@@ -18,5 +18,4 @@ export const SpellSchema = z.object({
 	target:z.string().optional(),
 });
 
-
 export type Spell = z.infer<typeof SpellSchema>;
