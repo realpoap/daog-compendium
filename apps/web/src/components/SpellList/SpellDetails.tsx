@@ -33,7 +33,7 @@ const SpellDetails = () => {
 			className="text-lg mt-8 text-stone-100"
 			onClick={() => history.go(-1)}>
 				<FcPrevious 
-				className={cn("icon-stone-900 dark:icon-stone-100  icon-lg"/>Back
+				className={cn("icon-stone-900 dark:icon-stone-100  icon-lg")}/>Back
 			</button>
       
 			<div className='items-center text-center flex flex-col snap-center transition-all duration-1000 ease-out opacity-100 translate-y-8' 
