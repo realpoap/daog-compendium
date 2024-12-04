@@ -1,6 +1,6 @@
 import { cn } from '@/utils/classNames';
+import { Link } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
-import { MultiSelect } from 'react-multi-select-component';
 import { GiBrain, GiDrop } from "rocketicons/gi";
 import { useDebounce } from 'use-debounce';
 import { default as spells } from '../../data/spells.json';
@@ -22,15 +22,6 @@ type SpellEntry = {
   range: string | number;
 }
 
-const Options = [
-  {label: 'Mouflette', value:'mouflette'},
-  {label: 'Eau', value:'eau'},
-  {label: 'Feu', value:'feu'},
-  {label: 'Terre', value:'terre'},
-  {label: 'Air', value:'air'},
-  {label: 'Sang', value:'sang'},
-]
-
 const SpellSearch = () => {
 
   const [items, setItems] = useState<SpellEntry[]>(spells);
@@ -39,9 +30,6 @@ const SpellSearch = () => {
   const [prunedItems, setPrunedItems] = useState<SpellEntry[]>([]);
 
   const keys = ['titleCommon', 'titleGlaise', 'type', 'description', 'component', 'effects'];
-  // , 'titleGlaise', 'component', 'description', 'type', 'effects'
-	  
-  console.log('search:', debouncedSearch);
 
   useEffect(()=> {
     const filteredItems = items.filter((item) => 
@@ -51,10 +39,7 @@ const SpellSearch = () => {
     );
     setPrunedItems(filteredItems);    
   }, [debouncedSearch, items])
-
-  console.log('pruned:' ,prunedItems);
   
-  // debouncedSearch.some((val) => item[key as keyof SpellEntry].toString().toLowerCase().includes(val))
   return (
     <div 
       className='mt-sm p-2 flex flex-col items-center'>
@@ -68,12 +53,18 @@ const SpellSearch = () => {
         className={cn('rounded-lg w-60 mb-4 pl-2 p-1 border b-stone-500 dark:bg-stone-700 text-lg text-purple-900 dark:text-purple-400 focus:outline-none focus:ring-purple-900 dark:focus:ring-purple-400 focus:border-purple-900 dark:focus:border-purple-400 focus:ring-1 caret-purple-900 dark:caret-purple-400 shadow-sm placeholder:italic text-center font-grenze')}
         type='search'
       />
-      
+
       </div>
       <div className='container max-w-screen overflow-hidden flex flex-col justify-evenly gap-8 text-center items-center snap-mandatory snap-y z-0'>
       {prunedItems.map((d)=>(
+        <Link 
+          key={d.number} 
+          to={`/spells/$id`}
+          params={{id: `${d.number}`}}
+        >
+          
         <div className='items-center text-center flex flex-col snap-center transition-all duration-1000 ease-out opacity-100 translate-y-8' 
-        key={d.number} 
+        
         >
             <span className='text-stone-500 text-sm mr-2'>
               ~ {d.number} ~
@@ -84,12 +75,14 @@ const SpellSearch = () => {
           <div className='flex flex-row font-noto items-baseline align-baseline justify-center w-48 dark:text-stone-200'>
             <span className='text-sm font-semibold align-baseline mr-1'>{d.type}</span>
             <span className='text-sm font-semibold mx-2 align-baseline'>|</span>
-            <span className='text-sm font-semibold font-noto align-baseline'><GiDrop className='icon-stone-900 dark:icon-stone-100 icon-sm'/>{d.level}</span>
+            <span className='text-sm font-semibold font-noto align-baseline'>
+              <GiDrop className='icon-stone-900 dark:icon-stone-100 icon-sm'/>{d.level}</span>
             <span className='text-sm font-semibold mx-2 align-baseline'>|</span>
             <span className='text-sm font-semibold font-noto align-baseline'><GiBrain className='icon-stone-900 dark:icon-stone-100 icon-sm mr-1'/>{d.difficulty}</span>
           </div>
           <div className={cn('line-clamp-2 text-stone-700 dark:text-stone-400 mt-1 italic max-w-72 text-sm md:max-w-xl md:text-ellipsis md:line-clamp-none font-noto')}>{d.description}</div>
         </div>
+        </Link>
       ))}
       </div>
     </div>

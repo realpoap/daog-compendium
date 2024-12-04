@@ -2090,7 +2090,7 @@
     "components": "surface d'eau",
     "description": "Vous formez l'eau en forme une lame de glace qui pointe et plonge vers votre cible à moins de 15+#magie mètres. En cas d'échec d'AGI 20+#magie, la cible subit 2d3 dommages.",
     "effects": "",
-    "damages": "",
+    "damages": "2d3",
     "heal": "",
     "duration": "",
     "range": ""

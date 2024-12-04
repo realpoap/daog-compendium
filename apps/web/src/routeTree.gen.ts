@@ -13,12 +13,13 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as SpellsIndexImport } from './routes/spells/index'
+import { Route as SpellsIdImport } from './routes/spells/$id'
 
 // Create Virtual Routes
 
 const AboutLazyImport = createFileRoute('/about')()
 const IndexLazyImport = createFileRoute('/')()
+const SpellsIndexLazyImport = createFileRoute('/spells/')()
 
 // Create/Update Routes
 
@@ -34,9 +35,15 @@ const IndexLazyRoute = IndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
-const SpellsIndexRoute = SpellsIndexImport.update({
+const SpellsIndexLazyRoute = SpellsIndexLazyImport.update({
   id: '/spells/',
   path: '/spells/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/spells/index.lazy').then((d) => d.Route))
+
+const SpellsIdRoute = SpellsIdImport.update({
+  id: '/spells/$id',
+  path: '/spells/$id',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -58,11 +65,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutLazyImport
       parentRoute: typeof rootRoute
     }
+    '/spells/$id': {
+      id: '/spells/$id'
+      path: '/spells/$id'
+      fullPath: '/spells/$id'
+      preLoaderRoute: typeof SpellsIdImport
+      parentRoute: typeof rootRoute
+    }
     '/spells/': {
       id: '/spells/'
       path: '/spells'
       fullPath: '/spells'
-      preLoaderRoute: typeof SpellsIndexImport
+      preLoaderRoute: typeof SpellsIndexLazyImport
       parentRoute: typeof rootRoute
     }
   }
@@ -73,41 +87,46 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
   '/about': typeof AboutLazyRoute
-  '/spells': typeof SpellsIndexRoute
+  '/spells/$id': typeof SpellsIdRoute
+  '/spells': typeof SpellsIndexLazyRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
   '/about': typeof AboutLazyRoute
-  '/spells': typeof SpellsIndexRoute
+  '/spells/$id': typeof SpellsIdRoute
+  '/spells': typeof SpellsIndexLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
   '/about': typeof AboutLazyRoute
-  '/spells/': typeof SpellsIndexRoute
+  '/spells/$id': typeof SpellsIdRoute
+  '/spells/': typeof SpellsIndexLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/spells'
+  fullPaths: '/' | '/about' | '/spells/$id' | '/spells'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/spells'
-  id: '__root__' | '/' | '/about' | '/spells/'
+  to: '/' | '/about' | '/spells/$id' | '/spells'
+  id: '__root__' | '/' | '/about' | '/spells/$id' | '/spells/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
   AboutLazyRoute: typeof AboutLazyRoute
-  SpellsIndexRoute: typeof SpellsIndexRoute
+  SpellsIdRoute: typeof SpellsIdRoute
+  SpellsIndexLazyRoute: typeof SpellsIndexLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   AboutLazyRoute: AboutLazyRoute,
-  SpellsIndexRoute: SpellsIndexRoute,
+  SpellsIdRoute: SpellsIdRoute,
+  SpellsIndexLazyRoute: SpellsIndexLazyRoute,
 }
 
 export const routeTree = rootRoute
@@ -122,6 +141,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/about",
+        "/spells/$id",
         "/spells/"
       ]
     },
@@ -131,8 +151,11 @@ export const routeTree = rootRoute
     "/about": {
       "filePath": "about.lazy.tsx"
     },
+    "/spells/$id": {
+      "filePath": "spells/$id.tsx"
+    },
     "/spells/": {
-      "filePath": "spells/index.tsx"
+      "filePath": "spells/index.lazy.tsx"
     }
   }
 }
