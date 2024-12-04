@@ -22,7 +22,7 @@ console.log('toggle');
 					id="hamburger-button"
 					onClick={toggleMenu}
 					className="cursor-pointer" >
-						<BiMenu className="icon-stone-900 dark:icon-stone-100 icon-xl"/>
+						<BiMenu className="icon-stone-900 dark:icon-stone-100 icon-2xl"/>
 					</button>
 		    </section>
 				<section onClick={toggleMenu} id="mobile-menu" className={`${open ? 'flex' : 'hidden'} absolute top-0 bg-purple-900 w-full text-5xl text-stone-100 flex-col justify-center origin-top animate-open-menu`}>
