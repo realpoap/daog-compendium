@@ -20,6 +20,7 @@
       "@/*": ["./src/*"],
       "@api/*": ["../api/src/*"]
     },
+    //get rid of this in prod:
     "declaration": false,
     "declarationMap": false,
   },
