@@ -6,8 +6,20 @@ export const NAV_ITEMS: NavItem[] = [
 		path: "/",
 	},
 	{
-		title: "About",
-		path: "/about",
+		title: "Rules",
+		path: "/rules",
+	},
+	{
+		title: "Characters",
+		path: "/characters",
+	},
+	{
+		title: "Bestiary",
+		path: "/bestiary",
+	},
+	{
+		title: "Items",
+		path: "/items",
 	},
 	{
 		title: "Spells",

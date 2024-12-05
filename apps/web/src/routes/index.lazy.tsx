@@ -14,8 +14,8 @@ export const Route = createLazyFileRoute('/')({
 
 function Index() {
   return (
-    <div className='container '>
-
+    <div className='container items-center'>
+      // latest edits and favorited items //
     </div>
   )
 }

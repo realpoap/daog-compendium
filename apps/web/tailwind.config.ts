@@ -1,3 +1,4 @@
+import daisyui from 'daisyui';
 import icons from 'rocketicons/tailwind';
 import type { Config } from 'tailwindcss';
 
@@ -7,7 +8,7 @@ const config: Pick<Config, 'content' | 'presets' | 'darkMode' | 'plugins' | 'the
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   presets: [sharedConfig],
   darkMode: 'media',
-  plugins: [icons],
+  plugins: [icons, daisyui],
   theme: {
     extend: {
       screen: {
