@@ -34,7 +34,7 @@ const SpellDetails = () => {
   return (
     <div className="flex flex-col justify-center">
 			<button
-			className="text-lg mt-8 text-stone-100 font-grenze text-2xl align-middle"
+			className="text-stone-500 mt-1 font-grenze text-2xl align-middle"
 			onClick={() => history.go(-1)}>
 				<span className="text-2xl">&#8249;</span> Back
 			</button>

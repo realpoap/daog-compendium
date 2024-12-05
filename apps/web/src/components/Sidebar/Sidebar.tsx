@@ -14,7 +14,7 @@ console.log('toggle');
 	return (
 		<header className='sticky top-0 h-1/4 z-50'>
         <section className='w-full  bg-stone-100  dark:bg-stone-800 shadow-md mx-auto p-2 flex justify-between font-grenze'>
-          <h1 className=' font-extrabold text-2xl dark:text-stone-100 tracking-wider'>DAOG Compendium</h1>
+          <h1 className=' font-bold text-2xl dark:text-stone-100 tracking-wider'>DAOG Compendium</h1>
       			<nav aria-label="main" className={`${open ? 'block' : 'hidden'} md:block space-x-10 text-xl tracking-wide`}>
 							<Nav/>
 						</nav>

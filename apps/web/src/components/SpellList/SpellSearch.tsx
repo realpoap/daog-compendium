@@ -58,12 +58,13 @@ const SpellSearch = () => {
       <div className='container max-w-screen overflow-hidden flex flex-col justify-evenly gap-8 text-center items-center snap-mandatory snap-y z-0'>
       {prunedItems.map((d)=>(
         <Link 
+        className='w-full'
           key={d.number} 
           to={`/spells/$id`}
           params={{id: `${d.number}`}}
         >
           
-        <div className='items-center text-center flex flex-col snap-center transition-all duration-1000 ease-out opacity-100 translate-y-8' 
+        <div className='items-center text-center flex flex-col snap-center transition-all duration-1000 ease-out opacity-100 translate-y-8 hover:bg-stone-700 rounded-md p-1 pb-2 w-full' 
         
         >
             <span className='text-stone-500 text-sm mr-2'>
