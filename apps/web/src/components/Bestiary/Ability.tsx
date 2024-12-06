@@ -1,19 +1,36 @@
+import { useState } from 'react';
+
 type AbilityProps = {
 	name: string;
 	description: string;
 };
 
 const Ability = ({ name, description }: AbilityProps) => {
-	console.log(description);
+	const [open, setOpen] = useState(false);
+
+	const openTooltip = () => {
+		setOpen(true);
+	};
+	const closeTooltip = () => {
+		setTimeout(() => {
+			setOpen(false);
+		}, 1000);
+	};
 
 	return (
 		<div
-			className='tooltip tooltip-bottom rounded-md'
+			className={`tooltip tooltip-bottom hover:tooltip-open ${open ? 'tooltip-open' : ''}`}
 			data-tip={description}
 		>
-			<div className='badge badge-md font-noto cursor-pointer px-4 py-3 hover:opacity-90'>
+			<button
+				onMouseDown={openTooltip}
+				onMouseUp={closeTooltip}
+				onTouchStart={openTooltip}
+				onTouchEnd={closeTooltip}
+				className='badge badge-md font-noto bg-grey-900 cursor-pointer border-none px-4 py-3 font-semibold shadow-sm hover:bg-purple-500 hover:text-purple-900'
+			>
 				{name}
-			</div>
+			</button>
 		</div>
 	);
 };

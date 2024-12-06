@@ -12,8 +12,7 @@ const config: Pick<Config, 'content' | 'presets' | 'darkMode' | 'plugins' | 'the
   theme: {
     extend: {
       screen: {
-        'widescreen': {'raw': '(min-aspect-ratio: 3/2)'},
-        'tallscreen': {'raw': '(min-aspect-ratio: 13/20)'}
+        'hover-hover': {'raw': '(hover: hover) and (pointer: fine)'},
       },
       fontFamily: {
         grenze: ["Grenze", "serif"],

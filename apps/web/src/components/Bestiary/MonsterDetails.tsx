@@ -83,7 +83,7 @@ const MonsterDetails = () => {
 					</span>
 				</div>
 				{monster?.special_abilities && (
-					<div className='flex w-auto w-full flex-row flex-wrap items-center justify-center gap-2 overflow-visible px-2'>
+					<div className='flex w-full flex-row flex-wrap items-center justify-center gap-2 overflow-visible px-2'>
 						{monster.special_abilities.map(a => (
 							<Ability
 								key={a.name}

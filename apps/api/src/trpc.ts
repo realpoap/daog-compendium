@@ -13,7 +13,7 @@ const trpc = initTRPC.context<Context>().create({
   transformer: superjson,
 });
 
-export const publicProcedure = trpc.procedure;
+export const procedure = trpc.procedure;
 export const router = trpc.router;
 
 export type RouterInput = inferRouterInputs<AppRouter>;

@@ -12,8 +12,6 @@ async function main() {
 
   app.use(cors({ origin: '*' }));
 
-  console.log('in server');
-
   app.use(
     '/trpc',
     createExpressMiddleware({

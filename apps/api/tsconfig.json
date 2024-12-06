@@ -13,6 +13,8 @@
     "resolveFullPaths": true,
     "verbose": false
   },
+  "strict": true,
+"strictNullChecks": true,
   "include": ["src"],
   "exclude": ["node_modules"],
   //get rid of this in prod:
