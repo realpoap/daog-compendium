@@ -10,7 +10,13 @@ async function main() {
 
   const app = express();
 
-  app.use(cors({ origin: '*' }));
+  const corsOptions ={
+   origin:'daog-compendium.vercel.app', 
+   credentials:true,
+   optionSuccessStatus:200,
+}
+
+app.use(cors(corsOptions))
 
  app.use(
     '/trpc',
