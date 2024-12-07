@@ -6,7 +6,7 @@ import express from 'express';
 import { appRouter } from '@api/router';
 
 async function main() {
-  const port = process.env.PORT || 3000;
+  const port = process.env.VERCEL_URL || 3000;
 
   const app = express();
 
