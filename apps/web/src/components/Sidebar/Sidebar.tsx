@@ -6,6 +6,9 @@ const Sidebar = () => {
 	const [open, setOpen] = useState(false);
 
 	const toggleMenu = () => {
+		open
+			? document.getElementsByTagName('body')[0].classList.remove('fixed')
+			: document.getElementsByTagName('body')[0].classList.add('fixed');
 		setOpen(prev => !prev);
 	};
 
@@ -32,12 +35,12 @@ const Sidebar = () => {
 			<section
 				onClick={toggleMenu}
 				id='mobile-menu'
-				className={`${open ? 'flex' : 'hidden'} animate-open-menu absolute top-0 min-h-[100dvh] w-full origin-top flex-col justify-center bg-purple-900 text-5xl text-stone-100`}
+				className={`${open ? 'flex' : 'hidden'} fixed top-0 h-screen w-screen origin-top flex-col justify-center overflow-hidden overflow-y-scroll overscroll-y-none bg-purple-900 text-5xl text-stone-100`}
 			>
 				<button className='font-grenze self-end px-6 text-6xl'>&times;</button>
 				<nav
 					aria-label='mobile'
-					className='font-grenze font-semi-bold flex min-h-screen flex-col items-center gap-8 py-8'
+					className='font-grenze font-semi-bold flex h-screen flex-col items-center gap-8 py-8'
 				>
 					<Nav />
 				</nav>
