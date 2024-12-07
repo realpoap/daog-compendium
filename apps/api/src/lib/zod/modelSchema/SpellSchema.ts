@@ -11,8 +11,8 @@ export const SpellSchema = z.object({
   number: z.number().int(),
   titleGlaise: z.string().nullable(),
   titleCommon: z.string(),
-  createdAt: z.coerce.date(),
-  updatedAt: z.coerce.date(),
+  createdAt: z.coerce.date().nullable(),
+  updatedAt: z.coerce.date().nullable(),
   level: z.number().int(),
   cost: z.number().int(),
   difficulty: z.number().int(),
@@ -23,7 +23,7 @@ export const SpellSchema = z.object({
   range: z.string().nullable(),
   duration: z.string().nullable(),
   target: z.string().nullable(),
-  components: z.string().array(),
+  components: z.string().nullable(),
 })
 
 export type Spell = z.infer<typeof SpellSchema>

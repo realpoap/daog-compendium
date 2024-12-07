@@ -4,11 +4,10 @@ import { z } from 'zod';
 import { SpellWhereInputSchema } from './SpellWhereInputSchema';
 import { StringNullableFilterSchema } from './StringNullableFilterSchema';
 import { StringFilterSchema } from './StringFilterSchema';
-import { DateTimeFilterSchema } from './DateTimeFilterSchema';
+import { DateTimeNullableFilterSchema } from './DateTimeNullableFilterSchema';
 import { IntFilterSchema } from './IntFilterSchema';
 import { EnumSpellTypeFilterSchema } from './EnumSpellTypeFilterSchema';
 import { SpellTypeSchema } from './SpellTypeSchema';
-import { StringNullableListFilterSchema } from './StringNullableListFilterSchema';
 
 export const SpellWhereUniqueInputSchema: z.ZodType<Prisma.SpellWhereUniqueInput> = z.union([
   z.object({
@@ -30,8 +29,8 @@ export const SpellWhereUniqueInputSchema: z.ZodType<Prisma.SpellWhereUniqueInput
   NOT: z.union([ z.lazy(() => SpellWhereInputSchema),z.lazy(() => SpellWhereInputSchema).array() ]).optional(),
   titleGlaise: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   titleCommon: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
-  createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
+  createdAt: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
+  updatedAt: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
   level: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
   type: z.union([ z.lazy(() => EnumSpellTypeFilterSchema),z.lazy(() => SpellTypeSchema) ]).optional(),
   cost: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
@@ -43,7 +42,7 @@ export const SpellWhereUniqueInputSchema: z.ZodType<Prisma.SpellWhereUniqueInput
   range: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   duration: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   target: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  components: z.lazy(() => StringNullableListFilterSchema).optional()
+  components: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
 }).strict());
 
 export default SpellWhereUniqueInputSchema;

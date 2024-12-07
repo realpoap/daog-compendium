@@ -43,8 +43,8 @@ model Spell {
   number      Int       @unique
   titleGlaise String?
   titleCommon String
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt   DateTime?  @default(now())
+  updatedAt   DateTime?  @updatedAt
   level       Int
   type        SpellType
   cost        Int
@@ -56,8 +56,7 @@ model Spell {
   range       String?
   duration    String?
   target      String?
-  components  String[]
-
+  components  String?
 }
 
 model Component {
@@ -75,7 +74,7 @@ enum SpellType {
   mouflette
   beast
   nature
-  carrion
+  scourge
   spirit
   death
   life

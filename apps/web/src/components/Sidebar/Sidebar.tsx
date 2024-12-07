@@ -11,7 +11,7 @@ const Sidebar = () => {
 
 	return (
 		<header className='sticky top-0 z-50 h-1/4'>
-			<section className='font-grenze mx-auto flex w-full justify-between bg-stone-100 p-2 shadow-md dark:bg-stone-800'>
+			<section className='font-grenze mx-auto flex w-full justify-between bg-stone-100 p-2 shadow-md shadow-stone-900 dark:bg-stone-800'>
 				<h1 className='text-2xl font-bold tracking-wider dark:text-stone-100'>
 					DAOG Compendium
 				</h1>

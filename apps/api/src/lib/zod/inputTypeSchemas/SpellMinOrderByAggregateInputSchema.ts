@@ -20,7 +20,8 @@ export const SpellMinOrderByAggregateInputSchema: z.ZodType<Prisma.SpellMinOrder
   effects: z.lazy(() => SortOrderSchema).optional(),
   range: z.lazy(() => SortOrderSchema).optional(),
   duration: z.lazy(() => SortOrderSchema).optional(),
-  target: z.lazy(() => SortOrderSchema).optional()
+  target: z.lazy(() => SortOrderSchema).optional(),
+  components: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export default SpellMinOrderByAggregateInputSchema;

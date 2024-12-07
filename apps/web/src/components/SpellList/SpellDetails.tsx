@@ -1,5 +1,8 @@
 import { cn } from '@/utils/classNames';
+import { trpc } from '@/utils/trpc';
+import { Spell } from '@api/lib/zod/modelSchema/SpellSchema';
 import { useParams, useRouter } from '@tanstack/react-router';
+import { useEffect, useState } from 'react';
 import {
 	GiBlood,
 	GiBrain,
@@ -19,7 +22,7 @@ import {
 	GiWhirlwind,
 } from 'rocketicons/gi';
 
-import { default as spells } from '../../data/spells.json';
+// import { default as spells } from '../../data/spells.json';
 
 const options = [
 	{
@@ -105,7 +108,17 @@ const options = [
 const SpellDetails = () => {
 	const { history } = useRouter();
 	const { id } = useParams({ strict: false });
-	const spell = spells.find(s => s.number.toString() === id);
+	const [spell, setSpell] = useState<Spell | undefined>();
+	const query = trpc.spells.getByNumber.useQuery(Number(id));
+
+	useEffect(() => {
+		if (query.isLoading) {
+			return console.log('loading single spell...');
+		}
+		if (query.data) {
+			setSpell(query.data);
+		}
+	}, [query.data]);
 
 	const icon = options.find(o => {
 		if (
@@ -120,7 +133,7 @@ const SpellDetails = () => {
 	return (
 		<div className='flex flex-col justify-center'>
 			<button
-				className='font-grenze mt-1 align-middle text-2xl text-stone-500'
+				className='font-grenze mt-1 align-middle text-2xl text-stone-500 hover:text-stone-200'
 				onClick={() => history.go(-1)}
 			>
 				<span className='text-2xl'>&#8249;</span> Back
@@ -130,7 +143,9 @@ const SpellDetails = () => {
 				<div className='size-10 items-center overflow-clip rounded-full border-0 align-middle'>
 					<span className='relative mb-2 inline-block'>{icon?.icon}</span>
 				</div>
-				<span className='text-md text-stone-500'>~ {spell?.number} ~</span>
+				<span className='text-md font-noto text-stone-500'>
+					~ {spell?.number} ~
+				</span>
 				<p
 					className={cn(
 						'font-grenze text-4xl font-extrabold tracking-wider text-purple-900 dark:text-purple-400',
@@ -146,7 +161,7 @@ const SpellDetails = () => {
 					{spell?.titleGlaise}
 				</p>
 				<div className='font-noto my-4 flex w-full flex-row items-baseline justify-center align-baseline dark:text-stone-200'>
-					<span className='text-md mr-1 align-baseline font-semibold'>
+					<span className='text-md text- mr-1 align-baseline font-semibold capitalize'>
 						{spell?.type}
 					</span>
 					<span className='text-md mx-2 align-baseline font-semibold'>|</span>
@@ -171,6 +186,7 @@ const SpellDetails = () => {
 					<p>Effects : {spell?.effects}</p>
 					<p>Duration : {spell?.duration}</p>
 					<p>Range : {spell?.range}</p>
+					<p>Target : {spell?.target}</p>
 				</div>
 				<div>
 					<span className='align-baseline text-sm font-semibold'>

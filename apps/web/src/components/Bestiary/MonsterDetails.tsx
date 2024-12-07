@@ -22,7 +22,7 @@ const MonsterDetails = () => {
 		<div className='item-center flex flex-col'>
 			<div className='align-center flex flex-col items-center justify-center gap-2'>
 				<button
-					className='font-grenze mt-1 align-middle text-2xl text-stone-500'
+					className='font-grenze mt-1 align-middle text-2xl text-stone-500 hover:text-stone-200'
 					onClick={() => history.go(-1)}
 				>
 					<span className='text-2xl'>&#8249;</span> Back
@@ -38,7 +38,7 @@ const MonsterDetails = () => {
 							{monster?.name}
 						</h3>
 						{monster?.legendary_actions && (
-							<div className='badge badge-accent badge-lg absolute -right-2 top-2 size-6 animate-bounce content-center items-center rounded-full p-0 drop-shadow-md'>
+							<div className='badge badge-accent badge-lg absolute -right-2 top-2 size-6 animate-bounce content-center items-center rounded-full p-0 shadow-sm shadow-stone-900'>
 								<GiCrownedSkull className='icon-stone-200-sm' />
 							</div>
 						)}
