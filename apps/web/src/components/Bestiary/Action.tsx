@@ -7,7 +7,7 @@ type ActionProps = {
 	type?: string;
 };
 
-const Action = ({ name, dmg, description, type }: ActionProps) => {
+const Action = ({ name, dmg, description }: ActionProps) => {
 	return (
 		<div
 			tabIndex={0}
