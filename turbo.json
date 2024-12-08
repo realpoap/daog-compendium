@@ -3,6 +3,7 @@
   "globalDependencies": ["**/.env.*local"],
   "tasks": {
     "build": {
+      "env": ["VITE_API_URL", "DATABASE_URL"],
       "dependsOn": ["^build"],
       "outputs": ["dist/**"]
     },

@@ -5,8 +5,6 @@ import express from 'express';
 
 import { appRouter } from '@api/router';
 
-
-
 async function main() {
   const port = process.env.PORT || 3000;
 
@@ -17,9 +15,7 @@ async function main() {
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
   }
   
-  //app.use(cors(corsOptions));
-  
-  app.options('*', cors(corsOptions)) 
+  app.use(cors(corsOptions));
 
   app.use(
     '/trpc',
