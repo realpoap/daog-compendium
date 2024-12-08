@@ -10,59 +10,21 @@ async function main() {
 
   const app = express();
 
-  const corsOptions ={
-   origin:'daog-compendium.vercel.app', 
-   credentials:true,
-   optionSuccessStatus:200,
-}
+app.use(cors());
 
-app.use(cors(corsOptions))
-
- app.use(
+  app.use(
     '/trpc',
     createExpressMiddleware({
       router: appRouter,
-  createContext: (ctx) => ({ req: ctx.req, res: ctx.res }),
-  responseMeta(ctx) {
-    ctx.ctx?.res?.setHeader(
-      'Access-Control-Allow-Origin',
-      '.brand.localhost'
-    )
-    ctx.ctx?.res?.setHeader('Access-Control-Request-Method', '*')
-    ctx.ctx?.res?.setHeader(
-      'Access-Control-Allow-Methods',
-      'OPTIONS, GET'
-    )
-    ctx.ctx?.res?.setHeader('Access-Control-Allow-Headers', '*')
-
-    if (ctx.ctx?.req?.method === 'OPTIONS') {
-      ctx.ctx?.res?.writeHead(200)
-    }
-
-    return {
-      headers: ctx.ctx?.res?.getHeaders() as Record<
-        string,
-        string
-      >,
-      statusCode: ctx.ctx?.res?.statusCode || 200
-    }
-  }
+      createContext: (ctx) => ({ req: ctx.req, res: ctx.res }),
+      onError:
+        process.env.NODE_ENV === 'development'
+          ? ({ path, error }) => {
+              console.error(`❌ tRPC failed on ${path ?? '<no-path>'}: ${error.message}`);
+            }
+          : undefined,
     })
   );
-
-  // app.use(
-  //   '/trpc',
-  //   createExpressMiddleware({
-  //     router: appRouter,
-  //     createContext: (ctx) => ({ req: ctx.req, res: ctx.res }),
-  //     onError:
-  //       process.env.NODE_ENV === 'development'
-  //         ? ({ path, error }) => {
-  //             console.error(`❌ tRPC failed on ${path ?? '<no-path>'}: ${error.message}`);
-  //           }
-  //         : undefined,
-  //   })
-  // );
 
   // For testing purposes, wait-on requests '/'
   app.get('/', (req, res) => res.send('Server is running now!'));

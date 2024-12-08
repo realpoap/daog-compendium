@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { Prisma } from '@prisma/client';
+import type { Prisma } from '../../../generated/client';
 import { SpellWhereInputSchema } from '../inputTypeSchemas/SpellWhereInputSchema'
 import { SpellOrderByWithAggregationInputSchema } from '../inputTypeSchemas/SpellOrderByWithAggregationInputSchema'
 import { SpellScalarFieldEnumSchema } from '../inputTypeSchemas/SpellScalarFieldEnumSchema'

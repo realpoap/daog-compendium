@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { Prisma } from '@prisma/client';
+import type { Prisma } from '../../../generated/client';
 import { ComponentWhereInputSchema } from '../inputTypeSchemas/ComponentWhereInputSchema'
 import { ComponentOrderByWithAggregationInputSchema } from '../inputTypeSchemas/ComponentOrderByWithAggregationInputSchema'
 import { ComponentScalarFieldEnumSchema } from '../inputTypeSchemas/ComponentScalarFieldEnumSchema'
