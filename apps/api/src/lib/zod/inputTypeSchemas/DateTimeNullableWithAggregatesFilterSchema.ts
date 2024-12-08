@@ -1,4 +1,4 @@
-import type { Prisma } from '../../../generated/client';
+import type { Prisma } from '@prisma/client';
 
 import { z } from 'zod';
 import { NestedDateTimeNullableWithAggregatesFilterSchema } from './NestedDateTimeNullableWithAggregatesFilterSchema';

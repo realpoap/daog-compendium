@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { Prisma } from '../../../generated/client';
+import type { Prisma } from '@prisma/client';
 import { SpellWhereInputSchema } from '../inputTypeSchemas/SpellWhereInputSchema'
 import { SpellOrderByWithRelationInputSchema } from '../inputTypeSchemas/SpellOrderByWithRelationInputSchema'
 import { SpellWhereUniqueInputSchema } from '../inputTypeSchemas/SpellWhereUniqueInputSchema'

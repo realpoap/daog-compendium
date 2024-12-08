@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { Prisma } from '../../../generated/client';
+import type { Prisma } from '@prisma/client';
 import { SpellCreateInputSchema } from '../inputTypeSchemas/SpellCreateInputSchema'
 import { SpellUncheckedCreateInputSchema } from '../inputTypeSchemas/SpellUncheckedCreateInputSchema'
 // Select schema needs to be in file to prevent circular imports
