@@ -1,5 +1,4 @@
 import { z } from 'zod';
-
 import { procedure, router } from '@api/trpc';
 
 export const schema = z.object({

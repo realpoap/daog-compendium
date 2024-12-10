@@ -13,12 +13,6 @@ export function TrpcWrapper({ children }: { children: React.ReactNode }) {
 				httpBatchLink({
 					url: import.meta.env.VITE_API_URL + '/trpc',
 					transformer: superjson,
-					// You can pass any HTTP headers you wish here
-					async headers() {
-						return {
-							'Access-Control-Allow-Origin': '*', // Adjust this as needed for your CORS policy
-						};
-					},
 				}),
 			],
 		}),
