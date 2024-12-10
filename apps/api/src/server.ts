@@ -10,12 +10,12 @@ async function main() {
 
   const app = express();
 
-  const corsOptions = {
+  app.options('*', cors()); // handle preflight
+  app.use(cors({
     origin: '*',
-    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-  }
-  
-  app.use(cors(corsOptions));
+    methods: 'GET,POST,OPTIONS',
+    allowedHeaders: 'Content-Type,Authorization',
+  }));
 
   app.use(
     '/trpc',
@@ -32,7 +32,10 @@ async function main() {
   );
 
   // For testing purposes, wait-on requests '/'
-  app.get('/', (req, res) => res.send('Server is running now!'));
+  app.get('/', (req, res) => {
+    console.log('server running');
+    res.send('Server is running now!');
+  })
 
   app.listen(port, () => {
     console.log(`App listening on port: ${port}`);
