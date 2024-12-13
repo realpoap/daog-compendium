@@ -11,7 +11,7 @@
     "type-check": "tsc",
     "build": "rimraf dist && tsc --noEmit false && tsc-alias",
     "start": "node dist/server.js",
-    "postinstall": "prisma generate"
+    "postinstall": "npx prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^6.0.1",

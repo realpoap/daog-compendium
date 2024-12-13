@@ -15,7 +15,7 @@
   },
   "strict": true,
 "strictNullChecks": true,
-  "include": ["src"],
+  "include": ["src", "src/index.ts"],
   "exclude": ["node_modules"],
   //get rid of this in prod:
   "declaration": false,

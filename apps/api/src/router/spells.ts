@@ -1,6 +1,6 @@
+import { prisma } from '@api/index';
 import { procedure, router } from '@api/trpc';
 import { z } from 'zod';
-import { prisma } from '@api/prisma-client';
 import { SpellSchema } from '../lib/zod/modelSchema/SpellSchema';
 
 const SpellNewSchema = SpellSchema.omit({id: true});
