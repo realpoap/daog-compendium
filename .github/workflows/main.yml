@@ -11,6 +11,9 @@ jobs:
     name: Build and Test
     timeout-minutes: 15
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: '../../apps/web'
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -20,15 +23,15 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
         with:
-          cache-dependency-path: ./apps/web/package-lock.json
+          cache-dependency-path: '**/package-lock.json'
           node-version: 20
           cache: 'npm'
       
       - name: Install dependencies
-        run: pnpm install
+        run: npm install
 
       - name: Build
-        run: pnpm run build
+        run: npm run build
 
       # - name: Test
       #   run: npm run test
