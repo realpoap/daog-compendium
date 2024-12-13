@@ -26,9 +26,9 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@repo/api": "*",
-    "@repo/tailwind-config": "*",
-    "@repo/typescript-config": "*",
+    "@repo/api": "workspace:*",
+    "@repo/tailwind-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
     "@tanstack/router-vite-plugin": "^1.85.3",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
