@@ -1,28 +1,28 @@
-import { NavItem } from "./types";
+import { NavItem } from './types';
 
 export const NAV_ITEMS: NavItem[] = [
 	{
-		title: "Home",
-		path: "/",
+		title: 'Home',
+		path: '/',
 	},
 	{
-		title: "Rules",
-		path: "/rules",
+		title: 'Rules',
+		path: 'https://daog-docs.onrender.com',
 	},
 	{
-		title: "Characters",
-		path: "/characters",
+		title: 'Characters',
+		path: '/characters',
 	},
 	{
-		title: "Bestiary",
-		path: "/bestiary",
+		title: 'Bestiary',
+		path: '/bestiary',
 	},
 	{
-		title: "Items",
-		path: "/items",
+		title: 'Items',
+		path: '/items',
 	},
 	{
-		title: "Spells",
-		path: "/spells",
+		title: 'Spells',
+		path: '/spells',
 	},
-]
+];
