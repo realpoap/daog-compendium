@@ -29,7 +29,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Install dependencies
-        run: npm install
+        run: |
+          cd ./apps/web
+          echo 'Installing...'
+          npm install
       - name: Build frontend
         run: |
           cd ./apps/web
