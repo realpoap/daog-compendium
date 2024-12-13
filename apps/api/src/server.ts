@@ -1,8 +1,9 @@
+import { appRouter } from '@api/router/_app';
 import { createExpressMiddleware } from '@trpc/server/adapters/express';
+import { log } from 'console';
 import cors from 'cors';
 import 'dotenv/config';
 import express from 'express';
-import { appRouter } from '@api/router/_app';
 
 async function main() {
   const port = process.env.PORT || 3000;
@@ -42,7 +43,7 @@ async function main() {
   // For testing purposes, wait-on requests '/'
   app.get('/', (req, res) => {
     console.log('server running');
-    res.send('Server is running now!');
+    res.send(`Server is running now ! Front end set as : ${origin}`);
   })
 
   app.listen(port, () => {

@@ -7,11 +7,16 @@ const SpellNewSchema = SpellSchema.omit({id: true});
 
 export const spellsRouter = router({
 	getAll: procedure.query(async ()=> {
-		return await prisma.spell.findMany({
-			orderBy: {
-				updatedAt: 'desc'
-			}
-		});
+		try {
+			return await prisma.spell.findMany({
+				orderBy: {
+					updatedAt: 'desc'
+				}
+			});
+		} catch (error) {
+			console.error("Error in spells.getAll:", error); // Log the error for debugging
+      throw new Error(`Internal server error`);
+		}
 	}),
 	getByNumber: procedure
 		.input(z.number())
