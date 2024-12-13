@@ -59,6 +59,7 @@ import { appRouter } from '@api/router/_app';
 import { initTRPC } from '@trpc/server';
 import * as trpcExpress from '@trpc/server/adapters/express';
 import cors from 'cors';
+import 'dotenv/config';
 import express from 'express';
 
 const port = process.env.PORT || 3000;
@@ -74,11 +75,8 @@ const t = initTRPC.context<Context>().create();
 
 const app = express();
 
-app.use(cors({
-    origin: '*',
-    methods: 'GET,POST,OPTIONS',
-    allowedHeaders: 'Content-Type,Authorization',
-  }));
+const origin = process.env.NODE_ENV === 'production' ? process.env.FRONTEND_URL : true;
+  app.use(cors({ origin, credentials: true }));
 
 app.use(
   '/trpc',
