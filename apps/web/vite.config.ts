@@ -20,6 +20,6 @@ export default defineConfig({
       plugins: [tailwindcss()],
     },
   },
-  base: "/daog-compendium/"
+  base: "/"
 
 });
