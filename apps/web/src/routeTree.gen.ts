@@ -13,7 +13,6 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as RulesIndexImport } from './routes/rules/index'
 import { Route as BestiaryIndexImport } from './routes/bestiary/index'
 import { Route as SpellsAddImport } from './routes/spells/add'
 import { Route as SpellsIdImport } from './routes/spells/$id'
@@ -44,12 +43,6 @@ const SpellsIndexLazyRoute = SpellsIndexLazyImport.update({
   path: '/spells/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/spells/index.lazy').then((d) => d.Route))
-
-const RulesIndexRoute = RulesIndexImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => RulesLazyRoute,
-} as any)
 
 const BestiaryIndexRoute = BestiaryIndexImport.update({
   id: '/bestiary/',
@@ -121,13 +114,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BestiaryIndexImport
       parentRoute: typeof rootRoute
     }
-    '/rules/': {
-      id: '/rules/'
-      path: '/'
-      fullPath: '/rules/'
-      preLoaderRoute: typeof RulesIndexImport
-      parentRoute: typeof RulesLazyImport
-    }
     '/spells/': {
       id: '/spells/'
       path: '/spells'
@@ -140,48 +126,34 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-interface RulesLazyRouteChildren {
-  RulesIndexRoute: typeof RulesIndexRoute
-}
-
-const RulesLazyRouteChildren: RulesLazyRouteChildren = {
-  RulesIndexRoute: RulesIndexRoute,
-}
-
-const RulesLazyRouteWithChildren = RulesLazyRoute._addFileChildren(
-  RulesLazyRouteChildren,
-)
-
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
-  '/rules': typeof RulesLazyRouteWithChildren
+  '/rules': typeof RulesLazyRoute
   '/bestiary/$id': typeof BestiaryIdRoute
   '/spells/$id': typeof SpellsIdRoute
   '/spells/add': typeof SpellsAddRoute
   '/bestiary': typeof BestiaryIndexRoute
-  '/rules/': typeof RulesIndexRoute
   '/spells': typeof SpellsIndexLazyRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
+  '/rules': typeof RulesLazyRoute
   '/bestiary/$id': typeof BestiaryIdRoute
   '/spells/$id': typeof SpellsIdRoute
   '/spells/add': typeof SpellsAddRoute
   '/bestiary': typeof BestiaryIndexRoute
-  '/rules': typeof RulesIndexRoute
   '/spells': typeof SpellsIndexLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
-  '/rules': typeof RulesLazyRouteWithChildren
+  '/rules': typeof RulesLazyRoute
   '/bestiary/$id': typeof BestiaryIdRoute
   '/spells/$id': typeof SpellsIdRoute
   '/spells/add': typeof SpellsAddRoute
   '/bestiary/': typeof BestiaryIndexRoute
-  '/rules/': typeof RulesIndexRoute
   '/spells/': typeof SpellsIndexLazyRoute
 }
 
@@ -194,16 +166,15 @@ export interface FileRouteTypes {
     | '/spells/$id'
     | '/spells/add'
     | '/bestiary'
-    | '/rules/'
     | '/spells'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/rules'
     | '/bestiary/$id'
     | '/spells/$id'
     | '/spells/add'
     | '/bestiary'
-    | '/rules'
     | '/spells'
   id:
     | '__root__'
@@ -213,14 +184,13 @@ export interface FileRouteTypes {
     | '/spells/$id'
     | '/spells/add'
     | '/bestiary/'
-    | '/rules/'
     | '/spells/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
-  RulesLazyRoute: typeof RulesLazyRouteWithChildren
+  RulesLazyRoute: typeof RulesLazyRoute
   BestiaryIdRoute: typeof BestiaryIdRoute
   SpellsIdRoute: typeof SpellsIdRoute
   SpellsAddRoute: typeof SpellsAddRoute
@@ -230,7 +200,7 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
-  RulesLazyRoute: RulesLazyRouteWithChildren,
+  RulesLazyRoute: RulesLazyRoute,
   BestiaryIdRoute: BestiaryIdRoute,
   SpellsIdRoute: SpellsIdRoute,
   SpellsAddRoute: SpellsAddRoute,
@@ -261,10 +231,7 @@ export const routeTree = rootRoute
       "filePath": "index.lazy.tsx"
     },
     "/rules": {
-      "filePath": "rules.lazy.tsx",
-      "children": [
-        "/rules/"
-      ]
+      "filePath": "rules.lazy.tsx"
     },
     "/bestiary/$id": {
       "filePath": "bestiary/$id.tsx"
@@ -277,10 +244,6 @@ export const routeTree = rootRoute
     },
     "/bestiary/": {
       "filePath": "bestiary/index.tsx"
-    },
-    "/rules/": {
-      "filePath": "rules/index.tsx",
-      "parent": "/rules"
     },
     "/spells/": {
       "filePath": "spells/index.lazy.tsx"
