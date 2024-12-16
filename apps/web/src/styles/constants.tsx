@@ -7,7 +7,7 @@ export const NAV_ITEMS: NavItem[] = [
 	},
 	{
 		title: 'Rules',
-		path: 'https://daog-docs.onrender.com',
+		path: 'https://daog-docs.onrender.com/docs/intro',
 	},
 	{
 		title: 'Characters',
