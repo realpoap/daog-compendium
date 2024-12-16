@@ -48,6 +48,8 @@ jobs:
 
       - name: Build
         run: pnpm run build
+        env: 
+          VITE_API_URL: ${{ secrets.VITE_API_URL}}
       
       - name: Upload production-ready build files
         uses: actions/upload-pages-artifact@v3
