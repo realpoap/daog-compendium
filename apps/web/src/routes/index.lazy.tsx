@@ -14,7 +14,7 @@ function Index() {
 
 	return (
 		<p className='text-xl'>
-			Message: {query.data?.message}, and url: {process.env.VITE_API_URL}
+			Message: {query.data?.message}, and url: {import.meta.env.VITE_API_URL}
 		</p>
 	);
 }
