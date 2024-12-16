@@ -10,11 +10,12 @@ export const Route = createLazyFileRoute('/')({
 });
 
 function Index() {
-	const query = trpc.hello.get.useQuery({ name: 'Jonas' });
+	const query = trpc.hello.get.useQuery({ name: 'Admin' });
 
 	return (
 		<p className='text-xl'>
-			Message: {query.data?.message}, and url: {import.meta.env.VITE_API_URL}
+			Message: {query.data?.message}, and server url:{' '}
+			{import.meta.env.VITE_API_URL}
 		</p>
 	);
 }

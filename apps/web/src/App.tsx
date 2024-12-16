@@ -7,15 +7,18 @@ import { routeTree } from './routeTree.gen';
 const router = createRouter({ routeTree });
 
 declare module '@tanstack/react-router' {
-  interface Register {
-    router: typeof router;
-  }
+	interface Register {
+		router: typeof router;
+	}
 }
 
 export function App() {
-  return (
-    <TrpcWrapper>
-      <RouterProvider router={router} />
-    </TrpcWrapper>
-  );
+	return (
+		<TrpcWrapper>
+			<RouterProvider
+				router={router}
+				basepath='/daog-compendium/'
+			/>
+		</TrpcWrapper>
+	);
 }
