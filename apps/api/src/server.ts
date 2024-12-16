@@ -42,7 +42,7 @@ async function main() {
 
   // For testing purposes, wait-on requests '/'
   app.get('/', (req, res) => {
-    console.log('server running');
+    console.log(`Server is running now ! Front end set as : ${origin}`);
     res.send(`Server is running now ! Front end set as : ${origin}`);
   })
 
