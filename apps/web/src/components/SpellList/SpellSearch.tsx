@@ -18,6 +18,7 @@ const SpellSearch = () => {
 	const query = trpc.spells.getAll.useQuery(undefined, {
 		enabled: items === undefined,
 	});
+	const [latestNumber, setLatestNumber] = useState(0);
 
 	const keys = [
 		'titleCommon',
@@ -38,6 +39,8 @@ const SpellSearch = () => {
 		}
 
 		if (query.data && items !== undefined) {
+			setLatestNumber(Math.max(...items.map(i => i.number)));
+
 			const filteredItems = items.filter(item =>
 				keys.some(key =>
 					item[key as keyof Spell]
@@ -49,6 +52,8 @@ const SpellSearch = () => {
 			setPrunedItems(filteredItems);
 		}
 	}, [debouncedSearch, items]);
+
+	console.log(latestNumber);
 
 	var prevScrollpos = window.scrollY;
 	window.onscroll = function () {
@@ -66,6 +71,7 @@ const SpellSearch = () => {
 	if (query.isLoading) {
 		return (
 			<div className='flex h-screen flex-col items-center justify-center'>
+				<p className='font-grenze'>...Fetching amazing spells ... </p>
 				<span className='loading loading-spinner loading-lg'></span>
 			</div>
 		);
@@ -90,6 +96,7 @@ const SpellSearch = () => {
 					<Link
 						id='add-button'
 						to={'/spells/add'}
+						params={{ id: `${latestNumber}` }}
 						className='badge bg-accent z-20 mb-2 h-10 w-10 border-none shadow-md shadow-stone-900 transition-opacity duration-200'
 					>
 						<RiAddLine className='icon-white-2xl' />

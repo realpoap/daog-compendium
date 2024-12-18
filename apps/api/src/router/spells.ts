@@ -29,6 +29,18 @@ export const spellsRouter = router({
 			throw new Error(`Internal server error`);
 		}
 	}),
+	getHighestNumber: procedure.query(async () => {
+		try {
+			return await prisma.spell.aggregate({
+					_max: {
+						number: true
+					}
+			})
+		} catch (error) {
+			console.error("Error in spells.count:", error)
+			throw new Error(`Internal server error`);
+		}
+	}),
 	getByNumber: procedure
 		.input(z.number())
 		.query(async({input}) => {
