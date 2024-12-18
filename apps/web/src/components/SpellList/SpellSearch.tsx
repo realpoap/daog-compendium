@@ -1,11 +1,14 @@
 import { cn } from '@/utils/classNames';
 import { trpc } from '@/utils/trpc';
-import { Spell } from '@api/lib/zod/modelSchema/SpellSchema';
+import { SpellSchema } from '@api/lib/zod-prisma/index';
 import { Link } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 import { GiBrain, GiDrop } from 'rocketicons/gi';
 import { RiAddLine } from 'rocketicons/ri';
 import { useDebounce } from 'use-debounce';
+import { z } from 'zod';
+
+type Spell = z.infer<typeof SpellSchema>;
 
 const SpellSearch = () => {
 	const [items, setItems] = useState<Spell[]>();
