@@ -33,7 +33,6 @@ yarn-debug.log*
 yarn-error.log*
 
 # Deployment
-.github/
 
 # Misc
 .DS_Store
