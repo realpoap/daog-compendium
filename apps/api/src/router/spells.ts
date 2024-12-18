@@ -1,7 +1,7 @@
 import { prisma } from '@api/index';
 import { ZodNewSpell } from '@api/lib/ZodSpell';
 import { procedure, router } from '@api/trpc';
-import { z } from 'zod';
+import { number, z } from 'zod';
 
 export const spellsRouter = router({
 	getAll: procedure.query(async ()=> {
@@ -18,7 +18,12 @@ export const spellsRouter = router({
 	}),
 	getTotal: procedure.query(async () => {
 		try {
-			return await prisma.spell.count();
+			return await prisma.spell.count({
+				select: {
+					_all:true,
+					number:true, // count all records with number non-null
+				}
+			});
 		} catch (error) {
 			console.error("Error in spells.count:", error)
 			throw new Error(`Internal server error`);
