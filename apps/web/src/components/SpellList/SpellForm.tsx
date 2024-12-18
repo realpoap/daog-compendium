@@ -60,10 +60,7 @@ const SpellForm = () => {
 	// SET DEFAULT VALUES -----------------------------------------
 	if (totalCount.isSuccess) {
 		number = Number(totalCount.data + 1);
-		methods.setValue('createdAt', new Date());
-		methods.setValue('updatedAt', new Date());
-		console.log(totalCount.data);
-		console.log(methods.getValues('createdAt'));
+		console.log('spell number:', totalCount.data);
 	}
 
 	return (
