@@ -6,11 +6,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMemo } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Field } from '../Field';
-import { Input } from '../Input';
-import { InputNumber } from '../InputNumber';
-import { Select } from '../Select';
-import { Textarea } from '../TextArea';
+import {
+	Field,
+	Input,
+	InputNumber,
+	Select,
+	Textarea,
+} from '../RHFComponents/index';
 
 type NewSpell = z.infer<typeof ZodNewSpell>; // Types for New Spell to tRPC
 
