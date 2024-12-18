@@ -59,7 +59,7 @@ const SpellForm = () => {
 	}
 	// SET DEFAULT VALUES -----------------------------------------
 	if (totalCount.isSuccess) {
-		number = Number(totalCount.data + 1);
+		number = Number(totalCount.data) + 1;
 		console.log('spell number:', totalCount.data);
 	}
 
