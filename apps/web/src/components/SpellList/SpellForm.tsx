@@ -6,11 +6,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMemo } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Field } from '../Field';
-import { Input } from '../Input';
-import { InputNumber } from '../InputNumber';
-import { Select } from '../Select';
-import { Textarea } from '../TextArea';
+import {
+	Field,
+	Input,
+	InputNumber,
+	Select,
+	Textarea,
+} from '../RHFComponents/index';
 
 type NewSpell = z.infer<typeof ZodNewSpell>; // Types for New Spell to tRPC
 
@@ -58,10 +60,7 @@ const SpellForm = () => {
 	// SET DEFAULT VALUES -----------------------------------------
 	if (totalCount.isSuccess) {
 		number = Number(totalCount.data + 1);
-		methods.setValue('createdAt', new Date());
-		methods.setValue('updatedAt', new Date());
-		console.log(totalCount.data);
-		console.log(methods.getValues('createdAt'));
+		console.log('spell number:', totalCount.data);
 	}
 
 	return (

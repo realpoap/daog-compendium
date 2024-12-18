@@ -1,7 +1,5 @@
 import { trpc } from '@/utils/trpc';
-import { SpellSchema } from '@api/lib/zod/modelSchema/SpellSchema';
 import { createLazyFileRoute } from '@tanstack/react-router';
-import { z } from 'zod';
 
 import spellEntries from '@/data/spellts';
 

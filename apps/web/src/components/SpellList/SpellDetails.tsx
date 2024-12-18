@@ -1,10 +1,13 @@
 import { spellOptions } from '@/types/spellOptions';
 import { cn } from '@/utils/classNames';
 import { trpc } from '@/utils/trpc';
-import { Spell } from '@api/lib/zod/modelSchema/SpellSchema';
+import { SpellSchema } from '@api/lib/zod-prisma/index';
 import { useParams, useRouter } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 import { GiBrain, GiDrop, GiHeartPlus, GiSwordWound } from 'rocketicons/gi';
+import { z } from 'zod';
+
+type Spell = z.infer<typeof SpellSchema>;
 
 const SpellDetails = () => {
 	const { history } = useRouter();
