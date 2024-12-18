@@ -53,13 +53,14 @@ const SpellForm = () => {
 	if (totalCount.isLoading && !totalCount.data) {
 		return (
 			<div className='flex h-screen flex-col items-center justify-center'>
+				<p>{totalCount.status}</p>
 				<span className='loading loading-spinner loading-lg'></span>
 			</div>
 		);
 	}
 	// SET DEFAULT VALUES -----------------------------------------
 	if (totalCount.isSuccess) {
-		number = Number(totalCount.data) + 1;
+		number = Number(totalCount.data?.number) + 1;
 		console.log('spell number:', totalCount.data);
 	}
 
