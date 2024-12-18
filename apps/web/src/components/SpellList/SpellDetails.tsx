@@ -1,109 +1,10 @@
+import { spellOptions } from '@/types/spellOptions';
 import { cn } from '@/utils/classNames';
 import { trpc } from '@/utils/trpc';
 import { Spell } from '@api/lib/zod/modelSchema/SpellSchema';
 import { useParams, useRouter } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
-import {
-	GiBlood,
-	GiBrain,
-	GiBrainTentacle,
-	GiBurningSkull,
-	GiCarrion,
-	GiDrop,
-	GiEarthSpit,
-	GiFlatPawPrint,
-	GiGoat,
-	GiHeartDrop,
-	GiHeartPlus,
-	GiSmallFire,
-	GiSwordWound,
-	GiTreeBranch,
-	GiWaterfall,
-	GiWhirlwind,
-} from 'rocketicons/gi';
-
-// import { default as spells } from '../../data/spells.json';
-
-const options = [
-	{
-		label: 'Mouflette',
-		value: 'mouflette',
-		icon: <GiGoat className='icon-stone-900 dark:icon-stone-100 icon-4xl' />,
-	},
-	{
-		label: 'Eau',
-		value: 'water',
-		icon: (
-			<GiWaterfall className='icon-stone-900 dark:icon-stone-100 icon-2xl' />
-		),
-	},
-	{
-		label: 'Feu',
-		value: 'fire',
-		icon: (
-			<GiSmallFire className='icon-stone-900 dark:icon-stone-100 icon-4xl' />
-		),
-	},
-	{
-		label: 'Terre',
-		value: 'earth',
-		icon: (
-			<GiEarthSpit className='icon-stone-900 dark:icon-stone-100 icon-5xl' />
-		),
-	},
-	{
-		label: 'Air',
-		value: 'air',
-		icon: (
-			<GiWhirlwind className='icon-stone-900 dark:icon-stone-100 icon-4xl' />
-		),
-	},
-	{
-		label: 'Sang',
-		value: 'blood',
-		icon: <GiBlood className='icon-stone-900 dark:icon-stone-100 icon-4xl' />,
-	},
-	{
-		label: 'Bête',
-		value: 'beast',
-		icon: (
-			<GiFlatPawPrint className='icon-stone-900 dark:icon-stone-100 icon-4xl' />
-		),
-	},
-	{
-		label: 'Nature',
-		value: 'nature',
-		icon: (
-			<GiTreeBranch className='icon-stone-900 dark:icon-stone-100 icon-3xl' />
-		),
-	},
-	{
-		label: 'Vie',
-		value: 'life',
-		icon: (
-			<GiHeartDrop className='icon-stone-900 dark:icon-stone-100 icon-4xl' />
-		),
-	},
-	{
-		label: 'Mort',
-		value: 'death',
-		icon: (
-			<GiBurningSkull className='icon-stone-900 dark:icon-stone-100 icon-4xl' />
-		),
-	},
-	{
-		label: 'Fléau',
-		value: 'scourge',
-		icon: <GiCarrion className='icon-stone-900 dark:icon-stone-100 icon-4xl' />,
-	},
-	{
-		label: 'Esprit',
-		value: 'spirit',
-		icon: (
-			<GiBrainTentacle className='icon-stone-900 dark:icon-stone-100 icon-4xl' />
-		),
-	},
-];
+import { GiBrain, GiDrop, GiHeartPlus, GiSwordWound } from 'rocketicons/gi';
 
 const SpellDetails = () => {
 	const { history } = useRouter();
@@ -120,7 +21,7 @@ const SpellDetails = () => {
 		}
 	}, [query.data]);
 
-	const icon = options.find(o => {
+	const icon = spellOptions.find(o => {
 		if (
 			o.label.toLowerCase() === spell?.type.toLowerCase() ||
 			o.value === spell?.type.toLowerCase()

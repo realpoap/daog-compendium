@@ -4,7 +4,7 @@ import type { Config } from 'tailwindcss';
 
 import sharedConfig from '@repo/tailwind-config';
 
-const config: Pick<Config, 'content' | 'presets' | 'darkMode' | 'plugins' | 'theme'> = {
+const config: Pick<Config, 'content' | 'presets' | 'darkMode' | 'plugins' | 'theme' | 'daisyui'> = {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   presets: [sharedConfig],
   darkMode: 'media',
@@ -21,6 +21,19 @@ const config: Pick<Config, 'content' | 'presets' | 'darkMode' | 'plugins' | 'the
       },
     },
   },
+  daisyui: {
+    themes: [
+      {
+        mytheme: {
+          "primary": "#a991f7",
+          "secondary": "#4a044e",
+          "accent": "#9ACD32",
+          "neutral": "#3d4451",
+          "base-100": "#ffffff",
+        },
+      },
+    ],
+  }
   
 };
 

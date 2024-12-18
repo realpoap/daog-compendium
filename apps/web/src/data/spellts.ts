@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const SpellTypeSchema = z.enum(['mouflette','beast','nature','carrion','spirit','death','life','earth','fire','water','air','blood']);
+const SpellTypeSchema = z.enum(['mouflette','beast','nature','scourge','spirit','death','life','earth','fire','water','air','blood']);
 
 const SpellNewSchema = z.object({
   type: SpellTypeSchema,

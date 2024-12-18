@@ -41,7 +41,7 @@ async function main() {
   );
 
   // For testing purposes, wait-on requests '/'
-  app.get('/', (req, res) => {
+  app.get('/healthcheck', (req, res) => {
     console.log(`Server is running now ! Front end set as : ${origin}`);
     res.send(`Server is running now ! Front end set as : ${origin}`);
   })

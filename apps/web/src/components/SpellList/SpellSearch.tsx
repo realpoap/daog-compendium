@@ -67,7 +67,7 @@ const SpellSearch = () => {
 			</div>
 		);
 	}
-	console.log(prunedItems);
+	//console.log(prunedItems);
 
 	if (query.data) {
 		return (

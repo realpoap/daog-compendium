@@ -10,7 +10,7 @@ generator client {
 
 generator zod {
   provider                         = "zod-prisma-types"
-  output                           = "../src/lib/zod"
+  output                           = "lib/zod"
   useMultipleFiles                 = true
 }
 
