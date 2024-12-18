@@ -3,6 +3,7 @@ import { cn } from '@/utils/classNames';
 import { trpc } from '@/utils/trpc';
 import { ZodNewSpell } from '@api/lib/ZodSpell'; // resolver for RHF
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useParams, useRouter } from '@tanstack/react-router';
 import { useMemo } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -17,6 +18,8 @@ import {
 type NewSpell = z.infer<typeof ZodNewSpell>; // Types for New Spell to tRPC
 
 const SpellForm = () => {
+	const { history } = useRouter();
+
 	const methods = useForm<NewSpell>({
 		resolver: async (data, context, options) => {
 			// you can debug your validation schema here
@@ -30,9 +33,9 @@ const SpellForm = () => {
 		shouldFocusError: true,
 	});
 
-	const totalCount = trpc.spells.getTotal.useQuery();
+	const highestSpellNumber = trpc.spells.getHighestNumber.useQuery();
 	const createSpell = trpc.spells.create.useMutation();
-	let number = 0;
+	let newSpellNumber = 0;
 
 	const errors = useMemo(() => methods.formState.errors, [methods.formState]);
 
@@ -50,18 +53,18 @@ const SpellForm = () => {
 		console.log(errors);
 	};
 
-	if (totalCount.isLoading && !totalCount.data) {
+	if (highestSpellNumber.isLoading && !highestSpellNumber.data) {
 		return (
 			<div className='flex h-screen flex-col items-center justify-center'>
-				<p>{totalCount.status}</p>
+				<p>{highestSpellNumber.status}</p>
 				<span className='loading loading-spinner loading-lg'></span>
 			</div>
 		);
 	}
-	// SET DEFAULT VALUES -----------------------------------------
-	if (totalCount.isSuccess) {
-		number = Number(totalCount.data?.number) + 1;
-		console.log('spell number:', totalCount.data);
+
+	if (highestSpellNumber.isSuccess && highestSpellNumber.data) {
+		newSpellNumber = Number(highestSpellNumber.data?._max?.number) + 1;
+		console.log(newSpellNumber);
 	}
 
 	return (
@@ -80,7 +83,7 @@ const SpellForm = () => {
 					<Field name='number'>
 						<InputNumber
 							name='number'
-							placeholder={number}
+							placeholder={newSpellNumber}
 						/>
 					</Field>
 					{/* TITLE -------------------------------------------------- */}
