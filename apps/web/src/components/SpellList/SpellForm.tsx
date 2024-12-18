@@ -36,12 +36,12 @@ const SpellForm = () => {
 
 	const onSubmit = async (data: NewSpell) => {
 		await new Promise(resolve => setTimeout(resolve, 1000));
-		//methods.reset();
 		await createSpell.mutate(data);
 		if (!createSpell.isSuccess) {
 			alert('Spell creation failed.');
 			return;
 		}
+		methods.reset();
 	};
 
 	const onError = () => {
