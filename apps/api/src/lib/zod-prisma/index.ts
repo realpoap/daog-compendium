@@ -12,7 +12,7 @@ import type { Prisma } from '@prisma/client';
 
 export const UserScalarFieldEnumSchema = z.enum(['id','email','name','password','isOwner','role','createdAt']);
 
-export const SpellScalarFieldEnumSchema = z.enum(['id','number','titleGlaise','titleCommon','createdAt','updatedAt','level','type','cost','difficulty','description','damages','heal','effects','range','duration','target','components']);
+export const SpellScalarFieldEnumSchema = z.enum(['id','number','titleGlaise','titleCommon','createdAt','updatedAt','level','type','cost','difficulty','casting','targetType','action','flavor','description','damages','heal','effects','range','duration','target','components']);
 
 export const ComponentScalarFieldEnumSchema = z.enum(['id','quantity','name','description','weight','value','rarity','spells']);
 
@@ -27,6 +27,18 @@ export type RoleType = `${z.infer<typeof RoleSchema>}`
 export const SpellTypeSchema = z.enum(['mouflette','beast','nature','scourge','spirit','death','life','earth','fire','water','air','blood']);
 
 export type SpellTypeType = `${z.infer<typeof SpellTypeSchema>}`
+
+export const SpellActionSchema = z.enum(['charm','damage','heal','protect','enhance','link','create','transform','move','remove','puzzle']);
+
+export type SpellActionType = `${z.infer<typeof SpellActionSchema>}`
+
+export const SpellCastingSchema = z.enum(['instant','delayed','ritual','concentration','upkeep']);
+
+export type SpellCastingType = `${z.infer<typeof SpellCastingSchema>}`
+
+export const SpellTargetSchema = z.enum(['single','multiple','random','self','none']);
+
+export type SpellTargetType = `${z.infer<typeof SpellTargetSchema>}`
 
 /////////////////////////////////////////
 // MODELS
@@ -54,6 +66,9 @@ export type User = z.infer<typeof UserSchema>
 
 export const SpellSchema = z.object({
   type: SpellTypeSchema,
+  casting: SpellCastingSchema.nullable(),
+  targetType: SpellTargetSchema.nullable(),
+  action: SpellActionSchema.nullable(),
   id: z.string(),
   number: z.number().int(),
   titleGlaise: z.string().nullable(),
@@ -63,7 +78,8 @@ export const SpellSchema = z.object({
   level: z.number().int(),
   cost: z.number().int(),
   difficulty: z.number().int(),
-  description: z.string().nullable(),
+  flavor: z.string().nullable(),
+  description: z.string(),
   damages: z.string().nullable(),
   heal: z.string().nullable(),
   effects: z.string().nullable(),
@@ -131,6 +147,10 @@ export const SpellSelectSchema: z.ZodType<Prisma.SpellSelect> = z.object({
   type: z.boolean().optional(),
   cost: z.boolean().optional(),
   difficulty: z.boolean().optional(),
+  casting: z.boolean().optional(),
+  targetType: z.boolean().optional(),
+  action: z.boolean().optional(),
+  flavor: z.boolean().optional(),
   description: z.boolean().optional(),
   damages: z.boolean().optional(),
   heal: z.boolean().optional(),
@@ -269,7 +289,11 @@ export const SpellWhereInputSchema: z.ZodType<Prisma.SpellWhereInput> = z.object
   type: z.union([ z.lazy(() => EnumSpellTypeFilterSchema),z.lazy(() => SpellTypeSchema) ]).optional(),
   cost: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
   difficulty: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  description: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  casting: z.union([ z.lazy(() => EnumSpellCastingNullableFilterSchema),z.lazy(() => SpellCastingSchema) ]).optional().nullable(),
+  targetType: z.union([ z.lazy(() => EnumSpellTargetNullableFilterSchema),z.lazy(() => SpellTargetSchema) ]).optional().nullable(),
+  action: z.union([ z.lazy(() => EnumSpellActionNullableFilterSchema),z.lazy(() => SpellActionSchema) ]).optional().nullable(),
+  flavor: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  description: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   damages: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   heal: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   effects: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
@@ -290,6 +314,10 @@ export const SpellOrderByWithRelationInputSchema: z.ZodType<Prisma.SpellOrderByW
   type: z.lazy(() => SortOrderSchema).optional(),
   cost: z.lazy(() => SortOrderSchema).optional(),
   difficulty: z.lazy(() => SortOrderSchema).optional(),
+  casting: z.lazy(() => SortOrderSchema).optional(),
+  targetType: z.lazy(() => SortOrderSchema).optional(),
+  action: z.lazy(() => SortOrderSchema).optional(),
+  flavor: z.lazy(() => SortOrderSchema).optional(),
   description: z.lazy(() => SortOrderSchema).optional(),
   damages: z.lazy(() => SortOrderSchema).optional(),
   heal: z.lazy(() => SortOrderSchema).optional(),
@@ -326,7 +354,11 @@ export const SpellWhereUniqueInputSchema: z.ZodType<Prisma.SpellWhereUniqueInput
   type: z.union([ z.lazy(() => EnumSpellTypeFilterSchema),z.lazy(() => SpellTypeSchema) ]).optional(),
   cost: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
   difficulty: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
-  description: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  casting: z.union([ z.lazy(() => EnumSpellCastingNullableFilterSchema),z.lazy(() => SpellCastingSchema) ]).optional().nullable(),
+  targetType: z.union([ z.lazy(() => EnumSpellTargetNullableFilterSchema),z.lazy(() => SpellTargetSchema) ]).optional().nullable(),
+  action: z.union([ z.lazy(() => EnumSpellActionNullableFilterSchema),z.lazy(() => SpellActionSchema) ]).optional().nullable(),
+  flavor: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  description: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   damages: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   heal: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   effects: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
@@ -347,6 +379,10 @@ export const SpellOrderByWithAggregationInputSchema: z.ZodType<Prisma.SpellOrder
   type: z.lazy(() => SortOrderSchema).optional(),
   cost: z.lazy(() => SortOrderSchema).optional(),
   difficulty: z.lazy(() => SortOrderSchema).optional(),
+  casting: z.lazy(() => SortOrderSchema).optional(),
+  targetType: z.lazy(() => SortOrderSchema).optional(),
+  action: z.lazy(() => SortOrderSchema).optional(),
+  flavor: z.lazy(() => SortOrderSchema).optional(),
   description: z.lazy(() => SortOrderSchema).optional(),
   damages: z.lazy(() => SortOrderSchema).optional(),
   heal: z.lazy(() => SortOrderSchema).optional(),
@@ -376,7 +412,11 @@ export const SpellScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.SpellSc
   type: z.union([ z.lazy(() => EnumSpellTypeWithAggregatesFilterSchema),z.lazy(() => SpellTypeSchema) ]).optional(),
   cost: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
   difficulty: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
-  description: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  casting: z.union([ z.lazy(() => EnumSpellCastingNullableWithAggregatesFilterSchema),z.lazy(() => SpellCastingSchema) ]).optional().nullable(),
+  targetType: z.union([ z.lazy(() => EnumSpellTargetNullableWithAggregatesFilterSchema),z.lazy(() => SpellTargetSchema) ]).optional().nullable(),
+  action: z.union([ z.lazy(() => EnumSpellActionNullableWithAggregatesFilterSchema),z.lazy(() => SpellActionSchema) ]).optional().nullable(),
+  flavor: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  description: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   damages: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   heal: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   effects: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
@@ -544,7 +584,11 @@ export const SpellCreateInputSchema: z.ZodType<Prisma.SpellCreateInput> = z.obje
   type: z.lazy(() => SpellTypeSchema),
   cost: z.number().int(),
   difficulty: z.number().int(),
-  description: z.string().optional().nullable(),
+  casting: z.lazy(() => SpellCastingSchema).optional().nullable(),
+  targetType: z.lazy(() => SpellTargetSchema).optional().nullable(),
+  action: z.lazy(() => SpellActionSchema).optional().nullable(),
+  flavor: z.string().optional().nullable(),
+  description: z.string(),
   damages: z.string().optional().nullable(),
   heal: z.string().optional().nullable(),
   effects: z.string().optional().nullable(),
@@ -565,7 +609,11 @@ export const SpellUncheckedCreateInputSchema: z.ZodType<Prisma.SpellUncheckedCre
   type: z.lazy(() => SpellTypeSchema),
   cost: z.number().int(),
   difficulty: z.number().int(),
-  description: z.string().optional().nullable(),
+  casting: z.lazy(() => SpellCastingSchema).optional().nullable(),
+  targetType: z.lazy(() => SpellTargetSchema).optional().nullable(),
+  action: z.lazy(() => SpellActionSchema).optional().nullable(),
+  flavor: z.string().optional().nullable(),
+  description: z.string(),
   damages: z.string().optional().nullable(),
   heal: z.string().optional().nullable(),
   effects: z.string().optional().nullable(),
@@ -585,7 +633,11 @@ export const SpellUpdateInputSchema: z.ZodType<Prisma.SpellUpdateInput> = z.obje
   type: z.union([ z.lazy(() => SpellTypeSchema),z.lazy(() => EnumSpellTypeFieldUpdateOperationsInputSchema) ]).optional(),
   cost: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   difficulty: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  casting: z.union([ z.lazy(() => SpellCastingSchema),z.lazy(() => NullableEnumSpellCastingFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  targetType: z.union([ z.lazy(() => SpellTargetSchema),z.lazy(() => NullableEnumSpellTargetFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  action: z.union([ z.lazy(() => SpellActionSchema),z.lazy(() => NullableEnumSpellActionFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  flavor: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  description: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   damages: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   heal: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   effects: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -605,7 +657,11 @@ export const SpellUncheckedUpdateInputSchema: z.ZodType<Prisma.SpellUncheckedUpd
   type: z.union([ z.lazy(() => SpellTypeSchema),z.lazy(() => EnumSpellTypeFieldUpdateOperationsInputSchema) ]).optional(),
   cost: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   difficulty: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  casting: z.union([ z.lazy(() => SpellCastingSchema),z.lazy(() => NullableEnumSpellCastingFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  targetType: z.union([ z.lazy(() => SpellTargetSchema),z.lazy(() => NullableEnumSpellTargetFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  action: z.union([ z.lazy(() => SpellActionSchema),z.lazy(() => NullableEnumSpellActionFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  flavor: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  description: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   damages: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   heal: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   effects: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -626,7 +682,11 @@ export const SpellCreateManyInputSchema: z.ZodType<Prisma.SpellCreateManyInput> 
   type: z.lazy(() => SpellTypeSchema),
   cost: z.number().int(),
   difficulty: z.number().int(),
-  description: z.string().optional().nullable(),
+  casting: z.lazy(() => SpellCastingSchema).optional().nullable(),
+  targetType: z.lazy(() => SpellTargetSchema).optional().nullable(),
+  action: z.lazy(() => SpellActionSchema).optional().nullable(),
+  flavor: z.string().optional().nullable(),
+  description: z.string(),
   damages: z.string().optional().nullable(),
   heal: z.string().optional().nullable(),
   effects: z.string().optional().nullable(),
@@ -646,7 +706,11 @@ export const SpellUpdateManyMutationInputSchema: z.ZodType<Prisma.SpellUpdateMan
   type: z.union([ z.lazy(() => SpellTypeSchema),z.lazy(() => EnumSpellTypeFieldUpdateOperationsInputSchema) ]).optional(),
   cost: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   difficulty: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  casting: z.union([ z.lazy(() => SpellCastingSchema),z.lazy(() => NullableEnumSpellCastingFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  targetType: z.union([ z.lazy(() => SpellTargetSchema),z.lazy(() => NullableEnumSpellTargetFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  action: z.union([ z.lazy(() => SpellActionSchema),z.lazy(() => NullableEnumSpellActionFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  flavor: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  description: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   damages: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   heal: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   effects: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -666,7 +730,11 @@ export const SpellUncheckedUpdateManyInputSchema: z.ZodType<Prisma.SpellUnchecke
   type: z.union([ z.lazy(() => SpellTypeSchema),z.lazy(() => EnumSpellTypeFieldUpdateOperationsInputSchema) ]).optional(),
   cost: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   difficulty: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  casting: z.union([ z.lazy(() => SpellCastingSchema),z.lazy(() => NullableEnumSpellCastingFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  targetType: z.union([ z.lazy(() => SpellTargetSchema),z.lazy(() => NullableEnumSpellTargetFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  action: z.union([ z.lazy(() => SpellActionSchema),z.lazy(() => NullableEnumSpellActionFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  flavor: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  description: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   damages: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   heal: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   effects: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -918,6 +986,30 @@ export const EnumSpellTypeFilterSchema: z.ZodType<Prisma.EnumSpellTypeFilter> = 
   not: z.union([ z.lazy(() => SpellTypeSchema),z.lazy(() => NestedEnumSpellTypeFilterSchema) ]).optional(),
 }).strict();
 
+export const EnumSpellCastingNullableFilterSchema: z.ZodType<Prisma.EnumSpellCastingNullableFilter> = z.object({
+  equals: z.lazy(() => SpellCastingSchema).optional().nullable(),
+  in: z.lazy(() => SpellCastingSchema).array().optional().nullable(),
+  notIn: z.lazy(() => SpellCastingSchema).array().optional().nullable(),
+  not: z.union([ z.lazy(() => SpellCastingSchema),z.lazy(() => NestedEnumSpellCastingNullableFilterSchema) ]).optional().nullable(),
+  isSet: z.boolean().optional()
+}).strict();
+
+export const EnumSpellTargetNullableFilterSchema: z.ZodType<Prisma.EnumSpellTargetNullableFilter> = z.object({
+  equals: z.lazy(() => SpellTargetSchema).optional().nullable(),
+  in: z.lazy(() => SpellTargetSchema).array().optional().nullable(),
+  notIn: z.lazy(() => SpellTargetSchema).array().optional().nullable(),
+  not: z.union([ z.lazy(() => SpellTargetSchema),z.lazy(() => NestedEnumSpellTargetNullableFilterSchema) ]).optional().nullable(),
+  isSet: z.boolean().optional()
+}).strict();
+
+export const EnumSpellActionNullableFilterSchema: z.ZodType<Prisma.EnumSpellActionNullableFilter> = z.object({
+  equals: z.lazy(() => SpellActionSchema).optional().nullable(),
+  in: z.lazy(() => SpellActionSchema).array().optional().nullable(),
+  notIn: z.lazy(() => SpellActionSchema).array().optional().nullable(),
+  not: z.union([ z.lazy(() => SpellActionSchema),z.lazy(() => NestedEnumSpellActionNullableFilterSchema) ]).optional().nullable(),
+  isSet: z.boolean().optional()
+}).strict();
+
 export const SpellCountOrderByAggregateInputSchema: z.ZodType<Prisma.SpellCountOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   number: z.lazy(() => SortOrderSchema).optional(),
@@ -929,6 +1021,10 @@ export const SpellCountOrderByAggregateInputSchema: z.ZodType<Prisma.SpellCountO
   type: z.lazy(() => SortOrderSchema).optional(),
   cost: z.lazy(() => SortOrderSchema).optional(),
   difficulty: z.lazy(() => SortOrderSchema).optional(),
+  casting: z.lazy(() => SortOrderSchema).optional(),
+  targetType: z.lazy(() => SortOrderSchema).optional(),
+  action: z.lazy(() => SortOrderSchema).optional(),
+  flavor: z.lazy(() => SortOrderSchema).optional(),
   description: z.lazy(() => SortOrderSchema).optional(),
   damages: z.lazy(() => SortOrderSchema).optional(),
   heal: z.lazy(() => SortOrderSchema).optional(),
@@ -957,6 +1053,10 @@ export const SpellMaxOrderByAggregateInputSchema: z.ZodType<Prisma.SpellMaxOrder
   type: z.lazy(() => SortOrderSchema).optional(),
   cost: z.lazy(() => SortOrderSchema).optional(),
   difficulty: z.lazy(() => SortOrderSchema).optional(),
+  casting: z.lazy(() => SortOrderSchema).optional(),
+  targetType: z.lazy(() => SortOrderSchema).optional(),
+  action: z.lazy(() => SortOrderSchema).optional(),
+  flavor: z.lazy(() => SortOrderSchema).optional(),
   description: z.lazy(() => SortOrderSchema).optional(),
   damages: z.lazy(() => SortOrderSchema).optional(),
   heal: z.lazy(() => SortOrderSchema).optional(),
@@ -978,6 +1078,10 @@ export const SpellMinOrderByAggregateInputSchema: z.ZodType<Prisma.SpellMinOrder
   type: z.lazy(() => SortOrderSchema).optional(),
   cost: z.lazy(() => SortOrderSchema).optional(),
   difficulty: z.lazy(() => SortOrderSchema).optional(),
+  casting: z.lazy(() => SortOrderSchema).optional(),
+  targetType: z.lazy(() => SortOrderSchema).optional(),
+  action: z.lazy(() => SortOrderSchema).optional(),
+  flavor: z.lazy(() => SortOrderSchema).optional(),
   description: z.lazy(() => SortOrderSchema).optional(),
   damages: z.lazy(() => SortOrderSchema).optional(),
   heal: z.lazy(() => SortOrderSchema).optional(),
@@ -1053,6 +1157,39 @@ export const EnumSpellTypeWithAggregatesFilterSchema: z.ZodType<Prisma.EnumSpell
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedEnumSpellTypeFilterSchema).optional(),
   _max: z.lazy(() => NestedEnumSpellTypeFilterSchema).optional()
+}).strict();
+
+export const EnumSpellCastingNullableWithAggregatesFilterSchema: z.ZodType<Prisma.EnumSpellCastingNullableWithAggregatesFilter> = z.object({
+  equals: z.lazy(() => SpellCastingSchema).optional().nullable(),
+  in: z.lazy(() => SpellCastingSchema).array().optional().nullable(),
+  notIn: z.lazy(() => SpellCastingSchema).array().optional().nullable(),
+  not: z.union([ z.lazy(() => SpellCastingSchema),z.lazy(() => NestedEnumSpellCastingNullableWithAggregatesFilterSchema) ]).optional().nullable(),
+  _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
+  _min: z.lazy(() => NestedEnumSpellCastingNullableFilterSchema).optional(),
+  _max: z.lazy(() => NestedEnumSpellCastingNullableFilterSchema).optional(),
+  isSet: z.boolean().optional()
+}).strict();
+
+export const EnumSpellTargetNullableWithAggregatesFilterSchema: z.ZodType<Prisma.EnumSpellTargetNullableWithAggregatesFilter> = z.object({
+  equals: z.lazy(() => SpellTargetSchema).optional().nullable(),
+  in: z.lazy(() => SpellTargetSchema).array().optional().nullable(),
+  notIn: z.lazy(() => SpellTargetSchema).array().optional().nullable(),
+  not: z.union([ z.lazy(() => SpellTargetSchema),z.lazy(() => NestedEnumSpellTargetNullableWithAggregatesFilterSchema) ]).optional().nullable(),
+  _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
+  _min: z.lazy(() => NestedEnumSpellTargetNullableFilterSchema).optional(),
+  _max: z.lazy(() => NestedEnumSpellTargetNullableFilterSchema).optional(),
+  isSet: z.boolean().optional()
+}).strict();
+
+export const EnumSpellActionNullableWithAggregatesFilterSchema: z.ZodType<Prisma.EnumSpellActionNullableWithAggregatesFilter> = z.object({
+  equals: z.lazy(() => SpellActionSchema).optional().nullable(),
+  in: z.lazy(() => SpellActionSchema).array().optional().nullable(),
+  notIn: z.lazy(() => SpellActionSchema).array().optional().nullable(),
+  not: z.union([ z.lazy(() => SpellActionSchema),z.lazy(() => NestedEnumSpellActionNullableWithAggregatesFilterSchema) ]).optional().nullable(),
+  _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
+  _min: z.lazy(() => NestedEnumSpellActionNullableFilterSchema).optional(),
+  _max: z.lazy(() => NestedEnumSpellActionNullableFilterSchema).optional(),
+  isSet: z.boolean().optional()
 }).strict();
 
 export const FloatNullableFilterSchema: z.ZodType<Prisma.FloatNullableFilter> = z.object({
@@ -1171,6 +1308,21 @@ export const NullableDateTimeFieldUpdateOperationsInputSchema: z.ZodType<Prisma.
 
 export const EnumSpellTypeFieldUpdateOperationsInputSchema: z.ZodType<Prisma.EnumSpellTypeFieldUpdateOperationsInput> = z.object({
   set: z.lazy(() => SpellTypeSchema).optional()
+}).strict();
+
+export const NullableEnumSpellCastingFieldUpdateOperationsInputSchema: z.ZodType<Prisma.NullableEnumSpellCastingFieldUpdateOperationsInput> = z.object({
+  set: z.lazy(() => SpellCastingSchema).optional().nullable(),
+  unset: z.boolean().optional()
+}).strict();
+
+export const NullableEnumSpellTargetFieldUpdateOperationsInputSchema: z.ZodType<Prisma.NullableEnumSpellTargetFieldUpdateOperationsInput> = z.object({
+  set: z.lazy(() => SpellTargetSchema).optional().nullable(),
+  unset: z.boolean().optional()
+}).strict();
+
+export const NullableEnumSpellActionFieldUpdateOperationsInputSchema: z.ZodType<Prisma.NullableEnumSpellActionFieldUpdateOperationsInput> = z.object({
+  set: z.lazy(() => SpellActionSchema).optional().nullable(),
+  unset: z.boolean().optional()
 }).strict();
 
 export const ComponentCreatespellsInputSchema: z.ZodType<Prisma.ComponentCreatespellsInput> = z.object({
@@ -1322,6 +1474,30 @@ export const NestedEnumSpellTypeFilterSchema: z.ZodType<Prisma.NestedEnumSpellTy
   not: z.union([ z.lazy(() => SpellTypeSchema),z.lazy(() => NestedEnumSpellTypeFilterSchema) ]).optional(),
 }).strict();
 
+export const NestedEnumSpellCastingNullableFilterSchema: z.ZodType<Prisma.NestedEnumSpellCastingNullableFilter> = z.object({
+  equals: z.lazy(() => SpellCastingSchema).optional().nullable(),
+  in: z.lazy(() => SpellCastingSchema).array().optional().nullable(),
+  notIn: z.lazy(() => SpellCastingSchema).array().optional().nullable(),
+  not: z.union([ z.lazy(() => SpellCastingSchema),z.lazy(() => NestedEnumSpellCastingNullableFilterSchema) ]).optional().nullable(),
+  isSet: z.boolean().optional()
+}).strict();
+
+export const NestedEnumSpellTargetNullableFilterSchema: z.ZodType<Prisma.NestedEnumSpellTargetNullableFilter> = z.object({
+  equals: z.lazy(() => SpellTargetSchema).optional().nullable(),
+  in: z.lazy(() => SpellTargetSchema).array().optional().nullable(),
+  notIn: z.lazy(() => SpellTargetSchema).array().optional().nullable(),
+  not: z.union([ z.lazy(() => SpellTargetSchema),z.lazy(() => NestedEnumSpellTargetNullableFilterSchema) ]).optional().nullable(),
+  isSet: z.boolean().optional()
+}).strict();
+
+export const NestedEnumSpellActionNullableFilterSchema: z.ZodType<Prisma.NestedEnumSpellActionNullableFilter> = z.object({
+  equals: z.lazy(() => SpellActionSchema).optional().nullable(),
+  in: z.lazy(() => SpellActionSchema).array().optional().nullable(),
+  notIn: z.lazy(() => SpellActionSchema).array().optional().nullable(),
+  not: z.union([ z.lazy(() => SpellActionSchema),z.lazy(() => NestedEnumSpellActionNullableFilterSchema) ]).optional().nullable(),
+  isSet: z.boolean().optional()
+}).strict();
+
 export const NestedIntWithAggregatesFilterSchema: z.ZodType<Prisma.NestedIntWithAggregatesFilter> = z.object({
   equals: z.number().optional(),
   in: z.number().array().optional(),
@@ -1402,6 +1578,39 @@ export const NestedEnumSpellTypeWithAggregatesFilterSchema: z.ZodType<Prisma.Nes
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedEnumSpellTypeFilterSchema).optional(),
   _max: z.lazy(() => NestedEnumSpellTypeFilterSchema).optional()
+}).strict();
+
+export const NestedEnumSpellCastingNullableWithAggregatesFilterSchema: z.ZodType<Prisma.NestedEnumSpellCastingNullableWithAggregatesFilter> = z.object({
+  equals: z.lazy(() => SpellCastingSchema).optional().nullable(),
+  in: z.lazy(() => SpellCastingSchema).array().optional().nullable(),
+  notIn: z.lazy(() => SpellCastingSchema).array().optional().nullable(),
+  not: z.union([ z.lazy(() => SpellCastingSchema),z.lazy(() => NestedEnumSpellCastingNullableWithAggregatesFilterSchema) ]).optional().nullable(),
+  _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
+  _min: z.lazy(() => NestedEnumSpellCastingNullableFilterSchema).optional(),
+  _max: z.lazy(() => NestedEnumSpellCastingNullableFilterSchema).optional(),
+  isSet: z.boolean().optional()
+}).strict();
+
+export const NestedEnumSpellTargetNullableWithAggregatesFilterSchema: z.ZodType<Prisma.NestedEnumSpellTargetNullableWithAggregatesFilter> = z.object({
+  equals: z.lazy(() => SpellTargetSchema).optional().nullable(),
+  in: z.lazy(() => SpellTargetSchema).array().optional().nullable(),
+  notIn: z.lazy(() => SpellTargetSchema).array().optional().nullable(),
+  not: z.union([ z.lazy(() => SpellTargetSchema),z.lazy(() => NestedEnumSpellTargetNullableWithAggregatesFilterSchema) ]).optional().nullable(),
+  _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
+  _min: z.lazy(() => NestedEnumSpellTargetNullableFilterSchema).optional(),
+  _max: z.lazy(() => NestedEnumSpellTargetNullableFilterSchema).optional(),
+  isSet: z.boolean().optional()
+}).strict();
+
+export const NestedEnumSpellActionNullableWithAggregatesFilterSchema: z.ZodType<Prisma.NestedEnumSpellActionNullableWithAggregatesFilter> = z.object({
+  equals: z.lazy(() => SpellActionSchema).optional().nullable(),
+  in: z.lazy(() => SpellActionSchema).array().optional().nullable(),
+  notIn: z.lazy(() => SpellActionSchema).array().optional().nullable(),
+  not: z.union([ z.lazy(() => SpellActionSchema),z.lazy(() => NestedEnumSpellActionNullableWithAggregatesFilterSchema) ]).optional().nullable(),
+  _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
+  _min: z.lazy(() => NestedEnumSpellActionNullableFilterSchema).optional(),
+  _max: z.lazy(() => NestedEnumSpellActionNullableFilterSchema).optional(),
+  isSet: z.boolean().optional()
 }).strict();
 
 export const NestedFloatNullableFilterSchema: z.ZodType<Prisma.NestedFloatNullableFilter> = z.object({

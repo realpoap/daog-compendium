@@ -1,5 +1,6 @@
 import { prisma } from '@api/index';
-import { ZodNewSpell } from '@api/lib/ZodSpell';
+import { SpellSchema } from '@api/lib/zod-prisma';
+import { ZodNewSpell, ZodSpell } from '@api/lib/ZodSpell';
 import { procedure, router } from '@api/trpc';
 import { number, z } from 'zod';
 
@@ -48,10 +49,17 @@ export const spellsRouter = router({
 				where:{number:input}
 			})
 		}),
+		getById: procedure
+		.input(z.string())
+		.query(async({input}) => {
+			return await prisma.spell.findFirstOrThrow({
+				where:{id:input}
+			})
+		}),
 	create: procedure
 		.input(ZodNewSpell)
 		.mutation(async({input}) => {
-			console.log('💌 creating spell :', input.titleCommon)
+			console.log('💌 creating spell #', input.number, ': ',input.titleCommon)
 			return await prisma.spell.create({
 				data: input,
 			})
@@ -64,14 +72,13 @@ export const spellsRouter = router({
 				data: input
 			})
 		}),
-	// update: procedure
-	// 	.input(ZodNewSpell)
-	// 	.mutation(async({input}) =>{
-	// 		console.log('💌 updating spell :', input.titleCommon)
-	// 		//const {id} = input;
-	// 		return await prisma.spell.update({
-	// 			where: {id},
-	// 			data: input
-	// 		})
-	// 	}),
+	update: procedure
+		.input(ZodSpell)
+		.mutation(async({input}) =>{
+			console.log('💌 updating spell :', input.titleCommon)
+			return await prisma.spell.update({
+				where: {number: input.number},
+				data: input
+			})
+		}),
 })

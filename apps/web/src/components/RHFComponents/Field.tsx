@@ -15,8 +15,16 @@ export const Field = (props: {
 	const {
 		formState: { errors },
 	} = useFormContext();
+	const widthClass =
+		width === 'third'
+			? 'w-1/3'
+			: width === 'half'
+				? 'w-1/2'
+				: width === 'small'
+					? 'w-1/4'
+					: 'w-11/12';
 	return (
-		<div className={`${width === 'small' ? 'w-1/3' : 'w-full'}`}>
+		<div className={`${widthClass} self-center`}>
 			<Label
 				name={name}
 				id={id ?? name}

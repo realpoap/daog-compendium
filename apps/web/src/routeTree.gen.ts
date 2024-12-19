@@ -17,6 +17,7 @@ import { Route as BestiaryIndexImport } from './routes/bestiary/index'
 import { Route as SpellsAddImport } from './routes/spells/add'
 import { Route as SpellsIdImport } from './routes/spells/$id'
 import { Route as BestiaryIdImport } from './routes/bestiary/$id'
+import { Route as SpellsEditIdImport } from './routes/spells/edit/$id'
 
 // Create Virtual Routes
 
@@ -65,6 +66,12 @@ const SpellsIdRoute = SpellsIdImport.update({
 const BestiaryIdRoute = BestiaryIdImport.update({
   id: '/bestiary/$id',
   path: '/bestiary/$id',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const SpellsEditIdRoute = SpellsEditIdImport.update({
+  id: '/spells/edit/$id',
+  path: '/spells/edit/$id',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -121,6 +128,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SpellsIndexLazyImport
       parentRoute: typeof rootRoute
     }
+    '/spells/edit/$id': {
+      id: '/spells/edit/$id'
+      path: '/spells/edit/$id'
+      fullPath: '/spells/edit/$id'
+      preLoaderRoute: typeof SpellsEditIdImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -134,6 +148,7 @@ export interface FileRoutesByFullPath {
   '/spells/add': typeof SpellsAddRoute
   '/bestiary': typeof BestiaryIndexRoute
   '/spells': typeof SpellsIndexLazyRoute
+  '/spells/edit/$id': typeof SpellsEditIdRoute
 }
 
 export interface FileRoutesByTo {
@@ -144,6 +159,7 @@ export interface FileRoutesByTo {
   '/spells/add': typeof SpellsAddRoute
   '/bestiary': typeof BestiaryIndexRoute
   '/spells': typeof SpellsIndexLazyRoute
+  '/spells/edit/$id': typeof SpellsEditIdRoute
 }
 
 export interface FileRoutesById {
@@ -155,6 +171,7 @@ export interface FileRoutesById {
   '/spells/add': typeof SpellsAddRoute
   '/bestiary/': typeof BestiaryIndexRoute
   '/spells/': typeof SpellsIndexLazyRoute
+  '/spells/edit/$id': typeof SpellsEditIdRoute
 }
 
 export interface FileRouteTypes {
@@ -167,6 +184,7 @@ export interface FileRouteTypes {
     | '/spells/add'
     | '/bestiary'
     | '/spells'
+    | '/spells/edit/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -176,6 +194,7 @@ export interface FileRouteTypes {
     | '/spells/add'
     | '/bestiary'
     | '/spells'
+    | '/spells/edit/$id'
   id:
     | '__root__'
     | '/'
@@ -185,6 +204,7 @@ export interface FileRouteTypes {
     | '/spells/add'
     | '/bestiary/'
     | '/spells/'
+    | '/spells/edit/$id'
   fileRoutesById: FileRoutesById
 }
 
@@ -196,6 +216,7 @@ export interface RootRouteChildren {
   SpellsAddRoute: typeof SpellsAddRoute
   BestiaryIndexRoute: typeof BestiaryIndexRoute
   SpellsIndexLazyRoute: typeof SpellsIndexLazyRoute
+  SpellsEditIdRoute: typeof SpellsEditIdRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -206,6 +227,7 @@ const rootRouteChildren: RootRouteChildren = {
   SpellsAddRoute: SpellsAddRoute,
   BestiaryIndexRoute: BestiaryIndexRoute,
   SpellsIndexLazyRoute: SpellsIndexLazyRoute,
+  SpellsEditIdRoute: SpellsEditIdRoute,
 }
 
 export const routeTree = rootRoute
@@ -224,7 +246,8 @@ export const routeTree = rootRoute
         "/spells/$id",
         "/spells/add",
         "/bestiary/",
-        "/spells/"
+        "/spells/",
+        "/spells/edit/$id"
       ]
     },
     "/": {
@@ -247,6 +270,9 @@ export const routeTree = rootRoute
     },
     "/spells/": {
       "filePath": "spells/index.lazy.tsx"
+    },
+    "/spells/edit/$id": {
+      "filePath": "spells/edit/$id.tsx"
     }
   }
 }
