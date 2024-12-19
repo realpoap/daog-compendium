@@ -209,7 +209,7 @@ const SpellForm = () => {
 					>
 						<Textarea
 							name='flavor'
-							placeholder='How it looks...'
+							placeholder='How the spell looks...'
 						/>
 					</Field>
 					<Field
@@ -229,14 +229,14 @@ const SpellForm = () => {
 					>
 						<input
 							type='checkbox'
-							className='max-h-4 min-h-2'
+							className='peer min-h-2 w-full py-0'
 						/>
-						<div className='collapse-title font-noto m-0 mt-2 max-h-4 min-h-4 py-0 text-xs text-purple-400 peer-checked:hidden'>
+						<div className='collapse-title font-noto m-0 mt-2 min-h-2 py-0 text-xs text-purple-400'>
 							+ details
 						</div>
 						<div
 							className={cn(
-								'collapse-content items-center justify-center p-0 pb-0',
+								'collapse-content flex flex-col items-center justify-start p-0 pb-0 peer-checked:visible',
 							)}
 						>
 							<div className='flex w-full flex-row flex-wrap justify-center gap-x-4'>
@@ -302,10 +302,10 @@ const SpellForm = () => {
 					<button
 						type='submit'
 						disabled={methods.formState.isSubmitting}
-						className='bg-accent font-grenze rounded-lg px-4 py-2 text-lg font-bold transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:bg-stone-500'
+						className='bg-accent font-grenze w-1/2 self-center rounded-lg px-4 py-2 text-lg font-bold transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:bg-stone-500'
 					>
 						{!methods.formState.isSubmitting ? (
-							<span>Create</span>
+							<span className='text-center'>Create</span>
 						) : (
 							<span className='loading loading-dots loading-md'></span>
 						)}

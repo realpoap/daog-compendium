@@ -24,10 +24,22 @@ type Spell = z.infer<typeof ZodSpell>; // Types for New Spell to tRPC
 
 const SpellEdit = () => {
 	const { history } = useRouter();
+	const navigate = useNavigate();
 
 	const { id } = useParams({ strict: false });
+	const utils = trpc.useUtils();
+
 	const spellById = trpc.spells.getById.useQuery(id as string);
-	const updateSpell = trpc.spells.update.useMutation();
+	const updateSpell = trpc.spells.update.useMutation({
+		onSuccess() {
+			utils.spells.getByNumber.invalidate();
+			utils.spells.getById.invalidate();
+			navigate({
+				to: '/spells/$id',
+				params: { id: `${spell?.number}` },
+			});
+		},
+	});
 
 	useEffect(() => {
 		if (!spellById.isSuccess) return;
@@ -50,6 +62,7 @@ const SpellEdit = () => {
 	const onSubmit = async (data: Spell) => {
 		await new Promise(resolve => setTimeout(resolve, 500));
 		try {
+			utils.spells.getByNumber.invalidate();
 			await updateSpell.mutate(data);
 		} catch (error) {
 			if (updateSpell.isError) {
@@ -59,22 +72,24 @@ const SpellEdit = () => {
 		}
 	};
 
+	//Loading -----------------------------------------------------------------
 	if (spellById.isLoading && !spellById.data) {
 		return (
-			<div className='flex h-screen flex-col items-center justify-center'>
-				<p>{spellById.status}</p>
-				<span className='loading loading-spinner loading-lg'></span>
+			<div className='font-grenze flex h-screen flex-row flex-col items-center justify-center'>
+				<p>Opening spell</p>
+				<span className='loading loading-dots loading-md'></span>
 			</div>
 		);
 	}
-
+	// define spell object data after query success
 	const spell = spellById?.data;
 
 	return (
 		<div className='mt-sm flex flex-col items-center justify-center p-2 px-2'>
+			{/* Back button ------------------------------------------------- */}
 			<button
 				className='font-grenze mt-1 align-middle text-2xl text-stone-500 hover:text-stone-200'
-				onClick={() => history.go(-1)}
+				onClick={() => history.back()}
 			>
 				<span className='text-2xl'>&#8249;</span> Back
 			</button>
@@ -84,12 +99,14 @@ const SpellEdit = () => {
 				</h1>
 			</div>
 
+			{/* Modals ------------------------------------------------- */}
+
 			<FormProvider {...methods}>
 				<form
 					onSubmit={methods.handleSubmit(onSubmit)}
 					className='flex w-full flex-col'
 				>
-					<p className='font-grenze text-center text-2xl text-stone-500'>
+					<p className='font-grenze 2xl items-center text-center text-stone-500'>
 						{' '}
 						~ {spell?.number} ~{' '}
 					</p>
@@ -109,12 +126,14 @@ const SpellEdit = () => {
 					>
 						<input
 							type='checkbox'
-							className='max-h-4 min-h-2'
+							className='peer min-h-2'
 						/>
-						<div className='collapse-title font-noto m-0 mt-2 max-h-4 min-h-4 py-0 text-xs text-purple-400 peer-checked:hidden'>
+						<div className='collapse-title font-noto m-0 mt-2 min-h-2 py-0 text-xs text-purple-400'>
 							+ add glaise name
 						</div>
-						<div className={cn('collapse-content pb-0 pr-0')}>
+						<div
+							className={cn('collapse-content pb-0 pr-0 peer-checked:visible')}
+						>
 							<Field
 								name='titleGlaise'
 								label='Name (glaise)'
@@ -220,14 +239,14 @@ const SpellEdit = () => {
 					>
 						<input
 							type='checkbox'
-							className='max-h-4 min-h-2'
+							className='peer min-h-2 w-full py-0'
 						/>
-						<div className='collapse-title font-noto m-0 mt-2 max-h-4 min-h-4 py-0 text-xs text-purple-400 peer-checked:hidden'>
+						<div className='collapse-title font-noto m-0 mt-2 min-h-2 py-0 text-xs text-purple-400'>
 							+ details
 						</div>
 						<div
 							className={cn(
-								'collapse-content items-center justify-center p-0 pb-0',
+								'collapse-content flex flex-col items-center justify-start p-0 pb-0 peer-checked:visible',
 							)}
 						>
 							<div className='flex w-full flex-row flex-wrap justify-center gap-x-4'>

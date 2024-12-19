@@ -6,6 +6,7 @@ import {
 	GiCarrion,
 	GiEarthSpit,
 	GiFlatPawPrint,
+	GiGhost,
 	GiGoat,
 	GiHeartDrop,
 	GiSmallFire,
@@ -89,9 +90,7 @@ export const spellOptions = [
 	{
 		label: 'Esprit',
 		value: 'spirit',
-		icon: (
-			<GiBrainTentacle className='icon-stone-900 dark:icon-stone-100 icon-4xl' />
-		),
+		icon: <GiGhost className='icon-stone-900 dark:icon-stone-100 icon-4xl' />,
 	},
 ];
 
@@ -111,7 +110,6 @@ export const targetTypeOptions = [
 	{
 		label: 'random',
 		value: 'random',
-		icon: <GiCardRandom className='icon-stone-900 dark:icon-stone-100' />,
 	},
 	{
 		label: 'none',
@@ -123,35 +121,22 @@ export const castingOptions = [
 	{
 		label: 'instant',
 		value: 'instant',
-		icon: <GiBurningSkull className='icon-stone-900 dark:icon-stone-100' />,
 	},
 	{
 		label: 'delayed',
 		value: 'delayed',
-		icon: (
-			<GiBurningSkull className='icon-stone-900 dark:icon-stone-100 icon-4xl' />
-		),
 	},
 	{
 		label: 'ritual',
 		value: 'ritual',
-		icon: (
-			<GiBurningSkull className='icon-stone-900 dark:icon-stone-100 icon-4xl' />
-		),
 	},
 	{
 		label: 'concentration',
 		value: 'concentration',
-		icon: (
-			<GiBurningSkull className='icon-stone-900 dark:icon-stone-100 icon-4xl' />
-		),
 	},
 	{
 		label: 'upkeep',
 		value: 'upkeep',
-		icon: (
-			<GiBurningSkull className='icon-stone-900 dark:icon-stone-100 icon-4xl' />
-		),
 	},
 ];
 
