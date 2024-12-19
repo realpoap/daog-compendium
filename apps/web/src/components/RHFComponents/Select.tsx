@@ -9,7 +9,7 @@ export const Select = ({
 	defaultValue,
 }: {
 	name: string;
-	options: { label: string; value: string; icon: JSX.Element }[];
+	options: { label: string; value: string; icon?: JSX.Element }[];
 	id?: string;
 	defaultValue: string;
 }) => {
@@ -22,7 +22,7 @@ export const Select = ({
 		<select
 			defaultValue={defaultValue}
 			className={cn(
-				'select select-bordered font-grenze w-full rounded-lg px-4 py-2 text-lg text-purple-900 caret-purple-900 shadow-sm placeholder:italic focus:border-purple-900 focus:outline-none focus:ring-1 focus:ring-purple-900 dark:bg-stone-700 dark:text-purple-400 dark:caret-purple-400 dark:focus:border-purple-400 dark:focus:ring-purple-400',
+				'select select-bordered font-grenze w-full rounded-lg px-4 py-2 text-lg italic text-purple-900 caret-purple-900 shadow-sm focus:border-purple-900 focus:outline-none focus:ring-1 focus:ring-purple-900 dark:bg-stone-700 dark:text-purple-400 dark:caret-purple-400 dark:focus:border-purple-400 dark:focus:ring-purple-400 peer-default:dark:text-stone-400',
 				{
 					'select-error': errors[name],
 					'ring-error': errors[name],
@@ -36,7 +36,7 @@ export const Select = ({
 				value={'default'}
 				disabled
 			>
-				Magic Type
+				{id}
 			</option>
 			{options.map(item => (
 				<option

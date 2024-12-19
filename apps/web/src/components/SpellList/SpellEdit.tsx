@@ -6,10 +6,10 @@ import {
 } from '@/types/spellOptions';
 import { cn } from '@/utils/classNames';
 import { trpc } from '@/utils/trpc';
-import { ZodNewSpell } from '@api/lib/ZodSpell'; // resolver for RHF
+import { ZodSpell } from '@api/lib/ZodSpell'; // resolver for RHF
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useParams, useRouter } from '@tanstack/react-router';
-import { useMemo } from 'react';
+import { useNavigate, useParams, useRouter } from '@tanstack/react-router';
+import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import {
@@ -20,58 +20,55 @@ import {
 	Textarea,
 } from '../RHFComponents/index';
 
-type NewSpell = z.infer<typeof ZodNewSpell>; // Types for New Spell to tRPC
+type Spell = z.infer<typeof ZodSpell>; // Types for New Spell to tRPC
 
-const SpellForm = () => {
+const SpellEdit = () => {
 	const { history } = useRouter();
 
-	const methods = useForm<NewSpell>({
+	const { id } = useParams({ strict: false });
+	const spellById = trpc.spells.getById.useQuery(id as string);
+	const updateSpell = trpc.spells.update.useMutation();
+
+	useEffect(() => {
+		if (!spellById.isSuccess) return;
+		methods.reset(spellById.data as Spell);
+	}, [spellById.status]);
+
+	const methods = useForm<Spell>({
 		resolver: async (data, context, options) => {
 			// you can debug your validation schema here
 			console.log('formData', data);
 			console.log(
 				'validation result',
-				await zodResolver(ZodNewSpell)(data, context, options),
+				await zodResolver(ZodSpell)(data, context, options),
 			);
-			return zodResolver(ZodNewSpell)(data, context, options);
+			return zodResolver(ZodSpell)(data, context, options);
 		},
 		shouldFocusError: true,
 	});
 
-	const highestSpellNumber = trpc.spells.getHighestNumber.useQuery();
-	const createSpell = trpc.spells.create.useMutation();
-	let newSpellNumber = 0;
-
-	const errors = useMemo(() => methods.formState.errors, [methods.formState]);
-
-	const onSubmit = async (data: NewSpell) => {
-		await new Promise(resolve => setTimeout(resolve, 1000));
-		await createSpell.mutate(data);
-		if (!createSpell.isSuccess) {
-			alert('Spell creation failed.');
-			return;
+	const onSubmit = async (data: Spell) => {
+		await new Promise(resolve => setTimeout(resolve, 500));
+		try {
+			await updateSpell.mutate(data);
+		} catch (error) {
+			if (updateSpell.isError) {
+				alert('Spell update failed.');
+				return;
+			}
 		}
-		methods.reset();
 	};
 
-	const onError = () => {
-		console.log(errors);
-	};
-
-	if (highestSpellNumber.isLoading && !highestSpellNumber.data) {
+	if (spellById.isLoading && !spellById.data) {
 		return (
 			<div className='flex h-screen flex-col items-center justify-center'>
-				<p>{highestSpellNumber.status}</p>
+				<p>{spellById.status}</p>
 				<span className='loading loading-spinner loading-lg'></span>
 			</div>
 		);
 	}
 
-	if (highestSpellNumber.isSuccess && highestSpellNumber.data) {
-		newSpellNumber = Number(highestSpellNumber.data?._max?.number) + 1;
-		console.log(newSpellNumber);
-		methods.setValue('number', newSpellNumber);
-	}
+	const spell = spellById?.data;
 
 	return (
 		<div className='mt-sm flex flex-col items-center justify-center p-2 px-2'>
@@ -89,12 +86,12 @@ const SpellForm = () => {
 
 			<FormProvider {...methods}>
 				<form
-					onSubmit={methods.handleSubmit(onSubmit, onError)}
+					onSubmit={methods.handleSubmit(onSubmit)}
 					className='flex w-full flex-col'
 				>
 					<p className='font-grenze text-center text-2xl text-stone-500'>
 						{' '}
-						~ {newSpellNumber} ~{' '}
+						~ {spell?.number} ~{' '}
 					</p>
 					{/* TITLE -------------------------------------------------- */}
 					<Field
@@ -138,7 +135,7 @@ const SpellForm = () => {
 							<Select
 								name='casting'
 								options={castingOptions}
-								defaultValue='default'
+								defaultValue={spell?.casting as string}
 							/>
 						</Field>
 						<Field
@@ -148,7 +145,7 @@ const SpellForm = () => {
 							<Select
 								name='action'
 								options={actionOptions}
-								defaultValue='default'
+								defaultValue={spell?.action as string}
 							/>
 						</Field>
 						<Field
@@ -159,7 +156,7 @@ const SpellForm = () => {
 							<Select
 								name='targetType'
 								options={targetTypeOptions}
-								defaultValue='default'
+								defaultValue={spell?.targetType as string}
 							/>
 						</Field>
 					</div>
@@ -174,7 +171,7 @@ const SpellForm = () => {
 							<Select
 								name='type'
 								options={spellOptions}
-								defaultValue='default'
+								defaultValue={spell?.type as string}
 							/>
 						</Field>
 					</div>
@@ -207,19 +204,13 @@ const SpellForm = () => {
 						name='flavor'
 						label='Flavor'
 					>
-						<Textarea
-							name='flavor'
-							placeholder='How it looks...'
-						/>
+						<Textarea name='flavor' />
 					</Field>
 					<Field
 						name='description'
 						label='Description'
 					>
-						<Textarea
-							name='description'
-							placeholder='How the spell works...'
-						/>
+						<Textarea name='description' />
 					</Field>
 
 					{/* SPECS ------------------------------------------------ */}
@@ -302,10 +293,10 @@ const SpellForm = () => {
 					<button
 						type='submit'
 						disabled={methods.formState.isSubmitting}
-						className='bg-accent font-grenze rounded-lg px-4 py-2 text-lg font-bold transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:bg-stone-500'
+						className='bg-accent font-grenze w-1/2 self-center rounded-lg px-4 py-2 text-lg font-bold transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:bg-stone-500'
 					>
 						{!methods.formState.isSubmitting ? (
-							<span>Create</span>
+							<span>Update</span>
 						) : (
 							<span className='loading loading-dots loading-md'></span>
 						)}
@@ -316,4 +307,4 @@ const SpellForm = () => {
 	);
 };
 
-export default SpellForm;
+export default SpellEdit;

@@ -2,6 +2,7 @@ import {
 	GiBlood,
 	GiBrainTentacle,
 	GiBurningSkull,
+	GiCardRandom,
 	GiCarrion,
 	GiEarthSpit,
 	GiFlatPawPrint,
@@ -91,5 +92,112 @@ export const spellOptions = [
 		icon: (
 			<GiBrainTentacle className='icon-stone-900 dark:icon-stone-100 icon-4xl' />
 		),
+	},
+];
+
+export const targetTypeOptions = [
+	{
+		label: 'single',
+		value: 'single',
+	},
+	{
+		label: 'multiple',
+		value: 'multiple',
+	},
+	{
+		label: 'self',
+		value: 'self',
+	},
+	{
+		label: 'random',
+		value: 'random',
+		icon: <GiCardRandom className='icon-stone-900 dark:icon-stone-100' />,
+	},
+	{
+		label: 'none',
+		value: 'none',
+	},
+];
+
+export const castingOptions = [
+	{
+		label: 'instant',
+		value: 'instant',
+		icon: <GiBurningSkull className='icon-stone-900 dark:icon-stone-100' />,
+	},
+	{
+		label: 'delayed',
+		value: 'delayed',
+		icon: (
+			<GiBurningSkull className='icon-stone-900 dark:icon-stone-100 icon-4xl' />
+		),
+	},
+	{
+		label: 'ritual',
+		value: 'ritual',
+		icon: (
+			<GiBurningSkull className='icon-stone-900 dark:icon-stone-100 icon-4xl' />
+		),
+	},
+	{
+		label: 'concentration',
+		value: 'concentration',
+		icon: (
+			<GiBurningSkull className='icon-stone-900 dark:icon-stone-100 icon-4xl' />
+		),
+	},
+	{
+		label: 'upkeep',
+		value: 'upkeep',
+		icon: (
+			<GiBurningSkull className='icon-stone-900 dark:icon-stone-100 icon-4xl' />
+		),
+	},
+];
+
+export const actionOptions = [
+	{
+		label: 'charm',
+		value: 'charm',
+	},
+	{
+		label: 'create',
+		value: 'create',
+	},
+	{
+		label: 'damage',
+		value: 'damage',
+	},
+	{
+		label: 'enhance',
+		value: 'enhance',
+	},
+	{
+		label: 'heal',
+		value: 'heal',
+	},
+	{
+		label: 'link',
+		value: 'link',
+	},
+	{
+		label: 'move',
+		value: 'move',
+	},
+	{
+		label: 'protect',
+		value: 'protect',
+	},
+	{
+		label: 'puzzle',
+		value: 'puzzle',
+	},
+	{
+		label: 'transform',
+		value: 'transform',
+	},
+	{
+		label: 'remove',
+		value: 'remove',
 	},
 ];

@@ -49,7 +49,11 @@ model Spell {
   type        SpellType
   cost        Int
   difficulty  Int
-  description String?
+  casting     SpellCasting?
+  targetType  SpellTarget?
+  action      SpellAction?
+  flavor      String?
+  description String
   damages     String?
   heal        String?
   effects     String?
@@ -83,4 +87,34 @@ enum SpellType {
   water
   air
   blood
+}
+
+enum SpellAction {
+  charm
+  damage
+  heal
+  protect
+  enhance
+  link
+  create
+  transform
+  move
+  remove
+  puzzle
+}
+
+enum SpellCasting {
+  instant
+  delayed
+  ritual
+  concentration
+  upkeep
+}
+
+enum SpellTarget {
+  single
+  multiple
+  random
+  self
+  none
 }

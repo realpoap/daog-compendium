@@ -3,7 +3,7 @@ import { trpc } from '@/utils/trpc';
 import { SpellSchema } from '@api/lib/zod-prisma/index';
 import { Link } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
-import { GiBrain, GiDrop } from 'rocketicons/gi';
+import { GiBrain, GiDrop, GiRoundStar } from 'rocketicons/gi';
 import { RiAddLine } from 'rocketicons/ri';
 import { useDebounce } from 'use-debounce';
 import { z } from 'zod';
@@ -27,6 +27,9 @@ const SpellSearch = () => {
 		'description',
 		'component',
 		'effects',
+		'targetType',
+		'casting',
+		'flavor',
 	];
 
 	useEffect(() => {
@@ -71,8 +74,8 @@ const SpellSearch = () => {
 	if (query.isLoading) {
 		return (
 			<div className='flex h-screen flex-col items-center justify-center'>
-				<p className='font-grenze'>...Fetching amazing spells ... </p>
-				<span className='loading loading-spinner loading-lg'></span>
+				<p className='font-grenze'>Fetching amazing spells ... </p>
+				<span className='loading loading-spinner loading-md'></span>
 			</div>
 		);
 	}
@@ -96,7 +99,6 @@ const SpellSearch = () => {
 					<Link
 						id='add-button'
 						to={'/spells/add'}
-						params={{ id: `${latestNumber}` }}
 						className='badge bg-accent z-20 mb-2 h-10 w-10 border-none shadow-md shadow-stone-900 transition-opacity duration-200'
 					>
 						<RiAddLine className='icon-white-2xl' />
@@ -122,9 +124,13 @@ const SpellSearch = () => {
 								>
 									{d.titleCommon}
 								</p>
+								<span className='font-noto mr-1 align-baseline text-sm font-semibold capitalize'>
+									{d.type}
+								</span>
 								<div className='font-noto flex w-48 flex-row items-baseline justify-center align-baseline dark:text-stone-200'>
-									<span className='mr-1 align-baseline text-sm font-semibold capitalize'>
-										{d.type}
+									<span className='font-noto align-baseline text-sm font-semibold'>
+										<GiRoundStar className='icon-stone-900 dark:icon-stone-100 icon-md mr-1' />
+										{d?.level}
 									</span>
 									<span className='mx-2 align-baseline text-sm font-semibold'>
 										|
@@ -141,12 +147,15 @@ const SpellSearch = () => {
 										{d.difficulty}
 									</span>
 								</div>
+								<span className='font-noto mt-1 align-baseline text-xs font-light italic dark:text-stone-400'>
+									// {d.casting} spell to {d.action} {d.targetType} people //
+								</span>
 								<div
 									className={cn(
 										'font-noto mt-1 line-clamp-2 max-w-72 text-sm italic text-stone-700 md:line-clamp-none md:max-w-xl md:text-ellipsis dark:text-stone-400',
 									)}
 								>
-									{d.description}
+									{d.flavor}
 								</div>
 							</div>
 						</Link>
