@@ -75,32 +75,34 @@ const SpellDetails = () => {
 					~ {spell?.number} ~
 				</span>
 				<div className='sticky top-10 w-full bg-stone-800 py-4'>
-					<h3
+					<h1
 						className={cn(
-							'font-grenze text-4xl font-extrabold tracking-wider text-purple-900 dark:text-purple-400',
+							'font-grenze text-5xl font-extrabold tracking-wider text-purple-900 dark:text-purple-400',
 						)}
 					>
 						{spell?.titleCommon}
-					</h3>
+					</h1>
 					<p
 						className={cn(
-							'font-noto text-md font-bold tracking-wider text-purple-900 opacity-80 dark:text-purple-400',
+							'font-noto text-lg font-bold tracking-wider text-purple-900 opacity-80 dark:text-purple-400',
 						)}
 					>
 						{spell?.titleGlaise}
 					</p>
 				</div>
-				<span className='text-md font-grenze mr-1 align-baseline font-semibold capitalize tracking-wider dark:text-stone-200'>
+				<span className='font-grenze mr-1 align-baseline text-2xl font-semibold capitalize tracking-wider dark:text-stone-200'>
 					{spell?.type}
 				</span>
-				<span className='font-noto align-baseline text-xs font-light italic dark:text-stone-400'>
+				<span className='font-noto text-md align-baseline font-light italic dark:text-stone-400'>
 					// {spell?.casting} spell to {spell?.action}{' '}
 					{spell?.targetType !== 'none' && spell?.targetType}
 					{spell?.targetType === 'none'
 						? 'noone'
-						: spell?.targetType === 'self'
-							? ''
-							: ' creatures'}{' '}
+						: spell?.targetType === 'single'
+							? ' creature'
+							: spell?.targetType === 'self'
+								? ''
+								: ' creatures'}{' '}
 					//
 				</span>
 				<div className='font-noto my-4 flex w-full flex-row items-baseline justify-center align-baseline dark:text-stone-200'>
@@ -121,14 +123,14 @@ const SpellDetails = () => {
 				</div>
 				<div
 					className={cn(
-						'font-grenze my-1 max-w-72 text-base italic tracking-wider text-stone-700 md:line-clamp-none md:max-w-xl dark:text-stone-400',
+						'font-grenze my-1 max-w-72 text-lg italic leading-none tracking-wider text-stone-700 md:line-clamp-none md:max-w-xl dark:text-stone-400',
 					)}
 				>
 					{spell?.flavor}
 				</div>
 				<div
 					className={cn(
-						'font-noto my-1 max-w-72 text-sm text-stone-700 md:line-clamp-none md:max-w-xl dark:text-stone-400',
+						'font-noto text-md my-1 max-w-72 text-stone-700 md:line-clamp-none md:max-w-xl dark:text-stone-400',
 					)}
 				>
 					{spell?.description}
@@ -169,7 +171,7 @@ const SpellDetails = () => {
 							<p className='font-grenze text-xl tracking-wide text-purple-400'>
 								Duration
 							</p>
-							<p className='text-sm'>{spell?.duration}</p>
+							<p className='text-base'>{spell?.duration}</p>
 						</div>
 					)}
 					{spell?.range && (
@@ -177,7 +179,7 @@ const SpellDetails = () => {
 							<p className='font-grenze text-xl tracking-wide text-purple-400'>
 								Range
 							</p>
-							<p className='text-sm'>{spell?.range}</p>
+							<p className='text-base'>{spell?.range}</p>
 						</div>
 					)}
 					{spell?.target && (
@@ -185,7 +187,7 @@ const SpellDetails = () => {
 							<p className='font-grenze text-xl tracking-wide text-purple-400'>
 								Target
 							</p>
-							<p className='text-sm'>{spell?.target}</p>
+							<p className='text-base'>{spell?.target}</p>
 						</div>
 					)}
 					{spell?.effects && (
@@ -193,17 +195,17 @@ const SpellDetails = () => {
 							<p className='font-grenze text-xl tracking-wide text-purple-400'>
 								Effects
 							</p>
-							<p className='text-sm'>{spell?.effects}</p>
+							<p className='text-base'>{spell?.effects}</p>
 						</div>
 					)}
 				</div>
-				<div>
-					<span className='align-baseline text-sm font-semibold'>
+				<div className='light:text-stone-900 dark:text-stone-200'>
+					<span className='align-baseline text-base font-semibold'>
 						<GiSwordWound className='icon-stone-900 dark:icon-stone-100 icon-md mr-2' />
 						{spell?.damages || '~'}
 					</span>
 					<span className='mx-4 align-baseline text-sm font-semibold'>|</span>
-					<span className='font-noto align-baseline text-sm font-semibold'>
+					<span className='font-noto align-baseline text-base font-semibold'>
 						<GiHeartPlus className='icon-stone-900 dark:icon-stone-100 icon-md mr-2' />
 						{spell?.heal || '~'}
 					</span>
@@ -212,7 +214,7 @@ const SpellDetails = () => {
 			<Link
 				to={`/spells/edit/$id`}
 				params={{ id: `${spell?.id}` }}
-				className='bg-accent font-grenze my-4 w-1/4 self-center rounded-lg px-4 py-1 text-center text-lg font-bold transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:bg-stone-500'
+				className='bg-accent font-grenze my-4 w-1/2 self-center rounded-lg px-4 py-2 text-center text-lg font-bold transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:bg-stone-500 md:w-1/4'
 			>
 				Edit
 			</Link>

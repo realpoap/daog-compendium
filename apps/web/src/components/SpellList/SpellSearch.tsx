@@ -79,9 +79,9 @@ const SpellSearch = () => {
 
 	if (query.isLoading) {
 		return (
-			<div className='flex h-screen flex-col items-center justify-center'>
-				<p className='font-grenze'>Fetching amazing spells ... </p>
-				<span className='loading loading-spinner loading-md'></span>
+			<div className='flex h-screen flex-row items-center justify-center'>
+				<p className='font-grenze text-lg'>Fetching amazing spells</p>
+				<span className='loading loading-dots loading-md'></span>
 			</div>
 		);
 	}
@@ -154,7 +154,16 @@ const SpellSearch = () => {
 									</span>
 								</div>
 								<span className='font-noto mt-1 align-baseline text-xs font-light italic dark:text-stone-400'>
-									// {d.casting} spell to {d.action} {d.targetType} people //
+									// {d?.casting} spell to {d?.action}{' '}
+									{d?.targetType !== 'none' && d?.targetType}
+									{d?.targetType === 'none'
+										? 'noone'
+										: d?.targetType === 'self'
+											? ''
+											: d?.targetType === 'single'
+												? ' creature'
+												: ' creatures'}{' '}
+									//
 								</span>
 								<div
 									className={cn(

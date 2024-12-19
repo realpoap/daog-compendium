@@ -11,6 +11,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useParams, useRouter } from '@tanstack/react-router';
 import { useMemo } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 import { z } from 'zod';
 import {
 	Field,
@@ -39,30 +40,27 @@ const SpellForm = () => {
 	});
 
 	const highestSpellNumber = trpc.spells.getHighestNumber.useQuery();
-	const createSpell = trpc.spells.create.useMutation();
+	const createSpell = trpc.spells.create.useMutation({
+		onSuccess: () => {
+			toast.success('Spell created !');
+			methods.reset();
+		},
+		onError: error => {
+			toast.error('Something bad happened...');
+			throw new Error(error.message);
+		},
+	});
 	let newSpellNumber = 0;
 
-	const errors = useMemo(() => methods.formState.errors, [methods.formState]);
-
 	const onSubmit = async (data: NewSpell) => {
-		await new Promise(resolve => setTimeout(resolve, 1000));
-		await createSpell.mutate(data);
-		if (!createSpell.isSuccess) {
-			alert('Spell creation failed.');
-			return;
-		}
-		methods.reset();
-	};
-
-	const onError = () => {
-		console.log(errors);
+		createSpell.mutate(data);
 	};
 
 	if (highestSpellNumber.isLoading && !highestSpellNumber.data) {
 		return (
-			<div className='flex h-screen flex-col items-center justify-center'>
-				<p>{highestSpellNumber.status}</p>
-				<span className='loading loading-spinner loading-lg'></span>
+			<div className='flex h-[100dvh] flex-row items-center justify-center align-middle'>
+				<p>Loading magic</p>
+				<span className='loading loading-dots loading-sm'></span>
 			</div>
 		);
 	}
@@ -83,18 +81,17 @@ const SpellForm = () => {
 			</button>
 			<div className='container sticky top-10 z-10 flex h-fit flex-col items-center bg-gradient-to-b from-stone-100 from-80% dark:from-stone-800'>
 				<h1 className='font-grenze sticky mx-auto my-4 text-center text-6xl font-bold tracking-wide text-purple-900 md:mt-8 dark:text-purple-400'>
-					New Spell
+					Create a spell :
 				</h1>
 			</div>
 
 			<FormProvider {...methods}>
 				<form
-					onSubmit={methods.handleSubmit(onSubmit, onError)}
-					className='flex w-full flex-col'
+					onSubmit={methods.handleSubmit(onSubmit)}
+					className='flex w-full flex-col md:w-2/3'
 				>
-					<p className='font-grenze text-center text-2xl text-stone-500'>
-						{' '}
-						~ {newSpellNumber} ~{' '}
+					<p className='font-grenze text-center align-baseline text-2xl text-stone-500'>
+						~ {newSpellNumber} ~
 					</p>
 					{/* TITLE -------------------------------------------------- */}
 					<Field
@@ -112,12 +109,16 @@ const SpellForm = () => {
 					>
 						<input
 							type='checkbox'
-							className='max-h-4 min-h-2'
+							className='peer min-h-2'
 						/>
-						<div className='collapse-title font-noto m-0 mt-2 max-h-4 min-h-4 py-0 text-xs text-purple-400 peer-checked:hidden'>
+						<div className='collapse-title font-noto m-0 ml-4 mt-2 min-h-2 py-0 text-xs text-purple-400'>
 							+ add glaise name
 						</div>
-						<div className={cn('collapse-content pb-0 pr-0')}>
+						<div
+							className={cn(
+								'collapse-content peer-checked:collapse-open flex flex-col items-center pb-0 pr-0',
+							)}
+						>
 							<Field
 								name='titleGlaise'
 								label='Name (glaise)'
@@ -231,8 +232,8 @@ const SpellForm = () => {
 							type='checkbox'
 							className='peer min-h-2 w-full py-0'
 						/>
-						<div className='collapse-title font-noto m-0 mt-2 min-h-2 py-0 text-xs text-purple-400'>
-							+ details
+						<div className='collapse-title font-noto m-0 ml-4 mt-2 min-h-2 py-0 text-xs text-purple-400'>
+							+ add details
 						</div>
 						<div
 							className={cn(
@@ -302,7 +303,7 @@ const SpellForm = () => {
 					<button
 						type='submit'
 						disabled={methods.formState.isSubmitting}
-						className='bg-accent font-grenze w-1/2 self-center rounded-lg px-4 py-2 text-lg font-bold transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:bg-stone-500'
+						className='bg-accent font-grenze w-1/2 self-center rounded-lg px-4 py-2 text-lg font-bold transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:bg-stone-500 md:w-1/4'
 					>
 						{!methods.formState.isSubmitting ? (
 							<span className='text-center'>Create</span>

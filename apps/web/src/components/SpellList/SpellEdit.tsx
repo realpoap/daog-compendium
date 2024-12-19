@@ -11,6 +11,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate, useParams, useRouter } from '@tanstack/react-router';
 import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 import { z } from 'zod';
 import {
 	Field,
@@ -31,13 +32,18 @@ const SpellEdit = () => {
 
 	const spellById = trpc.spells.getById.useQuery(id as string);
 	const updateSpell = trpc.spells.update.useMutation({
-		onSuccess() {
+		onSuccess: () => {
+			toast.success('Spell edited !');
 			utils.spells.getByNumber.invalidate();
 			utils.spells.getById.invalidate();
 			navigate({
 				to: '/spells/$id',
 				params: { id: `${spell?.number}` },
 			});
+		},
+		onError: error => {
+			toast.error('Something bad happened...');
+			throw new Error(error.message);
 		},
 	});
 
@@ -60,16 +66,8 @@ const SpellEdit = () => {
 	});
 
 	const onSubmit = async (data: Spell) => {
-		await new Promise(resolve => setTimeout(resolve, 500));
-		try {
-			utils.spells.getByNumber.invalidate();
-			await updateSpell.mutate(data);
-		} catch (error) {
-			if (updateSpell.isError) {
-				alert('Spell update failed.');
-				return;
-			}
-		}
+		utils.spells.getByNumber.invalidate();
+		updateSpell.mutate(data);
 	};
 
 	//Loading -----------------------------------------------------------------
@@ -84,6 +82,10 @@ const SpellEdit = () => {
 	// define spell object data after query success
 	const spell = spellById?.data;
 
+	/////////////////////////////////////////
+	// RETURN
+	/////////////////////////////////////////
+
 	return (
 		<div className='mt-sm flex flex-col items-center justify-center p-2 px-2'>
 			{/* Back button ------------------------------------------------- */}
@@ -95,7 +97,7 @@ const SpellEdit = () => {
 			</button>
 			<div className='container sticky top-10 z-10 flex h-fit flex-col items-center bg-gradient-to-b from-stone-100 from-80% dark:from-stone-800'>
 				<h1 className='font-grenze sticky mx-auto my-4 text-center text-6xl font-bold tracking-wide text-purple-900 md:mt-8 dark:text-purple-400'>
-					New Spell
+					Edit : {spell?.titleCommon}
 				</h1>
 			</div>
 
@@ -104,7 +106,7 @@ const SpellEdit = () => {
 			<FormProvider {...methods}>
 				<form
 					onSubmit={methods.handleSubmit(onSubmit)}
-					className='flex w-full flex-col'
+					className='flex w-full flex-col md:w-2/3'
 				>
 					<p className='font-grenze 2xl items-center text-center text-stone-500'>
 						{' '}
@@ -128,11 +130,13 @@ const SpellEdit = () => {
 							type='checkbox'
 							className='peer min-h-2'
 						/>
-						<div className='collapse-title font-noto m-0 mt-2 min-h-2 py-0 text-xs text-purple-400'>
+						<div className='collapse-title font-noto m-0 ml-4 mt-2 min-h-2 py-0 text-xs text-purple-400'>
 							+ add glaise name
 						</div>
 						<div
-							className={cn('collapse-content pb-0 pr-0 peer-checked:visible')}
+							className={cn(
+								'collapse-content peer-checked:collapse-open flex flex-col items-center pb-0 pr-0',
+							)}
 						>
 							<Field
 								name='titleGlaise'
@@ -241,8 +245,8 @@ const SpellEdit = () => {
 							type='checkbox'
 							className='peer min-h-2 w-full py-0'
 						/>
-						<div className='collapse-title font-noto m-0 mt-2 min-h-2 py-0 text-xs text-purple-400'>
-							+ details
+						<div className='collapse-title font-noto m-0 ml-4 mt-2 min-h-2 py-0 text-xs text-purple-400'>
+							+ add details
 						</div>
 						<div
 							className={cn(
@@ -312,7 +316,7 @@ const SpellEdit = () => {
 					<button
 						type='submit'
 						disabled={methods.formState.isSubmitting}
-						className='bg-accent font-grenze w-1/2 self-center rounded-lg px-4 py-2 text-lg font-bold transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:bg-stone-500'
+						className='bg-accent font-grenze w-1/2 self-center rounded-lg px-4 py-2 text-lg font-bold transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:bg-stone-500 md:w-1/4'
 					>
 						{!methods.formState.isSubmitting ? (
 							<span>Update</span>
