@@ -3,7 +3,13 @@ import { trpc } from '@/utils/trpc';
 import { SpellSchema } from '@api/lib/zod-prisma/index';
 import { Link } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
-import { GiBrain, GiDrop, GiRoundStar } from 'rocketicons/gi';
+import {
+	GiBrain,
+	GiDrop,
+	GiFairyWand,
+	GiPolarStar,
+	GiRoundStar,
+} from 'rocketicons/gi';
 import { RiAddLine } from 'rocketicons/ri';
 import { useDebounce } from 'use-debounce';
 import { z } from 'zod';
@@ -129,7 +135,7 @@ const SpellSearch = () => {
 								</span>
 								<div className='font-noto flex w-48 flex-row items-baseline justify-center align-baseline dark:text-stone-200'>
 									<span className='font-noto align-baseline text-sm font-semibold'>
-										<GiRoundStar className='icon-stone-900 dark:icon-stone-100 icon-md mr-1' />
+										<GiPolarStar className='icon-stone-900 dark:icon-stone-100 icon-md mr-1' />
 										{d?.level}
 									</span>
 									<span className='mx-2 align-baseline text-sm font-semibold'>
@@ -143,7 +149,7 @@ const SpellSearch = () => {
 										|
 									</span>
 									<span className='font-noto align-baseline text-sm font-semibold'>
-										<GiBrain className='icon-stone-900 dark:icon-stone-100 icon-sm mr-1' />
+										<GiFairyWand className='icon-stone-900 dark:icon-stone-100 icon-sm mr-1' />
 										{d.difficulty}
 									</span>
 								</div>
