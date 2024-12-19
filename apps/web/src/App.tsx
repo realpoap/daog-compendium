@@ -1,5 +1,5 @@
 import { RouterProvider, createRouter } from '@tanstack/react-router';
-
+import { Toaster } from 'react-hot-toast';
 import { TrpcWrapper } from './components/TrpcWrapper';
 import './index.css';
 import { routeTree } from './routeTree.gen';
@@ -15,6 +15,7 @@ declare module '@tanstack/react-router' {
 export function App() {
 	return (
 		<TrpcWrapper>
+			<Toaster />
 			<RouterProvider
 				router={router}
 				basepath='/daog-compendium/'
