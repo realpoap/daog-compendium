@@ -1,8 +1,7 @@
 import { prisma } from '@api/index';
-import { SpellSchema } from '@api/lib/zod-prisma';
 import { ZodNewSpell, ZodSpell } from '@api/lib/ZodSpell';
 import { procedure, router } from '@api/trpc';
-import { number, z } from 'zod';
+import { z } from 'zod';
 
 export const spellsRouter = router({
 	getAll: procedure.query(async ()=> {

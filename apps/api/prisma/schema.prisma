@@ -21,20 +21,19 @@ datasource db {
 
 model User {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  email     String
+  email     String   @unique
   name      String
   password  String   @unique
-  isOwner   Boolean
-  role      Role     @default(BASIC)
+  isOwner   Boolean  @default(false)
+  role      Role     @default(VIEWER)
   createdAt DateTime @default(now())
 
   @@unique([name, password])
-  @@index([email])
 }
 
 enum Role {
-  BASIC
-  ADITOR
+  VIEWER
+  EDITOR
   ADMIN
 }
 

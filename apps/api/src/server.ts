@@ -1,14 +1,17 @@
 import { appRouter } from '@api/router/_app';
 import { createExpressMiddleware } from '@trpc/server/adapters/express';
-import { log } from 'console';
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import 'dotenv/config';
 import express from 'express';
+import { createContext } from './trpc';
 
 async function main() {
   const port = process.env.PORT || 3000;
 
   const app = express();
+
+  app.use(cookieParser());
 
   const origin = process.env.NODE_ENV === 'production' 
   ? process.env.FRONTEND_URL 
@@ -30,7 +33,7 @@ async function main() {
     '/trpc',
     createExpressMiddleware({
       router: appRouter,
-      createContext: (ctx) => ({ req: ctx.req, res: ctx.res }),
+      createContext ,
       onError:
         process.env.NODE_ENV === 'development'
           ? ({ path, error }) => {
