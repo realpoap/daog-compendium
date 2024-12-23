@@ -37,7 +37,9 @@ const Sidebar = () => {
 				id='mobile-menu'
 				className={`${open ? 'flex' : 'hidden'} fixed top-0 h-screen w-screen origin-top flex-col justify-center overflow-hidden overflow-y-scroll overscroll-y-none bg-purple-900 text-5xl text-stone-100`}
 			>
-				<button className='font-grenze self-end px-6 text-6xl'>&times;</button>
+				<button className='font-grenze fixed top-2 self-end px-6 text-6xl'>
+					&times;
+				</button>
 				<nav
 					aria-label='mobile'
 					className='font-grenze font-semi-bold flex h-screen flex-col items-center gap-8 py-8'

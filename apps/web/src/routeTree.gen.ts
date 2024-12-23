@@ -16,6 +16,8 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as BestiaryIndexImport } from './routes/bestiary/index'
 import { Route as SpellsAddImport } from './routes/spells/add'
 import { Route as SpellsIdImport } from './routes/spells/$id'
+import { Route as MeRegisterImport } from './routes/me/register'
+import { Route as MeLoginImport } from './routes/me/login'
 import { Route as BestiaryIdImport } from './routes/bestiary/$id'
 import { Route as SpellsEditIdImport } from './routes/spells/edit/$id'
 
@@ -63,6 +65,18 @@ const SpellsIdRoute = SpellsIdImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const MeRegisterRoute = MeRegisterImport.update({
+  id: '/me/register',
+  path: '/me/register',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const MeLoginRoute = MeLoginImport.update({
+  id: '/me/login',
+  path: '/me/login',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const BestiaryIdRoute = BestiaryIdImport.update({
   id: '/bestiary/$id',
   path: '/bestiary/$id',
@@ -98,6 +112,20 @@ declare module '@tanstack/react-router' {
       path: '/bestiary/$id'
       fullPath: '/bestiary/$id'
       preLoaderRoute: typeof BestiaryIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/me/login': {
+      id: '/me/login'
+      path: '/me/login'
+      fullPath: '/me/login'
+      preLoaderRoute: typeof MeLoginImport
+      parentRoute: typeof rootRoute
+    }
+    '/me/register': {
+      id: '/me/register'
+      path: '/me/register'
+      fullPath: '/me/register'
+      preLoaderRoute: typeof MeRegisterImport
       parentRoute: typeof rootRoute
     }
     '/spells/$id': {
@@ -144,6 +172,8 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
   '/rules': typeof RulesLazyRoute
   '/bestiary/$id': typeof BestiaryIdRoute
+  '/me/login': typeof MeLoginRoute
+  '/me/register': typeof MeRegisterRoute
   '/spells/$id': typeof SpellsIdRoute
   '/spells/add': typeof SpellsAddRoute
   '/bestiary': typeof BestiaryIndexRoute
@@ -155,6 +185,8 @@ export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
   '/rules': typeof RulesLazyRoute
   '/bestiary/$id': typeof BestiaryIdRoute
+  '/me/login': typeof MeLoginRoute
+  '/me/register': typeof MeRegisterRoute
   '/spells/$id': typeof SpellsIdRoute
   '/spells/add': typeof SpellsAddRoute
   '/bestiary': typeof BestiaryIndexRoute
@@ -167,6 +199,8 @@ export interface FileRoutesById {
   '/': typeof IndexLazyRoute
   '/rules': typeof RulesLazyRoute
   '/bestiary/$id': typeof BestiaryIdRoute
+  '/me/login': typeof MeLoginRoute
+  '/me/register': typeof MeRegisterRoute
   '/spells/$id': typeof SpellsIdRoute
   '/spells/add': typeof SpellsAddRoute
   '/bestiary/': typeof BestiaryIndexRoute
@@ -180,6 +214,8 @@ export interface FileRouteTypes {
     | '/'
     | '/rules'
     | '/bestiary/$id'
+    | '/me/login'
+    | '/me/register'
     | '/spells/$id'
     | '/spells/add'
     | '/bestiary'
@@ -190,6 +226,8 @@ export interface FileRouteTypes {
     | '/'
     | '/rules'
     | '/bestiary/$id'
+    | '/me/login'
+    | '/me/register'
     | '/spells/$id'
     | '/spells/add'
     | '/bestiary'
@@ -200,6 +238,8 @@ export interface FileRouteTypes {
     | '/'
     | '/rules'
     | '/bestiary/$id'
+    | '/me/login'
+    | '/me/register'
     | '/spells/$id'
     | '/spells/add'
     | '/bestiary/'
@@ -212,6 +252,8 @@ export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
   RulesLazyRoute: typeof RulesLazyRoute
   BestiaryIdRoute: typeof BestiaryIdRoute
+  MeLoginRoute: typeof MeLoginRoute
+  MeRegisterRoute: typeof MeRegisterRoute
   SpellsIdRoute: typeof SpellsIdRoute
   SpellsAddRoute: typeof SpellsAddRoute
   BestiaryIndexRoute: typeof BestiaryIndexRoute
@@ -223,6 +265,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   RulesLazyRoute: RulesLazyRoute,
   BestiaryIdRoute: BestiaryIdRoute,
+  MeLoginRoute: MeLoginRoute,
+  MeRegisterRoute: MeRegisterRoute,
   SpellsIdRoute: SpellsIdRoute,
   SpellsAddRoute: SpellsAddRoute,
   BestiaryIndexRoute: BestiaryIndexRoute,
@@ -243,6 +287,8 @@ export const routeTree = rootRoute
         "/",
         "/rules",
         "/bestiary/$id",
+        "/me/login",
+        "/me/register",
         "/spells/$id",
         "/spells/add",
         "/bestiary/",
@@ -258,6 +304,12 @@ export const routeTree = rootRoute
     },
     "/bestiary/$id": {
       "filePath": "bestiary/$id.tsx"
+    },
+    "/me/login": {
+      "filePath": "me/login.tsx"
+    },
+    "/me/register": {
+      "filePath": "me/register.tsx"
     },
     "/spells/$id": {
       "filePath": "spells/$id.tsx"
