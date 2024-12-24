@@ -20,7 +20,7 @@ export const SortOrderSchema = z.enum(['asc','desc']);
 
 export const QueryModeSchema = z.enum(['default','insensitive']);
 
-export const RoleSchema = z.enum(['BASIC','ADITOR','ADMIN']);
+export const RoleSchema = z.enum(['VIEWER','EDITOR','ADMIN']);
 
 export type RoleType = `${z.infer<typeof RoleSchema>}`
 
@@ -210,8 +210,28 @@ export const UserOrderByWithRelationInputSchema: z.ZodType<Prisma.UserOrderByWit
 export const UserWhereUniqueInputSchema: z.ZodType<Prisma.UserWhereUniqueInput> = z.union([
   z.object({
     id: z.string(),
+    email: z.string(),
     password: z.string(),
     name_password: z.lazy(() => UserNamePasswordCompoundUniqueInputSchema)
+  }),
+  z.object({
+    id: z.string(),
+    email: z.string(),
+    password: z.string(),
+  }),
+  z.object({
+    id: z.string(),
+    email: z.string(),
+    name_password: z.lazy(() => UserNamePasswordCompoundUniqueInputSchema),
+  }),
+  z.object({
+    id: z.string(),
+    email: z.string(),
+  }),
+  z.object({
+    id: z.string(),
+    password: z.string(),
+    name_password: z.lazy(() => UserNamePasswordCompoundUniqueInputSchema),
   }),
   z.object({
     id: z.string(),
@@ -223,6 +243,22 @@ export const UserWhereUniqueInputSchema: z.ZodType<Prisma.UserWhereUniqueInput> 
   }),
   z.object({
     id: z.string(),
+  }),
+  z.object({
+    email: z.string(),
+    password: z.string(),
+    name_password: z.lazy(() => UserNamePasswordCompoundUniqueInputSchema),
+  }),
+  z.object({
+    email: z.string(),
+    password: z.string(),
+  }),
+  z.object({
+    email: z.string(),
+    name_password: z.lazy(() => UserNamePasswordCompoundUniqueInputSchema),
+  }),
+  z.object({
+    email: z.string(),
   }),
   z.object({
     password: z.string(),
@@ -237,12 +273,12 @@ export const UserWhereUniqueInputSchema: z.ZodType<Prisma.UserWhereUniqueInput> 
 ])
 .and(z.object({
   id: z.string().optional(),
+  email: z.string().optional(),
   password: z.string().optional(),
   name_password: z.lazy(() => UserNamePasswordCompoundUniqueInputSchema).optional(),
   AND: z.union([ z.lazy(() => UserWhereInputSchema),z.lazy(() => UserWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => UserWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => UserWhereInputSchema),z.lazy(() => UserWhereInputSchema).array() ]).optional(),
-  email: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   name: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   isOwner: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   role: z.union([ z.lazy(() => EnumRoleFilterSchema),z.lazy(() => RoleSchema) ]).optional(),
@@ -512,7 +548,7 @@ export const UserCreateInputSchema: z.ZodType<Prisma.UserCreateInput> = z.object
   email: z.string(),
   name: z.string(),
   password: z.string(),
-  isOwner: z.boolean(),
+  isOwner: z.boolean().optional(),
   role: z.lazy(() => RoleSchema).optional(),
   createdAt: z.coerce.date().optional()
 }).strict();
@@ -522,7 +558,7 @@ export const UserUncheckedCreateInputSchema: z.ZodType<Prisma.UserUncheckedCreat
   email: z.string(),
   name: z.string(),
   password: z.string(),
-  isOwner: z.boolean(),
+  isOwner: z.boolean().optional(),
   role: z.lazy(() => RoleSchema).optional(),
   createdAt: z.coerce.date().optional()
 }).strict();
@@ -550,7 +586,7 @@ export const UserCreateManyInputSchema: z.ZodType<Prisma.UserCreateManyInput> = 
   email: z.string(),
   name: z.string(),
   password: z.string(),
-  isOwner: z.boolean(),
+  isOwner: z.boolean().optional(),
   role: z.lazy(() => RoleSchema).optional(),
   createdAt: z.coerce.date().optional()
 }).strict();

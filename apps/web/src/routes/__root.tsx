@@ -3,10 +3,14 @@ import { cn } from '@/utils/classNames';
 import { createRootRoute, Outlet } from '@tanstack/react-router';
 
 export const Route = createRootRoute({
-  component: () => (
-    <div className={cn('min-height-screen items-center md:grid-cols-12 text-stone-900 bg-stone-100 dark:text-stone-100 dark:bg-stone-800')}>
-      <Sidebar/>
-      <Outlet/>
-    </div>
-  ),
-})
+	component: () => (
+		<div
+			className={cn(
+				'min-height-screen items-center bg-stone-100 text-stone-900 md:grid-cols-12 dark:bg-stone-800 dark:text-stone-100',
+			)}
+		>
+			<Sidebar />
+			<Outlet />
+		</div>
+	),
+});
