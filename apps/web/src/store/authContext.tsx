@@ -19,7 +19,6 @@ type AuthContextType = {
 	register: (input: CreateUserInput) => void;
 	login: (input: LoginUserInput) => void;
 	logout: () => void;
-	getMe: () => void;
 };
 
 export const AuthContext = createContext<AuthContextType | undefined>(
