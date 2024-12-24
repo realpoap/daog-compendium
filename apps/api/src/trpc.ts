@@ -1,6 +1,5 @@
 import { initTRPC, TRPCError, type inferRouterInputs, type inferRouterOutputs } from '@trpc/server';
 import * as trpcExpress from "@trpc/server/adapters/express";
-import type { Request, Response } from 'express';
 import superjson from 'superjson';
 
 import type { AppRouter } from '@api/router/_app';

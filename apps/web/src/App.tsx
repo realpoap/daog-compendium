@@ -3,6 +3,7 @@ import { Toaster } from 'react-hot-toast';
 import { TrpcWrapper } from './components/TrpcWrapper';
 import './index.css';
 import { routeTree } from './routeTree.gen';
+import { AuthContextProvider } from './store/authContext';
 
 const router = createRouter({
 	routeTree,
@@ -18,11 +19,13 @@ declare module '@tanstack/react-router' {
 export function App() {
 	return (
 		<TrpcWrapper>
-			<Toaster />
-			<RouterProvider
-				router={router}
-				basepath='/daog-compendium/'
-			/>
+			<AuthContextProvider>
+				<Toaster />
+				<RouterProvider
+					router={router}
+					basepath='/daog-compendium/'
+				/>
+			</AuthContextProvider>
 		</TrpcWrapper>
 	);
 }

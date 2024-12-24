@@ -1,14 +1,16 @@
+import { useAuth } from '@/store/authContext';
 import { trpc } from '@/utils/trpc';
 import { CreateUserInput, ZodUser } from '@api/lib/ZodUser';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { dataTagSymbol } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import toast from 'react-hot-toast';
 import { Field, Input } from '../RHFComponents';
 import TitleBack from '../TitleBack';
 
 const Register = () => {
 	const navigate = useNavigate();
+	const { register } = useAuth();
 	const methods = useForm<CreateUserInput>({
 		resolver: async (data, context, options) => {
 			// you can debug your validation schema here
@@ -22,22 +24,18 @@ const Register = () => {
 		shouldFocusError: true,
 	});
 
-	const registerUser = trpc.auth.registerUser.useMutation({
-		onSuccess: () => {
-			toast.success('User created !');
-			methods.reset();
-			navigate({
-				to: '/me/login',
-			});
-		},
-		onError: error => {
-			toast.error('Something bad happened...');
-			throw new Error(error.message);
-		},
-	});
-
 	const onSubmit: SubmitHandler<CreateUserInput> = data => {
-		registerUser.mutate(data);
+		console.log('clicked');
+
+		register(data);
+		methods.reset();
+		navigate({
+			to: '/',
+		});
+	};
+
+	const onError = () => {
+		console.log(methods.formState.errors);
 	};
 
 	return (
@@ -45,7 +43,7 @@ const Register = () => {
 			<TitleBack title={'Sign In'} />
 			<FormProvider {...methods}>
 				<form
-					onSubmit={methods.handleSubmit(onSubmit)}
+					onSubmit={methods.handleSubmit(onSubmit, onError)}
 					className='flex w-full flex-col md:w-2/3'
 				>
 					<Field name='email'>
@@ -72,18 +70,18 @@ const Register = () => {
 							type='password'
 						/>
 					</Field>
+					<button
+						type='submit'
+						disabled={methods.formState.isSubmitting}
+						className='bg-accent font-grenze mt-4 w-1/2 self-center rounded-lg px-4 py-2 text-lg font-bold transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:bg-stone-500 md:w-1/4'
+					>
+						{!methods.formState.isSubmitting ? (
+							<span className='text-center'>Sign In</span>
+						) : (
+							<span className='loading loading-dots loading-md'></span>
+						)}
+					</button>
 				</form>
-				<button
-					type='submit'
-					disabled={methods.formState.isSubmitting}
-					className='bg-accent font-grenze mt-4 w-1/2 self-center rounded-lg px-4 py-2 text-lg font-bold transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:bg-stone-500 md:w-1/4'
-				>
-					{!methods.formState.isSubmitting ? (
-						<span className='text-center'>Sign In</span>
-					) : (
-						<span className='loading loading-dots loading-md'></span>
-					)}
-				</button>
 			</FormProvider>
 		</div>
 	);
