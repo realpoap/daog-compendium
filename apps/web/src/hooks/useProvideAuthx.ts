@@ -32,7 +32,6 @@ export const useProvideAuth = () => {
 	const loginUser = trpc.auth.login.useMutation({
 			onSuccess: (data) => {
 				setAccessToken(data.access_token)
-				toast.success('Successfully logged in');
 				setAuthLoading(false);
 			},
 			onError: (error) => {
@@ -66,29 +65,21 @@ export const useProvideAuth = () => {
 		});
 	
 	useEffect(()=> {
-		setAuthErrors('')
-		setAuthLoading(true)
-		if(me.isError) {
-			setAuthErrors(me.error?.message);
-			console.log(authErrors)
-			setUser(null);
-			setAccessToken('');
-			logout()
-			toast.error('Could not get current user');
-			throw new Error(me.error?.message);
-		}
-		if(me.data?.data.user && me.isSuccess) {
-			setUser(me.data.data.user)
-			const currentUser = {
-				email: me.data.data.user?.email,
-				password: me.data.data.user?.password,
+			if(me.data?.data.user) {
+				const userReceived = me.data.data.user
+				setUser(userReceived)
+				if (user?.name !== undefined){
+					console.log('calling login with:', user.name)
+					const currentUser = {
+						email: me.data.data.user?.email,
+						password: me.data.data.user?.password,
+					}
+					login(currentUser);
+					toast.success(`Welcome back ${user?.name}`);
+				}
 			}
-			login(currentUser);
-			toast.success(`Welcome back ${user?.name}`);
-			setAuthLoading(false)
-		}
-	},[])
-	
+	},[accessToken])
+
 	const logout = () => {
 		setAuthErrors('')
 		setAuthLoading(true)
@@ -98,7 +89,8 @@ export const useProvideAuth = () => {
 	const login = (input:LoginUserInput) => {
 		setAuthErrors('')
 		setAuthLoading(true)
-		loginUser.mutate(input)
+		loginUser.mutate(input)				
+
 	}
 	
 	const register = async (input:CreateUserInput) => {
@@ -109,7 +101,7 @@ export const useProvideAuth = () => {
 				email: input.email,
 				password: input.password
 			}
-		await loginUser.mutate(user);
+		loginUser.mutate(user);
 	}
 
 	return {user, accessToken, authErrors, isAuthLoading, register, login, logout}

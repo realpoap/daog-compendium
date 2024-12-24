@@ -1,15 +1,25 @@
+import { useAuth } from '@/store/authContext';
+import { useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
-import { BiMenu } from 'rocketicons/bi';
+import { BiLogIn, BiLogOut, BiMenu } from 'rocketicons/bi';
 import Nav from './Nav';
 
 const Sidebar = () => {
 	const [open, setOpen] = useState(false);
+	const { user, logout } = useAuth();
+	const navigate = useNavigate();
 
 	const toggleMenu = () => {
 		open
 			? document.getElementsByTagName('body')[0].classList.remove('fixed')
 			: document.getElementsByTagName('body')[0].classList.add('fixed');
 		setOpen(prev => !prev);
+	};
+
+	const goToHome = () => {
+		navigate({
+			to: '/',
+		});
 	};
 
 	return (
@@ -45,6 +55,24 @@ const Sidebar = () => {
 					className='font-grenze font-semi-bold flex h-screen flex-col items-center gap-8 py-8'
 				>
 					<Nav />
+					{user && (
+						<button
+							id='logout-button'
+							onClick={logout}
+							className='cursor-pointer'
+						>
+							<BiLogOut className='icon-stone-900 dark:icon-stone-100 icon-2xl' />
+						</button>
+					)}
+					{!user && (
+						<button
+							id='login-button'
+							onClick={goToHome}
+							className='cursor-pointer'
+						>
+							<BiLogIn className='icon-stone-900 dark:icon-stone-100 icon-2xl' />
+						</button>
+					)}
 				</nav>
 			</section>
 		</header>

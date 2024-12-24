@@ -11,6 +11,7 @@ export const deserializeUser = async ({
   try {
     // Get the token
     let access_token;
+    console.log('cookies', req.cookies)
     if (
       req.headers.authorization &&
       req.headers.authorization.startsWith('Bearer')
@@ -19,8 +20,6 @@ export const deserializeUser = async ({
     } else if (req.cookies.access_token) {
       access_token = req.cookies.access_token;
     }
-
-    console.log('are you auth ?')
 
     const notAuthenticated = {
         req,

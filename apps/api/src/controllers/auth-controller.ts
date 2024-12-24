@@ -89,6 +89,7 @@ export const loginHandler = async ({input, ctx}:{input:LoginUserInput, ctx: Cont
 		if(!validPassword) throw new TRPCError({code:'BAD_REQUEST', message:'Invalid password'})
 
     const {access_token, refresh_token} = await signToken(user)
+    console.log('access token >>>>>', access_token)
 
     // Send Access Token in Cookie
     ctx.res.cookie('access_token', access_token, accessTokenCookieOptions);
@@ -97,7 +98,7 @@ export const loginHandler = async ({input, ctx}:{input:LoginUserInput, ctx: Cont
       ...accessTokenCookieOptions,
       httpOnly: false,
     });
-
+    console.log('cookies after login:', ctx.req.cookies)
 
     // Send Access Token
     return {
