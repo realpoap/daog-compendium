@@ -1,6 +1,5 @@
 import { useProvideAuth } from '@/hooks/useProvideAuthx';
 import { CreateUserInput, LoginUserInput } from '@api/lib/ZodUser';
-import { TRPCHookResult } from '@trpc/react-query/shared';
 import React, { createContext, useContext } from 'react';
 
 type AuthContextType = {
@@ -9,7 +8,6 @@ type AuthContextType = {
 		id: string;
 		email: string;
 		name: string;
-		password: string;
 		isOwner: boolean;
 		createdAt: Date;
 	} | null;

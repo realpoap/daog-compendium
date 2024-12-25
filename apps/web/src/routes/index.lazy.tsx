@@ -2,6 +2,7 @@ import LoginForm from '@/components/User/LoginForm';
 import RegisterForm from '@/components/User/RegisterForm';
 import { useAuth } from '@/store/authContext';
 import { capitalizeFirstLetter } from '@/utils/capitalize';
+import { trpc } from '@/utils/trpc';
 import { createLazyFileRoute } from '@tanstack/react-router';
 
 export const Route = createLazyFileRoute('/')({
@@ -11,6 +12,8 @@ export const Route = createLazyFileRoute('/')({
 function Index() {
 	const { user, isAuthLoading } = useAuth();
 	console.log(user?.name);
+	const spellCount = trpc.spells.getTotal.useQuery();
+	const spellLatest = trpc.spells.getLatest.useQuery();
 
 	if (isAuthLoading) {
 		return (
@@ -76,9 +79,25 @@ function Index() {
 
 	return (
 		<div>
-			<p className='font-grenze text-center text-xl'>
+			<h1 className='font-grenze py-4 text-center text-4xl'>
 				Welcome {capitalizeFirstLetter(user?.name)} !
-			</p>
+			</h1>
+			<section className='flex flex-col justify-center gap-4 md:flex-row'>
+				<div className='stats shadow dark:bg-stone-700'>
+					<div className='stat flex flex-col justify-center gap-1'>
+						<div className='stat-title dark:text-purple-200'>Spell count</div>
+						<div className='stat-value font-grenze pb-2 text-6xl text-purple-500'>
+							{spellCount?.data?.number}
+						</div>
+						<div className='stat-desc flex flex-col dark:text-purple-200'>
+							<span>Recently added: </span>
+							<span className='font-grenze text-xl text-purple-500'>
+								{spellLatest?.data?.titleCommon}{' '}
+							</span>
+						</div>
+					</div>
+				</div>
+			</section>
 		</div>
 	);
 }

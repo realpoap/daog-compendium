@@ -16,6 +16,19 @@ export const spellsRouter = router({
       throw new Error(`Internal server error`);
 		}
 	}),
+	getLatest: procedure.query(async () => {
+		try {
+			return await prisma.spell.findFirst({
+				orderBy: {
+            createdAt: 'desc',
+        },
+        take: 1,
+			})
+		} catch (error) {
+			console.error("Error in spells.getLatest:", error)
+			throw new Error(`Internal server error`);
+		}
+	}),
 	getTotal: procedure.query(async () => {
 		try {
 			return await prisma.spell.count({

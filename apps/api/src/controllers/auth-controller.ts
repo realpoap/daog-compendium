@@ -18,7 +18,7 @@ const cookieOptions: CookieOptions = {
 export const accessTokenCookieOptions = {
   ...cookieOptions,
   expires: new Date(Date.now() + customConfig.accessTokenExpiresIn * 60 * 1000), //15 min
-   maxAge: customConfig.refreshTokenExpiresIn * 60 * 1000, //15min
+   maxAge: customConfig.accessTokenExpiresIn * 60 * 1000, //15min
 };
 
 export const refreshTokenCookieOptions = {
