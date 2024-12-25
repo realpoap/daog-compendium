@@ -24,7 +24,9 @@ export const useProvideAuth = () => {
 					setAuthErrors(error?.message);
 					console.log(authErrors)
 				}
-			toast.error('Something bad happened...');
+			toast.error('Could not create user...');
+			setAuthLoading(false)
+
 			throw new Error(error?.message);
 		},
 		});
@@ -42,6 +44,7 @@ export const useProvideAuth = () => {
 				setAccessToken('')
 				setUser(null);
 				toast.error('Could not log in');
+				setAuthLoading(false)
 				throw new Error(error?.message);
 			}
 		});
@@ -59,8 +62,8 @@ export const useProvideAuth = () => {
 					console.log(authErrors)
 				}
 				toast.error('Could not log out')
+				setAuthLoading(false)
 				throw new Error(error?.message);
-
 			}
 		});
 	
