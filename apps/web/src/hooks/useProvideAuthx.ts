@@ -68,7 +68,7 @@ export const useProvideAuth = () => {
 		});
 	
 	useEffect(()=> {
-			if(me.data?.data.user) {
+			if(me.data?.data.user&& !isAuthLoading) {
 				const userReceived = me.data.data.user
 				setUser(userReceived)
 				if (user?.name !== undefined){

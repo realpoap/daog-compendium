@@ -1,3 +1,4 @@
+import { useAuth } from '@/store/authContext';
 import { spellOptions } from '@/types/spellOptions';
 import { cn } from '@/utils/classNames';
 import { trpc } from '@/utils/trpc';
@@ -35,6 +36,7 @@ const SpellDetails = () => {
 	const { id } = useParams({ strict: false });
 	const [spell, setSpell] = useState<Spell | undefined>();
 	const query = trpc.spells.getByNumber.useQuery(Number(id));
+	const { user } = useAuth();
 
 	useEffect(() => {
 		if (query.isLoading) {
@@ -211,13 +213,23 @@ const SpellDetails = () => {
 					</span>
 				</div>
 			</div>
-			<Link
-				to={`/spells/edit/$id`}
-				params={{ id: `${spell?.id}` }}
-				className='bg-accent font-grenze my-4 w-1/2 self-center rounded-lg px-4 py-2 text-center text-lg font-bold transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:bg-stone-500 md:w-1/4'
-			>
-				Edit
-			</Link>
+			{user?.role !== 'VIEWER' && (
+				<Link
+					to={`/spells/edit/$id`}
+					params={{ id: `${spell?.id}` }}
+					className='bg-accent font-grenze my-4 w-1/2 self-center rounded-lg px-4 py-2 text-center text-lg font-bold transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:bg-stone-500 md:w-1/4'
+				>
+					Edit
+				</Link>
+			)}
+			{user?.role === 'ADMIN' && (
+				<Link
+					to={`/`}
+					className='font-grenze my-4 w-1/2 self-center rounded-lg bg-red-500 px-4 py-2 text-center text-lg font-bold transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:bg-stone-500 md:w-1/4'
+				>
+					Delete
+				</Link>
+			)}
 		</div>
 	);
 };

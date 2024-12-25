@@ -1,3 +1,4 @@
+import { useAuth } from '@/store/authContext';
 import { cn } from '@/utils/classNames';
 import { trpc } from '@/utils/trpc';
 import { SpellSchema } from '@api/lib/zod-prisma/index';
@@ -25,6 +26,7 @@ const SpellSearch = () => {
 		enabled: items === undefined,
 	});
 	const [latestNumber, setLatestNumber] = useState(0);
+	const { user } = useAuth();
 
 	const keys = [
 		'titleCommon',
@@ -102,13 +104,15 @@ const SpellSearch = () => {
 						)}
 						type='search'
 					/>
-					<Link
-						id='add-button'
-						to={'/spells/add'}
-						className='badge bg-accent z-20 mb-2 h-10 w-10 border-none shadow-md shadow-stone-900 transition-opacity duration-200'
-					>
-						<RiAddLine className='icon-white-2xl' />
-					</Link>
+					{user?.role !== 'VIEWER' && (
+						<Link
+							id='add-button'
+							to={'/spells/add'}
+							className='badge bg-accent z-20 mb-2 h-10 w-10 border-none shadow-md shadow-stone-900 transition-opacity duration-200'
+						>
+							<RiAddLine className='icon-white-2xl' />
+						</Link>
+					)}
 				</div>
 
 				<div className='max-w-screen container z-0 flex snap-y snap-mandatory flex-col items-center justify-start gap-8 overflow-hidden text-center'>
