@@ -10,7 +10,9 @@ export const Route = createLazyFileRoute('/')({
 
 function Index() {
 	const utils = trpc.useUtils();
+	utils.hello.getMe.invalidate();
 	const { user } = useAuth();
+	console.log(user);
 
 	if (!user) {
 		return (
