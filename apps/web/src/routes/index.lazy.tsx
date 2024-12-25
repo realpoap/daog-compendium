@@ -1,7 +1,7 @@
 import LoginForm from '@/components/User/LoginForm';
 import RegisterForm from '@/components/User/RegisterForm';
 import { useAuth } from '@/store/authContext';
-import { trpc } from '@/utils/trpc';
+import { capitalizeFirstLetter } from '@/utils/capitalize';
 import { createLazyFileRoute } from '@tanstack/react-router';
 
 export const Route = createLazyFileRoute('/')({
@@ -9,12 +9,19 @@ export const Route = createLazyFileRoute('/')({
 });
 
 function Index() {
-	const utils = trpc.useUtils();
-	utils.hello.getMe.invalidate();
-	const { user } = useAuth();
-	console.log(user);
+	const { user, isAuthLoading } = useAuth();
+	console.log(user?.name);
 
-	if (!user) {
+	if (isAuthLoading) {
+		return (
+			<div className='flex h-screen flex-row items-center justify-center'>
+				<p className='font-grenze text-lg'>Loading components</p>
+				<span className='loading loading-dots loading-sm ml-1'></span>
+			</div>
+		);
+	}
+
+	if (!user?.name) {
 		return (
 			<div className='width-full font-noto flex max-h-fit flex-col items-center justify-center gap-8 md:flex-row'>
 				{/* Register ------------------------------------ */}
@@ -69,7 +76,9 @@ function Index() {
 
 	return (
 		<div>
-			<p className='font-grenze text-center text-xl'>Welcome {user?.name} !</p>
+			<p className='font-grenze text-center text-xl'>
+				Welcome {capitalizeFirstLetter(user?.name)} !
+			</p>
 		</div>
 	);
 }

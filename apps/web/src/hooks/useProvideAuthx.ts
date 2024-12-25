@@ -1,3 +1,4 @@
+import { capitalizeFirstLetter } from "@/utils/capitalize";
 import { trpc } from "@/utils/trpc";
 import { UserSchema } from "@api/lib/zod-prisma";
 import { CreateUserInput, LoginUserInput } from "@api/lib/ZodUser";
@@ -6,13 +7,16 @@ import toast from "react-hot-toast";
 import { z } from "zod";
 
 type User = z.infer<typeof UserSchema>;
+type UserWithoutPass = Omit<User, 'password'>
 
 export const useProvideAuth = () => {
-	const [user, setUser] = useState< User|null>(null);
+	const [user, setUser] = useState< UserWithoutPass|null>(null);
 	const [accessToken, setAccessToken] = useState('')
 	const [isAuthLoading, setAuthLoading] = useState(false);
+	const [logged, setLogged] = useState(false);
 	const [authErrors, setAuthErrors] = useState('');
-	const me = trpc.hello.getMe.useQuery();
+	const me = trpc.auth.getMe.useQuery();
+	const utils = trpc.useUtils();
 
 	const registerUser = trpc.auth.registerUser.useMutation({
 		onSuccess: () => {
@@ -33,7 +37,8 @@ export const useProvideAuth = () => {
 
 	const loginUser = trpc.auth.login.useMutation({
 			onSuccess: (data) => {
-				setAccessToken(data.access_token)
+				setAccessToken(data.access_token);
+				setLogged(true);
 				setAuthLoading(false);
 			},
 			onError: (error) => {
@@ -68,20 +73,30 @@ export const useProvideAuth = () => {
 		});
 	
 	useEffect(()=> {
-			if(me.data?.data.user&& !isAuthLoading) {
-				const userReceived = me.data.data.user
-				setUser(userReceived)
-				if (user?.name !== undefined){
-					console.log('calling login with:', user.name)
-					const currentUser = {
-						email: me.data.data.user?.email,
-						password: me.data.data.user?.password,
+			getMe();
+	},[me.data])
+
+	const getMe = async () => {
+		console.log('calling getMe()')
+				if(me.data?.user) {
+					if(logged){
+					if(me.data?.user.name !== undefined) {
+						toast.success(`Welcome back ${capitalizeFirstLetter(me.data?.user.name)}`);
 					}
-					login(currentUser);
-					toast.success(`Welcome back ${user?.name}`);
+					} else {
+						console.log('calling login with:', user?.name)
+						const currentUser = {
+								email: me.data.user?.email,
+								password: me.data.user?.password,
+							}
+						await login(currentUser);
+						toast.success(`Logged in as ${capitalizeFirstLetter(me.data?.user.name)}`);
+
 				}
-			}
-	},[accessToken])
+				const {password, ...userReceived} = me.data.user;
+				setUser(userReceived);
+	}
+}
 
 	const logout = () => {
 		setAuthErrors('')
@@ -89,11 +104,11 @@ export const useProvideAuth = () => {
 		logoutUser.mutate();
 	}
 
-	const login = (input:LoginUserInput) => {
+	const login =  async(input:LoginUserInput) => {
 		setAuthErrors('')
 		setAuthLoading(true)
-		loginUser.mutate(input)				
-
+		await loginUser.mutateAsync(input)
+		utils.auth.getMe.invalidate()
 	}
 	
 	const register = async (input:CreateUserInput) => {

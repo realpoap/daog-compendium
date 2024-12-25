@@ -22,10 +22,9 @@ const LoginForm = () => {
 		shouldFocusError: true,
 	});
 
-	const onSubmit: SubmitHandler<LoginUserInput> = data => {
-		login(data);
+	const onSubmit: SubmitHandler<LoginUserInput> = async data => {
+		await login(data);
 		methods.reset();
-		console.log('redirecting');
 		navigate({
 			to: '/',
 		});

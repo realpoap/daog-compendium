@@ -1,3 +1,4 @@
+import { refreshTokenHandler } from '@api/controllers/auth-controller';
 import { prisma } from '@api/index';
 import { TRPCError } from '@trpc/server';
 import * as trpcExpress from '@trpc/server/adapters/express';
@@ -11,7 +12,6 @@ export const deserializeUser = async ({
   try {
     // Get the token
     let access_token;
-    console.log('cookies', req.cookies)
     if (
       req.headers.authorization &&
       req.headers.authorization.startsWith('Bearer')
@@ -28,7 +28,7 @@ export const deserializeUser = async ({
     };
 
     if (!access_token) {
-      console.log('did not find access token')
+      console.warn('Did not find access token');
       return notAuthenticated;
     }
 
@@ -39,7 +39,7 @@ export const deserializeUser = async ({
     );
     
     if (!decoded) {
-      console.log('did not decode')
+      console.warn('Did not decode access token');
       return notAuthenticated;
     }
     const decodedId = decoded.sub as string
@@ -49,8 +49,8 @@ export const deserializeUser = async ({
 			where: {id: decodedId}
 		});
 
-    if (!user) {
-      console.log('did not find user')
+    if (!user || req.cookies.logged_in !== 'true') {
+      console.warn('No user logged in');
       return notAuthenticated;
     }
 
