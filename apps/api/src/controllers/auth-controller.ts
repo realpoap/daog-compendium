@@ -5,23 +5,26 @@ import { CreateUserInput, LoginUserInput } from "@api/lib/ZodUser";
 import { Context } from "@api/trpc";
 import { TRPCError } from "@trpc/server";
 import bcrypt from 'bcryptjs';
+import 'dotenv/config';
 import { CookieOptions } from "express";
 
 const cookieOptions: CookieOptions = {
   httpOnly: true,
   secure: process.env.NODE_ENV === 'production',
-  sameSite: 'none',
+  sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
 };
 
 // Cookie options
 export const accessTokenCookieOptions = {
   ...cookieOptions,
   expires: new Date(Date.now() + customConfig.accessTokenExpiresIn * 60 * 1000), //15 min
+   maxAge: customConfig.accessTokenExpiresIn * 60 * 1000, //15min
 };
 
 export const refreshTokenCookieOptions = {
   ...cookieOptions,
   expires: new Date(Date.now() + customConfig.refreshTokenExpiresIn * 60 * 1000  ), // 1 day
+  maxAge: customConfig.refreshTokenExpiresIn * 60 * 1000, // 1 day
 };
 
 // Register new user
@@ -89,7 +92,6 @@ export const loginHandler = async ({input, ctx}:{input:LoginUserInput, ctx: Cont
 		if(!validPassword) throw new TRPCError({code:'BAD_REQUEST', message:'Invalid password'})
 
     const {access_token, refresh_token} = await signToken(user)
-    console.log('access token >>>>>', access_token)
 
     // Send Access Token in Cookie
     ctx.res.cookie('access_token', access_token, accessTokenCookieOptions);
@@ -121,7 +123,7 @@ export const loginHandler = async ({input, ctx}:{input:LoginUserInput, ctx: Cont
 						code: 'INTERNAL_SERVER_ERROR',
 						message: "Could not log in",
 					});
-    		}
+    }
   }
 }
 // Refresh Tokens handler
@@ -144,9 +146,9 @@ export const refreshTokenHandler = async ({ ctx }: { ctx: Context }) => {
     if (!decoded) {
       throw new TRPCError({ code: 'FORBIDDEN', message });
     }
-
+    
     // Check if the user exist
-    const user = await prisma.user.findFirstOrThrow();
+    const user = await prisma.user.findFirst({where:{email:ctx.user?.email}});
 
     if (!user) {
       throw new TRPCError({ code: 'FORBIDDEN', message });

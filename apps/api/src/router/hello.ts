@@ -13,6 +13,5 @@ export const helloRouter = router({
     console.log('User id in tRPC protected route', user?.id)
     return {data: 'sensitive information'}
   }),
-  getMe: procedure
-    .query(({ctx}) => getMeHandler({ctx}))
+  
 });

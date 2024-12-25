@@ -1,4 +1,5 @@
 import { loginHandler, logoutHandler, refreshTokenHandler, registerHandler } from '@api/controllers/auth-controller';
+import { getMeHandler } from '@api/controllers/user-controller';
 import { prisma } from '@api/index';
 import { ZodLogin, ZodUser } from '@api/lib/ZodUser';
 import { procedure, router } from "@api/trpc";
@@ -35,6 +36,8 @@ export const authRouter = router({
 	logout: procedure
 		.mutation(({ctx}) => logoutHandler({ctx})),
 	refreshToken: procedure
-		.query(({ctx}) => refreshTokenHandler({ctx}))
+		.query(({ctx}) => refreshTokenHandler({ctx})),
+	getMe: procedure
+    .query(({ctx}) => getMeHandler({ctx})),
 	
 })

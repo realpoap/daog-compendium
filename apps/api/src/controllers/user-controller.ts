@@ -1,14 +1,12 @@
-import { TRPCError } from '@trpc/server';
 import { Context } from '@api/trpc';
+import { TRPCError } from '@trpc/server';
 
 export const getMeHandler = ({ ctx }: { ctx: Context }) => {
   try {
     const user = ctx.user;
     return {
       status: 'success',
-      data: {
-        user,
-      },
+      user
     };
   } catch (err: any) {
     throw new TRPCError({

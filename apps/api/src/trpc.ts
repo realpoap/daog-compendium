@@ -27,7 +27,7 @@ export type Context = Awaited<ReturnType<typeof createContext>>;
 
 // AUTHENTIFICATION MIDDLEWARE //
 const isAuthorized = trpc.middleware(({ ctx, next }) => {
-  if (!ctx.user) {
+  if (!ctx.user || !ctx.req.cookies.logged_in) {
     throw new TRPCError({
       code: "UNAUTHORIZED",
       message: "You must be logged in to access this resource",

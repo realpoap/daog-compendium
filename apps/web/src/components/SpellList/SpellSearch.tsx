@@ -83,7 +83,7 @@ const SpellSearch = () => {
 		return (
 			<div className='flex h-screen flex-row items-center justify-center'>
 				<p className='font-grenze text-lg'>Fetching amazing spells</p>
-				<span className='loading loading-dots loading-md'></span>
+				<span className='loading loading-dots loading-sm ml-1'></span>
 			</div>
 		);
 	}
