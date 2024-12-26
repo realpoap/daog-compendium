@@ -9,9 +9,9 @@ generator client {
 }
 
 generator zod {
-  provider                         = "zod-prisma-types"
-  output                           = "../src/lib/zod-prisma"
-  useMultipleFiles                 = false
+  provider         = "zod-prisma-types"
+  output           = "../src/lib/zod-prisma"
+  useMultipleFiles = false
 }
 
 datasource db {
@@ -37,13 +37,110 @@ enum Role {
   ADMIN
 }
 
-model Spell {
+model Creature {
+  id          String              @id @default(auto()) @map("_id") @db.ObjectId
+  fullname    String              @unique
+  name        String
+  rank        String?
+  type        String
+  subtype     String?
+  size        CreatureSize
+  createdAd   DateTime?           @default(now())
+  updatedAt   DateTime?           @updatedAt
+  level       Int
+  attack      Int
+  defense     Int
+  ranged      Int
+  health      Int
+  armor       Int?
+  perception  Int?
+  magic       Int?
+  spirit      Int?
+  stats       StatProfil?
+  loot        String[]
+  objects     String[]
+  actionList  ActionList?
+  attributes  CreatureAttribute[]
+  flavor      String?
+  description String?
+  actions     CreatureActions[]
+}
+
+model CreatureAttribute {
   id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  number      Int       @unique
+  name        String    @unique
+  flavor      String?
+  Description String?
+  Creature    Creature? @relation(fields: [creatureId], references: [id])
+  creatureId  String?   @db.ObjectId
+}
+
+model ActionList {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  main       Int
+  limited    Int
+  free       Int
+  travel     Int
+  creature   Creature? @relation(fields: [creatureId], references: [id])
+  creatureId String?   @unique @db.ObjectId
+}
+
+model CreatureActions {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  action      ActionType
+  type        String
+  flavor      String?
+  description String
+  damages     String?
+  effects     String?
+  heal        String?
+  target      String?
+  range       String?
+  creature    Creature?  @relation(fields: [creatureId], references: [id])
+  creatureId  String?    @db.ObjectId
+}
+
+enum ActionType {
+  main
+  limited
+  free
+}
+
+enum CreatureSize {
+  tiny
+  small
+  average
+  large
+  huge
+  gigantic
+}
+
+model StatProfil {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  CEL Int
+  AGI Int
+  DEX Int
+  STR Int
+  END Int
+  VIT Int
+  COU Int
+  INS Int
+  SEN Int
+  CHA Int
+  SOC Int
+  ERU Int
+  creature    Creature?  @relation(fields: [creatureId], references: [id])
+  creatureId  String?    @db.ObjectId @unique
+}
+
+model Spell {
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
+  number      Int           @unique
   titleGlaise String?
   titleCommon String
-  createdAt   DateTime?  @default(now())
-  updatedAt   DateTime?  @updatedAt
+  createdAt   DateTime?     @default(now())
+  updatedAt   DateTime?     @updatedAt
   level       Int
   type        SpellType
   cost        Int
@@ -63,9 +160,9 @@ model Spell {
 }
 
 model Component {
-  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
   quantity    Float?
-  name        String  @unique
+  name        String   @unique
   description String?
   weight      Float?
   value       Float?

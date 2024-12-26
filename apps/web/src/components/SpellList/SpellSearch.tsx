@@ -4,13 +4,7 @@ import { trpc } from '@/utils/trpc';
 import { SpellSchema } from '@api/lib/zod-prisma/index';
 import { Link } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
-import {
-	GiBrain,
-	GiDrop,
-	GiFairyWand,
-	GiPolarStar,
-	GiRoundStar,
-} from 'rocketicons/gi';
+import { GiDrop, GiFairyWand, GiPolarStar } from 'rocketicons/gi';
 import { RiAddLine } from 'rocketicons/ri';
 import { useDebounce } from 'use-debounce';
 import { z } from 'zod';
@@ -27,6 +21,8 @@ const SpellSearch = () => {
 	});
 	const [latestNumber, setLatestNumber] = useState(0);
 	const { user } = useAuth();
+
+	const isEditor = user?.role === 'ADMIN' || user?.role === 'EDITOR';
 
 	const keys = [
 		'titleCommon',
@@ -104,7 +100,7 @@ const SpellSearch = () => {
 						)}
 						type='search'
 					/>
-					{user?.role !== 'VIEWER' && (
+					{isEditor && (
 						<Link
 							id='add-button'
 							to={'/spells/add'}
