@@ -17,9 +17,11 @@ function Index() {
 
 	if (isAuthLoading) {
 		return (
-			<div className='flex h-screen flex-row items-center justify-center'>
-				<p className='font-grenze text-lg'>Loading components</p>
-				<span className='loading loading-dots loading-sm ml-1'></span>
+			<div>
+				<h1 className='font-grenze py-4 text-center text-4xl'>Loading</h1>
+				<div className='m-4 flex flex-col justify-center gap-4 md:flex-row'>
+					<div className='skeleton s-48 dark:bg-stone-700'></div>
+				</div>
 			</div>
 		);
 	}
@@ -82,8 +84,8 @@ function Index() {
 			<h1 className='font-grenze py-4 text-center text-4xl'>
 				Welcome {capitalizeFirstLetter(user?.name)} !
 			</h1>
-			<section className='flex flex-col justify-center gap-4 md:flex-row'>
-				<div className='stats shadow dark:bg-stone-700'>
+			<section className='flex flex-col justify-center gap-4 p-4 md:flex-row'>
+				<div className='stats size-48 shadow dark:bg-stone-700'>
 					<div className='stat flex flex-col justify-center gap-1'>
 						<div className='stat-title dark:text-purple-200'>Spell count</div>
 						<div className='stat-value font-grenze pb-2 text-6xl text-purple-500'>

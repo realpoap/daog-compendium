@@ -37,6 +37,7 @@ const SpellDetails = () => {
 	const [spell, setSpell] = useState<Spell | undefined>();
 	const query = trpc.spells.getByNumber.useQuery(Number(id));
 	const { user } = useAuth();
+	const isEditor = user?.role === 'ADMIN' || user?.role === 'EDITOR';
 
 	useEffect(() => {
 		if (query.isLoading) {
@@ -213,7 +214,7 @@ const SpellDetails = () => {
 					</span>
 				</div>
 			</div>
-			{user?.role !== 'VIEWER' && (
+			{isEditor && (
 				<Link
 					to={`/spells/edit/$id`}
 					params={{ id: `${spell?.id}` }}
