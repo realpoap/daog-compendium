@@ -1,12 +1,20 @@
 import { cn } from '@/utils/classNames';
-import { SetStateAction } from 'react';
+import { Attribute } from '@api/lib/ZodCreature';
+import { SetStateAction, useState } from 'react';
 
 type Props = {
 	tags: string[];
 	setTags: React.Dispatch<SetStateAction<string[]>>;
+	attributesList: Attribute[];
 };
 
-export const AttributeTags = ({ setTags, tags }: Props) => {
+export const AttributeTags = ({ setTags, tags, attributesList }: Props) => {
+	const [searchTerm, setSearchTerm] = useState('');
+
+	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setSearchTerm(event.target.value);
+	};
+
 	const handleKeyDown = (e: React.KeyboardEvent) => {
 		if (e.key !== ',' || e.code !== 'Comma') return;
 		const value = (e.target as HTMLInputElement).value;
@@ -17,6 +25,14 @@ export const AttributeTags = ({ setTags, tags }: Props) => {
 	const handleKeyUp = (e: React.KeyboardEvent) => {
 		if (e.key !== ',' || e.code !== 'Comma') return;
 		(e.target as HTMLInputElement).value = '';
+	};
+	const handleSelect = (attribute: Attribute) => {
+		const input = document.getElementById(
+			'attribute-input',
+		) as HTMLInputElement;
+		input.value = '';
+		setSearchTerm('');
+		setTags([...tags, attribute.name]);
 	};
 
 	const removeTag = (index: number) => {
@@ -37,15 +53,80 @@ export const AttributeTags = ({ setTags, tags }: Props) => {
 					{tag}
 				</span>
 			))}
-			<input
-				className={cn(
-					'flex-1 bg-transparent px-2 focus:outline-none focus:ring-0',
+			<div className='flex flex-col items-center justify-between gap-2'>
+				<input
+					className={cn(
+						'flex-1 bg-transparent px-2 focus:outline-none focus:ring-0',
+					)}
+					placeholder='Write attributes separated by a comma'
+					type='text'
+					id='attribute-input'
+					onChange={handleChange}
+					onKeyDown={handleKeyDown}
+					onKeyUp={handleKeyUp}
+				/>
+				{searchTerm && (
+					<div className='absolute z-10 max-h-svh rounded shadow-lg dark:bg-stone-700'>
+						<ResultList
+							tags={tags}
+							results={attributesList}
+							searchTerm={searchTerm}
+							handleSelect={handleSelect}
+						/>
+					</div>
 				)}
-				placeholder='Write attributes separated by a comma'
-				type='text'
-				onKeyDown={handleKeyDown}
-				onKeyUp={handleKeyUp}
-			/>
+			</div>
 		</div>
 	);
 };
+
+type ResultListProps = {
+	tags: string[];
+	results: Attribute[];
+	searchTerm: string;
+	handleSelect: (attribute: Attribute) => void;
+};
+
+export default function ResultList({
+	tags,
+	results,
+	searchTerm,
+	handleSelect,
+}: ResultListProps): JSX.Element {
+	const matchedTerm = (name: string, searchTerm: string) => {
+		const index = name.toLowerCase().indexOf(searchTerm.toLowerCase());
+		if (index === -1) {
+			return name;
+		}
+		return (
+			<>
+				{name.substring(0, index)}
+				<b className='text-purple-400 group-hover:text-stone-800'>
+					{name.substring(index, index + searchTerm.length)}
+				</b>
+				{name.substring(index + searchTerm.length)}
+			</>
+		);
+	};
+	if (results.length === 0) {
+		return <div>No attribute found</div>;
+	}
+	return (
+		<>
+			<div>
+				{results
+					.filter(r => !tags.includes(r.name))
+					.filter(r => r.name.toLowerCase().includes(searchTerm.toLowerCase()))
+					.map(result => (
+						<li
+							key={result.id}
+							onClick={() => handleSelect(result)}
+							className='hover:bg-accent group cursor-pointer list-none rounded-sm px-1 text-stone-200 hover:text-stone-800'
+						>
+							<>{matchedTerm(result.name, searchTerm)}</>
+						</li>
+					))}
+			</div>
+		</>
+	);
+}

@@ -145,11 +145,15 @@ const DescriptionStep = ({
 				name='attributes'
 				label='Search attribute'
 			>
-				<AttributeTags
-					setTags={setAttributes}
-					tags={attributes}
-				/>
+				{attributesList.data && (
+					<AttributeTags
+						setTags={setAttributes}
+						tags={attributes}
+						attributesList={attributesList?.data}
+					/>
+				)}
 			</Field>
+
 			<button
 				className='bg-accent font-grenze m-y-2 mt-8 flex w-2/3 flex-col items-center justify-center self-center rounded-lg px-4 py-2 text-xl font-bold'
 				onClick={e => {

@@ -34,6 +34,21 @@ export const ActionSchema = z.object({
 
 export type Action = z.infer<typeof ActionSchema>
 
+export const NewActionSchema = z.object({
+	action: z.enum(['main','limited','free', 'travel','epic']),
+	name: z.string(),
+	type: z.string(),
+	flavor: z.string().nullable(),
+	description: z.string().nullable(),
+	damages: z.string().nullable(),
+	effects: z.string().nullable(),
+	heal: z.string().nullable(),
+	target: z.string().nullable(),
+	range: z.string().nullable(),
+})
+
+export type NewAction = z.infer<typeof NewActionSchema>
+
 export const ActionListSchema = z.object({
   main: z.number().int(),
   limited: z.number().int().nullable(),
