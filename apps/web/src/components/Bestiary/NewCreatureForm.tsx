@@ -32,7 +32,7 @@ const NewCreatureForm = ({
 			{/* PROFILE STEP ----------------------------------------- */}
 			{step === 2 && <ProfileStep setStep={setStep} />}
 			{/* ACTIONS STEP ----------------------------------------- */}
-			{step === 3 && <ActionsStep />}
+			{step === 3 && <ActionsStep setStep={setStep} />}
 			{/* EQUIPMENT STEP ----------------------------------------- */}
 		</form>
 	);

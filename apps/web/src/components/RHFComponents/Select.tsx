@@ -33,7 +33,9 @@ export const Select = ({
 			id={id ?? name}
 		>
 			<option
-				value={'default'}
+				value={undefined}
+				hidden
+				selected
 				disabled
 			>
 				{id}

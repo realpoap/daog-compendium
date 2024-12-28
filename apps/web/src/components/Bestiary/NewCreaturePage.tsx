@@ -1,7 +1,10 @@
 import { trpc } from '@/utils/trpc';
-import { NewCreature, ZodNewCreature } from '@api/lib/ZodCreature'; // resolver for RHF
+import {
+	AttributeSchema,
+	NewCreature,
+	ZodNewCreature,
+} from '@api/lib/ZodCreature'; // resolver for RHF
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from '@tanstack/react-router';
 import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
@@ -13,8 +16,6 @@ import NewCreatureForm from './NewCreatureForm';
 import NewCreatureSteps from './NewCreatureSteps';
 
 const NewCreaturePage = () => {
-	const { history } = useRouter();
-
 	const [step, setStep] = useState(1);
 
 	const methods = useForm<NewCreature>({
@@ -27,23 +28,65 @@ const NewCreaturePage = () => {
 			);
 			return zodResolver(ZodNewCreature)(data, context, options);
 		},
+		defaultValues: {
+			size: undefined,
+			stats: {
+				CEL: 15,
+				AGI: 15,
+				DEX: 15,
+				STR: 15,
+				END: 15,
+				VIT: 15,
+				COU: 15,
+				INS: 15,
+				SEN: 15,
+				CHA: 15,
+				SOC: 15,
+				ERU: 15,
+			},
+			fullname: undefined,
+			name: '',
+			rank: null,
+			isBoss: false,
+			type: undefined,
+			subtype: null,
+			alignment: undefined,
+			level: undefined,
+			attack: undefined,
+			attackBonus: null,
+			defense: undefined,
+			defenseBonus: null,
+			ranged: undefined,
+			rangedBonus: null,
+			health: undefined,
+			armor: null,
+			perception: undefined,
+			perceptionBonus: null,
+			magic: null,
+			spirit: null,
+			glory: null,
+			loot: [],
+			objects: [],
+			flavor: null,
+			description: null,
+			actionList: null,
+			attributes: [],
+			actions: [],
+		},
 		shouldFocusError: true,
+		mode: 'onTouched',
 	});
-
-	const formValues = methods.watch();
 
 	// TODO: Move things in a Context returning the FormProvider and methods
 
-	// Create Fullname and Level
+	// Create Fullname and Leve
 	useEffect(() => {
-		setTimeout(() => {
-			setFormValues;
-		}, 2000);
-	}, [formValues]);
+		setFormValues();
+	}, [methods.formState.isValidating]);
 
 	const setFormValues = () => {
 		const creature = methods.getValues();
-		console.log(creature);
+		console.log('Calculating data...');
 
 		let fullnameString = '';
 		if (creature.name) fullnameString = capitalizeFirstLetter(creature.name);
@@ -127,8 +170,8 @@ const NewCreaturePage = () => {
 					step={step}
 					setStep={setStep}
 					handleSubmit={e => {
-						e.stopPropagation();
-						e.preventDefault();
+						//e.stopPropagation();
+						//e.preventDefault();
 						methods.handleSubmit(onSubmit)(e);
 					}}
 					setAttributeValue={methods.setValue}

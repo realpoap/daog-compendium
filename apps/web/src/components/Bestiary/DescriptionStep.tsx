@@ -16,20 +16,16 @@ import {
 	Select,
 	Textarea,
 } from '../RHFComponents/index';
-import AttributeForm from './utils/AttributeForm';
 import { AttributeTags } from './utils/AttributeTags';
 
 const DescriptionStep = ({
 	setValue,
 	setStep,
-	step,
 }: {
 	setValue: UseFormSetValue<NewCreature>;
 	setStep: React.Dispatch<SetStateAction<number>>;
-	step: number;
 }) => {
 	const [attributes, setAttributes] = useState<string[]>([]);
-	const [isModalVisible, setIsModalVisible] = useState(false);
 	const attributesList = trpc.attributes.getAll.useQuery();
 
 	useEffect(() => {
@@ -47,7 +43,7 @@ const DescriptionStep = ({
 		if (attributesList.data) {
 			const list = attributesList.data;
 			let attObjects = [] as Attribute[];
-			attributes.map(att => {
+			attributes?.map(att => {
 				const attObject = list.find(el => el.name === att);
 				attObject && attObjects.push(attObject);
 			});
@@ -86,7 +82,7 @@ const DescriptionStep = ({
 					<Select
 						name='type'
 						options={creatureTypeOptions}
-						defaultValue='default'
+						defaultValue=''
 					/>
 				</Field>
 				<Field
@@ -97,7 +93,7 @@ const DescriptionStep = ({
 					<Select
 						name='size'
 						options={creatureSizeOptions}
-						defaultValue='default'
+						defaultValue=''
 					/>
 				</Field>
 				<Field
@@ -108,7 +104,7 @@ const DescriptionStep = ({
 					<Select
 						name='alignment'
 						options={creatureAlignmentOptions}
-						defaultValue='default'
+						defaultValue=''
 					/>
 				</Field>
 			</div>
@@ -153,8 +149,8 @@ const DescriptionStep = ({
 					/>
 				)}
 			</Field>
-
-			<button
+			{/* TODO: MOVE THIS TO VIEW PAGE */}
+			{/* <button
 				className='bg-accent font-grenze m-y-2 mt-8 flex w-2/3 flex-col items-center justify-center self-center rounded-lg px-4 py-2 text-xl font-bold'
 				onClick={e => {
 					e.stopPropagation();
@@ -174,7 +170,7 @@ const DescriptionStep = ({
 						setVisible={setIsModalVisible}
 					/>,
 					document.body,
-				)}
+				)} */}
 			<Field
 				name='flavor'
 				label='Flavor'

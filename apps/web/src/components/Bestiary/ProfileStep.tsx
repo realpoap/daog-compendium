@@ -114,7 +114,7 @@ const ProfileStep = ({
 							width='small'
 							label='SOC'
 						>
-							<InputNumber name='stasts.SOC' />
+							<InputNumber name='stats.SOC' />
 						</Field>
 						<Field
 							name='stats.ERU'
@@ -197,13 +197,13 @@ const ProfileStep = ({
 			<div className='flex w-full flex-row items-center justify-center gap-4'>
 				<button
 					className='font-grenze m-y-2 mt-8 flex w-1/3 flex-col items-center justify-center self-center rounded-lg bg-purple-500 px-4 py-2 text-xl font-bold transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:bg-stone-500'
-					onClick={() => setStep(prev => prev - 1)}
+					onClick={() => setStep(1)}
 				>
 					&#10094; Prev
 				</button>
 				<button
 					className='font-grenze m-y-2 mt-8 flex w-1/3 flex-col items-center justify-center self-center rounded-lg bg-purple-500 px-4 py-2 text-xl font-bold transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:bg-stone-500'
-					onClick={() => setStep(prev => prev + 1)}
+					onClick={() => setStep(3)}
 				>
 					Next &#10095;
 				</button>

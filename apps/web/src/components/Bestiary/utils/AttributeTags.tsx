@@ -53,7 +53,7 @@ export const AttributeTags = ({ setTags, tags, attributesList }: Props) => {
 					{tag}
 				</span>
 			))}
-			<div className='flex flex-col items-center justify-between gap-2'>
+			<div className='items-left flex flex-1 flex-col justify-between gap-2 text-left'>
 				<input
 					className={cn(
 						'flex-1 bg-transparent px-2 focus:outline-none focus:ring-0',

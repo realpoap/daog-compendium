@@ -18,9 +18,11 @@ const NewCreatureDetails = ({ creature }: { creature: NewCreature }) => {
 				<p className='font-grenze text-4xl font-bold dark:text-stone-500'>
 					{creature.name} {creature.subtype}
 				</p>
-				<p className='font-grenze text-2xl font-bold dark:text-stone-500'>
-					<GiRoundStar className='icon-lg icon-stone-500' /> {creature.level}
-				</p>
+				{creature.level && (
+					<p className='font-grenze text-2xl font-bold dark:text-stone-500'>
+						<GiRoundStar className='icon-lg icon-stone-500' /> {creature.level}
+					</p>
+				)}
 				<p className='font-grenze text-2xl font-semibold italic dark:text-stone-500'>
 					{creature.size} {creature.alignment} {creature.type}
 				</p>
