@@ -8,6 +8,7 @@ import { GiDrop, GiFairyWand, GiPolarStar } from 'rocketicons/gi';
 import { RiAddLine } from 'rocketicons/ri';
 import { useDebounce } from 'use-debounce';
 import { z } from 'zod';
+import SkeletonList from '../SkeletonList';
 
 type Spell = z.infer<typeof SpellSchema>;
 
@@ -60,8 +61,6 @@ const SpellSearch = () => {
 		}
 	}, [debouncedSearch, items]);
 
-	console.log(latestNumber);
-
 	var prevScrollpos = window.scrollY;
 	window.onscroll = function () {
 		var currentScrollPos = window.scrollY;
@@ -76,18 +75,13 @@ const SpellSearch = () => {
 	};
 
 	if (query.isLoading) {
-		return (
-			<div className='flex h-screen flex-row items-center justify-center'>
-				<p className='font-grenze text-lg'>Fetching amazing spells</p>
-				<span className='loading loading-dots loading-sm ml-1'></span>
-			</div>
-		);
+		return <SkeletonList />;
 	}
 	//console.log(prunedItems);
 
 	if (query.data) {
 		return (
-			<div className='mt-sm flex flex-col items-center p-2'>
+			<div className='mt-sm flex min-h-[100dvh] flex-col items-center p-2'>
 				<div className='container sticky top-10 z-10 flex min-h-[20dvh] flex-col items-center bg-gradient-to-b from-stone-100 from-80% dark:from-stone-800'>
 					<h1 className='font-grenze sticky mx-auto my-4 text-center text-6xl font-bold tracking-wide text-purple-900 md:mt-8 dark:text-purple-400'>
 						Spells

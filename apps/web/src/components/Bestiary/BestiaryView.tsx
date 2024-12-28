@@ -1,66 +1,66 @@
+import { useAuth } from '@/store/authContext';
 import { cn } from '@/utils/classNames';
+import { trpc } from '@/utils/trpc';
+import { Creature } from '@api/lib/ZodCreature';
 import { Link } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
+import { RiAddLine } from 'rocketicons/ri';
 import { useDebounce } from 'use-debounce';
-import { default as monsters } from '../../data/5e-SRD-Monsters.json';
-
-import { MonsterEntry } from '@/types/MonsterEntry';
-
-// type MonsterEntry = {
-// 	name: string;
-// 	size: string;
-// 	type: string;
-// 	subtype: string;
-// 	alignment: string;
-// 	armor_class: number;
-// 	hit_points: number;
-// 	hit_dice: string;
-// 	speed: string;
-// 	strength: number | undefined;
-// 	dexterity: number | undefined;
-// 	constitution: number | undefined;
-// 	intelligence: number | undefined;
-// 	wisdom: number | undefined;
-// 	charisma: number | undefined;
-// 	constitution_save?: number | undefined;
-// 	intelligence_save?: number | undefined;
-// 	wisdom_save?: number | undefined;
-// 	medicine?: number | undefined;
-// 	history?: number | undefined;
-// 	religion?: number | undefined;
-// 	perception?: number | undefined;
-// 	damage_vulnerabilities: string;
-// 	damage_resistances: string;
-// 	damage_immunities: string;
-// 	condition_immunities: string;
-// 	senses: string;
-// 	languages: string;
-// 	challenge_rating: string;
-// 	special_abilities: object[];
-// 	actions: object[];
-// 	legendary_actions: object[];
-// 	description?: string;
-// };
+import SkeletonList from '../SkeletonList';
 
 const BestiaryView = () => {
-	const [items, setItems] = useState<MonsterEntry[]>(monsters);
+	const [items, setItems] = useState<Creature[] | undefined>();
 	const [search, setSearch] = useState('');
 	const [debouncedSearch] = useDebounce(search, 500);
-	const [prunedItems, setPrunedItems] = useState<MonsterEntry[]>([]);
+	const [prunedItems, setPrunedItems] = useState<Creature[]>([]);
+
+	const getAllCreatures = trpc.creatures.getAll.useQuery(undefined, {
+		enabled: items === undefined,
+	});
+
+	const { user } = useAuth();
+
+	const isEditor = user?.role === 'ADMIN' || user?.role === 'EDITOR';
 
 	const keys = ['name', 'description', 'type', 'alignment', 'subtype'];
 
 	useEffect(() => {
-		const filteredItems = items.filter(item =>
-			keys.some(key =>
-				item[key as keyof MonsterEntry]
-					?.toString()
-					.toLowerCase()
-					.includes(debouncedSearch.toLowerCase()),
-			),
-		);
-		setPrunedItems(filteredItems);
+		setItems(getAllCreatures.data);
+	}, [getAllCreatures.data]);
+
+	useEffect(() => {
+		if (getAllCreatures.isLoading) {
+			return console.log('loading data...');
+		}
+		if (getAllCreatures.data && items !== undefined) {
+			const filteredItems = items.filter(item =>
+				keys.some(key =>
+					item[key as keyof Creature]
+						?.toString()
+						.toLowerCase()
+						.includes(debouncedSearch.toLowerCase()),
+				),
+			);
+			setPrunedItems(filteredItems);
+		}
 	}, [debouncedSearch, items]);
+
+	var prevScrollpos = window.scrollY;
+	window.onscroll = function () {
+		var currentScrollPos = window.scrollY;
+		if (prevScrollpos > currentScrollPos) {
+			document.getElementById('add-button')?.classList.add('opacity-1');
+			document.getElementById('add-button')?.classList.remove('opacity-0');
+		} else {
+			document.getElementById('add-button')?.classList.add('opacity-0');
+			document.getElementById('add-button')?.classList.remove('opacity-1');
+		}
+		prevScrollpos = currentScrollPos;
+	};
+
+	if (getAllCreatures.isLoading) {
+		return <SkeletonList />;
+	}
 
 	return (
 		<div className='mt-sm flex flex-col items-center p-2'>
@@ -76,6 +76,15 @@ const BestiaryView = () => {
 					)}
 					type='search'
 				/>
+				{isEditor && (
+					<Link
+						id='add-button'
+						to={'/bestiary/add'}
+						className='badge bg-accent z-20 mb-2 h-10 w-10 border-none shadow-md shadow-stone-900 transition-opacity duration-200'
+					>
+						<RiAddLine className='icon-white-2xl' />
+					</Link>
+				)}
 			</div>
 
 			{prunedItems.map(m => (
@@ -94,7 +103,7 @@ const BestiaryView = () => {
 							{m.name}
 						</p>
 						<span className='font-noto mr-2 text-sm text-stone-500'>
-							~ {m.size} {m.type} ~
+							~ {m.size} {m.alignment} {m.type} ~
 						</span>
 					</div>
 				</Link>

@@ -38,56 +38,101 @@ enum Role {
 }
 
 model Creature {
-  id          String              @id @default(auto()) @map("_id") @db.ObjectId
-  fullname    String              @unique
-  name        String
-  rank        String?
-  type        String
-  subtype     String?
-  size        CreatureSize
-  createdAd   DateTime?           @default(now())
-  updatedAt   DateTime?           @updatedAt
-  level       Int
-  attack      Int
-  defense     Int
-  ranged      Int
-  health      Int
-  armor       Int?
-  perception  Int?
-  magic       Int?
-  spirit      Int?
-  stats       StatProfil?
-  loot        String[]
-  objects     String[]
-  actionList  ActionList?
-  attributes  CreatureAttribute[]
-  flavor      String?
-  description String?
-  actions     CreatureActions[]
+  id              String       @id @default(auto()) @map("_id") @db.ObjectId
+  fullname        String       @unique
+  name            String
+  rank            String?
+  isBoss          Boolean?     @default(false)
+  type            Type
+  subtype         String?
+  alignment       Alignment
+  size            CreatureSize
+  createdAt       DateTime?    @default(now())
+  updatedAt       DateTime?    @updatedAt
+  level           Int
+  attack          Int
+  attackBonus     Int?
+  defense         Int
+  defenseBonus    Int?
+  ranged          Int
+  rangedBonus     Int?
+  health          Int
+  armor           Int?
+  perception      Int
+  perceptionBonus Int?
+  magic           Int?
+  spirit          Int?
+  glory           Int?
+  stats           StatProfil
+  loot            String[]
+  objects         String[]
+  actionList      ActionList?
+  attributes      Attribute[]
+  flavor          String?
+  description     String?
+  actions         Action[]
 }
 
-model CreatureAttribute {
+type CreatureAttribute {
+  name        String
+  flavor      String?
+  Description String?
+}
+
+model Attribute {
   id          String    @id @default(auto()) @map("_id") @db.ObjectId
   name        String    @unique
   flavor      String?
-  Description String?
+  description String?
   Creature    Creature? @relation(fields: [creatureId], references: [id])
   creatureId  String?   @db.ObjectId
 }
 
-model ActionList {
-  id         String    @id @default(auto()) @map("_id") @db.ObjectId
-  main       Int
-  limited    Int
-  free       Int
-  travel     Int
-  creature   Creature? @relation(fields: [creatureId], references: [id])
-  creatureId String?   @unique @db.ObjectId
+enum Type {
+  plant
+  demon
+  fae
+  insect
+  person
+  beast
+  monster
+  undead
+  wyrm
+  golem
 }
 
-model CreatureActions {
-  id          String     @id @default(auto()) @map("_id") @db.ObjectId
-  title       String
+enum Alignment {
+  saint
+  good
+  neutral
+  bad
+  evil
+}
+
+type ActionList {
+  main    Int  @default(1)
+  limited Int?
+  free    Int?
+  travel  Int?
+  epic    Int  @default(0)
+}
+
+type CreatureActions {
+  name        String
+  action      ActionType
+  type        String
+  flavor      String?
+  description String?
+  damages     String?
+  effects     String?
+  heal        String?
+  target      String?
+  range       String?
+}
+
+model Action {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name        String     @unique
   action      ActionType
   type        String
   flavor      String?
@@ -97,7 +142,7 @@ model CreatureActions {
   heal        String?
   target      String?
   range       String?
-  creature    Creature?  @relation(fields: [creatureId], references: [id])
+  Creature    Creature?  @relation(fields: [creatureId], references: [id])
   creatureId  String?    @db.ObjectId
 }
 
@@ -105,6 +150,8 @@ enum ActionType {
   main
   limited
   free
+  travel
+  epic
 }
 
 enum CreatureSize {
@@ -116,8 +163,7 @@ enum CreatureSize {
   gigantic
 }
 
-model StatProfil {
-  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+type StatProfil {
   CEL Int
   AGI Int
   DEX Int
@@ -130,8 +176,6 @@ model StatProfil {
   CHA Int
   SOC Int
   ERU Int
-  creature    Creature?  @relation(fields: [creatureId], references: [id])
-  creatureId  String?    @db.ObjectId @unique
 }
 
 model Spell {

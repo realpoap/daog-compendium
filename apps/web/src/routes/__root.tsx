@@ -6,7 +6,7 @@ export const Route = createRootRoute({
 	component: () => (
 		<div
 			className={cn(
-				'min-height-screen items-center bg-stone-100 text-stone-900 md:grid-cols-12 dark:bg-stone-800 dark:text-stone-100',
+				'min-height-[dvh] items-center bg-stone-100 text-stone-900 md:grid-cols-12 dark:bg-stone-800 dark:text-stone-100',
 			)}
 		>
 			<Sidebar />

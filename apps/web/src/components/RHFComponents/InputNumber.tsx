@@ -25,7 +25,6 @@ export const InputNumber = ({
 				})}
 				type='number'
 				max={1000}
-				min={0}
 				defaultValue={placeholder}
 				className={cn(
 					'font-grenze w-full rounded-lg px-4 py-2 text-lg text-purple-900 caret-purple-900 shadow-sm placeholder:italic focus:border-purple-900 focus:outline-none focus:ring-1 focus:ring-purple-900 dark:bg-stone-700 dark:text-purple-400 dark:caret-purple-400 dark:focus:border-purple-400 dark:focus:ring-purple-400',

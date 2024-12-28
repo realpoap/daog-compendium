@@ -8,8 +8,7 @@ import { cn } from '@/utils/classNames';
 import { trpc } from '@/utils/trpc';
 import { ZodNewSpell } from '@api/lib/ZodSpell'; // resolver for RHF
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useParams, useRouter } from '@tanstack/react-router';
-import { useMemo } from 'react';
+import { useRouter } from '@tanstack/react-router';
 import { FormProvider, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
@@ -20,6 +19,7 @@ import {
 	Select,
 	Textarea,
 } from '../RHFComponents/index';
+import TitleBack from '../TitleBack';
 
 type NewSpell = z.infer<typeof ZodNewSpell>; // Types for New Spell to tRPC
 
@@ -73,17 +73,7 @@ const SpellForm = () => {
 
 	return (
 		<div className='mt-sm flex flex-col items-center justify-center p-2 px-2'>
-			<button
-				className='font-grenze mt-1 align-middle text-2xl text-stone-500 hover:text-stone-200'
-				onClick={() => history.go(-1)}
-			>
-				<span className='text-2xl'>&#8249;</span> Back
-			</button>
-			<div className='container sticky top-10 z-10 flex h-fit flex-col items-center bg-gradient-to-b from-stone-100 from-80% dark:from-stone-800'>
-				<h1 className='font-grenze sticky mx-auto my-4 text-center text-6xl font-bold tracking-wide text-purple-900 md:mt-8 dark:text-purple-400'>
-					Create a spell :
-				</h1>
-			</div>
+			<TitleBack title='New spell' />
 
 			<FormProvider {...methods}>
 				<form

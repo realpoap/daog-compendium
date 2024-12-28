@@ -22,9 +22,11 @@ export const Field = (props: {
 				? 'w-1/2'
 				: width === 'small'
 					? 'w-1/4'
-					: 'w-11/12';
+					: width === 'tiny'
+						? 'w-1/5'
+						: 'w-11/12';
 	return (
-		<div className={`${widthClass} self-center`}>
+		<div className={`${widthClass} form-control self-center`}>
 			<Label
 				name={name}
 				id={id ?? name}
