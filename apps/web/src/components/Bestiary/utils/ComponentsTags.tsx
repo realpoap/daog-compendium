@@ -36,7 +36,7 @@ export const ComponentsTags = ({ setTags, tags, list }: Props) => {
 	};
 
 	const removeTag = (index: number) => {
-		setTags(tags.filter((el, i) => i !== Number(index)));
+		setTags(tags.filter((_el, i) => i !== Number(index)));
 	};
 	return (
 		<div

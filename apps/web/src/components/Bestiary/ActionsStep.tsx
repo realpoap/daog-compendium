@@ -1,14 +1,11 @@
 import { NewCreature } from '@api/lib/ZodCreature';
 import { useEffect, useState } from 'react';
-import { UseFormSetValue } from 'react-hook-form';
 import { Field, InputNumber } from '../RHFComponents';
 
 const ActionsStep = ({
 	handlePrevious,
 	handleNext,
-	setValue,
 }: {
-	setValue: UseFormSetValue<NewCreature>;
 	handlePrevious: (step: number) => void;
 	handleNext: (
 		inputs: (keyof NewCreature)[],
