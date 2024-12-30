@@ -1,14 +1,14 @@
 import { cn } from '@/utils/classNames';
-import { CreatureAttribute } from '@api/lib/ZodCreature';
+import { Item } from '@api/lib/ZodItem';
 import { SetStateAction, useState } from 'react';
 
 type Props = {
 	tags: string[];
 	setTags: React.Dispatch<SetStateAction<string[]>>;
-	attributesList: CreatureAttribute[];
+	list: Item[];
 };
 
-export const AttributeTags = ({ setTags, tags, attributesList }: Props) => {
+export const ItemsTags = ({ setTags, tags, list }: Props) => {
 	const [searchTerm, setSearchTerm] = useState('');
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,13 +26,11 @@ export const AttributeTags = ({ setTags, tags, attributesList }: Props) => {
 		if (e.key !== ',' || e.code !== 'Comma') return;
 		(e.target as HTMLInputElement).value = '';
 	};
-	const handleSelect = (attribute: CreatureAttribute) => {
-		const input = document.getElementById(
-			'attribute-input',
-		) as HTMLInputElement;
+	const handleSelect = (item: Item) => {
+		const input = document.getElementById('item-input') as HTMLInputElement;
 		input.value = '';
 		setSearchTerm('');
-		setTags([...tags, attribute.name]);
+		setTags([...tags, item.name]);
 	};
 
 	const removeTag = (index: number) => {
@@ -58,9 +56,9 @@ export const AttributeTags = ({ setTags, tags, attributesList }: Props) => {
 					className={cn(
 						'flex-1 bg-transparent px-2 focus:outline-none focus:ring-0',
 					)}
-					placeholder='Write attributes separated by a comma'
+					placeholder='Write items separated by a comma'
 					type='text'
-					id='attribute-input'
+					id='item-input'
 					onChange={handleChange}
 					onKeyDown={handleKeyDown}
 					onKeyUp={handleKeyUp}
@@ -69,7 +67,7 @@ export const AttributeTags = ({ setTags, tags, attributesList }: Props) => {
 					<div className='absolute z-10 max-h-svh rounded shadow-lg dark:bg-stone-700'>
 						<ResultList
 							tags={tags}
-							results={attributesList}
+							results={list}
 							searchTerm={searchTerm}
 							handleSelect={handleSelect}
 						/>
@@ -82,12 +80,12 @@ export const AttributeTags = ({ setTags, tags, attributesList }: Props) => {
 
 type ResultListProps = {
 	tags: string[];
-	results: CreatureAttribute[];
+	results: Item[];
 	searchTerm: string;
-	handleSelect: (attribute: CreatureAttribute) => void;
+	handleSelect: (item: Item) => void;
 };
 
-export default function ResultList({
+function ResultList({
 	tags,
 	results,
 	searchTerm,
@@ -109,7 +107,7 @@ export default function ResultList({
 		);
 	};
 	if (results.length === 0) {
-		return <div>No attribute found</div>;
+		return <div>No item found</div>;
 	}
 	return (
 		<>
@@ -119,7 +117,7 @@ export default function ResultList({
 					.filter(r => r.name.toLowerCase().includes(searchTerm.toLowerCase()))
 					.map(result => (
 						<li
-							key={result.name}
+							key={result.id}
 							onClick={() => handleSelect(result)}
 							className='hover:bg-accent group cursor-pointer list-none rounded-sm px-1 text-stone-200 hover:text-stone-800'
 						>

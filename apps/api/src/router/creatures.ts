@@ -1,5 +1,5 @@
 import { prisma } from '@api/index';
-import { ZodCreature, ZodNewCreature } from '@api/lib/ZodCreature';
+import { ActionWithCreatureIdSchema, CreatureActionSchema, ZodCreature, ZodNewCreature } from '@api/lib/ZodCreature';
 import { procedure, router } from '@api/trpc';
 import { z } from 'zod';
 
@@ -65,7 +65,7 @@ export const creaturesRouter = router({
 	getById: procedure
 		.input(z.string())
 		.query(async({input}) => {
-			return await prisma.spell.findFirstOrThrow({
+			return await prisma.creature.findFirstOrThrow({
 				where:{id:input}
 			})
 		}),
@@ -92,6 +92,20 @@ export const creaturesRouter = router({
 			return await prisma.creature.update({
 				where: {id: input.id},
 				data: input
+			})
+		}),
+	addAction: procedure
+		.input(ActionWithCreatureIdSchema)
+		.mutation(async({input}) =>{
+			console.log('💌 updating creature action :', input.name, 'with id:', input.id)
+			const {id, ...action} = input
+			return await prisma.creature.update({
+				where: {id: input.id},
+				data: {
+					actions: {
+						push:action
+					}
+				}
 			})
 		}),
 })

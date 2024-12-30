@@ -1,14 +1,12 @@
 import { trpc } from '@/utils/trpc';
-import {
-	AttributeSchema,
-	NewCreature,
-	ZodNewCreature,
-} from '@api/lib/ZodCreature'; // resolver for RHF
+import { NewCreature, ZodNewCreature } from '@api/lib/ZodCreature'; // resolver for RHF
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FormProvider, useForm, useWatch } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
+import { calculateStats, defaultCreature } from '@/utils/calculateStats';
 import { capitalizeFirstLetter } from '@/utils/capitalize';
+import { useNavigate } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 import TitleBack from '../TitleBack';
 import NewCreatureDetails from './NewCreatureDetails';
@@ -16,6 +14,7 @@ import NewCreatureForm from './NewCreatureForm';
 import NewCreatureSteps from './NewCreatureSteps';
 
 const NewCreaturePage = () => {
+	const navigate = useNavigate();
 	const [step, setStep] = useState(1);
 
 	const methods = useForm<NewCreature>({
@@ -28,66 +27,24 @@ const NewCreaturePage = () => {
 			);
 			return zodResolver(ZodNewCreature)(data, context, options);
 		},
-		defaultValues: {
-			size: undefined,
-			stats: {
-				CEL: 15,
-				AGI: 15,
-				DEX: 15,
-				STR: 15,
-				END: 15,
-				VIT: 15,
-				COU: 15,
-				INS: 15,
-				SEN: 15,
-				CHA: 15,
-				SOC: 15,
-				ERU: 15,
-			},
-			fullname: undefined,
-			name: '',
-			rank: null,
-			isBoss: false,
-			type: undefined,
-			subtype: null,
-			alignment: undefined,
-			level: undefined,
-			attack: undefined,
-			attackBonus: null,
-			defense: undefined,
-			defenseBonus: null,
-			ranged: undefined,
-			rangedBonus: null,
-			health: undefined,
-			armor: null,
-			perception: undefined,
-			perceptionBonus: null,
-			magic: null,
-			spirit: null,
-			glory: null,
-			loot: [],
-			objects: [],
-			flavor: null,
-			description: null,
-			actionList: null,
-			attributes: [],
-			actions: [],
-		},
+		defaultValues: defaultCreature,
 		shouldFocusError: true,
 		mode: 'onTouched',
 	});
 
 	// TODO: Move things in a Context returning the FormProvider and methods
 
-	// Create Fullname and Leve
+	// Create Fullname and Level
 	useEffect(() => {
 		setFormValues();
-	}, [methods.formState.isValidating]);
+		const calcCreature = calculateStats(methods.getValues());
+		methods.setValue('level', calcCreature.level);
+	}, [methods.formState.isValidating, methods.formState.touchedFields]);
 
 	const setFormValues = () => {
 		const creature = methods.getValues();
-		console.log('Calculating data...');
 
+		// Fullname
 		let fullnameString = '';
 		if (creature.name) fullnameString = capitalizeFirstLetter(creature.name);
 		if (creature.subtype)
@@ -100,57 +57,59 @@ const NewCreaturePage = () => {
 				capitalizeFirstLetter(creature.type),
 				')',
 			);
-
 		methods.setValue('fullname', fullnameString);
 
-		if (creature.attackBonus && creature.stats?.AGI && creature.stats?.STR) {
-			const attack =
-				Math.max(creature.stats?.STR, creature.stats?.AGI) +
-				creature.attackBonus;
+		// Stats
+		if (creature.stats?.AGI && creature.stats?.STR) {
+			const attB = creature.attackBonus ?? 0;
+			const attack = Math.max(creature.stats?.STR, creature.stats?.AGI) + attB;
 			methods.setValue('attack', attack);
 		}
-		if (creature.rangedBonus && creature.stats?.DEX) {
-			const ranged = creature.stats?.DEX + creature.rangedBonus;
+		if (creature.stats?.DEX) {
+			const ranB = creature.rangedBonus ?? 0;
+			const ranged = creature.stats?.DEX + ranB;
 			methods.setValue('ranged', ranged);
 		}
-		if (
-			creature.defenseBonus &&
-			creature.armor &&
-			creature.stats?.AGI &&
-			creature.stats?.STR
-		) {
+		if (creature.stats?.AGI && creature.stats?.STR) {
+			const defB = creature.defenseBonus ?? 0;
+			const armor = creature.armor ?? 0;
+
 			const defense =
-				Math.max(creature.stats?.STR, creature.stats?.AGI) +
-				creature.defenseBonus +
-				creature.armor;
+				Math.max(creature.stats?.STR, creature.stats?.AGI) + defB + armor;
 			methods.setValue('defense', defense);
 		}
-		if (
-			creature.perceptionBonus &&
-			creature.stats?.ERU &&
-			creature.stats?.SEN &&
-			creature.stats?.INS
-		) {
+		if (creature.stats?.ERU && creature.stats?.SEN && creature.stats?.INS) {
+			const perB = creature.perceptionBonus ?? 0;
+
 			const perception =
 				Math.max(
 					creature.stats?.STR,
 					creature.stats?.AGI,
 					creature.stats?.ERU,
-				) + creature.perceptionBonus;
+				) + perB;
 			methods.setValue('perception', perception);
 		}
-		if (creature.stats?.VIT && creature.glory) {
-			methods.setValue('health', creature.stats.VIT + creature.glory);
+		if (creature.stats?.VIT) {
+			const glory = creature.glory ?? 0;
+
+			methods.setValue('health', creature.stats.VIT + glory);
 		}
-		if (creature.stats?.SEN && creature.magic) {
-			methods.setValue('spirit', creature.stats.SEN + creature.magic);
+		if (creature.stats?.SEN) {
+			const magic = creature.magic ?? 0;
+
+			methods.setValue('spirit', creature.stats.SEN + magic);
 		}
 	};
 
 	const createCreature = trpc.creatures.create.useMutation({
-		onSuccess: () => {
+		onSuccess: data => {
 			toast.success('Creature created !');
 			methods.reset();
+			setStep(1);
+			navigate({
+				to: '/bestiary/$id',
+				params: { id: `${data.id}` },
+			});
 		},
 		onError: error => {
 			toast.error('Something bad happened...');
@@ -158,23 +117,30 @@ const NewCreaturePage = () => {
 		},
 	});
 
-	const onSubmit = (data: NewCreature) => console.log(data);
+	const onSubmit = (data: NewCreature) => {
+		createCreature.mutate(data);
+	};
 
 	return (
 		<div className='mt-sm flex flex-col items-center justify-center p-2 px-2'>
 			<TitleBack title='New creature' />
 			<NewCreatureSteps step={step} />
-			<NewCreatureDetails creature={methods.getValues()} />
+			<NewCreatureDetails
+				step={step}
+				creature={methods.getValues()}
+			/>
 			<FormProvider {...methods}>
 				<NewCreatureForm
 					step={step}
 					setStep={setStep}
+					trigger={methods.trigger}
 					handleSubmit={e => {
 						//e.stopPropagation();
-						//e.preventDefault();
+						e.preventDefault();
 						methods.handleSubmit(onSubmit)(e);
 					}}
-					setAttributeValue={methods.setValue}
+					setValue={methods.setValue}
+					isLoading={createCreature.isPending}
 				/>
 			</FormProvider>
 		</div>

@@ -64,19 +64,19 @@ model Creature {
   spirit          Int?
   glory           Int?
   stats           StatProfil
-  loot            String[]
-  objects         String[]
-  actionList      ActionList?
-  attributes      Attribute[]
+  loot            CreatureItem[]
+  scavenge        CreatureComponent[]
+  actionList      ActionList
+  attributes      CreatureAttribute[]
   flavor          String?
   description     String?
-  actions         Action[]
+  actions         CreatureAction[]
 }
 
 type CreatureAttribute {
   name        String
   flavor      String?
-  Description String?
+  description String?
 }
 
 model Attribute {
@@ -84,8 +84,6 @@ model Attribute {
   name        String    @unique
   flavor      String?
   description String?
-  Creature    Creature? @relation(fields: [creatureId], references: [id])
-  creatureId  String?   @db.ObjectId
 }
 
 enum Type {
@@ -117,7 +115,7 @@ type ActionList {
   epic    Int  @default(0)
 }
 
-type CreatureActions {
+type CreatureAction {
   name        String
   action      ActionType
   type        String
@@ -131,19 +129,17 @@ type CreatureActions {
 }
 
 model Action {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
   name        String     @unique
   action      ActionType
   type        String
   flavor      String?
-  description String
+  description String?
   damages     String?
   effects     String?
   heal        String?
   target      String?
   range       String?
-  Creature    Creature?  @relation(fields: [creatureId], references: [id])
-  creatureId  String?    @db.ObjectId
 }
 
 enum ActionType {
@@ -170,7 +166,7 @@ type StatProfil {
   STR Int
   END Int
   VIT Int
-  COU Int
+  WIL Int
   INS Int
   SEN Int
   CHA Int
@@ -204,14 +200,57 @@ model Spell {
 }
 
 model Component {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  quantity    Float?
+  name        String    @unique
+  description String?
+  weight      Float?
+  value       Float?
+  valueWeight Float?
+  rarity      String?
+  uses        String?
+}
+
+type CreatureComponent {
+  name        String    
+  quantity    Float?
+  description String?
+  weight      Float?
+  value       Float?
+  valueWeight Float?
+  rarity      String?
+  uses        String?
+}
+
+model Item {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   quantity    Float?
   name        String   @unique
   description String?
   weight      Float?
   value       Float?
+  valueWeight Float?
   rarity      String?
-  spells      String[]
+  damages     String?
+  armor       Int?
+  properties  String?
+  isRelic     Boolean?
+  magicWeight Int?
+}
+
+type CreatureItem {
+  name        String
+  quantity    Float?
+  description String?
+  weight      Float?
+  value       Float?
+  valueWeight Float?
+  rarity      String?
+  damages     String?
+  armor       Int?
+  properties  String?
+  isRelic     Boolean?
+  magicWeight Int?
 }
 
 enum SpellType {

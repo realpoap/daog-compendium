@@ -1,19 +1,21 @@
 import { cn } from '@/utils/classNames';
 import { NewCreature } from '@api/lib/ZodCreature';
-import { SetStateAction } from 'react';
-import { UseFormSetValue } from 'react-hook-form';
-
 import { Field, InputNumber } from '../RHFComponents/index';
 
 const ProfileStep = ({
-	setStep,
+	handlePrevious,
+	handleNext,
 }: {
-	setStep: React.Dispatch<SetStateAction<number>>;
+	handlePrevious: (step: number) => void;
+	handleNext: (
+		inputs: (keyof NewCreature)[],
+		nextStep: number,
+	) => Promise<void>;
 }) => {
 	return (
 		<div className='flex w-full flex-col items-center justify-center'>
-			<div className='flex flex-col flex-wrap items-center justify-between gap-4 px-[4vw] md:flex-row'>
-				<section className='container flex flex-col items-center justify-center md:w-5/12'>
+			<div className='flex flex-col flex-wrap items-center justify-between px-[2vw] md:w-full md:flex-row'>
+				<section className='container mb-6 flex flex-col items-center justify-center md:w-1/2'>
 					<h4 className='font-grenze text-xl font-semibold tracking-wider text-purple-300'>
 						Adroitness
 					</h4>
@@ -41,7 +43,7 @@ const ProfileStep = ({
 						</Field>
 					</div>
 				</section>
-				<section className='container flex flex-col items-center justify-center md:w-5/12'>
+				<section className='container mb-6 flex flex-col items-center justify-center md:w-1/2'>
 					<h4 className='font-grenze text-xl font-semibold tracking-wider text-purple-300'>
 						Constitution
 					</h4>
@@ -69,17 +71,17 @@ const ProfileStep = ({
 						</Field>
 					</div>
 				</section>
-				<section className='container flex flex-col items-center justify-center md:w-5/12'>
+				<section className='container mb-6 flex flex-col items-center justify-center md:w-1/2'>
 					<h4 className='font-grenze text-xl font-semibold tracking-wider text-purple-300'>
 						Perception
 					</h4>
 					<div className='flex flex-row justify-center gap-2'>
 						<Field
-							name='stats.COU'
+							name='stats.WIL'
 							width='small'
-							label='COU'
+							label='WIL'
 						>
-							<InputNumber name='stats.COU' />
+							<InputNumber name='stats.WIL' />
 						</Field>
 						<Field
 							name='stats.INS'
@@ -97,7 +99,7 @@ const ProfileStep = ({
 						</Field>
 					</div>
 				</section>
-				<section className='container flex flex-col items-center justify-center md:w-5/12'>
+				<section className='container mb-6 flex flex-col items-center justify-center md:w-1/2'>
 					<h4 className='font-grenze text-xl font-semibold tracking-wider text-purple-300'>
 						Shroudness
 					</h4>
@@ -127,7 +129,7 @@ const ProfileStep = ({
 				</section>
 			</div>
 			<div
-				className='collapse mt-4'
+				className='collapse'
 				tabIndex={0}
 			>
 				<input
@@ -197,13 +199,13 @@ const ProfileStep = ({
 			<div className='flex w-full flex-row items-center justify-center gap-4'>
 				<button
 					className='font-grenze m-y-2 mt-8 flex w-1/3 flex-col items-center justify-center self-center rounded-lg bg-purple-500 px-4 py-2 text-xl font-bold transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:bg-stone-500'
-					onClick={() => setStep(1)}
+					onClick={() => handlePrevious(1)}
 				>
 					&#10094; Prev
 				</button>
 				<button
 					className='font-grenze m-y-2 mt-8 flex w-1/3 flex-col items-center justify-center self-center rounded-lg bg-purple-500 px-4 py-2 text-xl font-bold transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:bg-stone-500'
-					onClick={() => setStep(3)}
+					onClick={() => handleNext(['stats'], 3)}
 				>
 					Next &#10095;
 				</button>

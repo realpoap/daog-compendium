@@ -5,9 +5,8 @@ import {
 } from '@/types/creatureOptions';
 import { cn } from '@/utils/classNames';
 import { trpc } from '@/utils/trpc';
-import { Attribute, NewCreature } from '@api/lib/ZodCreature';
-import { SetStateAction, useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
+import { CreatureAttribute, NewCreature } from '@api/lib/ZodCreature';
+import { useEffect, useState } from 'react';
 import { UseFormSetValue } from 'react-hook-form';
 import {
 	Checkbox,
@@ -20,35 +19,30 @@ import { AttributeTags } from './utils/AttributeTags';
 
 const DescriptionStep = ({
 	setValue,
-	setStep,
+	handleNext,
 }: {
 	setValue: UseFormSetValue<NewCreature>;
-	setStep: React.Dispatch<SetStateAction<number>>;
+	handleNext: (
+		inputs: (keyof NewCreature)[],
+		nextStep: number,
+	) => Promise<void>;
 }) => {
 	const [attributes, setAttributes] = useState<string[]>([]);
 	const attributesList = trpc.attributes.getAll.useQuery();
 
 	useEffect(() => {
-		const object = {
-			id: '',
-			name: '',
-			flavor: null,
-			description: null,
-			creatureId: null,
-		};
-		setValue('attributes', [object]);
-	}, []);
-
-	useEffect(() => {
 		if (attributesList.data) {
 			const list = attributesList.data;
-			let attObjects = [] as Attribute[];
+			let attObjects = [] as CreatureAttribute[];
 			attributes?.map(att => {
 				const attObject = list.find(el => el.name === att);
-				attObject && attObjects.push(attObject);
+				if (attObject) {
+					const { id, ...rest } = attObject;
+					attObjects.push(rest);
+				}
 			});
 			console.log(attObjects);
-			setValue('attributes', attObjects as Attribute[]);
+			setValue('attributes', attObjects as CreatureAttribute[]);
 		}
 	}, [attributes]);
 
@@ -141,12 +135,14 @@ const DescriptionStep = ({
 				name='attributes'
 				label='Search attribute'
 			>
-				{attributesList.data && (
+				{attributesList.data ? (
 					<AttributeTags
 						setTags={setAttributes}
 						tags={attributes}
 						attributesList={attributesList?.data}
 					/>
+				) : (
+					<div className='skeleton h-10 w-full dark:bg-stone-700'></div>
 				)}
 			</Field>
 			{/* TODO: MOVE THIS TO VIEW PAGE */}
@@ -185,7 +181,23 @@ const DescriptionStep = ({
 			</Field>
 			<button
 				className='font-grenze m-y-2 mt-8 flex w-2/3 flex-col items-center justify-center self-center rounded-lg bg-purple-500 px-4 py-2 text-xl font-bold transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:bg-stone-500'
-				onClick={() => setStep(2)}
+				onClick={() =>
+					handleNext(
+						[
+							'name',
+							'type',
+							'alignment',
+							'rank',
+							'subtype',
+							'flavor',
+							'description',
+							'isBoss',
+							'size',
+						],
+						2,
+					)
+				}
+				type='button'
 			>
 				Next &#10095;
 			</button>

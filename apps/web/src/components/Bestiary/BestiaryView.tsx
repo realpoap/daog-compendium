@@ -90,9 +90,9 @@ const BestiaryView = () => {
 			{prunedItems.map(m => (
 				<Link
 					className='w-full'
-					key={m.name}
+					key={m.id}
 					to={`/bestiary/$id`}
-					params={{ id: `${m.name}` }}
+					params={{ id: `${m.id}` }}
 				>
 					<div className='flex w-full translate-y-8 snap-center flex-col items-center rounded-md p-1 pb-2 text-center opacity-100 transition-all duration-1000 ease-out hover:bg-stone-700'>
 						<p

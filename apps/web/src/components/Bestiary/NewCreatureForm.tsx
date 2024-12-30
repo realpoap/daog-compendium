@@ -1,21 +1,42 @@
 import { NewCreature } from '@api/lib/ZodCreature';
 import { SetStateAction } from 'react';
-import { UseFormSetValue } from 'react-hook-form';
+import { UseFormSetValue, UseFormTrigger } from 'react-hook-form';
+import toast from 'react-hot-toast';
 import ActionsStep from './ActionsStep';
 import DescriptionStep from './DescriptionStep';
+import LootStep from './LootStep';
 import ProfileStep from './ProfileStep';
+import ResumeStep from './ResumeStep';
 
 const NewCreatureForm = ({
 	handleSubmit,
 	setStep,
-	setAttributeValue,
+	setValue,
 	step,
+	trigger,
+	isLoading,
 }: {
 	handleSubmit: React.FormEventHandler<HTMLFormElement>;
 	setStep: React.Dispatch<SetStateAction<number>>;
-	setAttributeValue: UseFormSetValue<NewCreature>;
+	setValue: UseFormSetValue<NewCreature>;
 	step: number;
+	trigger: UseFormTrigger<NewCreature>;
+	isLoading: boolean;
 }) => {
+	const handleNext = async (
+		inputs: (keyof NewCreature)[],
+		nextStep: number,
+	) => {
+		const output = await trigger(inputs);
+		if (!output)
+			toast.error('Please fix your inputs before moving on to the next step.');
+		if (output) setStep(nextStep);
+	};
+
+	const handlePrevious = (step: number) => {
+		setStep(step);
+	};
+
 	return (
 		<form
 			onSubmit={handleSubmit}
@@ -24,16 +45,40 @@ const NewCreatureForm = ({
 			{/* DESCRIPTION STEP ----------------------------------------- */}
 			{step === 1 && (
 				<DescriptionStep
-					setValue={setAttributeValue}
-					setStep={setStep}
-					step={step}
+					setValue={setValue}
+					handleNext={handleNext}
 				/>
 			)}
 			{/* PROFILE STEP ----------------------------------------- */}
-			{step === 2 && <ProfileStep setStep={setStep} />}
+			{step === 2 && (
+				<ProfileStep
+					handlePrevious={handlePrevious}
+					handleNext={handleNext}
+				/>
+			)}
 			{/* ACTIONS STEP ----------------------------------------- */}
-			{step === 3 && <ActionsStep setStep={setStep} />}
+			{step === 3 && (
+				<ActionsStep
+					setValue={setValue}
+					handlePrevious={handlePrevious}
+					handleNext={handleNext}
+				/>
+			)}
 			{/* EQUIPMENT STEP ----------------------------------------- */}
+			{step === 4 && (
+				<LootStep
+					setValue={setValue}
+					handlePrevious={handlePrevious}
+					handleNext={handleNext}
+				/>
+			)}
+			{/* VALIDATION STEP ----------------------------------------- */}
+			{step === 5 && (
+				<ResumeStep
+					handlePrevious={handlePrevious}
+					isLoading={isLoading}
+				/>
+			)}
 		</form>
 	);
 };

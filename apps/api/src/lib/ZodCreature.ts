@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { ComponentSchema, ItemSchema } from './ZodItem';
 
 export const StatProfilSchema = z.object({
   CEL: z.number().int(),
@@ -7,7 +8,7 @@ export const StatProfilSchema = z.object({
   STR: z.number().int(),
   END: z.number().int(),
   VIT: z.number().int(),
-  COU: z.number().int(),
+  WIL: z.number().int(),
   INS: z.number().int(),
   SEN: z.number().int(),
   CHA: z.number().int(),
@@ -17,25 +18,10 @@ export const StatProfilSchema = z.object({
 
 export type StatProfil = z.infer<typeof StatProfilSchema>
 
-export const ActionSchema = z.object({
-	action: z.enum(['main','limited','free', 'travel','epic']),
-	id: z.string(),
-	name: z.string(),
-	type: z.string(),
-	flavor: z.string().nullable(),
-	description: z.string().nullable(),
-	damages: z.string().nullable(),
-	effects: z.string().nullable(),
-	heal: z.string().nullable(),
-	target: z.string().nullable(),
-	range: z.string().nullable(),
-	creatureId: z.string().nullable(),
-})
+export const ActionTypeSchema = z.enum(['main','limited','free','travel','epic']);
 
-export type Action = z.infer<typeof ActionSchema>
-
-export const NewActionSchema = z.object({
-	action: z.enum(['main','limited','free', 'travel','epic']),
+export const CreatureActionSchema = z.object({
+	action: ActionTypeSchema,
 	name: z.string(),
 	type: z.string(),
 	flavor: z.string().nullable(),
@@ -47,7 +33,14 @@ export const NewActionSchema = z.object({
 	range: z.string().nullable(),
 })
 
-export type NewAction = z.infer<typeof NewActionSchema>
+export const ActionWithCreatureIdSchema = CreatureActionSchema.extend({
+  id: z.string(),
+})
+
+export type ActionWithCreatureId = z.infer<typeof ActionWithCreatureIdSchema>
+
+export type CreatureAction = z.infer<typeof CreatureActionSchema>
+
 
 export const ActionListSchema = z.object({
   main: z.number().int(),
@@ -59,15 +52,13 @@ export const ActionListSchema = z.object({
 
 export type ActionList = z.infer<typeof ActionListSchema>
 
-export const AttributeSchema = z.object({
-  id: z.string(),
+export const CreatureAttributeSchema = z.object({
   name: z.string(),
   flavor: z.string().nullable(),
   description: z.string().nullable(),
-  creatureId: z.string().nullable(),
 })
 
-export type Attribute = z.infer<typeof AttributeSchema>
+export type CreatureAttribute = z.infer<typeof CreatureAttributeSchema>
 
 export const NewAttributeSchema = z.object({
   name: z.string({required_error: 'Name is required'}).min(4,'Name must be greater than 3'),
@@ -76,6 +67,36 @@ export const NewAttributeSchema = z.object({
 })
 
 export type NewAttribute = z.infer<typeof NewAttributeSchema>
+
+export const CreatureComponentSchema = z.object({
+  name: z.string(),
+  quantity: z.number().nullable(),
+  description: z.string().nullable(),
+  weight: z.number().nullable(),
+  value: z.number().nullable(),
+  valueWeight: z.number().nullable(),
+  rarity: z.string().nullable(),
+  uses: z.string().nullable(),
+})
+
+export type CreatureComponent = z.infer<typeof CreatureComponentSchema>
+
+export const CreatureItemSchema = z.object({
+  name: z.string(),
+  quantity: z.number().nullable(),
+  description: z.string().nullable(),
+  weight: z.number().nullable(),
+  value: z.number().nullable(),
+  valueWeight: z.number().nullable(),
+  rarity: z.string().nullable(),
+  damages: z.string().nullable(),
+  armor: z.number().int().nullable(),
+  properties: z.string().nullable(),
+  isRelic: z.boolean().nullable(),
+  magicWeight: z.number().int().nullable(),
+})
+
+export type CreatureItem = z.infer<typeof CreatureItemSchema>
 
 export const ZodCreature = z.object({
 	size: z.enum(['tiny','small','average','large','huge','gigantic'],{
@@ -92,27 +113,27 @@ export const ZodCreature = z.object({
   errorMap: () => ({ message: 'Choose an alignment' })}),
 	createdAt: z.coerce.date().nullable(),
 	updatedAt: z.coerce.date().nullable(),
-	level: z.number().int(), 
-	attack: z.number().int(),
-	attackBonus: z.number().int(),
-	defense: z.number().int(),
-	defenseBonus: z.number().int(),
-	ranged: z.number().int(),
-	rangedBonus: z.number().int(),
-	health: z.number().int(),
-	glory: z.number().int().nullable(),
-	armor: z.number().int().nullable(),
-	perception: z.number().int(),
-	perceptionBonus: z.number().int().nullable(),
-	magic: z.number().int().nullable(),
-	spirit: z.number().int().nullable(),
-	loot: z.string().array(),
-	objects: z.string().array(),
-	flavor: z.string().nullable(),
-	description: z.string().nullable(),
-	actionList: ActionListSchema.nullable(),
-	attributes: z.array(AttributeSchema),
-	actions: z.array(ActionSchema),
+	level: z.number().int(),
+  attack: z.number().int(),
+  attackBonus: z.number().int().nullable(),
+  defense: z.number().int(),
+  defenseBonus: z.number().int().nullable(),
+  ranged: z.number().int(),
+  rangedBonus: z.number().int().nullable(),
+  health: z.number().int(),
+  armor: z.number().int().nullable(),
+  perception: z.number().int(),
+  perceptionBonus: z.number().int().nullable(),
+  magic: z.number().int().nullable(),
+  spirit: z.number().int().nullable(),
+  glory: z.number().int().nullable(),
+  flavor: z.string().nullable(),
+  description: z.string().nullable(),
+	actionList: ActionListSchema,
+	loot:z.array(CreatureItemSchema),
+	scavenge:z.array(CreatureComponentSchema),
+	attributes:z.array(CreatureAttributeSchema),
+	actions:z.array(CreatureActionSchema),
 })
 
 export type Creature = z.infer<typeof ZodCreature>
@@ -144,13 +165,14 @@ export const ZodNewCreature = z.object({
   magic: z.number().int().nullable(),
   spirit: z.number().int().nullable(),
   glory: z.number().int().nullable(),
-  loot: z.string().array(),
-  objects: z.string().array(),
   flavor: z.string().nullable(),
   description: z.string().nullable(),
-	actionList: ActionListSchema.nullable(),
-	attributes: z.array(AttributeSchema),
-	actions: z.array(ActionSchema),
+	actionList: ActionListSchema,
+	loot:z.array(CreatureItemSchema),
+	scavenge:z.array(CreatureComponentSchema),
+	attributes:z.array(CreatureAttributeSchema),
+	actions:z.array(CreatureActionSchema),
+
 })
 
 export type NewCreature = z.infer<typeof ZodNewCreature>

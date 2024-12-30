@@ -31,7 +31,6 @@ import { z } from 'zod';
 type Spell = z.infer<typeof SpellSchema>;
 
 const SpellDetails = () => {
-	const { history } = useRouter();
 	const navigate = useNavigate();
 	const { id } = useParams({ strict: false });
 	const [spell, setSpell] = useState<Spell | undefined>();

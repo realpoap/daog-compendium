@@ -1,35 +1,41 @@
-import { Field, Input, Textarea } from '@/components/RHFComponents';
+import { Field, Input, Select, Textarea } from '@/components/RHFComponents';
+import { ActionOptions } from '@/types/creatureOptions';
 import { trpc } from '@/utils/trpc';
-import { NewAction, NewActionSchema, NewAttribute } from '@api/lib/ZodCreature';
+import {
+	ActionWithCreatureId,
+	ActionWithCreatureIdSchema,
+	CreatureAction,
+	CreatureActionSchema,
+} from '@api/lib/ZodCreature';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SetStateAction } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 type Props = {
-	setVisible: React.Dispatch<SetStateAction<boolean>>;
-	setTags: React.Dispatch<SetStateAction<NewAction[]>>;
-	tags: NewAction[];
+	id: string;
+	actions: CreatureAction[];
+	setActions: React.Dispatch<SetStateAction<CreatureAction[]>>;
 };
 
-const ActionForm = ({ setVisible, setTags, tags }: Props) => {
-	const methods3 = useForm<NewAction>({
+const ActionForm = ({ id, actions, setActions }: Props) => {
+	const methods = useForm<ActionWithCreatureId>({
 		resolver: async (data, context, options) => {
 			// you can debug your validation schema here
 			console.log('formData', data);
 			console.log(
 				'validation result',
-				await zodResolver(NewActionSchema)(data, context, options),
+				await zodResolver(ActionWithCreatureIdSchema)(data, context, options),
 			);
-			return zodResolver(NewActionSchema)(data, context, options);
+			return zodResolver(ActionWithCreatureIdSchema)(data, context, options);
 		},
 		shouldFocusError: true,
 	});
 
-	const createAction = trpc.attributes.create.useMutation({
+	const createAction = trpc.actions.create.useMutation({
 		onSuccess: () => {
 			toast.success('Action added !');
-			methods3.reset();
+			methods.reset();
 		},
 		onError: error => {
 			toast.error('Something bad happened...');
@@ -37,10 +43,22 @@ const ActionForm = ({ setVisible, setTags, tags }: Props) => {
 		},
 	});
 
-	const onAttributeSubmit = (data: NewAttribute) => {
-		createAction.mutate(data);
-		setTags([...tags, data.name]);
-		methods3.reset();
+	const addActionOnCreature = trpc.creatures.addAction.useMutation({
+		onSuccess: () => {
+			toast.success('Action linked !');
+		},
+		onError: error => {
+			toast.error('Something bad happened...');
+			throw new Error(error.message);
+		},
+	});
+
+	const onActionSubmit = (data: ActionWithCreatureId) => {
+		const { id, ...action } = data;
+		setActions([...actions, action]);
+		createAction.mutate(action as CreatureAction);
+		addActionOnCreature.mutate(data);
+		(document.getElementById('action-form') as HTMLDialogElement).close();
 	};
 	return (
 		<>
@@ -49,29 +67,43 @@ const ActionForm = ({ setVisible, setTags, tags }: Props) => {
 				className='modal'
 			>
 				<div className='modal-box bg-stone-100 dark:bg-stone-800 dark:text-stone-200'>
-					<FormProvider {...methods3}>
+					<h3 className='font-grenze w-full text-center text-4xl font-bold text-purple-400'>
+						New Action
+					</h3>
+					<FormProvider {...methods}>
 						<form
+							className='flex flex-col items-center justify-start'
 							onSubmit={e => {
 								e.stopPropagation();
 								e.preventDefault();
-								methods3.handleSubmit(onAttributeSubmit)(e);
+								methods.setValue('id', id);
+								methods.handleSubmit(onActionSubmit)(e);
 							}}
 						>
 							<button
 								className='btn btn-sm btn-circle btn-ghost absolute right-2 top-2'
 								type='button'
-								onClick={() =>
+								onClick={e => {
+									e.stopPropagation();
 									(
-										document.getElementById(
-											'attribute-form',
-										) as HTMLDialogElement
-									).close()
-								}
+										document.getElementById('action-form') as HTMLDialogElement
+									).close();
+								}}
 							>
 								✕
 							</button>
 							<Field name='name'>
 								<Input name='name' />
+							</Field>
+							<Field name='action'>
+								<Select
+									name='action'
+									options={ActionOptions}
+									defaultValue=''
+								/>
+							</Field>
+							<Field name='type'>
+								<Input name='type' />
 							</Field>
 							<Field name='flavor'>
 								<Input name='flavor' />
@@ -79,9 +111,24 @@ const ActionForm = ({ setVisible, setTags, tags }: Props) => {
 							<Field name='description'>
 								<Textarea name='description' />
 							</Field>
+							<Field name='effects'>
+								<Textarea name='effects' />
+							</Field>
+							<Field name='damages'>
+								<Input name='damages'></Input>
+							</Field>
+							<Field name='heal'>
+								<Input name='heal'></Input>
+							</Field>
+							<Field name='target'>
+								<Input name='target'></Input>
+							</Field>
+							<Field name='range'>
+								<Input name='range'></Input>
+							</Field>
 							<button
 								type='submit'
-								disabled={createAction.isPending || !setVisible}
+								disabled={createAction.isPending}
 								className='bg-accent font-grenze m-y-2 mt-8 flex w-2/3 flex-col items-center justify-center self-center rounded-lg px-4 py-2 text-xl font-bold transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:bg-stone-500'
 							>
 								{!createAction.isPending ? (
@@ -92,7 +139,7 @@ const ActionForm = ({ setVisible, setTags, tags }: Props) => {
 							</button>
 						</form>
 					</FormProvider>
-					<p className='py-4 text-stone-500'>
+					<p className='py-4 text-center text-stone-500'>
 						Press ESC key or click on ✕ button to close
 					</p>
 				</div>

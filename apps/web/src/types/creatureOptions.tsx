@@ -90,3 +90,26 @@ export const creatureAlignmentOptions = [
 		value: 'evil',
 	},
 ];
+
+export const ActionOptions = [
+	{
+		label: 'Main',
+		value: 'main',
+	},
+	{
+		label: 'Limited',
+		value: 'limited',
+	},
+	{
+		label: 'Free',
+		value: 'free',
+	},
+	{
+		label: 'Travel',
+		value: 'Travel',
+	},
+	{
+		label: 'Epic',
+		value: 'epic',
+	},
+];
