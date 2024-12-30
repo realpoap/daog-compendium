@@ -2,11 +2,12 @@ import { Field, Input, Select, Textarea } from '@/components/RHFComponents';
 import { ActionOptions } from '@/types/creatureOptions';
 import { trpc } from '@/utils/trpc';
 import {
+	Action,
+	ActionSchema,
 	ActionWithCreatureId,
-	ActionWithCreatureIdSchema,
 	CreatureAction,
 	CreatureActionSchema,
-} from '@api/lib/ZodCreature';
+} from '@api/lib/ZodAction';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SetStateAction } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -14,20 +15,21 @@ import toast from 'react-hot-toast';
 
 type Props = {
 	id: string;
+	name: string;
 	actions: CreatureAction[];
 	setActions: React.Dispatch<SetStateAction<CreatureAction[]>>;
 };
 
-const ActionForm = ({ id, actions, setActions }: Props) => {
-	const methods = useForm<ActionWithCreatureId>({
+const ActionForm = ({ id, name, actions, setActions }: Props) => {
+	const methods = useForm<Action>({
 		resolver: async (data, context, options) => {
 			// you can debug your validation schema here
 			console.log('formData', data);
 			console.log(
 				'validation result',
-				await zodResolver(ActionWithCreatureIdSchema)(data, context, options),
+				await zodResolver(ActionSchema)(data, context, options),
 			);
-			return zodResolver(ActionWithCreatureIdSchema)(data, context, options);
+			return zodResolver(ActionSchema)(data, context, options);
 		},
 		shouldFocusError: true,
 	});
@@ -53,11 +55,13 @@ const ActionForm = ({ id, actions, setActions }: Props) => {
 		},
 	});
 
-	const onActionSubmit = (data: ActionWithCreatureId) => {
-		const { id, ...action } = data;
+	const onActionSubmit = (data: Action) => {
+		const { id, searchName, ...action } = data;
+		const actionForCreate = { ...action, searchName };
+		const actionForAddTo = { ...action, id };
 		setActions([...actions, action]);
-		createAction.mutate(action as CreatureAction);
-		addActionOnCreature.mutate(data);
+		createAction.mutate(actionForCreate as Action);
+		addActionOnCreature.mutate(actionForAddTo as ActionWithCreatureId);
 		(document.getElementById('action-form') as HTMLDialogElement).close();
 	};
 	return (
@@ -77,6 +81,10 @@ const ActionForm = ({ id, actions, setActions }: Props) => {
 								e.stopPropagation();
 								e.preventDefault();
 								methods.setValue('id', id);
+								methods.setValue(
+									'searchName',
+									`${methods.getValues('name')} (${name})`,
+								);
 								methods.handleSubmit(onActionSubmit)(e);
 							}}
 						>

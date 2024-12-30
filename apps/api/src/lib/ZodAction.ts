@@ -37,3 +37,4 @@ export const ActionWithCreatureIdSchema = CreatureActionSchema.extend({
 export type ActionWithCreatureId = z.infer<typeof ActionWithCreatureIdSchema>
 
 export type CreatureAction = z.infer<typeof CreatureActionSchema>
+export type Action = z.infer<typeof ActionSchema>

@@ -96,7 +96,7 @@ export const creaturesRouter = router({
 			})
 		}),
 	addAction: procedure
-		.input(ActionSchema)
+		.input(ActionWithCreatureIdSchema)
 		.mutation(async({input}) =>{
 			console.log('💌 updating creature action :', input.name, 'with id:', input.id)
 			const {id,searchName, ...action} = input

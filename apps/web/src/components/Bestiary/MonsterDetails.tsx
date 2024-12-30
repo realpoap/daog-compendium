@@ -127,6 +127,7 @@ const MonsterDetails = () => {
 				{createPortal(
 					<ActionForm
 						id={monster?.id}
+						name={monster?.name}
 						actions={actions}
 						setActions={setActions}
 					/>,
