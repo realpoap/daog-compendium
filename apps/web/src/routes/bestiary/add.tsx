@@ -1,4 +1,4 @@
-import NewCreaturePage from '@/components/Bestiary/NewCreaturePage';
+import NewCreaturePage from '@/components/Bestiary/NewCreature/NewCreaturePage';
 import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/bestiary/add')({
