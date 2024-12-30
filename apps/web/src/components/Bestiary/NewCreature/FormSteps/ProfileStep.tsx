@@ -1,6 +1,6 @@
 import { cn } from '@/utils/classNames';
 import { NewCreature } from '@api/lib/ZodCreature';
-import { Field, InputNumber } from '../RHFComponents/index';
+import { Field, InputNumber } from '../../../RHFComponents/index';
 
 const ProfileStep = ({
 	handlePrevious,

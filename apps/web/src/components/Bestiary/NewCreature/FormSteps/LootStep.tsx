@@ -6,9 +6,9 @@ import {
 } from '@api/lib/ZodCreature';
 import { useEffect, useState } from 'react';
 import { UseFormSetValue } from 'react-hook-form';
-import { Field } from '../RHFComponents';
-import { ComponentsTags } from './utils/ComponentsTags';
-import { ItemsTags } from './utils/ItemsTag';
+import { Field } from '../../../RHFComponents';
+import { ComponentsTags } from '../../utils/ComponentsTags';
+import { ItemsTags } from '../../utils/ItemsTag';
 
 const LootStep = ({
 	handlePrevious,

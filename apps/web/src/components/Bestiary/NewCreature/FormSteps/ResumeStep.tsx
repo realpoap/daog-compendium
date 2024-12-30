@@ -1,4 +1,4 @@
-import SubmitButton from '../SubmitButton';
+import SubmitButton from '../../../SubmitButton';
 
 const ResumeStep = ({
 	handlePrevious,
