@@ -2,11 +2,11 @@ import { NewCreature } from '@api/lib/ZodCreature';
 import { SetStateAction } from 'react';
 import { UseFormSetValue, UseFormTrigger } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import ActionsStep from './ActionsStep';
-import DescriptionStep from './DescriptionStep';
-import LootStep from './LootStep';
-import ProfileStep from './ProfileStep';
-import ResumeStep from './ResumeStep';
+import ActionsStep from './FormSteps/ActionsStep';
+import DescriptionStep from './FormSteps/DescriptionStep';
+import LootStep from './FormSteps/LootStep';
+import ProfileStep from './FormSteps/ProfileStep';
+import ResumeStep from './FormSteps/ResumeStep';
 
 const NewCreatureForm = ({
 	handleSubmit,
@@ -59,7 +59,6 @@ const NewCreatureForm = ({
 			{/* ACTIONS STEP ----------------------------------------- */}
 			{step === 3 && (
 				<ActionsStep
-					setValue={setValue}
 					handlePrevious={handlePrevious}
 					handleNext={handleNext}
 				/>

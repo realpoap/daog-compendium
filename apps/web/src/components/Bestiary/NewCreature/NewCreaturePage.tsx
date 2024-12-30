@@ -8,7 +8,7 @@ import { calculateStats, defaultCreature } from '@/utils/calculateStats';
 import { capitalizeFirstLetter } from '@/utils/capitalize';
 import { useNavigate } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
-import TitleBack from '../TitleBack';
+import TitleBack from '../../TitleBack';
 import NewCreatureDetails from './NewCreatureDetails';
 import NewCreatureForm from './NewCreatureForm';
 import NewCreatureSteps from './NewCreatureSteps';

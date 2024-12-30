@@ -1,6 +1,6 @@
 import { NewCreature } from '@api/lib/ZodCreature';
 import { useEffect, useState } from 'react';
-import { Field, InputNumber } from '../RHFComponents';
+import { Field, InputNumber } from '../../../RHFComponents';
 
 const ActionsStep = ({
 	handlePrevious,

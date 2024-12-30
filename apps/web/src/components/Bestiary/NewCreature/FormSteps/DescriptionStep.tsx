@@ -14,8 +14,9 @@ import {
 	Input,
 	Select,
 	Textarea,
-} from '../RHFComponents/index';
-import { AttributeTags } from './utils/AttributeTags';
+} from '../../../RHFComponents';
+import { AttributeTags } from '../../utils/AttributeTags';
+import { Attribute } from '@api/lib/zod-prisma';
 
 const DescriptionStep = ({
 	setValue,
@@ -32,7 +33,7 @@ const DescriptionStep = ({
 
 	useEffect(() => {
 		if (attributesList.data) {
-			const list = attributesList.data;
+			const list: Attribute[] = attributesList.data;
 			let attObjects = [] as CreatureAttribute[];
 			attributes?.map(att => {
 				const attObject = list.find(el => el.name === att);
