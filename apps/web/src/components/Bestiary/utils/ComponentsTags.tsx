@@ -1,5 +1,5 @@
 import { cn } from '@/utils/classNames';
-import { Component } from '@api/lib/ZodItem';
+import { Component } from '@api/lib/ZodComponent';
 import { SetStateAction, useState } from 'react';
 
 type Props = {
@@ -119,7 +119,7 @@ function ResultList({
 					.filter(r => r.name.toLowerCase().includes(searchTerm.toLowerCase()))
 					.map(result => (
 						<li
-							key={result.id}
+							key={result.name}
 							onClick={() => handleSelect(result)}
 							className='hover:bg-accent group cursor-pointer list-none rounded-sm px-1 text-stone-200 hover:text-stone-800'
 						>

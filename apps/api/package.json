@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "SET NODE_ENV=development & npx prisma generate --no-hints & tsx watch ./src/server.ts",
-    "lint": "eslint --cache --ext \".js,.ts,.tsx\" src",
+    "lint": "npx eslint src",
     "type-check": "tsc",
     "build": "rimraf dist && tsc --noEmit false && tsc-alias",
     "start": "node dist/server.js",
