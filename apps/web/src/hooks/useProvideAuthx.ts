@@ -15,7 +15,9 @@ export const useProvideAuth = () => {
 	const [isAuthLoading, setAuthLoading] = useState(false);
 	const [logged, setLogged] = useState(false);
 	const [authErrors, setAuthErrors] = useState('');
-	const me = trpc.auth.getMe.useQuery();
+	const me = trpc.auth.getMe.useQuery(undefined, {
+		enabled: user === null,
+	});
 	const utils = trpc.useUtils();
 
 	const registerUser = trpc.auth.registerUser.useMutation({
@@ -79,9 +81,9 @@ export const useProvideAuth = () => {
 	const getMe = async () => {
 		console.log('calling getMe()')
 				if(me.data?.user) {
-					if(logged){
-					if(me.data?.user.name !== undefined) {
-						toast.success(`Welcome back ${capitalizeFirstLetter(me.data?.user.name)}`);
+					if(logged && !isAuthLoading && user){
+					if(user.name !== undefined) {
+						toast.success(`Welcome back ${capitalizeFirstLetter(user.name)}`);
 					}
 					} else {
 						console.log('calling login with:', user?.name)
@@ -90,8 +92,6 @@ export const useProvideAuth = () => {
 								password: me.data.user?.password,
 							}
 						await login(currentUser);
-						toast.success(`Logged in as ${capitalizeFirstLetter(me.data?.user.name)}`);
-
 				}
 				const {password, ...userReceived} = me.data.user;
 				setUser(userReceived);

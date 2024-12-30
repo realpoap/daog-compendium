@@ -43,8 +43,13 @@ async function main() {
     })
   );
 
-  // For testing purposes, wait-on requests '/'
-  app.get('/healthcheck', (req, res) => {
+
+  app.get('/healthcheck', (_req, res) => {
+    console.log(`Monitoring health 🩺...`);
+    res.sendStatus(200);
+  })
+
+  app.get('/', (_req, res) => {
     console.log(`Server is running now ! Front end set as : ${origin}`);
     res.send(`Server is running now ! Front end set as : ${origin}`);
   })

@@ -10,23 +10,67 @@ export const Route = createLazyFileRoute('/')({
 });
 
 function Index() {
-	const { user, isAuthLoading } = useAuth();
+	const { user, isAuthLoading, accessToken } = useAuth();
 	console.log(user?.name);
 	const spellCount = trpc.spells.getTotal.useQuery();
 	const spellLatest = trpc.spells.getLatest.useQuery();
+	const creatureCount = trpc.creatures.getTotal.useQuery();
+	const creatureLatest = trpc.creatures.getLatest.useQuery();
 
 	if (isAuthLoading) {
 		return (
-			<div>
-				<h1 className='font-grenze py-4 text-center text-4xl'>Loading</h1>
+			<div className='mt-8 flex flex-col items-center justify-start'>
+				<h1 className='skeleton h-8 w-1/3 py-4 dark:bg-stone-700'></h1>
 				<div className='m-4 flex flex-col justify-center gap-4 md:flex-row'>
-					<div className='skeleton s-48 dark:bg-stone-700'></div>
+					<div className='skeleton h-1/3 w-1/3 dark:bg-stone-700'></div>
 				</div>
 			</div>
 		);
 	}
 
-	if (!user?.name) {
+	if (user && !isAuthLoading) {
+		return (
+			<div>
+				<h1 className='font-grenze py-4 text-center text-4xl'>
+					Welcome {capitalizeFirstLetter(user?.name)} !
+				</h1>
+				<section className='flex flex-row justify-center gap-4 p-4 md:flex-row'>
+					<div className='stats h-5/12 w-5/12 shadow md:h-1/4 md:w-1/4 dark:bg-stone-700'>
+						<div className='stat flex flex-col justify-center gap-1'>
+							<div className='stat-title dark:text-purple-200'>Spell count</div>
+							<div className='stat-value font-grenze pb-2 text-6xl text-purple-500'>
+								{spellCount?.data?.number}
+							</div>
+							<div className='stat-desc flex flex-col dark:text-purple-200'>
+								<span>Recently added: </span>
+								<span className='font-grenze text-xl text-purple-500'>
+									{spellLatest?.data?.titleCommon}{' '}
+								</span>
+							</div>
+						</div>
+					</div>
+					<div className='stats h-5/12 w-5/12 shadow md:h-1/4 md:w-1/4 dark:bg-stone-700'>
+						<div className='stat flex flex-col justify-center gap-1'>
+							<div className='stat-title dark:text-purple-200'>
+								Creature count
+							</div>
+							<div className='stat-value font-grenze pb-2 text-6xl text-purple-500'>
+								{creatureCount?.data?.name}
+							</div>
+							<div className='stat-desc flex flex-col dark:text-purple-200'>
+								<span>Recently added: </span>
+								<span className='font-grenze text-xl text-purple-500'>
+									{creatureLatest?.data?.fullname}{' '}
+								</span>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+		);
+	}
+
+	if (!accessToken) {
 		return (
 			<div className='width-full font-noto flex max-h-fit flex-col items-center justify-center gap-8 md:flex-row'>
 				{/* Register ------------------------------------ */}
@@ -78,30 +122,6 @@ function Index() {
 			</div>
 		);
 	}
-
-	return (
-		<div>
-			<h1 className='font-grenze py-4 text-center text-4xl'>
-				Welcome {capitalizeFirstLetter(user?.name)} !
-			</h1>
-			<section className='flex flex-col justify-center gap-4 p-4 md:flex-row'>
-				<div className='stats size-48 shadow dark:bg-stone-700'>
-					<div className='stat flex flex-col justify-center gap-1'>
-						<div className='stat-title dark:text-purple-200'>Spell count</div>
-						<div className='stat-value font-grenze pb-2 text-6xl text-purple-500'>
-							{spellCount?.data?.number}
-						</div>
-						<div className='stat-desc flex flex-col dark:text-purple-200'>
-							<span>Recently added: </span>
-							<span className='font-grenze text-xl text-purple-500'>
-								{spellLatest?.data?.titleCommon}{' '}
-							</span>
-						</div>
-					</div>
-				</div>
-			</section>
-		</div>
-	);
 }
 
 // function Index() {

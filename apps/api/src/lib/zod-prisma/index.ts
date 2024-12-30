@@ -12,19 +12,17 @@ import type { Prisma } from '@prisma/client';
 
 export const UserScalarFieldEnumSchema = z.enum(['id','email','name','password','isOwner','role','createdAt']);
 
-export const CreatureScalarFieldEnumSchema = z.enum(['id','fullname','name','rank','type','subtype','size','createdAd','updatedAt','level','attack','defense','ranged','health','armor','perception','magic','spirit','loot','objects','flavor','description']);
+export const CreatureScalarFieldEnumSchema = z.enum(['id','fullname','name','rank','isBoss','type','subtype','alignment','size','createdAt','updatedAt','level','attack','attackBonus','defense','defenseBonus','ranged','rangedBonus','health','armor','perception','perceptionBonus','magic','spirit','glory','flavor','description']);
 
-export const CreatureAttributeScalarFieldEnumSchema = z.enum(['id','name','flavor','Description','creatureId']);
+export const AttributeScalarFieldEnumSchema = z.enum(['id','name','flavor','description']);
 
-export const ActionListScalarFieldEnumSchema = z.enum(['id','main','limited','free','travel','creatureId']);
-
-export const CreatureActionsScalarFieldEnumSchema = z.enum(['id','title','action','type','flavor','description','damages','effects','heal','target','range','creatureId']);
-
-export const StatProfilScalarFieldEnumSchema = z.enum(['id','CEL','AGI','DEX','STR','END','VIT','COU','INS','SEN','CHA','SOC','ERU','creatureId']);
+export const ActionScalarFieldEnumSchema = z.enum(['id','name','action','type','flavor','description','damages','effects','heal','target','range']);
 
 export const SpellScalarFieldEnumSchema = z.enum(['id','number','titleGlaise','titleCommon','createdAt','updatedAt','level','type','cost','difficulty','casting','targetType','action','flavor','description','damages','heal','effects','range','duration','target','components']);
 
-export const ComponentScalarFieldEnumSchema = z.enum(['id','quantity','name','description','weight','value','rarity','spells']);
+export const ComponentScalarFieldEnumSchema = z.enum(['id','quantity','name','description','weight','value','valueWeight','rarity','uses']);
+
+export const ItemScalarFieldEnumSchema = z.enum(['id','quantity','name','description','weight','value','valueWeight','rarity','damages','armor','properties','isRelic','magicWeight']);
 
 export const SortOrderSchema = z.enum(['asc','desc']);
 
@@ -34,7 +32,15 @@ export const RoleSchema = z.enum(['VIEWER','EDITOR','ADMIN']);
 
 export type RoleType = `${z.infer<typeof RoleSchema>}`
 
-export const ActionTypeSchema = z.enum(['main','limited','free']);
+export const TypeSchema = z.enum(['plant','demon','fae','insect','person','beast','monster','undead','wyrm','golem']);
+
+export type TypeType = `${z.infer<typeof TypeSchema>}`
+
+export const AlignmentSchema = z.enum(['saint','good','neutral','bad','evil']);
+
+export type AlignmentType = `${z.infer<typeof AlignmentSchema>}`
+
+export const ActionTypeSchema = z.enum(['main','limited','free','travel','epic']);
 
 export type ActionTypeType = `${z.infer<typeof ActionTypeSchema>}`
 
@@ -83,26 +89,31 @@ export type User = z.infer<typeof UserSchema>
 /////////////////////////////////////////
 
 export const CreatureSchema = z.object({
+  type: TypeSchema,
+  alignment: AlignmentSchema,
   size: CreatureSizeSchema,
   id: z.string(),
   fullname: z.string(),
   name: z.string(),
   rank: z.string().nullable(),
-  type: z.string(),
+  isBoss: z.boolean().nullable(),
   subtype: z.string().nullable(),
-  createdAd: z.coerce.date().nullable(),
+  createdAt: z.coerce.date().nullable(),
   updatedAt: z.coerce.date().nullable(),
   level: z.number().int(),
   attack: z.number().int(),
+  attackBonus: z.number().int().nullable(),
   defense: z.number().int(),
+  defenseBonus: z.number().int().nullable(),
   ranged: z.number().int(),
+  rangedBonus: z.number().int().nullable(),
   health: z.number().int(),
   armor: z.number().int().nullable(),
-  perception: z.number().int().nullable(),
+  perception: z.number().int(),
+  perceptionBonus: z.number().int().nullable(),
   magic: z.number().int().nullable(),
   spirit: z.number().int().nullable(),
-  loot: z.string().array(),
-  objects: z.string().array(),
+  glory: z.number().int().nullable(),
   flavor: z.string().nullable(),
   description: z.string().nullable(),
 })
@@ -110,77 +121,37 @@ export const CreatureSchema = z.object({
 export type Creature = z.infer<typeof CreatureSchema>
 
 /////////////////////////////////////////
-// CREATURE ATTRIBUTE SCHEMA
+// ATTRIBUTE SCHEMA
 /////////////////////////////////////////
 
-export const CreatureAttributeSchema = z.object({
+export const AttributeSchema = z.object({
   id: z.string(),
   name: z.string(),
   flavor: z.string().nullable(),
-  Description: z.string().nullable(),
-  creatureId: z.string().nullable(),
+  description: z.string().nullable(),
 })
 
-export type CreatureAttribute = z.infer<typeof CreatureAttributeSchema>
+export type Attribute = z.infer<typeof AttributeSchema>
 
 /////////////////////////////////////////
-// ACTION LIST SCHEMA
+// ACTION SCHEMA
 /////////////////////////////////////////
 
-export const ActionListSchema = z.object({
-  id: z.string(),
-  main: z.number().int(),
-  limited: z.number().int(),
-  free: z.number().int(),
-  travel: z.number().int(),
-  creatureId: z.string().nullable(),
-})
-
-export type ActionList = z.infer<typeof ActionListSchema>
-
-/////////////////////////////////////////
-// CREATURE ACTIONS SCHEMA
-/////////////////////////////////////////
-
-export const CreatureActionsSchema = z.object({
+export const ActionSchema = z.object({
   action: ActionTypeSchema,
   id: z.string(),
-  title: z.string(),
+  name: z.string(),
   type: z.string(),
   flavor: z.string().nullable(),
-  description: z.string(),
+  description: z.string().nullable(),
   damages: z.string().nullable(),
   effects: z.string().nullable(),
   heal: z.string().nullable(),
   target: z.string().nullable(),
   range: z.string().nullable(),
-  creatureId: z.string().nullable(),
 })
 
-export type CreatureActions = z.infer<typeof CreatureActionsSchema>
-
-/////////////////////////////////////////
-// STAT PROFIL SCHEMA
-/////////////////////////////////////////
-
-export const StatProfilSchema = z.object({
-  id: z.string(),
-  CEL: z.number().int(),
-  AGI: z.number().int(),
-  DEX: z.number().int(),
-  STR: z.number().int(),
-  END: z.number().int(),
-  VIT: z.number().int(),
-  COU: z.number().int(),
-  INS: z.number().int(),
-  SEN: z.number().int(),
-  CHA: z.number().int(),
-  SOC: z.number().int(),
-  ERU: z.number().int(),
-  creatureId: z.string().nullable(),
-})
-
-export type StatProfil = z.infer<typeof StatProfilSchema>
+export type Action = z.infer<typeof ActionSchema>
 
 /////////////////////////////////////////
 // SPELL SCHEMA
@@ -224,11 +195,160 @@ export const ComponentSchema = z.object({
   description: z.string().nullable(),
   weight: z.number().nullable(),
   value: z.number().nullable(),
+  valueWeight: z.number().nullable(),
   rarity: z.string().nullable(),
-  spells: z.string().array(),
+  uses: z.string().nullable(),
 })
 
 export type Component = z.infer<typeof ComponentSchema>
+
+/////////////////////////////////////////
+// ITEM SCHEMA
+/////////////////////////////////////////
+
+export const ItemSchema = z.object({
+  id: z.string(),
+  quantity: z.number().nullable(),
+  name: z.string(),
+  description: z.string().nullable(),
+  weight: z.number().nullable(),
+  value: z.number().nullable(),
+  valueWeight: z.number().nullable(),
+  rarity: z.string().nullable(),
+  damages: z.string().nullable(),
+  armor: z.number().int().nullable(),
+  properties: z.string().nullable(),
+  isRelic: z.boolean().nullable(),
+  magicWeight: z.number().int().nullable(),
+})
+
+export type Item = z.infer<typeof ItemSchema>
+
+/////////////////////////////////////////
+// COMPOSITE TYPES
+/////////////////////////////////////////
+// CREATURE ATTRIBUTE
+//------------------------------------------------------
+
+
+/////////////////////////////////////////
+// CREATURE ATTRIBUTE SCHEMA
+/////////////////////////////////////////
+
+export const CreatureAttributeSchema = z.object({
+  name: z.string(),
+  flavor: z.string().nullable(),
+  description: z.string().nullable(),
+})
+
+export type CreatureAttribute = z.infer<typeof CreatureAttributeSchema>
+// ACTION LIST
+//------------------------------------------------------
+
+
+/////////////////////////////////////////
+// ACTION LIST SCHEMA
+/////////////////////////////////////////
+
+export const ActionListSchema = z.object({
+  main: z.number().int(),
+  limited: z.number().int().nullable(),
+  free: z.number().int().nullable(),
+  travel: z.number().int().nullable(),
+  epic: z.number().int(),
+})
+
+export type ActionList = z.infer<typeof ActionListSchema>
+// CREATURE ACTION
+//------------------------------------------------------
+
+
+/////////////////////////////////////////
+// CREATURE ACTION SCHEMA
+/////////////////////////////////////////
+
+export const CreatureActionSchema = z.object({
+  action: ActionTypeSchema,
+  name: z.string(),
+  type: z.string(),
+  flavor: z.string().nullable(),
+  description: z.string().nullable(),
+  damages: z.string().nullable(),
+  effects: z.string().nullable(),
+  heal: z.string().nullable(),
+  target: z.string().nullable(),
+  range: z.string().nullable(),
+})
+
+export type CreatureAction = z.infer<typeof CreatureActionSchema>
+// STAT PROFIL
+//------------------------------------------------------
+
+
+/////////////////////////////////////////
+// STAT PROFIL SCHEMA
+/////////////////////////////////////////
+
+export const StatProfilSchema = z.object({
+  CEL: z.number().int(),
+  AGI: z.number().int(),
+  DEX: z.number().int(),
+  STR: z.number().int(),
+  END: z.number().int(),
+  VIT: z.number().int(),
+  WIL: z.number().int(),
+  INS: z.number().int(),
+  SEN: z.number().int(),
+  CHA: z.number().int(),
+  SOC: z.number().int(),
+  ERU: z.number().int(),
+})
+
+export type StatProfil = z.infer<typeof StatProfilSchema>
+// CREATURE COMPONENT
+//------------------------------------------------------
+
+
+/////////////////////////////////////////
+// CREATURE COMPONENT SCHEMA
+/////////////////////////////////////////
+
+export const CreatureComponentSchema = z.object({
+  name: z.string(),
+  quantity: z.number().nullable(),
+  description: z.string().nullable(),
+  weight: z.number().nullable(),
+  value: z.number().nullable(),
+  valueWeight: z.number().nullable(),
+  rarity: z.string().nullable(),
+  uses: z.string().nullable(),
+})
+
+export type CreatureComponent = z.infer<typeof CreatureComponentSchema>
+// CREATURE ITEM
+//------------------------------------------------------
+
+
+/////////////////////////////////////////
+// CREATURE ITEM SCHEMA
+/////////////////////////////////////////
+
+export const CreatureItemSchema = z.object({
+  name: z.string(),
+  quantity: z.number().nullable(),
+  description: z.string().nullable(),
+  weight: z.number().nullable(),
+  value: z.number().nullable(),
+  valueWeight: z.number().nullable(),
+  rarity: z.string().nullable(),
+  damages: z.string().nullable(),
+  armor: z.number().int().nullable(),
+  properties: z.string().nullable(),
+  isRelic: z.boolean().nullable(),
+  magicWeight: z.number().int().nullable(),
+})
+
+export type CreatureItem = z.infer<typeof CreatureItemSchema>
 
 /////////////////////////////////////////
 // SELECT & INCLUDE
@@ -262,100 +382,66 @@ export const CreatureArgsSchema: z.ZodType<Prisma.CreatureDefaultArgs> = z.objec
   include: z.lazy(() => CreatureIncludeSchema).optional(),
 }).strict();
 
-export const CreatureCountOutputTypeArgsSchema: z.ZodType<Prisma.CreatureCountOutputTypeDefaultArgs> = z.object({
-  select: z.lazy(() => CreatureCountOutputTypeSelectSchema).nullish(),
-}).strict();
-
-export const CreatureCountOutputTypeSelectSchema: z.ZodType<Prisma.CreatureCountOutputTypeSelect> = z.object({
-  attributes: z.boolean().optional(),
-  actions: z.boolean().optional(),
-}).strict();
-
 export const CreatureSelectSchema: z.ZodType<Prisma.CreatureSelect> = z.object({
   id: z.boolean().optional(),
   fullname: z.boolean().optional(),
   name: z.boolean().optional(),
   rank: z.boolean().optional(),
+  isBoss: z.boolean().optional(),
   type: z.boolean().optional(),
   subtype: z.boolean().optional(),
+  alignment: z.boolean().optional(),
   size: z.boolean().optional(),
-  createdAd: z.boolean().optional(),
+  createdAt: z.boolean().optional(),
   updatedAt: z.boolean().optional(),
   level: z.boolean().optional(),
   attack: z.boolean().optional(),
+  attackBonus: z.boolean().optional(),
   defense: z.boolean().optional(),
+  defenseBonus: z.boolean().optional(),
   ranged: z.boolean().optional(),
+  rangedBonus: z.boolean().optional(),
   health: z.boolean().optional(),
   armor: z.boolean().optional(),
   perception: z.boolean().optional(),
+  perceptionBonus: z.boolean().optional(),
   magic: z.boolean().optional(),
   spirit: z.boolean().optional(),
-  loot: z.boolean().optional(),
-  objects: z.boolean().optional(),
-  flavor: z.boolean().optional(),
-  description: z.boolean().optional(),
+  glory: z.boolean().optional(),
   stats: z.union([z.boolean(),z.lazy(() => StatProfilArgsSchema)]).optional(),
+  loot: z.union([z.boolean(),z.lazy(() => CreatureItemArgsSchema)]).optional(),
+  scavenge: z.union([z.boolean(),z.lazy(() => CreatureComponentArgsSchema)]).optional(),
   actionList: z.union([z.boolean(),z.lazy(() => ActionListArgsSchema)]).optional(),
   attributes: z.union([z.boolean(),z.lazy(() => CreatureAttributeArgsSchema)]).optional(),
-  actions: z.union([z.boolean(),z.lazy(() => CreatureActionsArgsSchema)]).optional(),
-  _count: z.union([z.boolean(),z.lazy(() => CreatureCountOutputTypeArgsSchema)]).optional(),
+  flavor: z.boolean().optional(),
+  description: z.boolean().optional(),
+  actions: z.union([z.boolean(),z.lazy(() => CreatureActionArgsSchema)]).optional(),
 }).strict()
 
-// CREATURE ATTRIBUTE
+// ATTRIBUTE
 //------------------------------------------------------
 
-export const CreatureAttributeIncludeSchema: z.ZodType<Prisma.CreatureAttributeInclude> = z.object({
-}).strict()
-
-export const CreatureAttributeArgsSchema: z.ZodType<Prisma.CreatureAttributeDefaultArgs> = z.object({
-  select: z.lazy(() => CreatureAttributeSelectSchema).optional(),
-  include: z.lazy(() => CreatureAttributeIncludeSchema).optional(),
+export const AttributeArgsSchema: z.ZodType<Prisma.AttributeDefaultArgs> = z.object({
+  select: z.lazy(() => AttributeSelectSchema).optional(),
 }).strict();
 
-export const CreatureAttributeSelectSchema: z.ZodType<Prisma.CreatureAttributeSelect> = z.object({
+export const AttributeSelectSchema: z.ZodType<Prisma.AttributeSelect> = z.object({
   id: z.boolean().optional(),
   name: z.boolean().optional(),
   flavor: z.boolean().optional(),
-  Description: z.boolean().optional(),
-  creatureId: z.boolean().optional(),
-  Creature: z.union([z.boolean(),z.lazy(() => CreatureArgsSchema)]).optional(),
+  description: z.boolean().optional(),
 }).strict()
 
-// ACTION LIST
+// ACTION
 //------------------------------------------------------
 
-export const ActionListIncludeSchema: z.ZodType<Prisma.ActionListInclude> = z.object({
-}).strict()
-
-export const ActionListArgsSchema: z.ZodType<Prisma.ActionListDefaultArgs> = z.object({
-  select: z.lazy(() => ActionListSelectSchema).optional(),
-  include: z.lazy(() => ActionListIncludeSchema).optional(),
+export const ActionArgsSchema: z.ZodType<Prisma.ActionDefaultArgs> = z.object({
+  select: z.lazy(() => ActionSelectSchema).optional(),
 }).strict();
 
-export const ActionListSelectSchema: z.ZodType<Prisma.ActionListSelect> = z.object({
+export const ActionSelectSchema: z.ZodType<Prisma.ActionSelect> = z.object({
   id: z.boolean().optional(),
-  main: z.boolean().optional(),
-  limited: z.boolean().optional(),
-  free: z.boolean().optional(),
-  travel: z.boolean().optional(),
-  creatureId: z.boolean().optional(),
-  creature: z.union([z.boolean(),z.lazy(() => CreatureArgsSchema)]).optional(),
-}).strict()
-
-// CREATURE ACTIONS
-//------------------------------------------------------
-
-export const CreatureActionsIncludeSchema: z.ZodType<Prisma.CreatureActionsInclude> = z.object({
-}).strict()
-
-export const CreatureActionsArgsSchema: z.ZodType<Prisma.CreatureActionsDefaultArgs> = z.object({
-  select: z.lazy(() => CreatureActionsSelectSchema).optional(),
-  include: z.lazy(() => CreatureActionsIncludeSchema).optional(),
-}).strict();
-
-export const CreatureActionsSelectSchema: z.ZodType<Prisma.CreatureActionsSelect> = z.object({
-  id: z.boolean().optional(),
-  title: z.boolean().optional(),
+  name: z.boolean().optional(),
   action: z.boolean().optional(),
   type: z.boolean().optional(),
   flavor: z.boolean().optional(),
@@ -365,37 +451,6 @@ export const CreatureActionsSelectSchema: z.ZodType<Prisma.CreatureActionsSelect
   heal: z.boolean().optional(),
   target: z.boolean().optional(),
   range: z.boolean().optional(),
-  creatureId: z.boolean().optional(),
-  creature: z.union([z.boolean(),z.lazy(() => CreatureArgsSchema)]).optional(),
-}).strict()
-
-// STAT PROFIL
-//------------------------------------------------------
-
-export const StatProfilIncludeSchema: z.ZodType<Prisma.StatProfilInclude> = z.object({
-}).strict()
-
-export const StatProfilArgsSchema: z.ZodType<Prisma.StatProfilDefaultArgs> = z.object({
-  select: z.lazy(() => StatProfilSelectSchema).optional(),
-  include: z.lazy(() => StatProfilIncludeSchema).optional(),
-}).strict();
-
-export const StatProfilSelectSchema: z.ZodType<Prisma.StatProfilSelect> = z.object({
-  id: z.boolean().optional(),
-  CEL: z.boolean().optional(),
-  AGI: z.boolean().optional(),
-  DEX: z.boolean().optional(),
-  STR: z.boolean().optional(),
-  END: z.boolean().optional(),
-  VIT: z.boolean().optional(),
-  COU: z.boolean().optional(),
-  INS: z.boolean().optional(),
-  SEN: z.boolean().optional(),
-  CHA: z.boolean().optional(),
-  SOC: z.boolean().optional(),
-  ERU: z.boolean().optional(),
-  creatureId: z.boolean().optional(),
-  creature: z.union([z.boolean(),z.lazy(() => CreatureArgsSchema)]).optional(),
 }).strict()
 
 // SPELL
@@ -444,8 +499,142 @@ export const ComponentSelectSchema: z.ZodType<Prisma.ComponentSelect> = z.object
   description: z.boolean().optional(),
   weight: z.boolean().optional(),
   value: z.boolean().optional(),
+  valueWeight: z.boolean().optional(),
   rarity: z.boolean().optional(),
-  spells: z.boolean().optional(),
+  uses: z.boolean().optional(),
+}).strict()
+
+// ITEM
+//------------------------------------------------------
+
+export const ItemArgsSchema: z.ZodType<Prisma.ItemDefaultArgs> = z.object({
+  select: z.lazy(() => ItemSelectSchema).optional(),
+}).strict();
+
+export const ItemSelectSchema: z.ZodType<Prisma.ItemSelect> = z.object({
+  id: z.boolean().optional(),
+  quantity: z.boolean().optional(),
+  name: z.boolean().optional(),
+  description: z.boolean().optional(),
+  weight: z.boolean().optional(),
+  value: z.boolean().optional(),
+  valueWeight: z.boolean().optional(),
+  rarity: z.boolean().optional(),
+  damages: z.boolean().optional(),
+  armor: z.boolean().optional(),
+  properties: z.boolean().optional(),
+  isRelic: z.boolean().optional(),
+  magicWeight: z.boolean().optional(),
+}).strict()
+
+// STAT PROFIL
+//------------------------------------------------------
+
+export const StatProfilArgsSchema: z.ZodType<Prisma.StatProfilDefaultArgs> = z.object({
+  select: z.lazy(() => StatProfilSelectSchema).optional(),
+}).strict();
+
+export const StatProfilSelectSchema: z.ZodType<Prisma.StatProfilSelect> = z.object({
+  CEL: z.boolean().optional(),
+  AGI: z.boolean().optional(),
+  DEX: z.boolean().optional(),
+  STR: z.boolean().optional(),
+  END: z.boolean().optional(),
+  VIT: z.boolean().optional(),
+  WIL: z.boolean().optional(),
+  INS: z.boolean().optional(),
+  SEN: z.boolean().optional(),
+  CHA: z.boolean().optional(),
+  SOC: z.boolean().optional(),
+  ERU: z.boolean().optional(),
+}).strict()
+
+// CREATURE ITEM
+//------------------------------------------------------
+
+export const CreatureItemArgsSchema: z.ZodType<Prisma.CreatureItemDefaultArgs> = z.object({
+  select: z.lazy(() => CreatureItemSelectSchema).optional(),
+}).strict();
+
+export const CreatureItemSelectSchema: z.ZodType<Prisma.CreatureItemSelect> = z.object({
+  name: z.boolean().optional(),
+  quantity: z.boolean().optional(),
+  description: z.boolean().optional(),
+  weight: z.boolean().optional(),
+  value: z.boolean().optional(),
+  valueWeight: z.boolean().optional(),
+  rarity: z.boolean().optional(),
+  damages: z.boolean().optional(),
+  armor: z.boolean().optional(),
+  properties: z.boolean().optional(),
+  isRelic: z.boolean().optional(),
+  magicWeight: z.boolean().optional(),
+}).strict()
+
+// CREATURE COMPONENT
+//------------------------------------------------------
+
+export const CreatureComponentArgsSchema: z.ZodType<Prisma.CreatureComponentDefaultArgs> = z.object({
+  select: z.lazy(() => CreatureComponentSelectSchema).optional(),
+}).strict();
+
+export const CreatureComponentSelectSchema: z.ZodType<Prisma.CreatureComponentSelect> = z.object({
+  name: z.boolean().optional(),
+  quantity: z.boolean().optional(),
+  description: z.boolean().optional(),
+  weight: z.boolean().optional(),
+  value: z.boolean().optional(),
+  valueWeight: z.boolean().optional(),
+  rarity: z.boolean().optional(),
+  uses: z.boolean().optional(),
+}).strict()
+
+// ACTION LIST
+//------------------------------------------------------
+
+export const ActionListArgsSchema: z.ZodType<Prisma.ActionListDefaultArgs> = z.object({
+  select: z.lazy(() => ActionListSelectSchema).optional(),
+}).strict();
+
+export const ActionListSelectSchema: z.ZodType<Prisma.ActionListSelect> = z.object({
+  main: z.boolean().optional(),
+  limited: z.boolean().optional(),
+  free: z.boolean().optional(),
+  travel: z.boolean().optional(),
+  epic: z.boolean().optional(),
+}).strict()
+
+// CREATURE ATTRIBUTE
+//------------------------------------------------------
+
+export const CreatureAttributeArgsSchema: z.ZodType<Prisma.CreatureAttributeDefaultArgs> = z.object({
+  select: z.lazy(() => CreatureAttributeSelectSchema).optional(),
+}).strict();
+
+export const CreatureAttributeSelectSchema: z.ZodType<Prisma.CreatureAttributeSelect> = z.object({
+  name: z.boolean().optional(),
+  flavor: z.boolean().optional(),
+  description: z.boolean().optional(),
+}).strict()
+
+// CREATURE ACTION
+//------------------------------------------------------
+
+export const CreatureActionArgsSchema: z.ZodType<Prisma.CreatureActionDefaultArgs> = z.object({
+  select: z.lazy(() => CreatureActionSelectSchema).optional(),
+}).strict();
+
+export const CreatureActionSelectSchema: z.ZodType<Prisma.CreatureActionSelect> = z.object({
+  name: z.boolean().optional(),
+  action: z.boolean().optional(),
+  type: z.boolean().optional(),
+  flavor: z.boolean().optional(),
+  description: z.boolean().optional(),
+  damages: z.boolean().optional(),
+  effects: z.boolean().optional(),
+  heal: z.boolean().optional(),
+  target: z.boolean().optional(),
+  range: z.boolean().optional(),
 }).strict()
 
 
@@ -588,28 +777,35 @@ export const CreatureWhereInputSchema: z.ZodType<Prisma.CreatureWhereInput> = z.
   fullname: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   name: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   rank: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  type: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  isBoss: z.union([ z.lazy(() => BoolNullableFilterSchema),z.boolean() ]).optional().nullable(),
+  type: z.union([ z.lazy(() => EnumTypeFilterSchema),z.lazy(() => TypeSchema) ]).optional(),
   subtype: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  alignment: z.union([ z.lazy(() => EnumAlignmentFilterSchema),z.lazy(() => AlignmentSchema) ]).optional(),
   size: z.union([ z.lazy(() => EnumCreatureSizeFilterSchema),z.lazy(() => CreatureSizeSchema) ]).optional(),
-  createdAd: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
+  createdAt: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
   updatedAt: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
   level: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
   attack: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  attackBonus: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
   defense: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  defenseBonus: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
   ranged: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  rangedBonus: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
   health: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
   armor: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
-  perception: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
+  perception: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  perceptionBonus: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
   magic: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
   spirit: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
-  loot: z.lazy(() => StringNullableListFilterSchema).optional(),
-  objects: z.lazy(() => StringNullableListFilterSchema).optional(),
+  glory: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
+  stats: z.union([ z.lazy(() => StatProfilCompositeFilterSchema),z.lazy(() => StatProfilObjectEqualityInputSchema) ]).optional(),
+  loot: z.union([ z.lazy(() => CreatureItemCompositeListFilterSchema),z.lazy(() => CreatureItemObjectEqualityInputSchema).array() ]).optional(),
+  scavenge: z.union([ z.lazy(() => CreatureComponentCompositeListFilterSchema),z.lazy(() => CreatureComponentObjectEqualityInputSchema).array() ]).optional(),
+  actionList: z.union([ z.lazy(() => ActionListCompositeFilterSchema),z.lazy(() => ActionListObjectEqualityInputSchema) ]).optional(),
+  attributes: z.union([ z.lazy(() => CreatureAttributeCompositeListFilterSchema),z.lazy(() => CreatureAttributeObjectEqualityInputSchema).array() ]).optional(),
   flavor: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   description: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  stats: z.union([ z.lazy(() => StatProfilNullableScalarRelationFilterSchema),z.lazy(() => StatProfilWhereInputSchema) ]).optional().nullable(),
-  actionList: z.union([ z.lazy(() => ActionListNullableScalarRelationFilterSchema),z.lazy(() => ActionListWhereInputSchema) ]).optional().nullable(),
-  attributes: z.lazy(() => CreatureAttributeListRelationFilterSchema).optional(),
-  actions: z.lazy(() => CreatureActionsListRelationFilterSchema).optional()
+  actions: z.union([ z.lazy(() => CreatureActionCompositeListFilterSchema),z.lazy(() => CreatureActionObjectEqualityInputSchema).array() ]).optional(),
 }).strict();
 
 export const CreatureOrderByWithRelationInputSchema: z.ZodType<Prisma.CreatureOrderByWithRelationInput> = z.object({
@@ -617,28 +813,35 @@ export const CreatureOrderByWithRelationInputSchema: z.ZodType<Prisma.CreatureOr
   fullname: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   rank: z.lazy(() => SortOrderSchema).optional(),
+  isBoss: z.lazy(() => SortOrderSchema).optional(),
   type: z.lazy(() => SortOrderSchema).optional(),
   subtype: z.lazy(() => SortOrderSchema).optional(),
+  alignment: z.lazy(() => SortOrderSchema).optional(),
   size: z.lazy(() => SortOrderSchema).optional(),
-  createdAd: z.lazy(() => SortOrderSchema).optional(),
+  createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional(),
   level: z.lazy(() => SortOrderSchema).optional(),
   attack: z.lazy(() => SortOrderSchema).optional(),
+  attackBonus: z.lazy(() => SortOrderSchema).optional(),
   defense: z.lazy(() => SortOrderSchema).optional(),
+  defenseBonus: z.lazy(() => SortOrderSchema).optional(),
   ranged: z.lazy(() => SortOrderSchema).optional(),
+  rangedBonus: z.lazy(() => SortOrderSchema).optional(),
   health: z.lazy(() => SortOrderSchema).optional(),
   armor: z.lazy(() => SortOrderSchema).optional(),
   perception: z.lazy(() => SortOrderSchema).optional(),
+  perceptionBonus: z.lazy(() => SortOrderSchema).optional(),
   magic: z.lazy(() => SortOrderSchema).optional(),
   spirit: z.lazy(() => SortOrderSchema).optional(),
-  loot: z.lazy(() => SortOrderSchema).optional(),
-  objects: z.lazy(() => SortOrderSchema).optional(),
+  glory: z.lazy(() => SortOrderSchema).optional(),
+  stats: z.lazy(() => StatProfilOrderByInputSchema).optional(),
+  loot: z.lazy(() => CreatureItemOrderByCompositeAggregateInputSchema).optional(),
+  scavenge: z.lazy(() => CreatureComponentOrderByCompositeAggregateInputSchema).optional(),
+  actionList: z.lazy(() => ActionListOrderByInputSchema).optional(),
+  attributes: z.lazy(() => CreatureAttributeOrderByCompositeAggregateInputSchema).optional(),
   flavor: z.lazy(() => SortOrderSchema).optional(),
   description: z.lazy(() => SortOrderSchema).optional(),
-  stats: z.lazy(() => StatProfilOrderByWithRelationInputSchema).optional(),
-  actionList: z.lazy(() => ActionListOrderByWithRelationInputSchema).optional(),
-  attributes: z.lazy(() => CreatureAttributeOrderByRelationAggregateInputSchema).optional(),
-  actions: z.lazy(() => CreatureActionsOrderByRelationAggregateInputSchema).optional()
+  actions: z.lazy(() => CreatureActionOrderByCompositeAggregateInputSchema).optional()
 }).strict();
 
 export const CreatureWhereUniqueInputSchema: z.ZodType<Prisma.CreatureWhereUniqueInput> = z.union([
@@ -661,28 +864,35 @@ export const CreatureWhereUniqueInputSchema: z.ZodType<Prisma.CreatureWhereUniqu
   NOT: z.union([ z.lazy(() => CreatureWhereInputSchema),z.lazy(() => CreatureWhereInputSchema).array() ]).optional(),
   name: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   rank: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  type: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  isBoss: z.union([ z.lazy(() => BoolNullableFilterSchema),z.boolean() ]).optional().nullable(),
+  type: z.union([ z.lazy(() => EnumTypeFilterSchema),z.lazy(() => TypeSchema) ]).optional(),
   subtype: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  alignment: z.union([ z.lazy(() => EnumAlignmentFilterSchema),z.lazy(() => AlignmentSchema) ]).optional(),
   size: z.union([ z.lazy(() => EnumCreatureSizeFilterSchema),z.lazy(() => CreatureSizeSchema) ]).optional(),
-  createdAd: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
+  createdAt: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
   updatedAt: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
   level: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
   attack: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
+  attackBonus: z.union([ z.lazy(() => IntNullableFilterSchema),z.number().int() ]).optional().nullable(),
   defense: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
+  defenseBonus: z.union([ z.lazy(() => IntNullableFilterSchema),z.number().int() ]).optional().nullable(),
   ranged: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
+  rangedBonus: z.union([ z.lazy(() => IntNullableFilterSchema),z.number().int() ]).optional().nullable(),
   health: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
   armor: z.union([ z.lazy(() => IntNullableFilterSchema),z.number().int() ]).optional().nullable(),
-  perception: z.union([ z.lazy(() => IntNullableFilterSchema),z.number().int() ]).optional().nullable(),
+  perception: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
+  perceptionBonus: z.union([ z.lazy(() => IntNullableFilterSchema),z.number().int() ]).optional().nullable(),
   magic: z.union([ z.lazy(() => IntNullableFilterSchema),z.number().int() ]).optional().nullable(),
   spirit: z.union([ z.lazy(() => IntNullableFilterSchema),z.number().int() ]).optional().nullable(),
-  loot: z.lazy(() => StringNullableListFilterSchema).optional(),
-  objects: z.lazy(() => StringNullableListFilterSchema).optional(),
+  glory: z.union([ z.lazy(() => IntNullableFilterSchema),z.number().int() ]).optional().nullable(),
+  stats: z.union([ z.lazy(() => StatProfilCompositeFilterSchema),z.lazy(() => StatProfilObjectEqualityInputSchema) ]).optional(),
+  loot: z.union([ z.lazy(() => CreatureItemCompositeListFilterSchema),z.lazy(() => CreatureItemObjectEqualityInputSchema).array() ]).optional(),
+  scavenge: z.union([ z.lazy(() => CreatureComponentCompositeListFilterSchema),z.lazy(() => CreatureComponentObjectEqualityInputSchema).array() ]).optional(),
+  actionList: z.union([ z.lazy(() => ActionListCompositeFilterSchema),z.lazy(() => ActionListObjectEqualityInputSchema) ]).optional(),
+  attributes: z.union([ z.lazy(() => CreatureAttributeCompositeListFilterSchema),z.lazy(() => CreatureAttributeObjectEqualityInputSchema).array() ]).optional(),
   flavor: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   description: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  stats: z.union([ z.lazy(() => StatProfilNullableScalarRelationFilterSchema),z.lazy(() => StatProfilWhereInputSchema) ]).optional().nullable(),
-  actionList: z.union([ z.lazy(() => ActionListNullableScalarRelationFilterSchema),z.lazy(() => ActionListWhereInputSchema) ]).optional().nullable(),
-  attributes: z.lazy(() => CreatureAttributeListRelationFilterSchema).optional(),
-  actions: z.lazy(() => CreatureActionsListRelationFilterSchema).optional()
+  actions: z.union([ z.lazy(() => CreatureActionCompositeListFilterSchema),z.lazy(() => CreatureActionObjectEqualityInputSchema).array() ]).optional(),
 }).strict());
 
 export const CreatureOrderByWithAggregationInputSchema: z.ZodType<Prisma.CreatureOrderByWithAggregationInput> = z.object({
@@ -690,22 +900,27 @@ export const CreatureOrderByWithAggregationInputSchema: z.ZodType<Prisma.Creatur
   fullname: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   rank: z.lazy(() => SortOrderSchema).optional(),
+  isBoss: z.lazy(() => SortOrderSchema).optional(),
   type: z.lazy(() => SortOrderSchema).optional(),
   subtype: z.lazy(() => SortOrderSchema).optional(),
+  alignment: z.lazy(() => SortOrderSchema).optional(),
   size: z.lazy(() => SortOrderSchema).optional(),
-  createdAd: z.lazy(() => SortOrderSchema).optional(),
+  createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional(),
   level: z.lazy(() => SortOrderSchema).optional(),
   attack: z.lazy(() => SortOrderSchema).optional(),
+  attackBonus: z.lazy(() => SortOrderSchema).optional(),
   defense: z.lazy(() => SortOrderSchema).optional(),
+  defenseBonus: z.lazy(() => SortOrderSchema).optional(),
   ranged: z.lazy(() => SortOrderSchema).optional(),
+  rangedBonus: z.lazy(() => SortOrderSchema).optional(),
   health: z.lazy(() => SortOrderSchema).optional(),
   armor: z.lazy(() => SortOrderSchema).optional(),
   perception: z.lazy(() => SortOrderSchema).optional(),
+  perceptionBonus: z.lazy(() => SortOrderSchema).optional(),
   magic: z.lazy(() => SortOrderSchema).optional(),
   spirit: z.lazy(() => SortOrderSchema).optional(),
-  loot: z.lazy(() => SortOrderSchema).optional(),
-  objects: z.lazy(() => SortOrderSchema).optional(),
+  glory: z.lazy(() => SortOrderSchema).optional(),
   flavor: z.lazy(() => SortOrderSchema).optional(),
   description: z.lazy(() => SortOrderSchema).optional(),
   _count: z.lazy(() => CreatureCountOrderByAggregateInputSchema).optional(),
@@ -723,48 +938,49 @@ export const CreatureScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.Crea
   fullname: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   name: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   rank: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
-  type: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  isBoss: z.union([ z.lazy(() => BoolNullableWithAggregatesFilterSchema),z.boolean() ]).optional().nullable(),
+  type: z.union([ z.lazy(() => EnumTypeWithAggregatesFilterSchema),z.lazy(() => TypeSchema) ]).optional(),
   subtype: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  alignment: z.union([ z.lazy(() => EnumAlignmentWithAggregatesFilterSchema),z.lazy(() => AlignmentSchema) ]).optional(),
   size: z.union([ z.lazy(() => EnumCreatureSizeWithAggregatesFilterSchema),z.lazy(() => CreatureSizeSchema) ]).optional(),
-  createdAd: z.union([ z.lazy(() => DateTimeNullableWithAggregatesFilterSchema),z.coerce.date() ]).optional().nullable(),
+  createdAt: z.union([ z.lazy(() => DateTimeNullableWithAggregatesFilterSchema),z.coerce.date() ]).optional().nullable(),
   updatedAt: z.union([ z.lazy(() => DateTimeNullableWithAggregatesFilterSchema),z.coerce.date() ]).optional().nullable(),
   level: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
   attack: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
+  attackBonus: z.union([ z.lazy(() => IntNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
   defense: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
+  defenseBonus: z.union([ z.lazy(() => IntNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
   ranged: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
+  rangedBonus: z.union([ z.lazy(() => IntNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
   health: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
   armor: z.union([ z.lazy(() => IntNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
-  perception: z.union([ z.lazy(() => IntNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  perception: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
+  perceptionBonus: z.union([ z.lazy(() => IntNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
   magic: z.union([ z.lazy(() => IntNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
   spirit: z.union([ z.lazy(() => IntNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
-  loot: z.lazy(() => StringNullableListFilterSchema).optional(),
-  objects: z.lazy(() => StringNullableListFilterSchema).optional(),
+  glory: z.union([ z.lazy(() => IntNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
   flavor: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   description: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
 }).strict();
 
-export const CreatureAttributeWhereInputSchema: z.ZodType<Prisma.CreatureAttributeWhereInput> = z.object({
-  AND: z.union([ z.lazy(() => CreatureAttributeWhereInputSchema),z.lazy(() => CreatureAttributeWhereInputSchema).array() ]).optional(),
-  OR: z.lazy(() => CreatureAttributeWhereInputSchema).array().optional(),
-  NOT: z.union([ z.lazy(() => CreatureAttributeWhereInputSchema),z.lazy(() => CreatureAttributeWhereInputSchema).array() ]).optional(),
+export const AttributeWhereInputSchema: z.ZodType<Prisma.AttributeWhereInput> = z.object({
+  AND: z.union([ z.lazy(() => AttributeWhereInputSchema),z.lazy(() => AttributeWhereInputSchema).array() ]).optional(),
+  OR: z.lazy(() => AttributeWhereInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => AttributeWhereInputSchema),z.lazy(() => AttributeWhereInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   name: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   flavor: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  Description: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  creatureId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  Creature: z.union([ z.lazy(() => CreatureNullableScalarRelationFilterSchema),z.lazy(() => CreatureWhereInputSchema) ]).optional().nullable(),
+  description: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
 }).strict();
 
-export const CreatureAttributeOrderByWithRelationInputSchema: z.ZodType<Prisma.CreatureAttributeOrderByWithRelationInput> = z.object({
+export const AttributeOrderByWithRelationInputSchema: z.ZodType<Prisma.AttributeOrderByWithRelationInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   flavor: z.lazy(() => SortOrderSchema).optional(),
-  Description: z.lazy(() => SortOrderSchema).optional(),
-  creatureId: z.lazy(() => SortOrderSchema).optional(),
-  Creature: z.lazy(() => CreatureOrderByWithRelationInputSchema).optional()
+  description: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
-export const CreatureAttributeWhereUniqueInputSchema: z.ZodType<Prisma.CreatureAttributeWhereUniqueInput> = z.union([
+export const AttributeWhereUniqueInputSchema: z.ZodType<Prisma.AttributeWhereUniqueInput> = z.union([
   z.object({
     id: z.string(),
     name: z.string()
@@ -779,133 +995,96 @@ export const CreatureAttributeWhereUniqueInputSchema: z.ZodType<Prisma.CreatureA
 .and(z.object({
   id: z.string().optional(),
   name: z.string().optional(),
-  AND: z.union([ z.lazy(() => CreatureAttributeWhereInputSchema),z.lazy(() => CreatureAttributeWhereInputSchema).array() ]).optional(),
-  OR: z.lazy(() => CreatureAttributeWhereInputSchema).array().optional(),
-  NOT: z.union([ z.lazy(() => CreatureAttributeWhereInputSchema),z.lazy(() => CreatureAttributeWhereInputSchema).array() ]).optional(),
+  AND: z.union([ z.lazy(() => AttributeWhereInputSchema),z.lazy(() => AttributeWhereInputSchema).array() ]).optional(),
+  OR: z.lazy(() => AttributeWhereInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => AttributeWhereInputSchema),z.lazy(() => AttributeWhereInputSchema).array() ]).optional(),
   flavor: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  Description: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  creatureId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  Creature: z.union([ z.lazy(() => CreatureNullableScalarRelationFilterSchema),z.lazy(() => CreatureWhereInputSchema) ]).optional().nullable(),
+  description: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
 }).strict());
 
-export const CreatureAttributeOrderByWithAggregationInputSchema: z.ZodType<Prisma.CreatureAttributeOrderByWithAggregationInput> = z.object({
+export const AttributeOrderByWithAggregationInputSchema: z.ZodType<Prisma.AttributeOrderByWithAggregationInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   flavor: z.lazy(() => SortOrderSchema).optional(),
-  Description: z.lazy(() => SortOrderSchema).optional(),
-  creatureId: z.lazy(() => SortOrderSchema).optional(),
-  _count: z.lazy(() => CreatureAttributeCountOrderByAggregateInputSchema).optional(),
-  _max: z.lazy(() => CreatureAttributeMaxOrderByAggregateInputSchema).optional(),
-  _min: z.lazy(() => CreatureAttributeMinOrderByAggregateInputSchema).optional()
+  description: z.lazy(() => SortOrderSchema).optional(),
+  _count: z.lazy(() => AttributeCountOrderByAggregateInputSchema).optional(),
+  _max: z.lazy(() => AttributeMaxOrderByAggregateInputSchema).optional(),
+  _min: z.lazy(() => AttributeMinOrderByAggregateInputSchema).optional()
 }).strict();
 
-export const CreatureAttributeScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.CreatureAttributeScalarWhereWithAggregatesInput> = z.object({
-  AND: z.union([ z.lazy(() => CreatureAttributeScalarWhereWithAggregatesInputSchema),z.lazy(() => CreatureAttributeScalarWhereWithAggregatesInputSchema).array() ]).optional(),
-  OR: z.lazy(() => CreatureAttributeScalarWhereWithAggregatesInputSchema).array().optional(),
-  NOT: z.union([ z.lazy(() => CreatureAttributeScalarWhereWithAggregatesInputSchema),z.lazy(() => CreatureAttributeScalarWhereWithAggregatesInputSchema).array() ]).optional(),
+export const AttributeScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.AttributeScalarWhereWithAggregatesInput> = z.object({
+  AND: z.union([ z.lazy(() => AttributeScalarWhereWithAggregatesInputSchema),z.lazy(() => AttributeScalarWhereWithAggregatesInputSchema).array() ]).optional(),
+  OR: z.lazy(() => AttributeScalarWhereWithAggregatesInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => AttributeScalarWhereWithAggregatesInputSchema),z.lazy(() => AttributeScalarWhereWithAggregatesInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   name: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   flavor: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
-  Description: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
-  creatureId: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  description: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
 }).strict();
 
-export const ActionListWhereInputSchema: z.ZodType<Prisma.ActionListWhereInput> = z.object({
-  AND: z.union([ z.lazy(() => ActionListWhereInputSchema),z.lazy(() => ActionListWhereInputSchema).array() ]).optional(),
-  OR: z.lazy(() => ActionListWhereInputSchema).array().optional(),
-  NOT: z.union([ z.lazy(() => ActionListWhereInputSchema),z.lazy(() => ActionListWhereInputSchema).array() ]).optional(),
+export const ActionWhereInputSchema: z.ZodType<Prisma.ActionWhereInput> = z.object({
+  AND: z.union([ z.lazy(() => ActionWhereInputSchema),z.lazy(() => ActionWhereInputSchema).array() ]).optional(),
+  OR: z.lazy(() => ActionWhereInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => ActionWhereInputSchema),z.lazy(() => ActionWhereInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
-  main: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  limited: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  free: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  travel: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  creatureId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  creature: z.union([ z.lazy(() => CreatureNullableScalarRelationFilterSchema),z.lazy(() => CreatureWhereInputSchema) ]).optional().nullable(),
+  name: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  action: z.union([ z.lazy(() => EnumActionTypeFilterSchema),z.lazy(() => ActionTypeSchema) ]).optional(),
+  type: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  flavor: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  description: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  damages: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  effects: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  heal: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  target: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  range: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
 }).strict();
 
-export const ActionListOrderByWithRelationInputSchema: z.ZodType<Prisma.ActionListOrderByWithRelationInput> = z.object({
+export const ActionOrderByWithRelationInputSchema: z.ZodType<Prisma.ActionOrderByWithRelationInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
-  main: z.lazy(() => SortOrderSchema).optional(),
-  limited: z.lazy(() => SortOrderSchema).optional(),
-  free: z.lazy(() => SortOrderSchema).optional(),
-  travel: z.lazy(() => SortOrderSchema).optional(),
-  creatureId: z.lazy(() => SortOrderSchema).optional(),
-  creature: z.lazy(() => CreatureOrderByWithRelationInputSchema).optional()
+  name: z.lazy(() => SortOrderSchema).optional(),
+  action: z.lazy(() => SortOrderSchema).optional(),
+  type: z.lazy(() => SortOrderSchema).optional(),
+  flavor: z.lazy(() => SortOrderSchema).optional(),
+  description: z.lazy(() => SortOrderSchema).optional(),
+  damages: z.lazy(() => SortOrderSchema).optional(),
+  effects: z.lazy(() => SortOrderSchema).optional(),
+  heal: z.lazy(() => SortOrderSchema).optional(),
+  target: z.lazy(() => SortOrderSchema).optional(),
+  range: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
-export const ActionListWhereUniqueInputSchema: z.ZodType<Prisma.ActionListWhereUniqueInput> = z.union([
+export const ActionWhereUniqueInputSchema: z.ZodType<Prisma.ActionWhereUniqueInput> = z.union([
   z.object({
     id: z.string(),
-    creatureId: z.string()
+    name: z.string()
   }),
   z.object({
     id: z.string(),
   }),
   z.object({
-    creatureId: z.string(),
+    name: z.string(),
   }),
 ])
 .and(z.object({
   id: z.string().optional(),
-  creatureId: z.string().optional(),
-  AND: z.union([ z.lazy(() => ActionListWhereInputSchema),z.lazy(() => ActionListWhereInputSchema).array() ]).optional(),
-  OR: z.lazy(() => ActionListWhereInputSchema).array().optional(),
-  NOT: z.union([ z.lazy(() => ActionListWhereInputSchema),z.lazy(() => ActionListWhereInputSchema).array() ]).optional(),
-  main: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
-  limited: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
-  free: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
-  travel: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
-  creature: z.union([ z.lazy(() => CreatureNullableScalarRelationFilterSchema),z.lazy(() => CreatureWhereInputSchema) ]).optional().nullable(),
-}).strict());
-
-export const ActionListOrderByWithAggregationInputSchema: z.ZodType<Prisma.ActionListOrderByWithAggregationInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional(),
-  main: z.lazy(() => SortOrderSchema).optional(),
-  limited: z.lazy(() => SortOrderSchema).optional(),
-  free: z.lazy(() => SortOrderSchema).optional(),
-  travel: z.lazy(() => SortOrderSchema).optional(),
-  creatureId: z.lazy(() => SortOrderSchema).optional(),
-  _count: z.lazy(() => ActionListCountOrderByAggregateInputSchema).optional(),
-  _avg: z.lazy(() => ActionListAvgOrderByAggregateInputSchema).optional(),
-  _max: z.lazy(() => ActionListMaxOrderByAggregateInputSchema).optional(),
-  _min: z.lazy(() => ActionListMinOrderByAggregateInputSchema).optional(),
-  _sum: z.lazy(() => ActionListSumOrderByAggregateInputSchema).optional()
-}).strict();
-
-export const ActionListScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.ActionListScalarWhereWithAggregatesInput> = z.object({
-  AND: z.union([ z.lazy(() => ActionListScalarWhereWithAggregatesInputSchema),z.lazy(() => ActionListScalarWhereWithAggregatesInputSchema).array() ]).optional(),
-  OR: z.lazy(() => ActionListScalarWhereWithAggregatesInputSchema).array().optional(),
-  NOT: z.union([ z.lazy(() => ActionListScalarWhereWithAggregatesInputSchema),z.lazy(() => ActionListScalarWhereWithAggregatesInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
-  main: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
-  limited: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
-  free: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
-  travel: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
-  creatureId: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
-}).strict();
-
-export const CreatureActionsWhereInputSchema: z.ZodType<Prisma.CreatureActionsWhereInput> = z.object({
-  AND: z.union([ z.lazy(() => CreatureActionsWhereInputSchema),z.lazy(() => CreatureActionsWhereInputSchema).array() ]).optional(),
-  OR: z.lazy(() => CreatureActionsWhereInputSchema).array().optional(),
-  NOT: z.union([ z.lazy(() => CreatureActionsWhereInputSchema),z.lazy(() => CreatureActionsWhereInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
-  title: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  name: z.string().optional(),
+  AND: z.union([ z.lazy(() => ActionWhereInputSchema),z.lazy(() => ActionWhereInputSchema).array() ]).optional(),
+  OR: z.lazy(() => ActionWhereInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => ActionWhereInputSchema),z.lazy(() => ActionWhereInputSchema).array() ]).optional(),
   action: z.union([ z.lazy(() => EnumActionTypeFilterSchema),z.lazy(() => ActionTypeSchema) ]).optional(),
   type: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   flavor: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  description: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  description: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   damages: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   effects: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   heal: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   target: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   range: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  creatureId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  creature: z.union([ z.lazy(() => CreatureNullableScalarRelationFilterSchema),z.lazy(() => CreatureWhereInputSchema) ]).optional().nullable(),
-}).strict();
+}).strict());
 
-export const CreatureActionsOrderByWithRelationInputSchema: z.ZodType<Prisma.CreatureActionsOrderByWithRelationInput> = z.object({
+export const ActionOrderByWithAggregationInputSchema: z.ZodType<Prisma.ActionOrderByWithAggregationInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
-  title: z.lazy(() => SortOrderSchema).optional(),
+  name: z.lazy(() => SortOrderSchema).optional(),
   action: z.lazy(() => SortOrderSchema).optional(),
   type: z.lazy(() => SortOrderSchema).optional(),
   flavor: z.lazy(() => SortOrderSchema).optional(),
@@ -915,180 +1094,26 @@ export const CreatureActionsOrderByWithRelationInputSchema: z.ZodType<Prisma.Cre
   heal: z.lazy(() => SortOrderSchema).optional(),
   target: z.lazy(() => SortOrderSchema).optional(),
   range: z.lazy(() => SortOrderSchema).optional(),
-  creatureId: z.lazy(() => SortOrderSchema).optional(),
-  creature: z.lazy(() => CreatureOrderByWithRelationInputSchema).optional()
+  _count: z.lazy(() => ActionCountOrderByAggregateInputSchema).optional(),
+  _max: z.lazy(() => ActionMaxOrderByAggregateInputSchema).optional(),
+  _min: z.lazy(() => ActionMinOrderByAggregateInputSchema).optional()
 }).strict();
 
-export const CreatureActionsWhereUniqueInputSchema: z.ZodType<Prisma.CreatureActionsWhereUniqueInput> = z.object({
-  id: z.string()
-})
-.and(z.object({
-  id: z.string().optional(),
-  AND: z.union([ z.lazy(() => CreatureActionsWhereInputSchema),z.lazy(() => CreatureActionsWhereInputSchema).array() ]).optional(),
-  OR: z.lazy(() => CreatureActionsWhereInputSchema).array().optional(),
-  NOT: z.union([ z.lazy(() => CreatureActionsWhereInputSchema),z.lazy(() => CreatureActionsWhereInputSchema).array() ]).optional(),
-  title: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
-  action: z.union([ z.lazy(() => EnumActionTypeFilterSchema),z.lazy(() => ActionTypeSchema) ]).optional(),
-  type: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
-  flavor: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  description: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
-  damages: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  effects: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  heal: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  target: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  range: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  creatureId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  creature: z.union([ z.lazy(() => CreatureNullableScalarRelationFilterSchema),z.lazy(() => CreatureWhereInputSchema) ]).optional().nullable(),
-}).strict());
-
-export const CreatureActionsOrderByWithAggregationInputSchema: z.ZodType<Prisma.CreatureActionsOrderByWithAggregationInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional(),
-  title: z.lazy(() => SortOrderSchema).optional(),
-  action: z.lazy(() => SortOrderSchema).optional(),
-  type: z.lazy(() => SortOrderSchema).optional(),
-  flavor: z.lazy(() => SortOrderSchema).optional(),
-  description: z.lazy(() => SortOrderSchema).optional(),
-  damages: z.lazy(() => SortOrderSchema).optional(),
-  effects: z.lazy(() => SortOrderSchema).optional(),
-  heal: z.lazy(() => SortOrderSchema).optional(),
-  target: z.lazy(() => SortOrderSchema).optional(),
-  range: z.lazy(() => SortOrderSchema).optional(),
-  creatureId: z.lazy(() => SortOrderSchema).optional(),
-  _count: z.lazy(() => CreatureActionsCountOrderByAggregateInputSchema).optional(),
-  _max: z.lazy(() => CreatureActionsMaxOrderByAggregateInputSchema).optional(),
-  _min: z.lazy(() => CreatureActionsMinOrderByAggregateInputSchema).optional()
-}).strict();
-
-export const CreatureActionsScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.CreatureActionsScalarWhereWithAggregatesInput> = z.object({
-  AND: z.union([ z.lazy(() => CreatureActionsScalarWhereWithAggregatesInputSchema),z.lazy(() => CreatureActionsScalarWhereWithAggregatesInputSchema).array() ]).optional(),
-  OR: z.lazy(() => CreatureActionsScalarWhereWithAggregatesInputSchema).array().optional(),
-  NOT: z.union([ z.lazy(() => CreatureActionsScalarWhereWithAggregatesInputSchema),z.lazy(() => CreatureActionsScalarWhereWithAggregatesInputSchema).array() ]).optional(),
+export const ActionScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.ActionScalarWhereWithAggregatesInput> = z.object({
+  AND: z.union([ z.lazy(() => ActionScalarWhereWithAggregatesInputSchema),z.lazy(() => ActionScalarWhereWithAggregatesInputSchema).array() ]).optional(),
+  OR: z.lazy(() => ActionScalarWhereWithAggregatesInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => ActionScalarWhereWithAggregatesInputSchema),z.lazy(() => ActionScalarWhereWithAggregatesInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
-  title: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  name: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   action: z.union([ z.lazy(() => EnumActionTypeWithAggregatesFilterSchema),z.lazy(() => ActionTypeSchema) ]).optional(),
   type: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   flavor: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
-  description: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  description: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   damages: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   effects: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   heal: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   target: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   range: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
-  creatureId: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
-}).strict();
-
-export const StatProfilWhereInputSchema: z.ZodType<Prisma.StatProfilWhereInput> = z.object({
-  AND: z.union([ z.lazy(() => StatProfilWhereInputSchema),z.lazy(() => StatProfilWhereInputSchema).array() ]).optional(),
-  OR: z.lazy(() => StatProfilWhereInputSchema).array().optional(),
-  NOT: z.union([ z.lazy(() => StatProfilWhereInputSchema),z.lazy(() => StatProfilWhereInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
-  CEL: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  AGI: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  DEX: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  STR: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  END: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  VIT: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  COU: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  INS: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  SEN: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  CHA: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  SOC: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  ERU: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  creatureId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  creature: z.union([ z.lazy(() => CreatureNullableScalarRelationFilterSchema),z.lazy(() => CreatureWhereInputSchema) ]).optional().nullable(),
-}).strict();
-
-export const StatProfilOrderByWithRelationInputSchema: z.ZodType<Prisma.StatProfilOrderByWithRelationInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional(),
-  CEL: z.lazy(() => SortOrderSchema).optional(),
-  AGI: z.lazy(() => SortOrderSchema).optional(),
-  DEX: z.lazy(() => SortOrderSchema).optional(),
-  STR: z.lazy(() => SortOrderSchema).optional(),
-  END: z.lazy(() => SortOrderSchema).optional(),
-  VIT: z.lazy(() => SortOrderSchema).optional(),
-  COU: z.lazy(() => SortOrderSchema).optional(),
-  INS: z.lazy(() => SortOrderSchema).optional(),
-  SEN: z.lazy(() => SortOrderSchema).optional(),
-  CHA: z.lazy(() => SortOrderSchema).optional(),
-  SOC: z.lazy(() => SortOrderSchema).optional(),
-  ERU: z.lazy(() => SortOrderSchema).optional(),
-  creatureId: z.lazy(() => SortOrderSchema).optional(),
-  creature: z.lazy(() => CreatureOrderByWithRelationInputSchema).optional()
-}).strict();
-
-export const StatProfilWhereUniqueInputSchema: z.ZodType<Prisma.StatProfilWhereUniqueInput> = z.union([
-  z.object({
-    id: z.string(),
-    creatureId: z.string()
-  }),
-  z.object({
-    id: z.string(),
-  }),
-  z.object({
-    creatureId: z.string(),
-  }),
-])
-.and(z.object({
-  id: z.string().optional(),
-  creatureId: z.string().optional(),
-  AND: z.union([ z.lazy(() => StatProfilWhereInputSchema),z.lazy(() => StatProfilWhereInputSchema).array() ]).optional(),
-  OR: z.lazy(() => StatProfilWhereInputSchema).array().optional(),
-  NOT: z.union([ z.lazy(() => StatProfilWhereInputSchema),z.lazy(() => StatProfilWhereInputSchema).array() ]).optional(),
-  CEL: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
-  AGI: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
-  DEX: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
-  STR: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
-  END: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
-  VIT: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
-  COU: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
-  INS: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
-  SEN: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
-  CHA: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
-  SOC: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
-  ERU: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
-  creature: z.union([ z.lazy(() => CreatureNullableScalarRelationFilterSchema),z.lazy(() => CreatureWhereInputSchema) ]).optional().nullable(),
-}).strict());
-
-export const StatProfilOrderByWithAggregationInputSchema: z.ZodType<Prisma.StatProfilOrderByWithAggregationInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional(),
-  CEL: z.lazy(() => SortOrderSchema).optional(),
-  AGI: z.lazy(() => SortOrderSchema).optional(),
-  DEX: z.lazy(() => SortOrderSchema).optional(),
-  STR: z.lazy(() => SortOrderSchema).optional(),
-  END: z.lazy(() => SortOrderSchema).optional(),
-  VIT: z.lazy(() => SortOrderSchema).optional(),
-  COU: z.lazy(() => SortOrderSchema).optional(),
-  INS: z.lazy(() => SortOrderSchema).optional(),
-  SEN: z.lazy(() => SortOrderSchema).optional(),
-  CHA: z.lazy(() => SortOrderSchema).optional(),
-  SOC: z.lazy(() => SortOrderSchema).optional(),
-  ERU: z.lazy(() => SortOrderSchema).optional(),
-  creatureId: z.lazy(() => SortOrderSchema).optional(),
-  _count: z.lazy(() => StatProfilCountOrderByAggregateInputSchema).optional(),
-  _avg: z.lazy(() => StatProfilAvgOrderByAggregateInputSchema).optional(),
-  _max: z.lazy(() => StatProfilMaxOrderByAggregateInputSchema).optional(),
-  _min: z.lazy(() => StatProfilMinOrderByAggregateInputSchema).optional(),
-  _sum: z.lazy(() => StatProfilSumOrderByAggregateInputSchema).optional()
-}).strict();
-
-export const StatProfilScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.StatProfilScalarWhereWithAggregatesInput> = z.object({
-  AND: z.union([ z.lazy(() => StatProfilScalarWhereWithAggregatesInputSchema),z.lazy(() => StatProfilScalarWhereWithAggregatesInputSchema).array() ]).optional(),
-  OR: z.lazy(() => StatProfilScalarWhereWithAggregatesInputSchema).array().optional(),
-  NOT: z.union([ z.lazy(() => StatProfilScalarWhereWithAggregatesInputSchema),z.lazy(() => StatProfilScalarWhereWithAggregatesInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
-  CEL: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
-  AGI: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
-  DEX: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
-  STR: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
-  END: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
-  VIT: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
-  COU: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
-  INS: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
-  SEN: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
-  CHA: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
-  SOC: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
-  ERU: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
-  creatureId: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
 }).strict();
 
 export const SpellWhereInputSchema: z.ZodType<Prisma.SpellWhereInput> = z.object({
@@ -1252,8 +1277,9 @@ export const ComponentWhereInputSchema: z.ZodType<Prisma.ComponentWhereInput> = 
   description: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   weight: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
   value: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  valueWeight: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
   rarity: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  spells: z.lazy(() => StringNullableListFilterSchema).optional()
+  uses: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
 }).strict();
 
 export const ComponentOrderByWithRelationInputSchema: z.ZodType<Prisma.ComponentOrderByWithRelationInput> = z.object({
@@ -1263,8 +1289,9 @@ export const ComponentOrderByWithRelationInputSchema: z.ZodType<Prisma.Component
   description: z.lazy(() => SortOrderSchema).optional(),
   weight: z.lazy(() => SortOrderSchema).optional(),
   value: z.lazy(() => SortOrderSchema).optional(),
+  valueWeight: z.lazy(() => SortOrderSchema).optional(),
   rarity: z.lazy(() => SortOrderSchema).optional(),
-  spells: z.lazy(() => SortOrderSchema).optional()
+  uses: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const ComponentWhereUniqueInputSchema: z.ZodType<Prisma.ComponentWhereUniqueInput> = z.union([
@@ -1289,8 +1316,9 @@ export const ComponentWhereUniqueInputSchema: z.ZodType<Prisma.ComponentWhereUni
   description: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   weight: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
   value: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  valueWeight: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
   rarity: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  spells: z.lazy(() => StringNullableListFilterSchema).optional()
+  uses: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
 }).strict());
 
 export const ComponentOrderByWithAggregationInputSchema: z.ZodType<Prisma.ComponentOrderByWithAggregationInput> = z.object({
@@ -1300,8 +1328,9 @@ export const ComponentOrderByWithAggregationInputSchema: z.ZodType<Prisma.Compon
   description: z.lazy(() => SortOrderSchema).optional(),
   weight: z.lazy(() => SortOrderSchema).optional(),
   value: z.lazy(() => SortOrderSchema).optional(),
+  valueWeight: z.lazy(() => SortOrderSchema).optional(),
   rarity: z.lazy(() => SortOrderSchema).optional(),
-  spells: z.lazy(() => SortOrderSchema).optional(),
+  uses: z.lazy(() => SortOrderSchema).optional(),
   _count: z.lazy(() => ComponentCountOrderByAggregateInputSchema).optional(),
   _avg: z.lazy(() => ComponentAvgOrderByAggregateInputSchema).optional(),
   _max: z.lazy(() => ComponentMaxOrderByAggregateInputSchema).optional(),
@@ -1319,8 +1348,115 @@ export const ComponentScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.Com
   description: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   weight: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
   value: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  valueWeight: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
   rarity: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
-  spells: z.lazy(() => StringNullableListFilterSchema).optional()
+  uses: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+}).strict();
+
+export const ItemWhereInputSchema: z.ZodType<Prisma.ItemWhereInput> = z.object({
+  AND: z.union([ z.lazy(() => ItemWhereInputSchema),z.lazy(() => ItemWhereInputSchema).array() ]).optional(),
+  OR: z.lazy(() => ItemWhereInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => ItemWhereInputSchema),z.lazy(() => ItemWhereInputSchema).array() ]).optional(),
+  id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  quantity: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  name: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  description: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  weight: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  value: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  valueWeight: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  rarity: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  damages: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  armor: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
+  properties: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  isRelic: z.union([ z.lazy(() => BoolNullableFilterSchema),z.boolean() ]).optional().nullable(),
+  magicWeight: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
+}).strict();
+
+export const ItemOrderByWithRelationInputSchema: z.ZodType<Prisma.ItemOrderByWithRelationInput> = z.object({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  quantity: z.lazy(() => SortOrderSchema).optional(),
+  name: z.lazy(() => SortOrderSchema).optional(),
+  description: z.lazy(() => SortOrderSchema).optional(),
+  weight: z.lazy(() => SortOrderSchema).optional(),
+  value: z.lazy(() => SortOrderSchema).optional(),
+  valueWeight: z.lazy(() => SortOrderSchema).optional(),
+  rarity: z.lazy(() => SortOrderSchema).optional(),
+  damages: z.lazy(() => SortOrderSchema).optional(),
+  armor: z.lazy(() => SortOrderSchema).optional(),
+  properties: z.lazy(() => SortOrderSchema).optional(),
+  isRelic: z.lazy(() => SortOrderSchema).optional(),
+  magicWeight: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
+export const ItemWhereUniqueInputSchema: z.ZodType<Prisma.ItemWhereUniqueInput> = z.union([
+  z.object({
+    id: z.string(),
+    name: z.string()
+  }),
+  z.object({
+    id: z.string(),
+  }),
+  z.object({
+    name: z.string(),
+  }),
+])
+.and(z.object({
+  id: z.string().optional(),
+  name: z.string().optional(),
+  AND: z.union([ z.lazy(() => ItemWhereInputSchema),z.lazy(() => ItemWhereInputSchema).array() ]).optional(),
+  OR: z.lazy(() => ItemWhereInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => ItemWhereInputSchema),z.lazy(() => ItemWhereInputSchema).array() ]).optional(),
+  quantity: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  description: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  weight: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  value: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  valueWeight: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  rarity: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  damages: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  armor: z.union([ z.lazy(() => IntNullableFilterSchema),z.number().int() ]).optional().nullable(),
+  properties: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  isRelic: z.union([ z.lazy(() => BoolNullableFilterSchema),z.boolean() ]).optional().nullable(),
+  magicWeight: z.union([ z.lazy(() => IntNullableFilterSchema),z.number().int() ]).optional().nullable(),
+}).strict());
+
+export const ItemOrderByWithAggregationInputSchema: z.ZodType<Prisma.ItemOrderByWithAggregationInput> = z.object({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  quantity: z.lazy(() => SortOrderSchema).optional(),
+  name: z.lazy(() => SortOrderSchema).optional(),
+  description: z.lazy(() => SortOrderSchema).optional(),
+  weight: z.lazy(() => SortOrderSchema).optional(),
+  value: z.lazy(() => SortOrderSchema).optional(),
+  valueWeight: z.lazy(() => SortOrderSchema).optional(),
+  rarity: z.lazy(() => SortOrderSchema).optional(),
+  damages: z.lazy(() => SortOrderSchema).optional(),
+  armor: z.lazy(() => SortOrderSchema).optional(),
+  properties: z.lazy(() => SortOrderSchema).optional(),
+  isRelic: z.lazy(() => SortOrderSchema).optional(),
+  magicWeight: z.lazy(() => SortOrderSchema).optional(),
+  _count: z.lazy(() => ItemCountOrderByAggregateInputSchema).optional(),
+  _avg: z.lazy(() => ItemAvgOrderByAggregateInputSchema).optional(),
+  _max: z.lazy(() => ItemMaxOrderByAggregateInputSchema).optional(),
+  _min: z.lazy(() => ItemMinOrderByAggregateInputSchema).optional(),
+  _sum: z.lazy(() => ItemSumOrderByAggregateInputSchema).optional()
+}).strict();
+
+export const ItemScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.ItemScalarWhereWithAggregatesInput> = z.object({
+  AND: z.union([ z.lazy(() => ItemScalarWhereWithAggregatesInputSchema),z.lazy(() => ItemScalarWhereWithAggregatesInputSchema).array() ]).optional(),
+  OR: z.lazy(() => ItemScalarWhereWithAggregatesInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => ItemScalarWhereWithAggregatesInputSchema),z.lazy(() => ItemScalarWhereWithAggregatesInputSchema).array() ]).optional(),
+  id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  quantity: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  name: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  description: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  weight: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  value: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  valueWeight: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  rarity: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  damages: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  armor: z.union([ z.lazy(() => IntNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  properties: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  isRelic: z.union([ z.lazy(() => BoolNullableWithAggregatesFilterSchema),z.boolean() ]).optional().nullable(),
+  magicWeight: z.union([ z.lazy(() => IntNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
 }).strict();
 
 export const UserCreateInputSchema: z.ZodType<Prisma.UserCreateInput> = z.object({
@@ -1394,28 +1530,35 @@ export const CreatureCreateInputSchema: z.ZodType<Prisma.CreatureCreateInput> = 
   fullname: z.string(),
   name: z.string(),
   rank: z.string().optional().nullable(),
-  type: z.string(),
+  isBoss: z.boolean().optional().nullable(),
+  type: z.lazy(() => TypeSchema),
   subtype: z.string().optional().nullable(),
+  alignment: z.lazy(() => AlignmentSchema),
   size: z.lazy(() => CreatureSizeSchema),
-  createdAd: z.coerce.date().optional().nullable(),
+  createdAt: z.coerce.date().optional().nullable(),
   updatedAt: z.coerce.date().optional().nullable(),
   level: z.number().int(),
   attack: z.number().int(),
+  attackBonus: z.number().int().optional().nullable(),
   defense: z.number().int(),
+  defenseBonus: z.number().int().optional().nullable(),
   ranged: z.number().int(),
+  rangedBonus: z.number().int().optional().nullable(),
   health: z.number().int(),
   armor: z.number().int().optional().nullable(),
-  perception: z.number().int().optional().nullable(),
+  perception: z.number().int(),
+  perceptionBonus: z.number().int().optional().nullable(),
   magic: z.number().int().optional().nullable(),
   spirit: z.number().int().optional().nullable(),
-  loot: z.union([ z.lazy(() => CreatureCreatelootInputSchema),z.string().array() ]).optional(),
-  objects: z.union([ z.lazy(() => CreatureCreateobjectsInputSchema),z.string().array() ]).optional(),
+  glory: z.number().int().optional().nullable(),
+  stats: z.union([ z.lazy(() => StatProfilCreateEnvelopeInputSchema),z.lazy(() => StatProfilCreateInputSchema) ]),
+  loot: z.union([ z.lazy(() => CreatureItemListCreateEnvelopeInputSchema),z.lazy(() => CreatureItemCreateInputSchema),z.lazy(() => CreatureItemCreateInputSchema).array() ]).optional(),
+  scavenge: z.union([ z.lazy(() => CreatureComponentListCreateEnvelopeInputSchema),z.lazy(() => CreatureComponentCreateInputSchema),z.lazy(() => CreatureComponentCreateInputSchema).array() ]).optional(),
+  actionList: z.union([ z.lazy(() => ActionListCreateEnvelopeInputSchema),z.lazy(() => ActionListCreateInputSchema) ]),
+  attributes: z.union([ z.lazy(() => CreatureAttributeListCreateEnvelopeInputSchema),z.lazy(() => CreatureAttributeCreateInputSchema),z.lazy(() => CreatureAttributeCreateInputSchema).array() ]).optional(),
   flavor: z.string().optional().nullable(),
   description: z.string().optional().nullable(),
-  stats: z.lazy(() => StatProfilCreateNestedOneWithoutCreatureInputSchema).optional(),
-  actionList: z.lazy(() => ActionListCreateNestedOneWithoutCreatureInputSchema).optional(),
-  attributes: z.lazy(() => CreatureAttributeCreateNestedManyWithoutCreatureInputSchema).optional(),
-  actions: z.lazy(() => CreatureActionsCreateNestedManyWithoutCreatureInputSchema).optional()
+  actions: z.union([ z.lazy(() => CreatureActionListCreateEnvelopeInputSchema),z.lazy(() => CreatureActionCreateInputSchema),z.lazy(() => CreatureActionCreateInputSchema).array() ]).optional(),
 }).strict();
 
 export const CreatureUncheckedCreateInputSchema: z.ZodType<Prisma.CreatureUncheckedCreateInput> = z.object({
@@ -1423,84 +1566,105 @@ export const CreatureUncheckedCreateInputSchema: z.ZodType<Prisma.CreatureUnchec
   fullname: z.string(),
   name: z.string(),
   rank: z.string().optional().nullable(),
-  type: z.string(),
+  isBoss: z.boolean().optional().nullable(),
+  type: z.lazy(() => TypeSchema),
   subtype: z.string().optional().nullable(),
+  alignment: z.lazy(() => AlignmentSchema),
   size: z.lazy(() => CreatureSizeSchema),
-  createdAd: z.coerce.date().optional().nullable(),
+  createdAt: z.coerce.date().optional().nullable(),
   updatedAt: z.coerce.date().optional().nullable(),
   level: z.number().int(),
   attack: z.number().int(),
+  attackBonus: z.number().int().optional().nullable(),
   defense: z.number().int(),
+  defenseBonus: z.number().int().optional().nullable(),
   ranged: z.number().int(),
+  rangedBonus: z.number().int().optional().nullable(),
   health: z.number().int(),
   armor: z.number().int().optional().nullable(),
-  perception: z.number().int().optional().nullable(),
+  perception: z.number().int(),
+  perceptionBonus: z.number().int().optional().nullable(),
   magic: z.number().int().optional().nullable(),
   spirit: z.number().int().optional().nullable(),
-  loot: z.union([ z.lazy(() => CreatureCreatelootInputSchema),z.string().array() ]).optional(),
-  objects: z.union([ z.lazy(() => CreatureCreateobjectsInputSchema),z.string().array() ]).optional(),
+  glory: z.number().int().optional().nullable(),
+  stats: z.union([ z.lazy(() => StatProfilCreateEnvelopeInputSchema),z.lazy(() => StatProfilCreateInputSchema) ]),
+  loot: z.union([ z.lazy(() => CreatureItemListCreateEnvelopeInputSchema),z.lazy(() => CreatureItemCreateInputSchema),z.lazy(() => CreatureItemCreateInputSchema).array() ]).optional(),
+  scavenge: z.union([ z.lazy(() => CreatureComponentListCreateEnvelopeInputSchema),z.lazy(() => CreatureComponentCreateInputSchema),z.lazy(() => CreatureComponentCreateInputSchema).array() ]).optional(),
+  actionList: z.union([ z.lazy(() => ActionListCreateEnvelopeInputSchema),z.lazy(() => ActionListCreateInputSchema) ]),
+  attributes: z.union([ z.lazy(() => CreatureAttributeListCreateEnvelopeInputSchema),z.lazy(() => CreatureAttributeCreateInputSchema),z.lazy(() => CreatureAttributeCreateInputSchema).array() ]).optional(),
   flavor: z.string().optional().nullable(),
   description: z.string().optional().nullable(),
-  stats: z.lazy(() => StatProfilUncheckedCreateNestedOneWithoutCreatureInputSchema).optional(),
-  actionList: z.lazy(() => ActionListUncheckedCreateNestedOneWithoutCreatureInputSchema).optional(),
-  attributes: z.lazy(() => CreatureAttributeUncheckedCreateNestedManyWithoutCreatureInputSchema).optional(),
-  actions: z.lazy(() => CreatureActionsUncheckedCreateNestedManyWithoutCreatureInputSchema).optional()
+  actions: z.union([ z.lazy(() => CreatureActionListCreateEnvelopeInputSchema),z.lazy(() => CreatureActionCreateInputSchema),z.lazy(() => CreatureActionCreateInputSchema).array() ]).optional(),
 }).strict();
 
 export const CreatureUpdateInputSchema: z.ZodType<Prisma.CreatureUpdateInput> = z.object({
   fullname: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   rank: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  type: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  isBoss: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  type: z.union([ z.lazy(() => TypeSchema),z.lazy(() => EnumTypeFieldUpdateOperationsInputSchema) ]).optional(),
   subtype: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  alignment: z.union([ z.lazy(() => AlignmentSchema),z.lazy(() => EnumAlignmentFieldUpdateOperationsInputSchema) ]).optional(),
   size: z.union([ z.lazy(() => CreatureSizeSchema),z.lazy(() => EnumCreatureSizeFieldUpdateOperationsInputSchema) ]).optional(),
-  createdAd: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  createdAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   level: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   attack: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  attackBonus: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   defense: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  defenseBonus: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   ranged: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  rangedBonus: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   health: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   armor: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  perception: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  perception: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  perceptionBonus: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   magic: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   spirit: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  loot: z.union([ z.lazy(() => CreatureUpdatelootInputSchema),z.string().array() ]).optional(),
-  objects: z.union([ z.lazy(() => CreatureUpdateobjectsInputSchema),z.string().array() ]).optional(),
+  glory: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  stats: z.union([ z.lazy(() => StatProfilUpdateEnvelopeInputSchema),z.lazy(() => StatProfilCreateInputSchema) ]).optional(),
+  loot: z.union([ z.lazy(() => CreatureItemListUpdateEnvelopeInputSchema),z.lazy(() => CreatureItemCreateInputSchema),z.lazy(() => CreatureItemCreateInputSchema).array() ]).optional(),
+  scavenge: z.union([ z.lazy(() => CreatureComponentListUpdateEnvelopeInputSchema),z.lazy(() => CreatureComponentCreateInputSchema),z.lazy(() => CreatureComponentCreateInputSchema).array() ]).optional(),
+  actionList: z.union([ z.lazy(() => ActionListUpdateEnvelopeInputSchema),z.lazy(() => ActionListCreateInputSchema) ]).optional(),
+  attributes: z.union([ z.lazy(() => CreatureAttributeListUpdateEnvelopeInputSchema),z.lazy(() => CreatureAttributeCreateInputSchema),z.lazy(() => CreatureAttributeCreateInputSchema).array() ]).optional(),
   flavor: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  stats: z.lazy(() => StatProfilUpdateOneWithoutCreatureNestedInputSchema).optional(),
-  actionList: z.lazy(() => ActionListUpdateOneWithoutCreatureNestedInputSchema).optional(),
-  attributes: z.lazy(() => CreatureAttributeUpdateManyWithoutCreatureNestedInputSchema).optional(),
-  actions: z.lazy(() => CreatureActionsUpdateManyWithoutCreatureNestedInputSchema).optional()
+  actions: z.union([ z.lazy(() => CreatureActionListUpdateEnvelopeInputSchema),z.lazy(() => CreatureActionCreateInputSchema),z.lazy(() => CreatureActionCreateInputSchema).array() ]).optional(),
 }).strict();
 
 export const CreatureUncheckedUpdateInputSchema: z.ZodType<Prisma.CreatureUncheckedUpdateInput> = z.object({
   fullname: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   rank: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  type: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  isBoss: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  type: z.union([ z.lazy(() => TypeSchema),z.lazy(() => EnumTypeFieldUpdateOperationsInputSchema) ]).optional(),
   subtype: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  alignment: z.union([ z.lazy(() => AlignmentSchema),z.lazy(() => EnumAlignmentFieldUpdateOperationsInputSchema) ]).optional(),
   size: z.union([ z.lazy(() => CreatureSizeSchema),z.lazy(() => EnumCreatureSizeFieldUpdateOperationsInputSchema) ]).optional(),
-  createdAd: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  createdAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   level: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   attack: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  attackBonus: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   defense: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  defenseBonus: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   ranged: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  rangedBonus: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   health: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   armor: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  perception: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  perception: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  perceptionBonus: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   magic: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   spirit: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  loot: z.union([ z.lazy(() => CreatureUpdatelootInputSchema),z.string().array() ]).optional(),
-  objects: z.union([ z.lazy(() => CreatureUpdateobjectsInputSchema),z.string().array() ]).optional(),
+  glory: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  stats: z.union([ z.lazy(() => StatProfilUpdateEnvelopeInputSchema),z.lazy(() => StatProfilCreateInputSchema) ]).optional(),
+  loot: z.union([ z.lazy(() => CreatureItemListUpdateEnvelopeInputSchema),z.lazy(() => CreatureItemCreateInputSchema),z.lazy(() => CreatureItemCreateInputSchema).array() ]).optional(),
+  scavenge: z.union([ z.lazy(() => CreatureComponentListUpdateEnvelopeInputSchema),z.lazy(() => CreatureComponentCreateInputSchema),z.lazy(() => CreatureComponentCreateInputSchema).array() ]).optional(),
+  actionList: z.union([ z.lazy(() => ActionListUpdateEnvelopeInputSchema),z.lazy(() => ActionListCreateInputSchema) ]).optional(),
+  attributes: z.union([ z.lazy(() => CreatureAttributeListUpdateEnvelopeInputSchema),z.lazy(() => CreatureAttributeCreateInputSchema),z.lazy(() => CreatureAttributeCreateInputSchema).array() ]).optional(),
   flavor: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  stats: z.lazy(() => StatProfilUncheckedUpdateOneWithoutCreatureNestedInputSchema).optional(),
-  actionList: z.lazy(() => ActionListUncheckedUpdateOneWithoutCreatureNestedInputSchema).optional(),
-  attributes: z.lazy(() => CreatureAttributeUncheckedUpdateManyWithoutCreatureNestedInputSchema).optional(),
-  actions: z.lazy(() => CreatureActionsUncheckedUpdateManyWithoutCreatureNestedInputSchema).optional()
+  actions: z.union([ z.lazy(() => CreatureActionListUpdateEnvelopeInputSchema),z.lazy(() => CreatureActionCreateInputSchema),z.lazy(() => CreatureActionCreateInputSchema).array() ]).optional(),
 }).strict();
 
 export const CreatureCreateManyInputSchema: z.ZodType<Prisma.CreatureCreateManyInput> = z.object({
@@ -1508,262 +1672,226 @@ export const CreatureCreateManyInputSchema: z.ZodType<Prisma.CreatureCreateManyI
   fullname: z.string(),
   name: z.string(),
   rank: z.string().optional().nullable(),
-  type: z.string(),
+  isBoss: z.boolean().optional().nullable(),
+  type: z.lazy(() => TypeSchema),
   subtype: z.string().optional().nullable(),
+  alignment: z.lazy(() => AlignmentSchema),
   size: z.lazy(() => CreatureSizeSchema),
-  createdAd: z.coerce.date().optional().nullable(),
+  createdAt: z.coerce.date().optional().nullable(),
   updatedAt: z.coerce.date().optional().nullable(),
   level: z.number().int(),
   attack: z.number().int(),
+  attackBonus: z.number().int().optional().nullable(),
   defense: z.number().int(),
+  defenseBonus: z.number().int().optional().nullable(),
   ranged: z.number().int(),
+  rangedBonus: z.number().int().optional().nullable(),
   health: z.number().int(),
   armor: z.number().int().optional().nullable(),
-  perception: z.number().int().optional().nullable(),
+  perception: z.number().int(),
+  perceptionBonus: z.number().int().optional().nullable(),
   magic: z.number().int().optional().nullable(),
   spirit: z.number().int().optional().nullable(),
-  loot: z.union([ z.lazy(() => CreatureCreatelootInputSchema),z.string().array() ]).optional(),
-  objects: z.union([ z.lazy(() => CreatureCreateobjectsInputSchema),z.string().array() ]).optional(),
+  glory: z.number().int().optional().nullable(),
+  stats: z.union([ z.lazy(() => StatProfilCreateEnvelopeInputSchema),z.lazy(() => StatProfilCreateInputSchema) ]),
+  loot: z.union([ z.lazy(() => CreatureItemListCreateEnvelopeInputSchema),z.lazy(() => CreatureItemCreateInputSchema),z.lazy(() => CreatureItemCreateInputSchema).array() ]).optional(),
+  scavenge: z.union([ z.lazy(() => CreatureComponentListCreateEnvelopeInputSchema),z.lazy(() => CreatureComponentCreateInputSchema),z.lazy(() => CreatureComponentCreateInputSchema).array() ]).optional(),
+  actionList: z.union([ z.lazy(() => ActionListCreateEnvelopeInputSchema),z.lazy(() => ActionListCreateInputSchema) ]),
+  attributes: z.union([ z.lazy(() => CreatureAttributeListCreateEnvelopeInputSchema),z.lazy(() => CreatureAttributeCreateInputSchema),z.lazy(() => CreatureAttributeCreateInputSchema).array() ]).optional(),
   flavor: z.string().optional().nullable(),
-  description: z.string().optional().nullable()
+  description: z.string().optional().nullable(),
+  actions: z.union([ z.lazy(() => CreatureActionListCreateEnvelopeInputSchema),z.lazy(() => CreatureActionCreateInputSchema),z.lazy(() => CreatureActionCreateInputSchema).array() ]).optional(),
 }).strict();
 
 export const CreatureUpdateManyMutationInputSchema: z.ZodType<Prisma.CreatureUpdateManyMutationInput> = z.object({
   fullname: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   rank: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  type: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  isBoss: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  type: z.union([ z.lazy(() => TypeSchema),z.lazy(() => EnumTypeFieldUpdateOperationsInputSchema) ]).optional(),
   subtype: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  alignment: z.union([ z.lazy(() => AlignmentSchema),z.lazy(() => EnumAlignmentFieldUpdateOperationsInputSchema) ]).optional(),
   size: z.union([ z.lazy(() => CreatureSizeSchema),z.lazy(() => EnumCreatureSizeFieldUpdateOperationsInputSchema) ]).optional(),
-  createdAd: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  createdAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   level: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   attack: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  attackBonus: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   defense: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  defenseBonus: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   ranged: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  rangedBonus: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   health: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   armor: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  perception: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  perception: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  perceptionBonus: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   magic: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   spirit: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  loot: z.union([ z.lazy(() => CreatureUpdatelootInputSchema),z.string().array() ]).optional(),
-  objects: z.union([ z.lazy(() => CreatureUpdateobjectsInputSchema),z.string().array() ]).optional(),
+  glory: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  stats: z.union([ z.lazy(() => StatProfilUpdateEnvelopeInputSchema),z.lazy(() => StatProfilCreateInputSchema) ]).optional(),
+  loot: z.union([ z.lazy(() => CreatureItemListUpdateEnvelopeInputSchema),z.lazy(() => CreatureItemCreateInputSchema),z.lazy(() => CreatureItemCreateInputSchema).array() ]).optional(),
+  scavenge: z.union([ z.lazy(() => CreatureComponentListUpdateEnvelopeInputSchema),z.lazy(() => CreatureComponentCreateInputSchema),z.lazy(() => CreatureComponentCreateInputSchema).array() ]).optional(),
+  actionList: z.union([ z.lazy(() => ActionListUpdateEnvelopeInputSchema),z.lazy(() => ActionListCreateInputSchema) ]).optional(),
+  attributes: z.union([ z.lazy(() => CreatureAttributeListUpdateEnvelopeInputSchema),z.lazy(() => CreatureAttributeCreateInputSchema),z.lazy(() => CreatureAttributeCreateInputSchema).array() ]).optional(),
   flavor: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  actions: z.union([ z.lazy(() => CreatureActionListUpdateEnvelopeInputSchema),z.lazy(() => CreatureActionCreateInputSchema),z.lazy(() => CreatureActionCreateInputSchema).array() ]).optional(),
 }).strict();
 
 export const CreatureUncheckedUpdateManyInputSchema: z.ZodType<Prisma.CreatureUncheckedUpdateManyInput> = z.object({
   fullname: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   rank: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  type: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  isBoss: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  type: z.union([ z.lazy(() => TypeSchema),z.lazy(() => EnumTypeFieldUpdateOperationsInputSchema) ]).optional(),
   subtype: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  alignment: z.union([ z.lazy(() => AlignmentSchema),z.lazy(() => EnumAlignmentFieldUpdateOperationsInputSchema) ]).optional(),
   size: z.union([ z.lazy(() => CreatureSizeSchema),z.lazy(() => EnumCreatureSizeFieldUpdateOperationsInputSchema) ]).optional(),
-  createdAd: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  createdAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   level: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   attack: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  attackBonus: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   defense: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  defenseBonus: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   ranged: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  rangedBonus: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   health: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   armor: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  perception: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  perception: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  perceptionBonus: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   magic: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   spirit: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  loot: z.union([ z.lazy(() => CreatureUpdatelootInputSchema),z.string().array() ]).optional(),
-  objects: z.union([ z.lazy(() => CreatureUpdateobjectsInputSchema),z.string().array() ]).optional(),
+  glory: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  stats: z.union([ z.lazy(() => StatProfilUpdateEnvelopeInputSchema),z.lazy(() => StatProfilCreateInputSchema) ]).optional(),
+  loot: z.union([ z.lazy(() => CreatureItemListUpdateEnvelopeInputSchema),z.lazy(() => CreatureItemCreateInputSchema),z.lazy(() => CreatureItemCreateInputSchema).array() ]).optional(),
+  scavenge: z.union([ z.lazy(() => CreatureComponentListUpdateEnvelopeInputSchema),z.lazy(() => CreatureComponentCreateInputSchema),z.lazy(() => CreatureComponentCreateInputSchema).array() ]).optional(),
+  actionList: z.union([ z.lazy(() => ActionListUpdateEnvelopeInputSchema),z.lazy(() => ActionListCreateInputSchema) ]).optional(),
+  attributes: z.union([ z.lazy(() => CreatureAttributeListUpdateEnvelopeInputSchema),z.lazy(() => CreatureAttributeCreateInputSchema),z.lazy(() => CreatureAttributeCreateInputSchema).array() ]).optional(),
+  flavor: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  actions: z.union([ z.lazy(() => CreatureActionListUpdateEnvelopeInputSchema),z.lazy(() => CreatureActionCreateInputSchema),z.lazy(() => CreatureActionCreateInputSchema).array() ]).optional(),
+}).strict();
+
+export const AttributeCreateInputSchema: z.ZodType<Prisma.AttributeCreateInput> = z.object({
+  id: z.string().optional(),
+  name: z.string(),
+  flavor: z.string().optional().nullable(),
+  description: z.string().optional().nullable()
+}).strict();
+
+export const AttributeUncheckedCreateInputSchema: z.ZodType<Prisma.AttributeUncheckedCreateInput> = z.object({
+  id: z.string().optional(),
+  name: z.string(),
+  flavor: z.string().optional().nullable(),
+  description: z.string().optional().nullable()
+}).strict();
+
+export const AttributeUpdateInputSchema: z.ZodType<Prisma.AttributeUpdateInput> = z.object({
+  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   flavor: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
-export const CreatureAttributeCreateInputSchema: z.ZodType<Prisma.CreatureAttributeCreateInput> = z.object({
+export const AttributeUncheckedUpdateInputSchema: z.ZodType<Prisma.AttributeUncheckedUpdateInput> = z.object({
+  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  flavor: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+}).strict();
+
+export const AttributeCreateManyInputSchema: z.ZodType<Prisma.AttributeCreateManyInput> = z.object({
   id: z.string().optional(),
   name: z.string(),
   flavor: z.string().optional().nullable(),
-  Description: z.string().optional().nullable(),
-  Creature: z.lazy(() => CreatureCreateNestedOneWithoutAttributesInputSchema).optional()
+  description: z.string().optional().nullable()
 }).strict();
 
-export const CreatureAttributeUncheckedCreateInputSchema: z.ZodType<Prisma.CreatureAttributeUncheckedCreateInput> = z.object({
+export const AttributeUpdateManyMutationInputSchema: z.ZodType<Prisma.AttributeUpdateManyMutationInput> = z.object({
+  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  flavor: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+}).strict();
+
+export const AttributeUncheckedUpdateManyInputSchema: z.ZodType<Prisma.AttributeUncheckedUpdateManyInput> = z.object({
+  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  flavor: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+}).strict();
+
+export const ActionCreateInputSchema: z.ZodType<Prisma.ActionCreateInput> = z.object({
   id: z.string().optional(),
   name: z.string(),
-  flavor: z.string().optional().nullable(),
-  Description: z.string().optional().nullable(),
-  creatureId: z.string().optional().nullable()
-}).strict();
-
-export const CreatureAttributeUpdateInputSchema: z.ZodType<Prisma.CreatureAttributeUpdateInput> = z.object({
-  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  flavor: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  Description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  Creature: z.lazy(() => CreatureUpdateOneWithoutAttributesNestedInputSchema).optional()
-}).strict();
-
-export const CreatureAttributeUncheckedUpdateInputSchema: z.ZodType<Prisma.CreatureAttributeUncheckedUpdateInput> = z.object({
-  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  flavor: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  Description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  creatureId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-}).strict();
-
-export const CreatureAttributeCreateManyInputSchema: z.ZodType<Prisma.CreatureAttributeCreateManyInput> = z.object({
-  id: z.string().optional(),
-  name: z.string(),
-  flavor: z.string().optional().nullable(),
-  Description: z.string().optional().nullable(),
-  creatureId: z.string().optional().nullable()
-}).strict();
-
-export const CreatureAttributeUpdateManyMutationInputSchema: z.ZodType<Prisma.CreatureAttributeUpdateManyMutationInput> = z.object({
-  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  flavor: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  Description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-}).strict();
-
-export const CreatureAttributeUncheckedUpdateManyInputSchema: z.ZodType<Prisma.CreatureAttributeUncheckedUpdateManyInput> = z.object({
-  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  flavor: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  Description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  creatureId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-}).strict();
-
-export const ActionListCreateInputSchema: z.ZodType<Prisma.ActionListCreateInput> = z.object({
-  id: z.string().optional(),
-  main: z.number().int(),
-  limited: z.number().int(),
-  free: z.number().int(),
-  travel: z.number().int(),
-  creature: z.lazy(() => CreatureCreateNestedOneWithoutActionListInputSchema).optional()
-}).strict();
-
-export const ActionListUncheckedCreateInputSchema: z.ZodType<Prisma.ActionListUncheckedCreateInput> = z.object({
-  id: z.string().optional(),
-  main: z.number().int(),
-  limited: z.number().int(),
-  free: z.number().int(),
-  travel: z.number().int(),
-  creatureId: z.string().optional().nullable()
-}).strict();
-
-export const ActionListUpdateInputSchema: z.ZodType<Prisma.ActionListUpdateInput> = z.object({
-  main: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  limited: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  free: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  travel: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  creature: z.lazy(() => CreatureUpdateOneWithoutActionListNestedInputSchema).optional()
-}).strict();
-
-export const ActionListUncheckedUpdateInputSchema: z.ZodType<Prisma.ActionListUncheckedUpdateInput> = z.object({
-  main: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  limited: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  free: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  travel: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  creatureId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-}).strict();
-
-export const ActionListCreateManyInputSchema: z.ZodType<Prisma.ActionListCreateManyInput> = z.object({
-  id: z.string().optional(),
-  main: z.number().int(),
-  limited: z.number().int(),
-  free: z.number().int(),
-  travel: z.number().int(),
-  creatureId: z.string().optional().nullable()
-}).strict();
-
-export const ActionListUpdateManyMutationInputSchema: z.ZodType<Prisma.ActionListUpdateManyMutationInput> = z.object({
-  main: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  limited: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  free: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  travel: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-}).strict();
-
-export const ActionListUncheckedUpdateManyInputSchema: z.ZodType<Prisma.ActionListUncheckedUpdateManyInput> = z.object({
-  main: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  limited: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  free: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  travel: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  creatureId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-}).strict();
-
-export const CreatureActionsCreateInputSchema: z.ZodType<Prisma.CreatureActionsCreateInput> = z.object({
-  id: z.string().optional(),
-  title: z.string(),
   action: z.lazy(() => ActionTypeSchema),
   type: z.string(),
   flavor: z.string().optional().nullable(),
-  description: z.string(),
+  description: z.string().optional().nullable(),
   damages: z.string().optional().nullable(),
   effects: z.string().optional().nullable(),
   heal: z.string().optional().nullable(),
   target: z.string().optional().nullable(),
-  range: z.string().optional().nullable(),
-  creature: z.lazy(() => CreatureCreateNestedOneWithoutActionsInputSchema).optional()
+  range: z.string().optional().nullable()
 }).strict();
 
-export const CreatureActionsUncheckedCreateInputSchema: z.ZodType<Prisma.CreatureActionsUncheckedCreateInput> = z.object({
+export const ActionUncheckedCreateInputSchema: z.ZodType<Prisma.ActionUncheckedCreateInput> = z.object({
   id: z.string().optional(),
-  title: z.string(),
+  name: z.string(),
   action: z.lazy(() => ActionTypeSchema),
   type: z.string(),
   flavor: z.string().optional().nullable(),
-  description: z.string(),
+  description: z.string().optional().nullable(),
   damages: z.string().optional().nullable(),
   effects: z.string().optional().nullable(),
   heal: z.string().optional().nullable(),
   target: z.string().optional().nullable(),
-  range: z.string().optional().nullable(),
-  creatureId: z.string().optional().nullable()
+  range: z.string().optional().nullable()
 }).strict();
 
-export const CreatureActionsUpdateInputSchema: z.ZodType<Prisma.CreatureActionsUpdateInput> = z.object({
-  title: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+export const ActionUpdateInputSchema: z.ZodType<Prisma.ActionUpdateInput> = z.object({
+  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   action: z.union([ z.lazy(() => ActionTypeSchema),z.lazy(() => EnumActionTypeFieldUpdateOperationsInputSchema) ]).optional(),
   type: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   flavor: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  description: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   damages: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   effects: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   heal: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   target: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   range: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  creature: z.lazy(() => CreatureUpdateOneWithoutActionsNestedInputSchema).optional()
 }).strict();
 
-export const CreatureActionsUncheckedUpdateInputSchema: z.ZodType<Prisma.CreatureActionsUncheckedUpdateInput> = z.object({
-  title: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+export const ActionUncheckedUpdateInputSchema: z.ZodType<Prisma.ActionUncheckedUpdateInput> = z.object({
+  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   action: z.union([ z.lazy(() => ActionTypeSchema),z.lazy(() => EnumActionTypeFieldUpdateOperationsInputSchema) ]).optional(),
   type: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   flavor: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  description: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   damages: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   effects: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   heal: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   target: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   range: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  creatureId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
-export const CreatureActionsCreateManyInputSchema: z.ZodType<Prisma.CreatureActionsCreateManyInput> = z.object({
+export const ActionCreateManyInputSchema: z.ZodType<Prisma.ActionCreateManyInput> = z.object({
   id: z.string().optional(),
-  title: z.string(),
+  name: z.string(),
   action: z.lazy(() => ActionTypeSchema),
   type: z.string(),
   flavor: z.string().optional().nullable(),
-  description: z.string(),
+  description: z.string().optional().nullable(),
   damages: z.string().optional().nullable(),
   effects: z.string().optional().nullable(),
   heal: z.string().optional().nullable(),
   target: z.string().optional().nullable(),
-  range: z.string().optional().nullable(),
-  creatureId: z.string().optional().nullable()
+  range: z.string().optional().nullable()
 }).strict();
 
-export const CreatureActionsUpdateManyMutationInputSchema: z.ZodType<Prisma.CreatureActionsUpdateManyMutationInput> = z.object({
-  title: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+export const ActionUpdateManyMutationInputSchema: z.ZodType<Prisma.ActionUpdateManyMutationInput> = z.object({
+  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   action: z.union([ z.lazy(() => ActionTypeSchema),z.lazy(() => EnumActionTypeFieldUpdateOperationsInputSchema) ]).optional(),
   type: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   flavor: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  description: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   damages: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   effects: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   heal: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -1771,132 +1899,17 @@ export const CreatureActionsUpdateManyMutationInputSchema: z.ZodType<Prisma.Crea
   range: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
-export const CreatureActionsUncheckedUpdateManyInputSchema: z.ZodType<Prisma.CreatureActionsUncheckedUpdateManyInput> = z.object({
-  title: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+export const ActionUncheckedUpdateManyInputSchema: z.ZodType<Prisma.ActionUncheckedUpdateManyInput> = z.object({
+  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   action: z.union([ z.lazy(() => ActionTypeSchema),z.lazy(() => EnumActionTypeFieldUpdateOperationsInputSchema) ]).optional(),
   type: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   flavor: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  description: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   damages: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   effects: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   heal: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   target: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   range: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  creatureId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-}).strict();
-
-export const StatProfilCreateInputSchema: z.ZodType<Prisma.StatProfilCreateInput> = z.object({
-  id: z.string().optional(),
-  CEL: z.number().int(),
-  AGI: z.number().int(),
-  DEX: z.number().int(),
-  STR: z.number().int(),
-  END: z.number().int(),
-  VIT: z.number().int(),
-  COU: z.number().int(),
-  INS: z.number().int(),
-  SEN: z.number().int(),
-  CHA: z.number().int(),
-  SOC: z.number().int(),
-  ERU: z.number().int(),
-  creature: z.lazy(() => CreatureCreateNestedOneWithoutStatsInputSchema).optional()
-}).strict();
-
-export const StatProfilUncheckedCreateInputSchema: z.ZodType<Prisma.StatProfilUncheckedCreateInput> = z.object({
-  id: z.string().optional(),
-  CEL: z.number().int(),
-  AGI: z.number().int(),
-  DEX: z.number().int(),
-  STR: z.number().int(),
-  END: z.number().int(),
-  VIT: z.number().int(),
-  COU: z.number().int(),
-  INS: z.number().int(),
-  SEN: z.number().int(),
-  CHA: z.number().int(),
-  SOC: z.number().int(),
-  ERU: z.number().int(),
-  creatureId: z.string().optional().nullable()
-}).strict();
-
-export const StatProfilUpdateInputSchema: z.ZodType<Prisma.StatProfilUpdateInput> = z.object({
-  CEL: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  AGI: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  DEX: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  STR: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  END: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  VIT: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  COU: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  INS: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  SEN: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  CHA: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  SOC: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  ERU: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  creature: z.lazy(() => CreatureUpdateOneWithoutStatsNestedInputSchema).optional()
-}).strict();
-
-export const StatProfilUncheckedUpdateInputSchema: z.ZodType<Prisma.StatProfilUncheckedUpdateInput> = z.object({
-  CEL: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  AGI: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  DEX: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  STR: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  END: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  VIT: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  COU: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  INS: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  SEN: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  CHA: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  SOC: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  ERU: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  creatureId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-}).strict();
-
-export const StatProfilCreateManyInputSchema: z.ZodType<Prisma.StatProfilCreateManyInput> = z.object({
-  id: z.string().optional(),
-  CEL: z.number().int(),
-  AGI: z.number().int(),
-  DEX: z.number().int(),
-  STR: z.number().int(),
-  END: z.number().int(),
-  VIT: z.number().int(),
-  COU: z.number().int(),
-  INS: z.number().int(),
-  SEN: z.number().int(),
-  CHA: z.number().int(),
-  SOC: z.number().int(),
-  ERU: z.number().int(),
-  creatureId: z.string().optional().nullable()
-}).strict();
-
-export const StatProfilUpdateManyMutationInputSchema: z.ZodType<Prisma.StatProfilUpdateManyMutationInput> = z.object({
-  CEL: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  AGI: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  DEX: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  STR: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  END: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  VIT: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  COU: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  INS: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  SEN: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  CHA: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  SOC: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  ERU: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-}).strict();
-
-export const StatProfilUncheckedUpdateManyInputSchema: z.ZodType<Prisma.StatProfilUncheckedUpdateManyInput> = z.object({
-  CEL: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  AGI: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  DEX: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  STR: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  END: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  VIT: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  COU: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  INS: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  SEN: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  CHA: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  SOC: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  ERU: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  creatureId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
 export const SpellCreateInputSchema: z.ZodType<Prisma.SpellCreateInput> = z.object({
@@ -2077,8 +2090,9 @@ export const ComponentCreateInputSchema: z.ZodType<Prisma.ComponentCreateInput> 
   description: z.string().optional().nullable(),
   weight: z.number().optional().nullable(),
   value: z.number().optional().nullable(),
+  valueWeight: z.number().optional().nullable(),
   rarity: z.string().optional().nullable(),
-  spells: z.union([ z.lazy(() => ComponentCreatespellsInputSchema),z.string().array() ]).optional(),
+  uses: z.string().optional().nullable()
 }).strict();
 
 export const ComponentUncheckedCreateInputSchema: z.ZodType<Prisma.ComponentUncheckedCreateInput> = z.object({
@@ -2088,8 +2102,9 @@ export const ComponentUncheckedCreateInputSchema: z.ZodType<Prisma.ComponentUnch
   description: z.string().optional().nullable(),
   weight: z.number().optional().nullable(),
   value: z.number().optional().nullable(),
+  valueWeight: z.number().optional().nullable(),
   rarity: z.string().optional().nullable(),
-  spells: z.union([ z.lazy(() => ComponentCreatespellsInputSchema),z.string().array() ]).optional(),
+  uses: z.string().optional().nullable()
 }).strict();
 
 export const ComponentUpdateInputSchema: z.ZodType<Prisma.ComponentUpdateInput> = z.object({
@@ -2098,8 +2113,9 @@ export const ComponentUpdateInputSchema: z.ZodType<Prisma.ComponentUpdateInput> 
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   weight: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   value: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  valueWeight: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   rarity: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  spells: z.union([ z.lazy(() => ComponentUpdatespellsInputSchema),z.string().array() ]).optional(),
+  uses: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
 export const ComponentUncheckedUpdateInputSchema: z.ZodType<Prisma.ComponentUncheckedUpdateInput> = z.object({
@@ -2108,8 +2124,9 @@ export const ComponentUncheckedUpdateInputSchema: z.ZodType<Prisma.ComponentUnch
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   weight: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   value: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  valueWeight: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   rarity: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  spells: z.union([ z.lazy(() => ComponentUpdatespellsInputSchema),z.string().array() ]).optional(),
+  uses: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
 export const ComponentCreateManyInputSchema: z.ZodType<Prisma.ComponentCreateManyInput> = z.object({
@@ -2119,8 +2136,9 @@ export const ComponentCreateManyInputSchema: z.ZodType<Prisma.ComponentCreateMan
   description: z.string().optional().nullable(),
   weight: z.number().optional().nullable(),
   value: z.number().optional().nullable(),
+  valueWeight: z.number().optional().nullable(),
   rarity: z.string().optional().nullable(),
-  spells: z.union([ z.lazy(() => ComponentCreatespellsInputSchema),z.string().array() ]).optional(),
+  uses: z.string().optional().nullable()
 }).strict();
 
 export const ComponentUpdateManyMutationInputSchema: z.ZodType<Prisma.ComponentUpdateManyMutationInput> = z.object({
@@ -2129,8 +2147,9 @@ export const ComponentUpdateManyMutationInputSchema: z.ZodType<Prisma.ComponentU
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   weight: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   value: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  valueWeight: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   rarity: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  spells: z.union([ z.lazy(() => ComponentUpdatespellsInputSchema),z.string().array() ]).optional(),
+  uses: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
 export const ComponentUncheckedUpdateManyInputSchema: z.ZodType<Prisma.ComponentUncheckedUpdateManyInput> = z.object({
@@ -2139,8 +2158,117 @@ export const ComponentUncheckedUpdateManyInputSchema: z.ZodType<Prisma.Component
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   weight: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   value: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  valueWeight: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   rarity: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  spells: z.union([ z.lazy(() => ComponentUpdatespellsInputSchema),z.string().array() ]).optional(),
+  uses: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+}).strict();
+
+export const ItemCreateInputSchema: z.ZodType<Prisma.ItemCreateInput> = z.object({
+  id: z.string().optional(),
+  quantity: z.number().optional().nullable(),
+  name: z.string(),
+  description: z.string().optional().nullable(),
+  weight: z.number().optional().nullable(),
+  value: z.number().optional().nullable(),
+  valueWeight: z.number().optional().nullable(),
+  rarity: z.string().optional().nullable(),
+  damages: z.string().optional().nullable(),
+  armor: z.number().int().optional().nullable(),
+  properties: z.string().optional().nullable(),
+  isRelic: z.boolean().optional().nullable(),
+  magicWeight: z.number().int().optional().nullable()
+}).strict();
+
+export const ItemUncheckedCreateInputSchema: z.ZodType<Prisma.ItemUncheckedCreateInput> = z.object({
+  id: z.string().optional(),
+  quantity: z.number().optional().nullable(),
+  name: z.string(),
+  description: z.string().optional().nullable(),
+  weight: z.number().optional().nullable(),
+  value: z.number().optional().nullable(),
+  valueWeight: z.number().optional().nullable(),
+  rarity: z.string().optional().nullable(),
+  damages: z.string().optional().nullable(),
+  armor: z.number().int().optional().nullable(),
+  properties: z.string().optional().nullable(),
+  isRelic: z.boolean().optional().nullable(),
+  magicWeight: z.number().int().optional().nullable()
+}).strict();
+
+export const ItemUpdateInputSchema: z.ZodType<Prisma.ItemUpdateInput> = z.object({
+  quantity: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  weight: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  value: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  valueWeight: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  rarity: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  damages: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  armor: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  properties: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  isRelic: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  magicWeight: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+}).strict();
+
+export const ItemUncheckedUpdateInputSchema: z.ZodType<Prisma.ItemUncheckedUpdateInput> = z.object({
+  quantity: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  weight: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  value: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  valueWeight: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  rarity: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  damages: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  armor: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  properties: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  isRelic: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  magicWeight: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+}).strict();
+
+export const ItemCreateManyInputSchema: z.ZodType<Prisma.ItemCreateManyInput> = z.object({
+  id: z.string().optional(),
+  quantity: z.number().optional().nullable(),
+  name: z.string(),
+  description: z.string().optional().nullable(),
+  weight: z.number().optional().nullable(),
+  value: z.number().optional().nullable(),
+  valueWeight: z.number().optional().nullable(),
+  rarity: z.string().optional().nullable(),
+  damages: z.string().optional().nullable(),
+  armor: z.number().int().optional().nullable(),
+  properties: z.string().optional().nullable(),
+  isRelic: z.boolean().optional().nullable(),
+  magicWeight: z.number().int().optional().nullable()
+}).strict();
+
+export const ItemUpdateManyMutationInputSchema: z.ZodType<Prisma.ItemUpdateManyMutationInput> = z.object({
+  quantity: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  weight: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  value: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  valueWeight: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  rarity: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  damages: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  armor: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  properties: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  isRelic: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  magicWeight: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+}).strict();
+
+export const ItemUncheckedUpdateManyInputSchema: z.ZodType<Prisma.ItemUncheckedUpdateManyInput> = z.object({
+  quantity: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  weight: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  value: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  valueWeight: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  rarity: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  damages: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  armor: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  properties: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  isRelic: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  magicWeight: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
 export const StringFilterSchema: z.ZodType<Prisma.StringFilter> = z.object({
@@ -2282,6 +2410,26 @@ export const StringNullableFilterSchema: z.ZodType<Prisma.StringNullableFilter> 
   isSet: z.boolean().optional()
 }).strict();
 
+export const BoolNullableFilterSchema: z.ZodType<Prisma.BoolNullableFilter> = z.object({
+  equals: z.boolean().optional().nullable(),
+  not: z.union([ z.boolean(),z.lazy(() => NestedBoolNullableFilterSchema) ]).optional().nullable(),
+  isSet: z.boolean().optional()
+}).strict();
+
+export const EnumTypeFilterSchema: z.ZodType<Prisma.EnumTypeFilter> = z.object({
+  equals: z.lazy(() => TypeSchema).optional(),
+  in: z.lazy(() => TypeSchema).array().optional(),
+  notIn: z.lazy(() => TypeSchema).array().optional(),
+  not: z.union([ z.lazy(() => TypeSchema),z.lazy(() => NestedEnumTypeFilterSchema) ]).optional(),
+}).strict();
+
+export const EnumAlignmentFilterSchema: z.ZodType<Prisma.EnumAlignmentFilter> = z.object({
+  equals: z.lazy(() => AlignmentSchema).optional(),
+  in: z.lazy(() => AlignmentSchema).array().optional(),
+  notIn: z.lazy(() => AlignmentSchema).array().optional(),
+  not: z.union([ z.lazy(() => AlignmentSchema),z.lazy(() => NestedEnumAlignmentFilterSchema) ]).optional(),
+}).strict();
+
 export const EnumCreatureSizeFilterSchema: z.ZodType<Prisma.EnumCreatureSizeFilter> = z.object({
   equals: z.lazy(() => CreatureSizeSchema).optional(),
   in: z.lazy(() => CreatureSizeSchema).array().optional(),
@@ -2324,41 +2472,158 @@ export const IntNullableFilterSchema: z.ZodType<Prisma.IntNullableFilter> = z.ob
   isSet: z.boolean().optional()
 }).strict();
 
-export const StringNullableListFilterSchema: z.ZodType<Prisma.StringNullableListFilter> = z.object({
-  equals: z.string().array().optional().nullable(),
-  has: z.string().optional().nullable(),
-  hasEvery: z.string().array().optional(),
-  hasSome: z.string().array().optional(),
-  isEmpty: z.boolean().optional()
+export const StatProfilCompositeFilterSchema: z.ZodType<Prisma.StatProfilCompositeFilter> = z.object({
+  equals: z.lazy(() => StatProfilObjectEqualityInputSchema).optional(),
+  is: z.lazy(() => StatProfilWhereInputSchema).optional(),
+  isNot: z.lazy(() => StatProfilWhereInputSchema).optional()
 }).strict();
 
-export const StatProfilNullableScalarRelationFilterSchema: z.ZodType<Prisma.StatProfilNullableScalarRelationFilter> = z.object({
-  is: z.lazy(() => StatProfilWhereInputSchema).optional().nullable(),
-  isNot: z.lazy(() => StatProfilWhereInputSchema).optional().nullable()
+export const StatProfilObjectEqualityInputSchema: z.ZodType<Prisma.StatProfilObjectEqualityInput> = z.object({
+  CEL: z.number(),
+  AGI: z.number(),
+  DEX: z.number(),
+  STR: z.number(),
+  END: z.number(),
+  VIT: z.number(),
+  WIL: z.number(),
+  INS: z.number(),
+  SEN: z.number(),
+  CHA: z.number(),
+  SOC: z.number(),
+  ERU: z.number()
 }).strict();
 
-export const ActionListNullableScalarRelationFilterSchema: z.ZodType<Prisma.ActionListNullableScalarRelationFilter> = z.object({
-  is: z.lazy(() => ActionListWhereInputSchema).optional().nullable(),
-  isNot: z.lazy(() => ActionListWhereInputSchema).optional().nullable()
+export const CreatureItemCompositeListFilterSchema: z.ZodType<Prisma.CreatureItemCompositeListFilter> = z.object({
+  equals: z.lazy(() => CreatureItemObjectEqualityInputSchema).array().optional(),
+  every: z.lazy(() => CreatureItemWhereInputSchema).optional(),
+  some: z.lazy(() => CreatureItemWhereInputSchema).optional(),
+  none: z.lazy(() => CreatureItemWhereInputSchema).optional(),
+  isEmpty: z.boolean().optional(),
+  isSet: z.boolean().optional()
 }).strict();
 
-export const CreatureAttributeListRelationFilterSchema: z.ZodType<Prisma.CreatureAttributeListRelationFilter> = z.object({
+export const CreatureItemObjectEqualityInputSchema: z.ZodType<Prisma.CreatureItemObjectEqualityInput> = z.object({
+  name: z.string(),
+  quantity: z.number().optional().nullable(),
+  description: z.string().optional().nullable(),
+  weight: z.number().optional().nullable(),
+  value: z.number().optional().nullable(),
+  valueWeight: z.number().optional().nullable(),
+  rarity: z.string().optional().nullable(),
+  damages: z.string().optional().nullable(),
+  armor: z.number().optional().nullable(),
+  properties: z.string().optional().nullable(),
+  isRelic: z.boolean().optional().nullable(),
+  magicWeight: z.number().optional().nullable()
+}).strict();
+
+export const CreatureComponentCompositeListFilterSchema: z.ZodType<Prisma.CreatureComponentCompositeListFilter> = z.object({
+  equals: z.lazy(() => CreatureComponentObjectEqualityInputSchema).array().optional(),
+  every: z.lazy(() => CreatureComponentWhereInputSchema).optional(),
+  some: z.lazy(() => CreatureComponentWhereInputSchema).optional(),
+  none: z.lazy(() => CreatureComponentWhereInputSchema).optional(),
+  isEmpty: z.boolean().optional(),
+  isSet: z.boolean().optional()
+}).strict();
+
+export const CreatureComponentObjectEqualityInputSchema: z.ZodType<Prisma.CreatureComponentObjectEqualityInput> = z.object({
+  name: z.string(),
+  quantity: z.number().optional().nullable(),
+  description: z.string().optional().nullable(),
+  weight: z.number().optional().nullable(),
+  value: z.number().optional().nullable(),
+  valueWeight: z.number().optional().nullable(),
+  rarity: z.string().optional().nullable(),
+  uses: z.string().optional().nullable()
+}).strict();
+
+export const ActionListCompositeFilterSchema: z.ZodType<Prisma.ActionListCompositeFilter> = z.object({
+  equals: z.lazy(() => ActionListObjectEqualityInputSchema).optional(),
+  is: z.lazy(() => ActionListWhereInputSchema).optional(),
+  isNot: z.lazy(() => ActionListWhereInputSchema).optional()
+}).strict();
+
+export const ActionListObjectEqualityInputSchema: z.ZodType<Prisma.ActionListObjectEqualityInput> = z.object({
+  main: z.number(),
+  limited: z.number().optional().nullable(),
+  free: z.number().optional().nullable(),
+  travel: z.number().optional().nullable(),
+  epic: z.number()
+}).strict();
+
+export const CreatureAttributeCompositeListFilterSchema: z.ZodType<Prisma.CreatureAttributeCompositeListFilter> = z.object({
+  equals: z.lazy(() => CreatureAttributeObjectEqualityInputSchema).array().optional(),
   every: z.lazy(() => CreatureAttributeWhereInputSchema).optional(),
   some: z.lazy(() => CreatureAttributeWhereInputSchema).optional(),
-  none: z.lazy(() => CreatureAttributeWhereInputSchema).optional()
+  none: z.lazy(() => CreatureAttributeWhereInputSchema).optional(),
+  isEmpty: z.boolean().optional(),
+  isSet: z.boolean().optional()
 }).strict();
 
-export const CreatureActionsListRelationFilterSchema: z.ZodType<Prisma.CreatureActionsListRelationFilter> = z.object({
-  every: z.lazy(() => CreatureActionsWhereInputSchema).optional(),
-  some: z.lazy(() => CreatureActionsWhereInputSchema).optional(),
-  none: z.lazy(() => CreatureActionsWhereInputSchema).optional()
+export const CreatureAttributeObjectEqualityInputSchema: z.ZodType<Prisma.CreatureAttributeObjectEqualityInput> = z.object({
+  name: z.string(),
+  flavor: z.string().optional().nullable(),
+  description: z.string().optional().nullable()
 }).strict();
 
-export const CreatureAttributeOrderByRelationAggregateInputSchema: z.ZodType<Prisma.CreatureAttributeOrderByRelationAggregateInput> = z.object({
+export const CreatureActionCompositeListFilterSchema: z.ZodType<Prisma.CreatureActionCompositeListFilter> = z.object({
+  equals: z.lazy(() => CreatureActionObjectEqualityInputSchema).array().optional(),
+  every: z.lazy(() => CreatureActionWhereInputSchema).optional(),
+  some: z.lazy(() => CreatureActionWhereInputSchema).optional(),
+  none: z.lazy(() => CreatureActionWhereInputSchema).optional(),
+  isEmpty: z.boolean().optional(),
+  isSet: z.boolean().optional()
+}).strict();
+
+export const CreatureActionObjectEqualityInputSchema: z.ZodType<Prisma.CreatureActionObjectEqualityInput> = z.object({
+  name: z.string(),
+  action: z.lazy(() => ActionTypeSchema),
+  type: z.string(),
+  flavor: z.string().optional().nullable(),
+  description: z.string().optional().nullable(),
+  damages: z.string().optional().nullable(),
+  effects: z.string().optional().nullable(),
+  heal: z.string().optional().nullable(),
+  target: z.string().optional().nullable(),
+  range: z.string().optional().nullable()
+}).strict();
+
+export const StatProfilOrderByInputSchema: z.ZodType<Prisma.StatProfilOrderByInput> = z.object({
+  CEL: z.lazy(() => SortOrderSchema).optional(),
+  AGI: z.lazy(() => SortOrderSchema).optional(),
+  DEX: z.lazy(() => SortOrderSchema).optional(),
+  STR: z.lazy(() => SortOrderSchema).optional(),
+  END: z.lazy(() => SortOrderSchema).optional(),
+  VIT: z.lazy(() => SortOrderSchema).optional(),
+  WIL: z.lazy(() => SortOrderSchema).optional(),
+  INS: z.lazy(() => SortOrderSchema).optional(),
+  SEN: z.lazy(() => SortOrderSchema).optional(),
+  CHA: z.lazy(() => SortOrderSchema).optional(),
+  SOC: z.lazy(() => SortOrderSchema).optional(),
+  ERU: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
+export const CreatureItemOrderByCompositeAggregateInputSchema: z.ZodType<Prisma.CreatureItemOrderByCompositeAggregateInput> = z.object({
   _count: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
-export const CreatureActionsOrderByRelationAggregateInputSchema: z.ZodType<Prisma.CreatureActionsOrderByRelationAggregateInput> = z.object({
+export const CreatureComponentOrderByCompositeAggregateInputSchema: z.ZodType<Prisma.CreatureComponentOrderByCompositeAggregateInput> = z.object({
+  _count: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
+export const ActionListOrderByInputSchema: z.ZodType<Prisma.ActionListOrderByInput> = z.object({
+  main: z.lazy(() => SortOrderSchema).optional(),
+  limited: z.lazy(() => SortOrderSchema).optional(),
+  free: z.lazy(() => SortOrderSchema).optional(),
+  travel: z.lazy(() => SortOrderSchema).optional(),
+  epic: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
+export const CreatureAttributeOrderByCompositeAggregateInputSchema: z.ZodType<Prisma.CreatureAttributeOrderByCompositeAggregateInput> = z.object({
+  _count: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
+export const CreatureActionOrderByCompositeAggregateInputSchema: z.ZodType<Prisma.CreatureActionOrderByCompositeAggregateInput> = z.object({
   _count: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
@@ -2367,22 +2632,27 @@ export const CreatureCountOrderByAggregateInputSchema: z.ZodType<Prisma.Creature
   fullname: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   rank: z.lazy(() => SortOrderSchema).optional(),
+  isBoss: z.lazy(() => SortOrderSchema).optional(),
   type: z.lazy(() => SortOrderSchema).optional(),
   subtype: z.lazy(() => SortOrderSchema).optional(),
+  alignment: z.lazy(() => SortOrderSchema).optional(),
   size: z.lazy(() => SortOrderSchema).optional(),
-  createdAd: z.lazy(() => SortOrderSchema).optional(),
+  createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional(),
   level: z.lazy(() => SortOrderSchema).optional(),
   attack: z.lazy(() => SortOrderSchema).optional(),
+  attackBonus: z.lazy(() => SortOrderSchema).optional(),
   defense: z.lazy(() => SortOrderSchema).optional(),
+  defenseBonus: z.lazy(() => SortOrderSchema).optional(),
   ranged: z.lazy(() => SortOrderSchema).optional(),
+  rangedBonus: z.lazy(() => SortOrderSchema).optional(),
   health: z.lazy(() => SortOrderSchema).optional(),
   armor: z.lazy(() => SortOrderSchema).optional(),
   perception: z.lazy(() => SortOrderSchema).optional(),
+  perceptionBonus: z.lazy(() => SortOrderSchema).optional(),
   magic: z.lazy(() => SortOrderSchema).optional(),
   spirit: z.lazy(() => SortOrderSchema).optional(),
-  loot: z.lazy(() => SortOrderSchema).optional(),
-  objects: z.lazy(() => SortOrderSchema).optional(),
+  glory: z.lazy(() => SortOrderSchema).optional(),
   flavor: z.lazy(() => SortOrderSchema).optional(),
   description: z.lazy(() => SortOrderSchema).optional()
 }).strict();
@@ -2390,13 +2660,18 @@ export const CreatureCountOrderByAggregateInputSchema: z.ZodType<Prisma.Creature
 export const CreatureAvgOrderByAggregateInputSchema: z.ZodType<Prisma.CreatureAvgOrderByAggregateInput> = z.object({
   level: z.lazy(() => SortOrderSchema).optional(),
   attack: z.lazy(() => SortOrderSchema).optional(),
+  attackBonus: z.lazy(() => SortOrderSchema).optional(),
   defense: z.lazy(() => SortOrderSchema).optional(),
+  defenseBonus: z.lazy(() => SortOrderSchema).optional(),
   ranged: z.lazy(() => SortOrderSchema).optional(),
+  rangedBonus: z.lazy(() => SortOrderSchema).optional(),
   health: z.lazy(() => SortOrderSchema).optional(),
   armor: z.lazy(() => SortOrderSchema).optional(),
   perception: z.lazy(() => SortOrderSchema).optional(),
+  perceptionBonus: z.lazy(() => SortOrderSchema).optional(),
   magic: z.lazy(() => SortOrderSchema).optional(),
-  spirit: z.lazy(() => SortOrderSchema).optional()
+  spirit: z.lazy(() => SortOrderSchema).optional(),
+  glory: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const CreatureMaxOrderByAggregateInputSchema: z.ZodType<Prisma.CreatureMaxOrderByAggregateInput> = z.object({
@@ -2404,20 +2679,27 @@ export const CreatureMaxOrderByAggregateInputSchema: z.ZodType<Prisma.CreatureMa
   fullname: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   rank: z.lazy(() => SortOrderSchema).optional(),
+  isBoss: z.lazy(() => SortOrderSchema).optional(),
   type: z.lazy(() => SortOrderSchema).optional(),
   subtype: z.lazy(() => SortOrderSchema).optional(),
+  alignment: z.lazy(() => SortOrderSchema).optional(),
   size: z.lazy(() => SortOrderSchema).optional(),
-  createdAd: z.lazy(() => SortOrderSchema).optional(),
+  createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional(),
   level: z.lazy(() => SortOrderSchema).optional(),
   attack: z.lazy(() => SortOrderSchema).optional(),
+  attackBonus: z.lazy(() => SortOrderSchema).optional(),
   defense: z.lazy(() => SortOrderSchema).optional(),
+  defenseBonus: z.lazy(() => SortOrderSchema).optional(),
   ranged: z.lazy(() => SortOrderSchema).optional(),
+  rangedBonus: z.lazy(() => SortOrderSchema).optional(),
   health: z.lazy(() => SortOrderSchema).optional(),
   armor: z.lazy(() => SortOrderSchema).optional(),
   perception: z.lazy(() => SortOrderSchema).optional(),
+  perceptionBonus: z.lazy(() => SortOrderSchema).optional(),
   magic: z.lazy(() => SortOrderSchema).optional(),
   spirit: z.lazy(() => SortOrderSchema).optional(),
+  glory: z.lazy(() => SortOrderSchema).optional(),
   flavor: z.lazy(() => SortOrderSchema).optional(),
   description: z.lazy(() => SortOrderSchema).optional()
 }).strict();
@@ -2427,20 +2709,27 @@ export const CreatureMinOrderByAggregateInputSchema: z.ZodType<Prisma.CreatureMi
   fullname: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   rank: z.lazy(() => SortOrderSchema).optional(),
+  isBoss: z.lazy(() => SortOrderSchema).optional(),
   type: z.lazy(() => SortOrderSchema).optional(),
   subtype: z.lazy(() => SortOrderSchema).optional(),
+  alignment: z.lazy(() => SortOrderSchema).optional(),
   size: z.lazy(() => SortOrderSchema).optional(),
-  createdAd: z.lazy(() => SortOrderSchema).optional(),
+  createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional(),
   level: z.lazy(() => SortOrderSchema).optional(),
   attack: z.lazy(() => SortOrderSchema).optional(),
+  attackBonus: z.lazy(() => SortOrderSchema).optional(),
   defense: z.lazy(() => SortOrderSchema).optional(),
+  defenseBonus: z.lazy(() => SortOrderSchema).optional(),
   ranged: z.lazy(() => SortOrderSchema).optional(),
+  rangedBonus: z.lazy(() => SortOrderSchema).optional(),
   health: z.lazy(() => SortOrderSchema).optional(),
   armor: z.lazy(() => SortOrderSchema).optional(),
   perception: z.lazy(() => SortOrderSchema).optional(),
+  perceptionBonus: z.lazy(() => SortOrderSchema).optional(),
   magic: z.lazy(() => SortOrderSchema).optional(),
   spirit: z.lazy(() => SortOrderSchema).optional(),
+  glory: z.lazy(() => SortOrderSchema).optional(),
   flavor: z.lazy(() => SortOrderSchema).optional(),
   description: z.lazy(() => SortOrderSchema).optional()
 }).strict();
@@ -2448,13 +2737,18 @@ export const CreatureMinOrderByAggregateInputSchema: z.ZodType<Prisma.CreatureMi
 export const CreatureSumOrderByAggregateInputSchema: z.ZodType<Prisma.CreatureSumOrderByAggregateInput> = z.object({
   level: z.lazy(() => SortOrderSchema).optional(),
   attack: z.lazy(() => SortOrderSchema).optional(),
+  attackBonus: z.lazy(() => SortOrderSchema).optional(),
   defense: z.lazy(() => SortOrderSchema).optional(),
+  defenseBonus: z.lazy(() => SortOrderSchema).optional(),
   ranged: z.lazy(() => SortOrderSchema).optional(),
+  rangedBonus: z.lazy(() => SortOrderSchema).optional(),
   health: z.lazy(() => SortOrderSchema).optional(),
   armor: z.lazy(() => SortOrderSchema).optional(),
   perception: z.lazy(() => SortOrderSchema).optional(),
+  perceptionBonus: z.lazy(() => SortOrderSchema).optional(),
   magic: z.lazy(() => SortOrderSchema).optional(),
-  spirit: z.lazy(() => SortOrderSchema).optional()
+  spirit: z.lazy(() => SortOrderSchema).optional(),
+  glory: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const StringNullableWithAggregatesFilterSchema: z.ZodType<Prisma.StringNullableWithAggregatesFilter> = z.object({
@@ -2474,6 +2768,35 @@ export const StringNullableWithAggregatesFilterSchema: z.ZodType<Prisma.StringNu
   _min: z.lazy(() => NestedStringNullableFilterSchema).optional(),
   _max: z.lazy(() => NestedStringNullableFilterSchema).optional(),
   isSet: z.boolean().optional()
+}).strict();
+
+export const BoolNullableWithAggregatesFilterSchema: z.ZodType<Prisma.BoolNullableWithAggregatesFilter> = z.object({
+  equals: z.boolean().optional().nullable(),
+  not: z.union([ z.boolean(),z.lazy(() => NestedBoolNullableWithAggregatesFilterSchema) ]).optional().nullable(),
+  _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
+  _min: z.lazy(() => NestedBoolNullableFilterSchema).optional(),
+  _max: z.lazy(() => NestedBoolNullableFilterSchema).optional(),
+  isSet: z.boolean().optional()
+}).strict();
+
+export const EnumTypeWithAggregatesFilterSchema: z.ZodType<Prisma.EnumTypeWithAggregatesFilter> = z.object({
+  equals: z.lazy(() => TypeSchema).optional(),
+  in: z.lazy(() => TypeSchema).array().optional(),
+  notIn: z.lazy(() => TypeSchema).array().optional(),
+  not: z.union([ z.lazy(() => TypeSchema),z.lazy(() => NestedEnumTypeWithAggregatesFilterSchema) ]).optional(),
+  _count: z.lazy(() => NestedIntFilterSchema).optional(),
+  _min: z.lazy(() => NestedEnumTypeFilterSchema).optional(),
+  _max: z.lazy(() => NestedEnumTypeFilterSchema).optional()
+}).strict();
+
+export const EnumAlignmentWithAggregatesFilterSchema: z.ZodType<Prisma.EnumAlignmentWithAggregatesFilter> = z.object({
+  equals: z.lazy(() => AlignmentSchema).optional(),
+  in: z.lazy(() => AlignmentSchema).array().optional(),
+  notIn: z.lazy(() => AlignmentSchema).array().optional(),
+  not: z.union([ z.lazy(() => AlignmentSchema),z.lazy(() => NestedEnumAlignmentWithAggregatesFilterSchema) ]).optional(),
+  _count: z.lazy(() => NestedIntFilterSchema).optional(),
+  _min: z.lazy(() => NestedEnumAlignmentFilterSchema).optional(),
+  _max: z.lazy(() => NestedEnumAlignmentFilterSchema).optional()
 }).strict();
 
 export const EnumCreatureSizeWithAggregatesFilterSchema: z.ZodType<Prisma.EnumCreatureSizeWithAggregatesFilter> = z.object({
@@ -2534,74 +2857,25 @@ export const IntNullableWithAggregatesFilterSchema: z.ZodType<Prisma.IntNullable
   isSet: z.boolean().optional()
 }).strict();
 
-export const CreatureNullableScalarRelationFilterSchema: z.ZodType<Prisma.CreatureNullableScalarRelationFilter> = z.object({
-  is: z.lazy(() => CreatureWhereInputSchema).optional().nullable(),
-  isNot: z.lazy(() => CreatureWhereInputSchema).optional().nullable()
-}).strict();
-
-export const CreatureAttributeCountOrderByAggregateInputSchema: z.ZodType<Prisma.CreatureAttributeCountOrderByAggregateInput> = z.object({
+export const AttributeCountOrderByAggregateInputSchema: z.ZodType<Prisma.AttributeCountOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   flavor: z.lazy(() => SortOrderSchema).optional(),
-  Description: z.lazy(() => SortOrderSchema).optional(),
-  creatureId: z.lazy(() => SortOrderSchema).optional()
+  description: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
-export const CreatureAttributeMaxOrderByAggregateInputSchema: z.ZodType<Prisma.CreatureAttributeMaxOrderByAggregateInput> = z.object({
+export const AttributeMaxOrderByAggregateInputSchema: z.ZodType<Prisma.AttributeMaxOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   flavor: z.lazy(() => SortOrderSchema).optional(),
-  Description: z.lazy(() => SortOrderSchema).optional(),
-  creatureId: z.lazy(() => SortOrderSchema).optional()
+  description: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
-export const CreatureAttributeMinOrderByAggregateInputSchema: z.ZodType<Prisma.CreatureAttributeMinOrderByAggregateInput> = z.object({
+export const AttributeMinOrderByAggregateInputSchema: z.ZodType<Prisma.AttributeMinOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   flavor: z.lazy(() => SortOrderSchema).optional(),
-  Description: z.lazy(() => SortOrderSchema).optional(),
-  creatureId: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
-export const ActionListCountOrderByAggregateInputSchema: z.ZodType<Prisma.ActionListCountOrderByAggregateInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional(),
-  main: z.lazy(() => SortOrderSchema).optional(),
-  limited: z.lazy(() => SortOrderSchema).optional(),
-  free: z.lazy(() => SortOrderSchema).optional(),
-  travel: z.lazy(() => SortOrderSchema).optional(),
-  creatureId: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
-export const ActionListAvgOrderByAggregateInputSchema: z.ZodType<Prisma.ActionListAvgOrderByAggregateInput> = z.object({
-  main: z.lazy(() => SortOrderSchema).optional(),
-  limited: z.lazy(() => SortOrderSchema).optional(),
-  free: z.lazy(() => SortOrderSchema).optional(),
-  travel: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
-export const ActionListMaxOrderByAggregateInputSchema: z.ZodType<Prisma.ActionListMaxOrderByAggregateInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional(),
-  main: z.lazy(() => SortOrderSchema).optional(),
-  limited: z.lazy(() => SortOrderSchema).optional(),
-  free: z.lazy(() => SortOrderSchema).optional(),
-  travel: z.lazy(() => SortOrderSchema).optional(),
-  creatureId: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
-export const ActionListMinOrderByAggregateInputSchema: z.ZodType<Prisma.ActionListMinOrderByAggregateInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional(),
-  main: z.lazy(() => SortOrderSchema).optional(),
-  limited: z.lazy(() => SortOrderSchema).optional(),
-  free: z.lazy(() => SortOrderSchema).optional(),
-  travel: z.lazy(() => SortOrderSchema).optional(),
-  creatureId: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
-export const ActionListSumOrderByAggregateInputSchema: z.ZodType<Prisma.ActionListSumOrderByAggregateInput> = z.object({
-  main: z.lazy(() => SortOrderSchema).optional(),
-  limited: z.lazy(() => SortOrderSchema).optional(),
-  free: z.lazy(() => SortOrderSchema).optional(),
-  travel: z.lazy(() => SortOrderSchema).optional()
+  description: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const EnumActionTypeFilterSchema: z.ZodType<Prisma.EnumActionTypeFilter> = z.object({
@@ -2611,9 +2885,9 @@ export const EnumActionTypeFilterSchema: z.ZodType<Prisma.EnumActionTypeFilter> 
   not: z.union([ z.lazy(() => ActionTypeSchema),z.lazy(() => NestedEnumActionTypeFilterSchema) ]).optional(),
 }).strict();
 
-export const CreatureActionsCountOrderByAggregateInputSchema: z.ZodType<Prisma.CreatureActionsCountOrderByAggregateInput> = z.object({
+export const ActionCountOrderByAggregateInputSchema: z.ZodType<Prisma.ActionCountOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
-  title: z.lazy(() => SortOrderSchema).optional(),
+  name: z.lazy(() => SortOrderSchema).optional(),
   action: z.lazy(() => SortOrderSchema).optional(),
   type: z.lazy(() => SortOrderSchema).optional(),
   flavor: z.lazy(() => SortOrderSchema).optional(),
@@ -2622,13 +2896,12 @@ export const CreatureActionsCountOrderByAggregateInputSchema: z.ZodType<Prisma.C
   effects: z.lazy(() => SortOrderSchema).optional(),
   heal: z.lazy(() => SortOrderSchema).optional(),
   target: z.lazy(() => SortOrderSchema).optional(),
-  range: z.lazy(() => SortOrderSchema).optional(),
-  creatureId: z.lazy(() => SortOrderSchema).optional()
+  range: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
-export const CreatureActionsMaxOrderByAggregateInputSchema: z.ZodType<Prisma.CreatureActionsMaxOrderByAggregateInput> = z.object({
+export const ActionMaxOrderByAggregateInputSchema: z.ZodType<Prisma.ActionMaxOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
-  title: z.lazy(() => SortOrderSchema).optional(),
+  name: z.lazy(() => SortOrderSchema).optional(),
   action: z.lazy(() => SortOrderSchema).optional(),
   type: z.lazy(() => SortOrderSchema).optional(),
   flavor: z.lazy(() => SortOrderSchema).optional(),
@@ -2637,13 +2910,12 @@ export const CreatureActionsMaxOrderByAggregateInputSchema: z.ZodType<Prisma.Cre
   effects: z.lazy(() => SortOrderSchema).optional(),
   heal: z.lazy(() => SortOrderSchema).optional(),
   target: z.lazy(() => SortOrderSchema).optional(),
-  range: z.lazy(() => SortOrderSchema).optional(),
-  creatureId: z.lazy(() => SortOrderSchema).optional()
+  range: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
-export const CreatureActionsMinOrderByAggregateInputSchema: z.ZodType<Prisma.CreatureActionsMinOrderByAggregateInput> = z.object({
+export const ActionMinOrderByAggregateInputSchema: z.ZodType<Prisma.ActionMinOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
-  title: z.lazy(() => SortOrderSchema).optional(),
+  name: z.lazy(() => SortOrderSchema).optional(),
   action: z.lazy(() => SortOrderSchema).optional(),
   type: z.lazy(() => SortOrderSchema).optional(),
   flavor: z.lazy(() => SortOrderSchema).optional(),
@@ -2652,8 +2924,7 @@ export const CreatureActionsMinOrderByAggregateInputSchema: z.ZodType<Prisma.Cre
   effects: z.lazy(() => SortOrderSchema).optional(),
   heal: z.lazy(() => SortOrderSchema).optional(),
   target: z.lazy(() => SortOrderSchema).optional(),
-  range: z.lazy(() => SortOrderSchema).optional(),
-  creatureId: z.lazy(() => SortOrderSchema).optional()
+  range: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const EnumActionTypeWithAggregatesFilterSchema: z.ZodType<Prisma.EnumActionTypeWithAggregatesFilter> = z.object({
@@ -2664,87 +2935,6 @@ export const EnumActionTypeWithAggregatesFilterSchema: z.ZodType<Prisma.EnumActi
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedEnumActionTypeFilterSchema).optional(),
   _max: z.lazy(() => NestedEnumActionTypeFilterSchema).optional()
-}).strict();
-
-export const StatProfilCountOrderByAggregateInputSchema: z.ZodType<Prisma.StatProfilCountOrderByAggregateInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional(),
-  CEL: z.lazy(() => SortOrderSchema).optional(),
-  AGI: z.lazy(() => SortOrderSchema).optional(),
-  DEX: z.lazy(() => SortOrderSchema).optional(),
-  STR: z.lazy(() => SortOrderSchema).optional(),
-  END: z.lazy(() => SortOrderSchema).optional(),
-  VIT: z.lazy(() => SortOrderSchema).optional(),
-  COU: z.lazy(() => SortOrderSchema).optional(),
-  INS: z.lazy(() => SortOrderSchema).optional(),
-  SEN: z.lazy(() => SortOrderSchema).optional(),
-  CHA: z.lazy(() => SortOrderSchema).optional(),
-  SOC: z.lazy(() => SortOrderSchema).optional(),
-  ERU: z.lazy(() => SortOrderSchema).optional(),
-  creatureId: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
-export const StatProfilAvgOrderByAggregateInputSchema: z.ZodType<Prisma.StatProfilAvgOrderByAggregateInput> = z.object({
-  CEL: z.lazy(() => SortOrderSchema).optional(),
-  AGI: z.lazy(() => SortOrderSchema).optional(),
-  DEX: z.lazy(() => SortOrderSchema).optional(),
-  STR: z.lazy(() => SortOrderSchema).optional(),
-  END: z.lazy(() => SortOrderSchema).optional(),
-  VIT: z.lazy(() => SortOrderSchema).optional(),
-  COU: z.lazy(() => SortOrderSchema).optional(),
-  INS: z.lazy(() => SortOrderSchema).optional(),
-  SEN: z.lazy(() => SortOrderSchema).optional(),
-  CHA: z.lazy(() => SortOrderSchema).optional(),
-  SOC: z.lazy(() => SortOrderSchema).optional(),
-  ERU: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
-export const StatProfilMaxOrderByAggregateInputSchema: z.ZodType<Prisma.StatProfilMaxOrderByAggregateInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional(),
-  CEL: z.lazy(() => SortOrderSchema).optional(),
-  AGI: z.lazy(() => SortOrderSchema).optional(),
-  DEX: z.lazy(() => SortOrderSchema).optional(),
-  STR: z.lazy(() => SortOrderSchema).optional(),
-  END: z.lazy(() => SortOrderSchema).optional(),
-  VIT: z.lazy(() => SortOrderSchema).optional(),
-  COU: z.lazy(() => SortOrderSchema).optional(),
-  INS: z.lazy(() => SortOrderSchema).optional(),
-  SEN: z.lazy(() => SortOrderSchema).optional(),
-  CHA: z.lazy(() => SortOrderSchema).optional(),
-  SOC: z.lazy(() => SortOrderSchema).optional(),
-  ERU: z.lazy(() => SortOrderSchema).optional(),
-  creatureId: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
-export const StatProfilMinOrderByAggregateInputSchema: z.ZodType<Prisma.StatProfilMinOrderByAggregateInput> = z.object({
-  id: z.lazy(() => SortOrderSchema).optional(),
-  CEL: z.lazy(() => SortOrderSchema).optional(),
-  AGI: z.lazy(() => SortOrderSchema).optional(),
-  DEX: z.lazy(() => SortOrderSchema).optional(),
-  STR: z.lazy(() => SortOrderSchema).optional(),
-  END: z.lazy(() => SortOrderSchema).optional(),
-  VIT: z.lazy(() => SortOrderSchema).optional(),
-  COU: z.lazy(() => SortOrderSchema).optional(),
-  INS: z.lazy(() => SortOrderSchema).optional(),
-  SEN: z.lazy(() => SortOrderSchema).optional(),
-  CHA: z.lazy(() => SortOrderSchema).optional(),
-  SOC: z.lazy(() => SortOrderSchema).optional(),
-  ERU: z.lazy(() => SortOrderSchema).optional(),
-  creatureId: z.lazy(() => SortOrderSchema).optional()
-}).strict();
-
-export const StatProfilSumOrderByAggregateInputSchema: z.ZodType<Prisma.StatProfilSumOrderByAggregateInput> = z.object({
-  CEL: z.lazy(() => SortOrderSchema).optional(),
-  AGI: z.lazy(() => SortOrderSchema).optional(),
-  DEX: z.lazy(() => SortOrderSchema).optional(),
-  STR: z.lazy(() => SortOrderSchema).optional(),
-  END: z.lazy(() => SortOrderSchema).optional(),
-  VIT: z.lazy(() => SortOrderSchema).optional(),
-  COU: z.lazy(() => SortOrderSchema).optional(),
-  INS: z.lazy(() => SortOrderSchema).optional(),
-  SEN: z.lazy(() => SortOrderSchema).optional(),
-  CHA: z.lazy(() => SortOrderSchema).optional(),
-  SOC: z.lazy(() => SortOrderSchema).optional(),
-  ERU: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const EnumSpellTypeFilterSchema: z.ZodType<Prisma.EnumSpellTypeFilter> = z.object({
@@ -2929,14 +3119,16 @@ export const ComponentCountOrderByAggregateInputSchema: z.ZodType<Prisma.Compone
   description: z.lazy(() => SortOrderSchema).optional(),
   weight: z.lazy(() => SortOrderSchema).optional(),
   value: z.lazy(() => SortOrderSchema).optional(),
+  valueWeight: z.lazy(() => SortOrderSchema).optional(),
   rarity: z.lazy(() => SortOrderSchema).optional(),
-  spells: z.lazy(() => SortOrderSchema).optional()
+  uses: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const ComponentAvgOrderByAggregateInputSchema: z.ZodType<Prisma.ComponentAvgOrderByAggregateInput> = z.object({
   quantity: z.lazy(() => SortOrderSchema).optional(),
   weight: z.lazy(() => SortOrderSchema).optional(),
-  value: z.lazy(() => SortOrderSchema).optional()
+  value: z.lazy(() => SortOrderSchema).optional(),
+  valueWeight: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const ComponentMaxOrderByAggregateInputSchema: z.ZodType<Prisma.ComponentMaxOrderByAggregateInput> = z.object({
@@ -2946,7 +3138,9 @@ export const ComponentMaxOrderByAggregateInputSchema: z.ZodType<Prisma.Component
   description: z.lazy(() => SortOrderSchema).optional(),
   weight: z.lazy(() => SortOrderSchema).optional(),
   value: z.lazy(() => SortOrderSchema).optional(),
-  rarity: z.lazy(() => SortOrderSchema).optional()
+  valueWeight: z.lazy(() => SortOrderSchema).optional(),
+  rarity: z.lazy(() => SortOrderSchema).optional(),
+  uses: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const ComponentMinOrderByAggregateInputSchema: z.ZodType<Prisma.ComponentMinOrderByAggregateInput> = z.object({
@@ -2956,13 +3150,16 @@ export const ComponentMinOrderByAggregateInputSchema: z.ZodType<Prisma.Component
   description: z.lazy(() => SortOrderSchema).optional(),
   weight: z.lazy(() => SortOrderSchema).optional(),
   value: z.lazy(() => SortOrderSchema).optional(),
-  rarity: z.lazy(() => SortOrderSchema).optional()
+  valueWeight: z.lazy(() => SortOrderSchema).optional(),
+  rarity: z.lazy(() => SortOrderSchema).optional(),
+  uses: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const ComponentSumOrderByAggregateInputSchema: z.ZodType<Prisma.ComponentSumOrderByAggregateInput> = z.object({
   quantity: z.lazy(() => SortOrderSchema).optional(),
   weight: z.lazy(() => SortOrderSchema).optional(),
-  value: z.lazy(() => SortOrderSchema).optional()
+  value: z.lazy(() => SortOrderSchema).optional(),
+  valueWeight: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const FloatNullableWithAggregatesFilterSchema: z.ZodType<Prisma.FloatNullableWithAggregatesFilter> = z.object({
@@ -2982,6 +3179,72 @@ export const FloatNullableWithAggregatesFilterSchema: z.ZodType<Prisma.FloatNull
   isSet: z.boolean().optional()
 }).strict();
 
+export const ItemCountOrderByAggregateInputSchema: z.ZodType<Prisma.ItemCountOrderByAggregateInput> = z.object({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  quantity: z.lazy(() => SortOrderSchema).optional(),
+  name: z.lazy(() => SortOrderSchema).optional(),
+  description: z.lazy(() => SortOrderSchema).optional(),
+  weight: z.lazy(() => SortOrderSchema).optional(),
+  value: z.lazy(() => SortOrderSchema).optional(),
+  valueWeight: z.lazy(() => SortOrderSchema).optional(),
+  rarity: z.lazy(() => SortOrderSchema).optional(),
+  damages: z.lazy(() => SortOrderSchema).optional(),
+  armor: z.lazy(() => SortOrderSchema).optional(),
+  properties: z.lazy(() => SortOrderSchema).optional(),
+  isRelic: z.lazy(() => SortOrderSchema).optional(),
+  magicWeight: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
+export const ItemAvgOrderByAggregateInputSchema: z.ZodType<Prisma.ItemAvgOrderByAggregateInput> = z.object({
+  quantity: z.lazy(() => SortOrderSchema).optional(),
+  weight: z.lazy(() => SortOrderSchema).optional(),
+  value: z.lazy(() => SortOrderSchema).optional(),
+  valueWeight: z.lazy(() => SortOrderSchema).optional(),
+  armor: z.lazy(() => SortOrderSchema).optional(),
+  magicWeight: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
+export const ItemMaxOrderByAggregateInputSchema: z.ZodType<Prisma.ItemMaxOrderByAggregateInput> = z.object({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  quantity: z.lazy(() => SortOrderSchema).optional(),
+  name: z.lazy(() => SortOrderSchema).optional(),
+  description: z.lazy(() => SortOrderSchema).optional(),
+  weight: z.lazy(() => SortOrderSchema).optional(),
+  value: z.lazy(() => SortOrderSchema).optional(),
+  valueWeight: z.lazy(() => SortOrderSchema).optional(),
+  rarity: z.lazy(() => SortOrderSchema).optional(),
+  damages: z.lazy(() => SortOrderSchema).optional(),
+  armor: z.lazy(() => SortOrderSchema).optional(),
+  properties: z.lazy(() => SortOrderSchema).optional(),
+  isRelic: z.lazy(() => SortOrderSchema).optional(),
+  magicWeight: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
+export const ItemMinOrderByAggregateInputSchema: z.ZodType<Prisma.ItemMinOrderByAggregateInput> = z.object({
+  id: z.lazy(() => SortOrderSchema).optional(),
+  quantity: z.lazy(() => SortOrderSchema).optional(),
+  name: z.lazy(() => SortOrderSchema).optional(),
+  description: z.lazy(() => SortOrderSchema).optional(),
+  weight: z.lazy(() => SortOrderSchema).optional(),
+  value: z.lazy(() => SortOrderSchema).optional(),
+  valueWeight: z.lazy(() => SortOrderSchema).optional(),
+  rarity: z.lazy(() => SortOrderSchema).optional(),
+  damages: z.lazy(() => SortOrderSchema).optional(),
+  armor: z.lazy(() => SortOrderSchema).optional(),
+  properties: z.lazy(() => SortOrderSchema).optional(),
+  isRelic: z.lazy(() => SortOrderSchema).optional(),
+  magicWeight: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
+export const ItemSumOrderByAggregateInputSchema: z.ZodType<Prisma.ItemSumOrderByAggregateInput> = z.object({
+  quantity: z.lazy(() => SortOrderSchema).optional(),
+  weight: z.lazy(() => SortOrderSchema).optional(),
+  value: z.lazy(() => SortOrderSchema).optional(),
+  valueWeight: z.lazy(() => SortOrderSchema).optional(),
+  armor: z.lazy(() => SortOrderSchema).optional(),
+  magicWeight: z.lazy(() => SortOrderSchema).optional()
+}).strict();
+
 export const StringFieldUpdateOperationsInputSchema: z.ZodType<Prisma.StringFieldUpdateOperationsInput> = z.object({
   set: z.string().optional()
 }).strict();
@@ -2998,69 +3261,114 @@ export const DateTimeFieldUpdateOperationsInputSchema: z.ZodType<Prisma.DateTime
   set: z.coerce.date().optional()
 }).strict();
 
-export const CreatureCreatelootInputSchema: z.ZodType<Prisma.CreatureCreatelootInput> = z.object({
-  set: z.string().array()
+export const StatProfilCreateEnvelopeInputSchema: z.ZodType<Prisma.StatProfilCreateEnvelopeInput> = z.object({
+  set: z.lazy(() => StatProfilCreateInputSchema).optional()
 }).strict();
 
-export const CreatureCreateobjectsInputSchema: z.ZodType<Prisma.CreatureCreateobjectsInput> = z.object({
-  set: z.string().array()
+export const StatProfilCreateInputSchema: z.ZodType<Prisma.StatProfilCreateInput> = z.object({
+  CEL: z.number(),
+  AGI: z.number(),
+  DEX: z.number(),
+  STR: z.number(),
+  END: z.number(),
+  VIT: z.number(),
+  WIL: z.number(),
+  INS: z.number(),
+  SEN: z.number(),
+  CHA: z.number(),
+  SOC: z.number(),
+  ERU: z.number()
 }).strict();
 
-export const StatProfilCreateNestedOneWithoutCreatureInputSchema: z.ZodType<Prisma.StatProfilCreateNestedOneWithoutCreatureInput> = z.object({
-  create: z.union([ z.lazy(() => StatProfilCreateWithoutCreatureInputSchema),z.lazy(() => StatProfilUncheckedCreateWithoutCreatureInputSchema) ]).optional(),
-  connectOrCreate: z.lazy(() => StatProfilCreateOrConnectWithoutCreatureInputSchema).optional(),
-  connect: z.lazy(() => StatProfilWhereUniqueInputSchema).optional()
+export const CreatureItemListCreateEnvelopeInputSchema: z.ZodType<Prisma.CreatureItemListCreateEnvelopeInput> = z.object({
+  set: z.union([ z.lazy(() => CreatureItemCreateInputSchema),z.lazy(() => CreatureItemCreateInputSchema).array() ]).optional(),
 }).strict();
 
-export const ActionListCreateNestedOneWithoutCreatureInputSchema: z.ZodType<Prisma.ActionListCreateNestedOneWithoutCreatureInput> = z.object({
-  create: z.union([ z.lazy(() => ActionListCreateWithoutCreatureInputSchema),z.lazy(() => ActionListUncheckedCreateWithoutCreatureInputSchema) ]).optional(),
-  connectOrCreate: z.lazy(() => ActionListCreateOrConnectWithoutCreatureInputSchema).optional(),
-  connect: z.lazy(() => ActionListWhereUniqueInputSchema).optional()
+export const CreatureItemCreateInputSchema: z.ZodType<Prisma.CreatureItemCreateInput> = z.object({
+  name: z.string(),
+  quantity: z.number().optional().nullable(),
+  description: z.string().optional().nullable(),
+  weight: z.number().optional().nullable(),
+  value: z.number().optional().nullable(),
+  valueWeight: z.number().optional().nullable(),
+  rarity: z.string().optional().nullable(),
+  damages: z.string().optional().nullable(),
+  armor: z.number().optional().nullable(),
+  properties: z.string().optional().nullable(),
+  isRelic: z.boolean().optional().nullable(),
+  magicWeight: z.number().optional().nullable()
 }).strict();
 
-export const CreatureAttributeCreateNestedManyWithoutCreatureInputSchema: z.ZodType<Prisma.CreatureAttributeCreateNestedManyWithoutCreatureInput> = z.object({
-  create: z.union([ z.lazy(() => CreatureAttributeCreateWithoutCreatureInputSchema),z.lazy(() => CreatureAttributeCreateWithoutCreatureInputSchema).array(),z.lazy(() => CreatureAttributeUncheckedCreateWithoutCreatureInputSchema),z.lazy(() => CreatureAttributeUncheckedCreateWithoutCreatureInputSchema).array() ]).optional(),
-  connectOrCreate: z.union([ z.lazy(() => CreatureAttributeCreateOrConnectWithoutCreatureInputSchema),z.lazy(() => CreatureAttributeCreateOrConnectWithoutCreatureInputSchema).array() ]).optional(),
-  createMany: z.lazy(() => CreatureAttributeCreateManyCreatureInputEnvelopeSchema).optional(),
-  connect: z.union([ z.lazy(() => CreatureAttributeWhereUniqueInputSchema),z.lazy(() => CreatureAttributeWhereUniqueInputSchema).array() ]).optional(),
+export const CreatureComponentListCreateEnvelopeInputSchema: z.ZodType<Prisma.CreatureComponentListCreateEnvelopeInput> = z.object({
+  set: z.union([ z.lazy(() => CreatureComponentCreateInputSchema),z.lazy(() => CreatureComponentCreateInputSchema).array() ]).optional(),
 }).strict();
 
-export const CreatureActionsCreateNestedManyWithoutCreatureInputSchema: z.ZodType<Prisma.CreatureActionsCreateNestedManyWithoutCreatureInput> = z.object({
-  create: z.union([ z.lazy(() => CreatureActionsCreateWithoutCreatureInputSchema),z.lazy(() => CreatureActionsCreateWithoutCreatureInputSchema).array(),z.lazy(() => CreatureActionsUncheckedCreateWithoutCreatureInputSchema),z.lazy(() => CreatureActionsUncheckedCreateWithoutCreatureInputSchema).array() ]).optional(),
-  connectOrCreate: z.union([ z.lazy(() => CreatureActionsCreateOrConnectWithoutCreatureInputSchema),z.lazy(() => CreatureActionsCreateOrConnectWithoutCreatureInputSchema).array() ]).optional(),
-  createMany: z.lazy(() => CreatureActionsCreateManyCreatureInputEnvelopeSchema).optional(),
-  connect: z.union([ z.lazy(() => CreatureActionsWhereUniqueInputSchema),z.lazy(() => CreatureActionsWhereUniqueInputSchema).array() ]).optional(),
+export const CreatureComponentCreateInputSchema: z.ZodType<Prisma.CreatureComponentCreateInput> = z.object({
+  name: z.string(),
+  quantity: z.number().optional().nullable(),
+  description: z.string().optional().nullable(),
+  weight: z.number().optional().nullable(),
+  value: z.number().optional().nullable(),
+  valueWeight: z.number().optional().nullable(),
+  rarity: z.string().optional().nullable(),
+  uses: z.string().optional().nullable()
 }).strict();
 
-export const StatProfilUncheckedCreateNestedOneWithoutCreatureInputSchema: z.ZodType<Prisma.StatProfilUncheckedCreateNestedOneWithoutCreatureInput> = z.object({
-  create: z.union([ z.lazy(() => StatProfilCreateWithoutCreatureInputSchema),z.lazy(() => StatProfilUncheckedCreateWithoutCreatureInputSchema) ]).optional(),
-  connectOrCreate: z.lazy(() => StatProfilCreateOrConnectWithoutCreatureInputSchema).optional(),
-  connect: z.lazy(() => StatProfilWhereUniqueInputSchema).optional()
+export const ActionListCreateEnvelopeInputSchema: z.ZodType<Prisma.ActionListCreateEnvelopeInput> = z.object({
+  set: z.lazy(() => ActionListCreateInputSchema).optional()
 }).strict();
 
-export const ActionListUncheckedCreateNestedOneWithoutCreatureInputSchema: z.ZodType<Prisma.ActionListUncheckedCreateNestedOneWithoutCreatureInput> = z.object({
-  create: z.union([ z.lazy(() => ActionListCreateWithoutCreatureInputSchema),z.lazy(() => ActionListUncheckedCreateWithoutCreatureInputSchema) ]).optional(),
-  connectOrCreate: z.lazy(() => ActionListCreateOrConnectWithoutCreatureInputSchema).optional(),
-  connect: z.lazy(() => ActionListWhereUniqueInputSchema).optional()
+export const ActionListCreateInputSchema: z.ZodType<Prisma.ActionListCreateInput> = z.object({
+  main: z.number().optional(),
+  limited: z.number().optional().nullable(),
+  free: z.number().optional().nullable(),
+  travel: z.number().optional().nullable(),
+  epic: z.number().optional()
 }).strict();
 
-export const CreatureAttributeUncheckedCreateNestedManyWithoutCreatureInputSchema: z.ZodType<Prisma.CreatureAttributeUncheckedCreateNestedManyWithoutCreatureInput> = z.object({
-  create: z.union([ z.lazy(() => CreatureAttributeCreateWithoutCreatureInputSchema),z.lazy(() => CreatureAttributeCreateWithoutCreatureInputSchema).array(),z.lazy(() => CreatureAttributeUncheckedCreateWithoutCreatureInputSchema),z.lazy(() => CreatureAttributeUncheckedCreateWithoutCreatureInputSchema).array() ]).optional(),
-  connectOrCreate: z.union([ z.lazy(() => CreatureAttributeCreateOrConnectWithoutCreatureInputSchema),z.lazy(() => CreatureAttributeCreateOrConnectWithoutCreatureInputSchema).array() ]).optional(),
-  createMany: z.lazy(() => CreatureAttributeCreateManyCreatureInputEnvelopeSchema).optional(),
-  connect: z.union([ z.lazy(() => CreatureAttributeWhereUniqueInputSchema),z.lazy(() => CreatureAttributeWhereUniqueInputSchema).array() ]).optional(),
+export const CreatureAttributeListCreateEnvelopeInputSchema: z.ZodType<Prisma.CreatureAttributeListCreateEnvelopeInput> = z.object({
+  set: z.union([ z.lazy(() => CreatureAttributeCreateInputSchema),z.lazy(() => CreatureAttributeCreateInputSchema).array() ]).optional(),
 }).strict();
 
-export const CreatureActionsUncheckedCreateNestedManyWithoutCreatureInputSchema: z.ZodType<Prisma.CreatureActionsUncheckedCreateNestedManyWithoutCreatureInput> = z.object({
-  create: z.union([ z.lazy(() => CreatureActionsCreateWithoutCreatureInputSchema),z.lazy(() => CreatureActionsCreateWithoutCreatureInputSchema).array(),z.lazy(() => CreatureActionsUncheckedCreateWithoutCreatureInputSchema),z.lazy(() => CreatureActionsUncheckedCreateWithoutCreatureInputSchema).array() ]).optional(),
-  connectOrCreate: z.union([ z.lazy(() => CreatureActionsCreateOrConnectWithoutCreatureInputSchema),z.lazy(() => CreatureActionsCreateOrConnectWithoutCreatureInputSchema).array() ]).optional(),
-  createMany: z.lazy(() => CreatureActionsCreateManyCreatureInputEnvelopeSchema).optional(),
-  connect: z.union([ z.lazy(() => CreatureActionsWhereUniqueInputSchema),z.lazy(() => CreatureActionsWhereUniqueInputSchema).array() ]).optional(),
+export const CreatureAttributeCreateInputSchema: z.ZodType<Prisma.CreatureAttributeCreateInput> = z.object({
+  name: z.string(),
+  flavor: z.string().optional().nullable(),
+  description: z.string().optional().nullable()
+}).strict();
+
+export const CreatureActionListCreateEnvelopeInputSchema: z.ZodType<Prisma.CreatureActionListCreateEnvelopeInput> = z.object({
+  set: z.union([ z.lazy(() => CreatureActionCreateInputSchema),z.lazy(() => CreatureActionCreateInputSchema).array() ]).optional(),
+}).strict();
+
+export const CreatureActionCreateInputSchema: z.ZodType<Prisma.CreatureActionCreateInput> = z.object({
+  name: z.string(),
+  action: z.lazy(() => ActionTypeSchema),
+  type: z.string(),
+  flavor: z.string().optional().nullable(),
+  description: z.string().optional().nullable(),
+  damages: z.string().optional().nullable(),
+  effects: z.string().optional().nullable(),
+  heal: z.string().optional().nullable(),
+  target: z.string().optional().nullable(),
+  range: z.string().optional().nullable()
 }).strict();
 
 export const NullableStringFieldUpdateOperationsInputSchema: z.ZodType<Prisma.NullableStringFieldUpdateOperationsInput> = z.object({
   set: z.string().optional().nullable(),
   unset: z.boolean().optional()
+}).strict();
+
+export const NullableBoolFieldUpdateOperationsInputSchema: z.ZodType<Prisma.NullableBoolFieldUpdateOperationsInput> = z.object({
+  set: z.boolean().optional().nullable(),
+  unset: z.boolean().optional()
+}).strict();
+
+export const EnumTypeFieldUpdateOperationsInputSchema: z.ZodType<Prisma.EnumTypeFieldUpdateOperationsInput> = z.object({
+  set: z.lazy(() => TypeSchema).optional()
+}).strict();
+
+export const EnumAlignmentFieldUpdateOperationsInputSchema: z.ZodType<Prisma.EnumAlignmentFieldUpdateOperationsInput> = z.object({
+  set: z.lazy(() => AlignmentSchema).optional()
 }).strict();
 
 export const EnumCreatureSizeFieldUpdateOperationsInputSchema: z.ZodType<Prisma.EnumCreatureSizeFieldUpdateOperationsInput> = z.object({
@@ -3089,178 +3397,46 @@ export const NullableIntFieldUpdateOperationsInputSchema: z.ZodType<Prisma.Nulla
   unset: z.boolean().optional()
 }).strict();
 
-export const CreatureUpdatelootInputSchema: z.ZodType<Prisma.CreatureUpdatelootInput> = z.object({
-  set: z.string().array().optional(),
-  push: z.union([ z.string(),z.string().array() ]).optional(),
+export const StatProfilUpdateEnvelopeInputSchema: z.ZodType<Prisma.StatProfilUpdateEnvelopeInput> = z.object({
+  set: z.lazy(() => StatProfilCreateInputSchema).optional(),
+  update: z.lazy(() => StatProfilUpdateInputSchema).optional()
 }).strict();
 
-export const CreatureUpdateobjectsInputSchema: z.ZodType<Prisma.CreatureUpdateobjectsInput> = z.object({
-  set: z.string().array().optional(),
-  push: z.union([ z.string(),z.string().array() ]).optional(),
+export const CreatureItemListUpdateEnvelopeInputSchema: z.ZodType<Prisma.CreatureItemListUpdateEnvelopeInput> = z.object({
+  set: z.union([ z.lazy(() => CreatureItemCreateInputSchema),z.lazy(() => CreatureItemCreateInputSchema).array() ]).optional(),
+  push: z.union([ z.lazy(() => CreatureItemCreateInputSchema),z.lazy(() => CreatureItemCreateInputSchema).array() ]).optional(),
+  updateMany: z.lazy(() => CreatureItemUpdateManyInputSchema).optional(),
+  deleteMany: z.lazy(() => CreatureItemDeleteManyInputSchema).optional()
 }).strict();
 
-export const StatProfilUpdateOneWithoutCreatureNestedInputSchema: z.ZodType<Prisma.StatProfilUpdateOneWithoutCreatureNestedInput> = z.object({
-  create: z.union([ z.lazy(() => StatProfilCreateWithoutCreatureInputSchema),z.lazy(() => StatProfilUncheckedCreateWithoutCreatureInputSchema) ]).optional(),
-  connectOrCreate: z.lazy(() => StatProfilCreateOrConnectWithoutCreatureInputSchema).optional(),
-  upsert: z.lazy(() => StatProfilUpsertWithoutCreatureInputSchema).optional(),
-  disconnect: z.union([ z.boolean(),z.lazy(() => StatProfilWhereInputSchema) ]).optional(),
-  delete: z.union([ z.boolean(),z.lazy(() => StatProfilWhereInputSchema) ]).optional(),
-  connect: z.lazy(() => StatProfilWhereUniqueInputSchema).optional(),
-  update: z.union([ z.lazy(() => StatProfilUpdateToOneWithWhereWithoutCreatureInputSchema),z.lazy(() => StatProfilUpdateWithoutCreatureInputSchema),z.lazy(() => StatProfilUncheckedUpdateWithoutCreatureInputSchema) ]).optional(),
+export const CreatureComponentListUpdateEnvelopeInputSchema: z.ZodType<Prisma.CreatureComponentListUpdateEnvelopeInput> = z.object({
+  set: z.union([ z.lazy(() => CreatureComponentCreateInputSchema),z.lazy(() => CreatureComponentCreateInputSchema).array() ]).optional(),
+  push: z.union([ z.lazy(() => CreatureComponentCreateInputSchema),z.lazy(() => CreatureComponentCreateInputSchema).array() ]).optional(),
+  updateMany: z.lazy(() => CreatureComponentUpdateManyInputSchema).optional(),
+  deleteMany: z.lazy(() => CreatureComponentDeleteManyInputSchema).optional()
 }).strict();
 
-export const ActionListUpdateOneWithoutCreatureNestedInputSchema: z.ZodType<Prisma.ActionListUpdateOneWithoutCreatureNestedInput> = z.object({
-  create: z.union([ z.lazy(() => ActionListCreateWithoutCreatureInputSchema),z.lazy(() => ActionListUncheckedCreateWithoutCreatureInputSchema) ]).optional(),
-  connectOrCreate: z.lazy(() => ActionListCreateOrConnectWithoutCreatureInputSchema).optional(),
-  upsert: z.lazy(() => ActionListUpsertWithoutCreatureInputSchema).optional(),
-  disconnect: z.union([ z.boolean(),z.lazy(() => ActionListWhereInputSchema) ]).optional(),
-  delete: z.union([ z.boolean(),z.lazy(() => ActionListWhereInputSchema) ]).optional(),
-  connect: z.lazy(() => ActionListWhereUniqueInputSchema).optional(),
-  update: z.union([ z.lazy(() => ActionListUpdateToOneWithWhereWithoutCreatureInputSchema),z.lazy(() => ActionListUpdateWithoutCreatureInputSchema),z.lazy(() => ActionListUncheckedUpdateWithoutCreatureInputSchema) ]).optional(),
+export const ActionListUpdateEnvelopeInputSchema: z.ZodType<Prisma.ActionListUpdateEnvelopeInput> = z.object({
+  set: z.lazy(() => ActionListCreateInputSchema).optional(),
+  update: z.lazy(() => ActionListUpdateInputSchema).optional()
 }).strict();
 
-export const CreatureAttributeUpdateManyWithoutCreatureNestedInputSchema: z.ZodType<Prisma.CreatureAttributeUpdateManyWithoutCreatureNestedInput> = z.object({
-  create: z.union([ z.lazy(() => CreatureAttributeCreateWithoutCreatureInputSchema),z.lazy(() => CreatureAttributeCreateWithoutCreatureInputSchema).array(),z.lazy(() => CreatureAttributeUncheckedCreateWithoutCreatureInputSchema),z.lazy(() => CreatureAttributeUncheckedCreateWithoutCreatureInputSchema).array() ]).optional(),
-  connectOrCreate: z.union([ z.lazy(() => CreatureAttributeCreateOrConnectWithoutCreatureInputSchema),z.lazy(() => CreatureAttributeCreateOrConnectWithoutCreatureInputSchema).array() ]).optional(),
-  upsert: z.union([ z.lazy(() => CreatureAttributeUpsertWithWhereUniqueWithoutCreatureInputSchema),z.lazy(() => CreatureAttributeUpsertWithWhereUniqueWithoutCreatureInputSchema).array() ]).optional(),
-  createMany: z.lazy(() => CreatureAttributeCreateManyCreatureInputEnvelopeSchema).optional(),
-  set: z.union([ z.lazy(() => CreatureAttributeWhereUniqueInputSchema),z.lazy(() => CreatureAttributeWhereUniqueInputSchema).array() ]).optional(),
-  disconnect: z.union([ z.lazy(() => CreatureAttributeWhereUniqueInputSchema),z.lazy(() => CreatureAttributeWhereUniqueInputSchema).array() ]).optional(),
-  delete: z.union([ z.lazy(() => CreatureAttributeWhereUniqueInputSchema),z.lazy(() => CreatureAttributeWhereUniqueInputSchema).array() ]).optional(),
-  connect: z.union([ z.lazy(() => CreatureAttributeWhereUniqueInputSchema),z.lazy(() => CreatureAttributeWhereUniqueInputSchema).array() ]).optional(),
-  update: z.union([ z.lazy(() => CreatureAttributeUpdateWithWhereUniqueWithoutCreatureInputSchema),z.lazy(() => CreatureAttributeUpdateWithWhereUniqueWithoutCreatureInputSchema).array() ]).optional(),
-  updateMany: z.union([ z.lazy(() => CreatureAttributeUpdateManyWithWhereWithoutCreatureInputSchema),z.lazy(() => CreatureAttributeUpdateManyWithWhereWithoutCreatureInputSchema).array() ]).optional(),
-  deleteMany: z.union([ z.lazy(() => CreatureAttributeScalarWhereInputSchema),z.lazy(() => CreatureAttributeScalarWhereInputSchema).array() ]).optional(),
+export const CreatureAttributeListUpdateEnvelopeInputSchema: z.ZodType<Prisma.CreatureAttributeListUpdateEnvelopeInput> = z.object({
+  set: z.union([ z.lazy(() => CreatureAttributeCreateInputSchema),z.lazy(() => CreatureAttributeCreateInputSchema).array() ]).optional(),
+  push: z.union([ z.lazy(() => CreatureAttributeCreateInputSchema),z.lazy(() => CreatureAttributeCreateInputSchema).array() ]).optional(),
+  updateMany: z.lazy(() => CreatureAttributeUpdateManyInputSchema).optional(),
+  deleteMany: z.lazy(() => CreatureAttributeDeleteManyInputSchema).optional()
 }).strict();
 
-export const CreatureActionsUpdateManyWithoutCreatureNestedInputSchema: z.ZodType<Prisma.CreatureActionsUpdateManyWithoutCreatureNestedInput> = z.object({
-  create: z.union([ z.lazy(() => CreatureActionsCreateWithoutCreatureInputSchema),z.lazy(() => CreatureActionsCreateWithoutCreatureInputSchema).array(),z.lazy(() => CreatureActionsUncheckedCreateWithoutCreatureInputSchema),z.lazy(() => CreatureActionsUncheckedCreateWithoutCreatureInputSchema).array() ]).optional(),
-  connectOrCreate: z.union([ z.lazy(() => CreatureActionsCreateOrConnectWithoutCreatureInputSchema),z.lazy(() => CreatureActionsCreateOrConnectWithoutCreatureInputSchema).array() ]).optional(),
-  upsert: z.union([ z.lazy(() => CreatureActionsUpsertWithWhereUniqueWithoutCreatureInputSchema),z.lazy(() => CreatureActionsUpsertWithWhereUniqueWithoutCreatureInputSchema).array() ]).optional(),
-  createMany: z.lazy(() => CreatureActionsCreateManyCreatureInputEnvelopeSchema).optional(),
-  set: z.union([ z.lazy(() => CreatureActionsWhereUniqueInputSchema),z.lazy(() => CreatureActionsWhereUniqueInputSchema).array() ]).optional(),
-  disconnect: z.union([ z.lazy(() => CreatureActionsWhereUniqueInputSchema),z.lazy(() => CreatureActionsWhereUniqueInputSchema).array() ]).optional(),
-  delete: z.union([ z.lazy(() => CreatureActionsWhereUniqueInputSchema),z.lazy(() => CreatureActionsWhereUniqueInputSchema).array() ]).optional(),
-  connect: z.union([ z.lazy(() => CreatureActionsWhereUniqueInputSchema),z.lazy(() => CreatureActionsWhereUniqueInputSchema).array() ]).optional(),
-  update: z.union([ z.lazy(() => CreatureActionsUpdateWithWhereUniqueWithoutCreatureInputSchema),z.lazy(() => CreatureActionsUpdateWithWhereUniqueWithoutCreatureInputSchema).array() ]).optional(),
-  updateMany: z.union([ z.lazy(() => CreatureActionsUpdateManyWithWhereWithoutCreatureInputSchema),z.lazy(() => CreatureActionsUpdateManyWithWhereWithoutCreatureInputSchema).array() ]).optional(),
-  deleteMany: z.union([ z.lazy(() => CreatureActionsScalarWhereInputSchema),z.lazy(() => CreatureActionsScalarWhereInputSchema).array() ]).optional(),
-}).strict();
-
-export const StatProfilUncheckedUpdateOneWithoutCreatureNestedInputSchema: z.ZodType<Prisma.StatProfilUncheckedUpdateOneWithoutCreatureNestedInput> = z.object({
-  create: z.union([ z.lazy(() => StatProfilCreateWithoutCreatureInputSchema),z.lazy(() => StatProfilUncheckedCreateWithoutCreatureInputSchema) ]).optional(),
-  connectOrCreate: z.lazy(() => StatProfilCreateOrConnectWithoutCreatureInputSchema).optional(),
-  upsert: z.lazy(() => StatProfilUpsertWithoutCreatureInputSchema).optional(),
-  disconnect: z.union([ z.boolean(),z.lazy(() => StatProfilWhereInputSchema) ]).optional(),
-  delete: z.union([ z.boolean(),z.lazy(() => StatProfilWhereInputSchema) ]).optional(),
-  connect: z.lazy(() => StatProfilWhereUniqueInputSchema).optional(),
-  update: z.union([ z.lazy(() => StatProfilUpdateToOneWithWhereWithoutCreatureInputSchema),z.lazy(() => StatProfilUpdateWithoutCreatureInputSchema),z.lazy(() => StatProfilUncheckedUpdateWithoutCreatureInputSchema) ]).optional(),
-}).strict();
-
-export const ActionListUncheckedUpdateOneWithoutCreatureNestedInputSchema: z.ZodType<Prisma.ActionListUncheckedUpdateOneWithoutCreatureNestedInput> = z.object({
-  create: z.union([ z.lazy(() => ActionListCreateWithoutCreatureInputSchema),z.lazy(() => ActionListUncheckedCreateWithoutCreatureInputSchema) ]).optional(),
-  connectOrCreate: z.lazy(() => ActionListCreateOrConnectWithoutCreatureInputSchema).optional(),
-  upsert: z.lazy(() => ActionListUpsertWithoutCreatureInputSchema).optional(),
-  disconnect: z.union([ z.boolean(),z.lazy(() => ActionListWhereInputSchema) ]).optional(),
-  delete: z.union([ z.boolean(),z.lazy(() => ActionListWhereInputSchema) ]).optional(),
-  connect: z.lazy(() => ActionListWhereUniqueInputSchema).optional(),
-  update: z.union([ z.lazy(() => ActionListUpdateToOneWithWhereWithoutCreatureInputSchema),z.lazy(() => ActionListUpdateWithoutCreatureInputSchema),z.lazy(() => ActionListUncheckedUpdateWithoutCreatureInputSchema) ]).optional(),
-}).strict();
-
-export const CreatureAttributeUncheckedUpdateManyWithoutCreatureNestedInputSchema: z.ZodType<Prisma.CreatureAttributeUncheckedUpdateManyWithoutCreatureNestedInput> = z.object({
-  create: z.union([ z.lazy(() => CreatureAttributeCreateWithoutCreatureInputSchema),z.lazy(() => CreatureAttributeCreateWithoutCreatureInputSchema).array(),z.lazy(() => CreatureAttributeUncheckedCreateWithoutCreatureInputSchema),z.lazy(() => CreatureAttributeUncheckedCreateWithoutCreatureInputSchema).array() ]).optional(),
-  connectOrCreate: z.union([ z.lazy(() => CreatureAttributeCreateOrConnectWithoutCreatureInputSchema),z.lazy(() => CreatureAttributeCreateOrConnectWithoutCreatureInputSchema).array() ]).optional(),
-  upsert: z.union([ z.lazy(() => CreatureAttributeUpsertWithWhereUniqueWithoutCreatureInputSchema),z.lazy(() => CreatureAttributeUpsertWithWhereUniqueWithoutCreatureInputSchema).array() ]).optional(),
-  createMany: z.lazy(() => CreatureAttributeCreateManyCreatureInputEnvelopeSchema).optional(),
-  set: z.union([ z.lazy(() => CreatureAttributeWhereUniqueInputSchema),z.lazy(() => CreatureAttributeWhereUniqueInputSchema).array() ]).optional(),
-  disconnect: z.union([ z.lazy(() => CreatureAttributeWhereUniqueInputSchema),z.lazy(() => CreatureAttributeWhereUniqueInputSchema).array() ]).optional(),
-  delete: z.union([ z.lazy(() => CreatureAttributeWhereUniqueInputSchema),z.lazy(() => CreatureAttributeWhereUniqueInputSchema).array() ]).optional(),
-  connect: z.union([ z.lazy(() => CreatureAttributeWhereUniqueInputSchema),z.lazy(() => CreatureAttributeWhereUniqueInputSchema).array() ]).optional(),
-  update: z.union([ z.lazy(() => CreatureAttributeUpdateWithWhereUniqueWithoutCreatureInputSchema),z.lazy(() => CreatureAttributeUpdateWithWhereUniqueWithoutCreatureInputSchema).array() ]).optional(),
-  updateMany: z.union([ z.lazy(() => CreatureAttributeUpdateManyWithWhereWithoutCreatureInputSchema),z.lazy(() => CreatureAttributeUpdateManyWithWhereWithoutCreatureInputSchema).array() ]).optional(),
-  deleteMany: z.union([ z.lazy(() => CreatureAttributeScalarWhereInputSchema),z.lazy(() => CreatureAttributeScalarWhereInputSchema).array() ]).optional(),
-}).strict();
-
-export const CreatureActionsUncheckedUpdateManyWithoutCreatureNestedInputSchema: z.ZodType<Prisma.CreatureActionsUncheckedUpdateManyWithoutCreatureNestedInput> = z.object({
-  create: z.union([ z.lazy(() => CreatureActionsCreateWithoutCreatureInputSchema),z.lazy(() => CreatureActionsCreateWithoutCreatureInputSchema).array(),z.lazy(() => CreatureActionsUncheckedCreateWithoutCreatureInputSchema),z.lazy(() => CreatureActionsUncheckedCreateWithoutCreatureInputSchema).array() ]).optional(),
-  connectOrCreate: z.union([ z.lazy(() => CreatureActionsCreateOrConnectWithoutCreatureInputSchema),z.lazy(() => CreatureActionsCreateOrConnectWithoutCreatureInputSchema).array() ]).optional(),
-  upsert: z.union([ z.lazy(() => CreatureActionsUpsertWithWhereUniqueWithoutCreatureInputSchema),z.lazy(() => CreatureActionsUpsertWithWhereUniqueWithoutCreatureInputSchema).array() ]).optional(),
-  createMany: z.lazy(() => CreatureActionsCreateManyCreatureInputEnvelopeSchema).optional(),
-  set: z.union([ z.lazy(() => CreatureActionsWhereUniqueInputSchema),z.lazy(() => CreatureActionsWhereUniqueInputSchema).array() ]).optional(),
-  disconnect: z.union([ z.lazy(() => CreatureActionsWhereUniqueInputSchema),z.lazy(() => CreatureActionsWhereUniqueInputSchema).array() ]).optional(),
-  delete: z.union([ z.lazy(() => CreatureActionsWhereUniqueInputSchema),z.lazy(() => CreatureActionsWhereUniqueInputSchema).array() ]).optional(),
-  connect: z.union([ z.lazy(() => CreatureActionsWhereUniqueInputSchema),z.lazy(() => CreatureActionsWhereUniqueInputSchema).array() ]).optional(),
-  update: z.union([ z.lazy(() => CreatureActionsUpdateWithWhereUniqueWithoutCreatureInputSchema),z.lazy(() => CreatureActionsUpdateWithWhereUniqueWithoutCreatureInputSchema).array() ]).optional(),
-  updateMany: z.union([ z.lazy(() => CreatureActionsUpdateManyWithWhereWithoutCreatureInputSchema),z.lazy(() => CreatureActionsUpdateManyWithWhereWithoutCreatureInputSchema).array() ]).optional(),
-  deleteMany: z.union([ z.lazy(() => CreatureActionsScalarWhereInputSchema),z.lazy(() => CreatureActionsScalarWhereInputSchema).array() ]).optional(),
-}).strict();
-
-export const CreatureCreateNestedOneWithoutAttributesInputSchema: z.ZodType<Prisma.CreatureCreateNestedOneWithoutAttributesInput> = z.object({
-  create: z.union([ z.lazy(() => CreatureCreateWithoutAttributesInputSchema),z.lazy(() => CreatureUncheckedCreateWithoutAttributesInputSchema) ]).optional(),
-  connectOrCreate: z.lazy(() => CreatureCreateOrConnectWithoutAttributesInputSchema).optional(),
-  connect: z.lazy(() => CreatureWhereUniqueInputSchema).optional()
-}).strict();
-
-export const CreatureUpdateOneWithoutAttributesNestedInputSchema: z.ZodType<Prisma.CreatureUpdateOneWithoutAttributesNestedInput> = z.object({
-  create: z.union([ z.lazy(() => CreatureCreateWithoutAttributesInputSchema),z.lazy(() => CreatureUncheckedCreateWithoutAttributesInputSchema) ]).optional(),
-  connectOrCreate: z.lazy(() => CreatureCreateOrConnectWithoutAttributesInputSchema).optional(),
-  upsert: z.lazy(() => CreatureUpsertWithoutAttributesInputSchema).optional(),
-  disconnect: z.boolean().optional(),
-  delete: z.union([ z.boolean(),z.lazy(() => CreatureWhereInputSchema) ]).optional(),
-  connect: z.lazy(() => CreatureWhereUniqueInputSchema).optional(),
-  update: z.union([ z.lazy(() => CreatureUpdateToOneWithWhereWithoutAttributesInputSchema),z.lazy(() => CreatureUpdateWithoutAttributesInputSchema),z.lazy(() => CreatureUncheckedUpdateWithoutAttributesInputSchema) ]).optional(),
-}).strict();
-
-export const CreatureCreateNestedOneWithoutActionListInputSchema: z.ZodType<Prisma.CreatureCreateNestedOneWithoutActionListInput> = z.object({
-  create: z.union([ z.lazy(() => CreatureCreateWithoutActionListInputSchema),z.lazy(() => CreatureUncheckedCreateWithoutActionListInputSchema) ]).optional(),
-  connectOrCreate: z.lazy(() => CreatureCreateOrConnectWithoutActionListInputSchema).optional(),
-  connect: z.lazy(() => CreatureWhereUniqueInputSchema).optional()
-}).strict();
-
-export const CreatureUpdateOneWithoutActionListNestedInputSchema: z.ZodType<Prisma.CreatureUpdateOneWithoutActionListNestedInput> = z.object({
-  create: z.union([ z.lazy(() => CreatureCreateWithoutActionListInputSchema),z.lazy(() => CreatureUncheckedCreateWithoutActionListInputSchema) ]).optional(),
-  connectOrCreate: z.lazy(() => CreatureCreateOrConnectWithoutActionListInputSchema).optional(),
-  upsert: z.lazy(() => CreatureUpsertWithoutActionListInputSchema).optional(),
-  disconnect: z.boolean().optional(),
-  delete: z.union([ z.boolean(),z.lazy(() => CreatureWhereInputSchema) ]).optional(),
-  connect: z.lazy(() => CreatureWhereUniqueInputSchema).optional(),
-  update: z.union([ z.lazy(() => CreatureUpdateToOneWithWhereWithoutActionListInputSchema),z.lazy(() => CreatureUpdateWithoutActionListInputSchema),z.lazy(() => CreatureUncheckedUpdateWithoutActionListInputSchema) ]).optional(),
-}).strict();
-
-export const CreatureCreateNestedOneWithoutActionsInputSchema: z.ZodType<Prisma.CreatureCreateNestedOneWithoutActionsInput> = z.object({
-  create: z.union([ z.lazy(() => CreatureCreateWithoutActionsInputSchema),z.lazy(() => CreatureUncheckedCreateWithoutActionsInputSchema) ]).optional(),
-  connectOrCreate: z.lazy(() => CreatureCreateOrConnectWithoutActionsInputSchema).optional(),
-  connect: z.lazy(() => CreatureWhereUniqueInputSchema).optional()
+export const CreatureActionListUpdateEnvelopeInputSchema: z.ZodType<Prisma.CreatureActionListUpdateEnvelopeInput> = z.object({
+  set: z.union([ z.lazy(() => CreatureActionCreateInputSchema),z.lazy(() => CreatureActionCreateInputSchema).array() ]).optional(),
+  push: z.union([ z.lazy(() => CreatureActionCreateInputSchema),z.lazy(() => CreatureActionCreateInputSchema).array() ]).optional(),
+  updateMany: z.lazy(() => CreatureActionUpdateManyInputSchema).optional(),
+  deleteMany: z.lazy(() => CreatureActionDeleteManyInputSchema).optional()
 }).strict();
 
 export const EnumActionTypeFieldUpdateOperationsInputSchema: z.ZodType<Prisma.EnumActionTypeFieldUpdateOperationsInput> = z.object({
   set: z.lazy(() => ActionTypeSchema).optional()
-}).strict();
-
-export const CreatureUpdateOneWithoutActionsNestedInputSchema: z.ZodType<Prisma.CreatureUpdateOneWithoutActionsNestedInput> = z.object({
-  create: z.union([ z.lazy(() => CreatureCreateWithoutActionsInputSchema),z.lazy(() => CreatureUncheckedCreateWithoutActionsInputSchema) ]).optional(),
-  connectOrCreate: z.lazy(() => CreatureCreateOrConnectWithoutActionsInputSchema).optional(),
-  upsert: z.lazy(() => CreatureUpsertWithoutActionsInputSchema).optional(),
-  disconnect: z.boolean().optional(),
-  delete: z.union([ z.boolean(),z.lazy(() => CreatureWhereInputSchema) ]).optional(),
-  connect: z.lazy(() => CreatureWhereUniqueInputSchema).optional(),
-  update: z.union([ z.lazy(() => CreatureUpdateToOneWithWhereWithoutActionsInputSchema),z.lazy(() => CreatureUpdateWithoutActionsInputSchema),z.lazy(() => CreatureUncheckedUpdateWithoutActionsInputSchema) ]).optional(),
-}).strict();
-
-export const CreatureCreateNestedOneWithoutStatsInputSchema: z.ZodType<Prisma.CreatureCreateNestedOneWithoutStatsInput> = z.object({
-  create: z.union([ z.lazy(() => CreatureCreateWithoutStatsInputSchema),z.lazy(() => CreatureUncheckedCreateWithoutStatsInputSchema) ]).optional(),
-  connectOrCreate: z.lazy(() => CreatureCreateOrConnectWithoutStatsInputSchema).optional(),
-  connect: z.lazy(() => CreatureWhereUniqueInputSchema).optional()
-}).strict();
-
-export const CreatureUpdateOneWithoutStatsNestedInputSchema: z.ZodType<Prisma.CreatureUpdateOneWithoutStatsNestedInput> = z.object({
-  create: z.union([ z.lazy(() => CreatureCreateWithoutStatsInputSchema),z.lazy(() => CreatureUncheckedCreateWithoutStatsInputSchema) ]).optional(),
-  connectOrCreate: z.lazy(() => CreatureCreateOrConnectWithoutStatsInputSchema).optional(),
-  upsert: z.lazy(() => CreatureUpsertWithoutStatsInputSchema).optional(),
-  disconnect: z.boolean().optional(),
-  delete: z.union([ z.boolean(),z.lazy(() => CreatureWhereInputSchema) ]).optional(),
-  connect: z.lazy(() => CreatureWhereUniqueInputSchema).optional(),
-  update: z.union([ z.lazy(() => CreatureUpdateToOneWithWhereWithoutStatsInputSchema),z.lazy(() => CreatureUpdateWithoutStatsInputSchema),z.lazy(() => CreatureUncheckedUpdateWithoutStatsInputSchema) ]).optional(),
 }).strict();
 
 export const EnumSpellTypeFieldUpdateOperationsInputSchema: z.ZodType<Prisma.EnumSpellTypeFieldUpdateOperationsInput> = z.object({
@@ -3282,10 +3458,6 @@ export const NullableEnumSpellActionFieldUpdateOperationsInputSchema: z.ZodType<
   unset: z.boolean().optional()
 }).strict();
 
-export const ComponentCreatespellsInputSchema: z.ZodType<Prisma.ComponentCreatespellsInput> = z.object({
-  set: z.string().array()
-}).strict();
-
 export const NullableFloatFieldUpdateOperationsInputSchema: z.ZodType<Prisma.NullableFloatFieldUpdateOperationsInput> = z.object({
   set: z.number().optional().nullable(),
   increment: z.number().optional(),
@@ -3293,11 +3465,6 @@ export const NullableFloatFieldUpdateOperationsInputSchema: z.ZodType<Prisma.Nul
   multiply: z.number().optional(),
   divide: z.number().optional(),
   unset: z.boolean().optional()
-}).strict();
-
-export const ComponentUpdatespellsInputSchema: z.ZodType<Prisma.ComponentUpdatespellsInput> = z.object({
-  set: z.string().array().optional(),
-  push: z.union([ z.string(),z.string().array() ]).optional(),
 }).strict();
 
 export const NestedStringFilterSchema: z.ZodType<Prisma.NestedStringFilter> = z.object({
@@ -3412,6 +3579,26 @@ export const NestedStringNullableFilterSchema: z.ZodType<Prisma.NestedStringNull
   isSet: z.boolean().optional()
 }).strict();
 
+export const NestedBoolNullableFilterSchema: z.ZodType<Prisma.NestedBoolNullableFilter> = z.object({
+  equals: z.boolean().optional().nullable(),
+  not: z.union([ z.boolean(),z.lazy(() => NestedBoolNullableFilterSchema) ]).optional().nullable(),
+  isSet: z.boolean().optional()
+}).strict();
+
+export const NestedEnumTypeFilterSchema: z.ZodType<Prisma.NestedEnumTypeFilter> = z.object({
+  equals: z.lazy(() => TypeSchema).optional(),
+  in: z.lazy(() => TypeSchema).array().optional(),
+  notIn: z.lazy(() => TypeSchema).array().optional(),
+  not: z.union([ z.lazy(() => TypeSchema),z.lazy(() => NestedEnumTypeFilterSchema) ]).optional(),
+}).strict();
+
+export const NestedEnumAlignmentFilterSchema: z.ZodType<Prisma.NestedEnumAlignmentFilter> = z.object({
+  equals: z.lazy(() => AlignmentSchema).optional(),
+  in: z.lazy(() => AlignmentSchema).array().optional(),
+  notIn: z.lazy(() => AlignmentSchema).array().optional(),
+  not: z.union([ z.lazy(() => AlignmentSchema),z.lazy(() => NestedEnumAlignmentFilterSchema) ]).optional(),
+}).strict();
+
 export const NestedEnumCreatureSizeFilterSchema: z.ZodType<Prisma.NestedEnumCreatureSizeFilter> = z.object({
   equals: z.lazy(() => CreatureSizeSchema).optional(),
   in: z.lazy(() => CreatureSizeSchema).array().optional(),
@@ -3443,6 +3630,92 @@ export const NestedIntNullableFilterSchema: z.ZodType<Prisma.NestedIntNullableFi
   isSet: z.boolean().optional()
 }).strict();
 
+export const StatProfilWhereInputSchema: z.ZodType<Prisma.StatProfilWhereInput> = z.object({
+  AND: z.union([ z.lazy(() => StatProfilWhereInputSchema),z.lazy(() => StatProfilWhereInputSchema).array() ]).optional(),
+  OR: z.lazy(() => StatProfilWhereInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => StatProfilWhereInputSchema),z.lazy(() => StatProfilWhereInputSchema).array() ]).optional(),
+  CEL: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  AGI: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  DEX: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  STR: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  END: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  VIT: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  WIL: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  INS: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  SEN: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  CHA: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  SOC: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  ERU: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+}).strict();
+
+export const CreatureItemWhereInputSchema: z.ZodType<Prisma.CreatureItemWhereInput> = z.object({
+  AND: z.union([ z.lazy(() => CreatureItemWhereInputSchema),z.lazy(() => CreatureItemWhereInputSchema).array() ]).optional(),
+  OR: z.lazy(() => CreatureItemWhereInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => CreatureItemWhereInputSchema),z.lazy(() => CreatureItemWhereInputSchema).array() ]).optional(),
+  name: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  quantity: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  description: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  weight: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  value: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  valueWeight: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  rarity: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  damages: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  armor: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
+  properties: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  isRelic: z.union([ z.lazy(() => BoolNullableFilterSchema),z.boolean() ]).optional().nullable(),
+  magicWeight: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
+}).strict();
+
+export const CreatureComponentWhereInputSchema: z.ZodType<Prisma.CreatureComponentWhereInput> = z.object({
+  AND: z.union([ z.lazy(() => CreatureComponentWhereInputSchema),z.lazy(() => CreatureComponentWhereInputSchema).array() ]).optional(),
+  OR: z.lazy(() => CreatureComponentWhereInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => CreatureComponentWhereInputSchema),z.lazy(() => CreatureComponentWhereInputSchema).array() ]).optional(),
+  name: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  quantity: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  description: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  weight: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  value: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  valueWeight: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  rarity: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  uses: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+}).strict();
+
+export const ActionListWhereInputSchema: z.ZodType<Prisma.ActionListWhereInput> = z.object({
+  AND: z.union([ z.lazy(() => ActionListWhereInputSchema),z.lazy(() => ActionListWhereInputSchema).array() ]).optional(),
+  OR: z.lazy(() => ActionListWhereInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => ActionListWhereInputSchema),z.lazy(() => ActionListWhereInputSchema).array() ]).optional(),
+  main: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  limited: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
+  free: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
+  travel: z.union([ z.lazy(() => IntNullableFilterSchema),z.number() ]).optional().nullable(),
+  epic: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+}).strict();
+
+export const CreatureAttributeWhereInputSchema: z.ZodType<Prisma.CreatureAttributeWhereInput> = z.object({
+  AND: z.union([ z.lazy(() => CreatureAttributeWhereInputSchema),z.lazy(() => CreatureAttributeWhereInputSchema).array() ]).optional(),
+  OR: z.lazy(() => CreatureAttributeWhereInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => CreatureAttributeWhereInputSchema),z.lazy(() => CreatureAttributeWhereInputSchema).array() ]).optional(),
+  name: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  flavor: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  description: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+}).strict();
+
+export const CreatureActionWhereInputSchema: z.ZodType<Prisma.CreatureActionWhereInput> = z.object({
+  AND: z.union([ z.lazy(() => CreatureActionWhereInputSchema),z.lazy(() => CreatureActionWhereInputSchema).array() ]).optional(),
+  OR: z.lazy(() => CreatureActionWhereInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => CreatureActionWhereInputSchema),z.lazy(() => CreatureActionWhereInputSchema).array() ]).optional(),
+  name: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  action: z.union([ z.lazy(() => EnumActionTypeFilterSchema),z.lazy(() => ActionTypeSchema) ]).optional(),
+  type: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  flavor: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  description: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  damages: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  effects: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  heal: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  target: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  range: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+}).strict();
+
 export const NestedStringNullableWithAggregatesFilterSchema: z.ZodType<Prisma.NestedStringNullableWithAggregatesFilter> = z.object({
   equals: z.string().optional().nullable(),
   in: z.string().array().optional().nullable(),
@@ -3459,6 +3732,35 @@ export const NestedStringNullableWithAggregatesFilterSchema: z.ZodType<Prisma.Ne
   _min: z.lazy(() => NestedStringNullableFilterSchema).optional(),
   _max: z.lazy(() => NestedStringNullableFilterSchema).optional(),
   isSet: z.boolean().optional()
+}).strict();
+
+export const NestedBoolNullableWithAggregatesFilterSchema: z.ZodType<Prisma.NestedBoolNullableWithAggregatesFilter> = z.object({
+  equals: z.boolean().optional().nullable(),
+  not: z.union([ z.boolean(),z.lazy(() => NestedBoolNullableWithAggregatesFilterSchema) ]).optional().nullable(),
+  _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
+  _min: z.lazy(() => NestedBoolNullableFilterSchema).optional(),
+  _max: z.lazy(() => NestedBoolNullableFilterSchema).optional(),
+  isSet: z.boolean().optional()
+}).strict();
+
+export const NestedEnumTypeWithAggregatesFilterSchema: z.ZodType<Prisma.NestedEnumTypeWithAggregatesFilter> = z.object({
+  equals: z.lazy(() => TypeSchema).optional(),
+  in: z.lazy(() => TypeSchema).array().optional(),
+  notIn: z.lazy(() => TypeSchema).array().optional(),
+  not: z.union([ z.lazy(() => TypeSchema),z.lazy(() => NestedEnumTypeWithAggregatesFilterSchema) ]).optional(),
+  _count: z.lazy(() => NestedIntFilterSchema).optional(),
+  _min: z.lazy(() => NestedEnumTypeFilterSchema).optional(),
+  _max: z.lazy(() => NestedEnumTypeFilterSchema).optional()
+}).strict();
+
+export const NestedEnumAlignmentWithAggregatesFilterSchema: z.ZodType<Prisma.NestedEnumAlignmentWithAggregatesFilter> = z.object({
+  equals: z.lazy(() => AlignmentSchema).optional(),
+  in: z.lazy(() => AlignmentSchema).array().optional(),
+  notIn: z.lazy(() => AlignmentSchema).array().optional(),
+  not: z.union([ z.lazy(() => AlignmentSchema),z.lazy(() => NestedEnumAlignmentWithAggregatesFilterSchema) ]).optional(),
+  _count: z.lazy(() => NestedIntFilterSchema).optional(),
+  _min: z.lazy(() => NestedEnumAlignmentFilterSchema).optional(),
+  _max: z.lazy(() => NestedEnumAlignmentFilterSchema).optional()
 }).strict();
 
 export const NestedEnumCreatureSizeWithAggregatesFilterSchema: z.ZodType<Prisma.NestedEnumCreatureSizeWithAggregatesFilter> = z.object({
@@ -3650,826 +3952,103 @@ export const NestedFloatNullableWithAggregatesFilterSchema: z.ZodType<Prisma.Nes
   isSet: z.boolean().optional()
 }).strict();
 
-export const StatProfilCreateWithoutCreatureInputSchema: z.ZodType<Prisma.StatProfilCreateWithoutCreatureInput> = z.object({
-  id: z.string().optional(),
-  CEL: z.number().int(),
-  AGI: z.number().int(),
-  DEX: z.number().int(),
-  STR: z.number().int(),
-  END: z.number().int(),
-  VIT: z.number().int(),
-  COU: z.number().int(),
-  INS: z.number().int(),
-  SEN: z.number().int(),
-  CHA: z.number().int(),
-  SOC: z.number().int(),
-  ERU: z.number().int()
+export const StatProfilUpdateInputSchema: z.ZodType<Prisma.StatProfilUpdateInput> = z.object({
+  CEL: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  AGI: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  DEX: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  STR: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  END: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  VIT: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  WIL: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  INS: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  SEN: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  CHA: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  SOC: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  ERU: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
-export const StatProfilUncheckedCreateWithoutCreatureInputSchema: z.ZodType<Prisma.StatProfilUncheckedCreateWithoutCreatureInput> = z.object({
-  id: z.string().optional(),
-  CEL: z.number().int(),
-  AGI: z.number().int(),
-  DEX: z.number().int(),
-  STR: z.number().int(),
-  END: z.number().int(),
-  VIT: z.number().int(),
-  COU: z.number().int(),
-  INS: z.number().int(),
-  SEN: z.number().int(),
-  CHA: z.number().int(),
-  SOC: z.number().int(),
-  ERU: z.number().int()
+export const CreatureItemUpdateManyInputSchema: z.ZodType<Prisma.CreatureItemUpdateManyInput> = z.object({
+  where: z.lazy(() => CreatureItemWhereInputSchema),
+  data: z.lazy(() => CreatureItemUpdateInputSchema)
 }).strict();
 
-export const StatProfilCreateOrConnectWithoutCreatureInputSchema: z.ZodType<Prisma.StatProfilCreateOrConnectWithoutCreatureInput> = z.object({
-  where: z.lazy(() => StatProfilWhereUniqueInputSchema),
-  create: z.union([ z.lazy(() => StatProfilCreateWithoutCreatureInputSchema),z.lazy(() => StatProfilUncheckedCreateWithoutCreatureInputSchema) ]),
+export const CreatureItemDeleteManyInputSchema: z.ZodType<Prisma.CreatureItemDeleteManyInput> = z.object({
+  where: z.lazy(() => CreatureItemWhereInputSchema)
 }).strict();
 
-export const ActionListCreateWithoutCreatureInputSchema: z.ZodType<Prisma.ActionListCreateWithoutCreatureInput> = z.object({
-  id: z.string().optional(),
-  main: z.number().int(),
-  limited: z.number().int(),
-  free: z.number().int(),
-  travel: z.number().int()
+export const CreatureComponentUpdateManyInputSchema: z.ZodType<Prisma.CreatureComponentUpdateManyInput> = z.object({
+  where: z.lazy(() => CreatureComponentWhereInputSchema),
+  data: z.lazy(() => CreatureComponentUpdateInputSchema)
 }).strict();
 
-export const ActionListUncheckedCreateWithoutCreatureInputSchema: z.ZodType<Prisma.ActionListUncheckedCreateWithoutCreatureInput> = z.object({
-  id: z.string().optional(),
-  main: z.number().int(),
-  limited: z.number().int(),
-  free: z.number().int(),
-  travel: z.number().int()
+export const CreatureComponentDeleteManyInputSchema: z.ZodType<Prisma.CreatureComponentDeleteManyInput> = z.object({
+  where: z.lazy(() => CreatureComponentWhereInputSchema)
 }).strict();
 
-export const ActionListCreateOrConnectWithoutCreatureInputSchema: z.ZodType<Prisma.ActionListCreateOrConnectWithoutCreatureInput> = z.object({
-  where: z.lazy(() => ActionListWhereUniqueInputSchema),
-  create: z.union([ z.lazy(() => ActionListCreateWithoutCreatureInputSchema),z.lazy(() => ActionListUncheckedCreateWithoutCreatureInputSchema) ]),
+export const ActionListUpdateInputSchema: z.ZodType<Prisma.ActionListUpdateInput> = z.object({
+  main: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  limited: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  free: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  travel: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  epic: z.union([ z.number(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
-export const CreatureAttributeCreateWithoutCreatureInputSchema: z.ZodType<Prisma.CreatureAttributeCreateWithoutCreatureInput> = z.object({
-  id: z.string().optional(),
-  name: z.string(),
-  flavor: z.string().optional().nullable(),
-  Description: z.string().optional().nullable()
+export const CreatureAttributeUpdateManyInputSchema: z.ZodType<Prisma.CreatureAttributeUpdateManyInput> = z.object({
+  where: z.lazy(() => CreatureAttributeWhereInputSchema),
+  data: z.lazy(() => CreatureAttributeUpdateInputSchema)
 }).strict();
 
-export const CreatureAttributeUncheckedCreateWithoutCreatureInputSchema: z.ZodType<Prisma.CreatureAttributeUncheckedCreateWithoutCreatureInput> = z.object({
-  id: z.string().optional(),
-  name: z.string(),
-  flavor: z.string().optional().nullable(),
-  Description: z.string().optional().nullable()
+export const CreatureAttributeDeleteManyInputSchema: z.ZodType<Prisma.CreatureAttributeDeleteManyInput> = z.object({
+  where: z.lazy(() => CreatureAttributeWhereInputSchema)
 }).strict();
 
-export const CreatureAttributeCreateOrConnectWithoutCreatureInputSchema: z.ZodType<Prisma.CreatureAttributeCreateOrConnectWithoutCreatureInput> = z.object({
-  where: z.lazy(() => CreatureAttributeWhereUniqueInputSchema),
-  create: z.union([ z.lazy(() => CreatureAttributeCreateWithoutCreatureInputSchema),z.lazy(() => CreatureAttributeUncheckedCreateWithoutCreatureInputSchema) ]),
+export const CreatureActionUpdateManyInputSchema: z.ZodType<Prisma.CreatureActionUpdateManyInput> = z.object({
+  where: z.lazy(() => CreatureActionWhereInputSchema),
+  data: z.lazy(() => CreatureActionUpdateInputSchema)
 }).strict();
 
-export const CreatureAttributeCreateManyCreatureInputEnvelopeSchema: z.ZodType<Prisma.CreatureAttributeCreateManyCreatureInputEnvelope> = z.object({
-  data: z.union([ z.lazy(() => CreatureAttributeCreateManyCreatureInputSchema),z.lazy(() => CreatureAttributeCreateManyCreatureInputSchema).array() ]),
+export const CreatureActionDeleteManyInputSchema: z.ZodType<Prisma.CreatureActionDeleteManyInput> = z.object({
+  where: z.lazy(() => CreatureActionWhereInputSchema)
 }).strict();
 
-export const CreatureActionsCreateWithoutCreatureInputSchema: z.ZodType<Prisma.CreatureActionsCreateWithoutCreatureInput> = z.object({
-  id: z.string().optional(),
-  title: z.string(),
-  action: z.lazy(() => ActionTypeSchema),
-  type: z.string(),
-  flavor: z.string().optional().nullable(),
-  description: z.string(),
-  damages: z.string().optional().nullable(),
-  effects: z.string().optional().nullable(),
-  heal: z.string().optional().nullable(),
-  target: z.string().optional().nullable(),
-  range: z.string().optional().nullable()
-}).strict();
-
-export const CreatureActionsUncheckedCreateWithoutCreatureInputSchema: z.ZodType<Prisma.CreatureActionsUncheckedCreateWithoutCreatureInput> = z.object({
-  id: z.string().optional(),
-  title: z.string(),
-  action: z.lazy(() => ActionTypeSchema),
-  type: z.string(),
-  flavor: z.string().optional().nullable(),
-  description: z.string(),
-  damages: z.string().optional().nullable(),
-  effects: z.string().optional().nullable(),
-  heal: z.string().optional().nullable(),
-  target: z.string().optional().nullable(),
-  range: z.string().optional().nullable()
-}).strict();
-
-export const CreatureActionsCreateOrConnectWithoutCreatureInputSchema: z.ZodType<Prisma.CreatureActionsCreateOrConnectWithoutCreatureInput> = z.object({
-  where: z.lazy(() => CreatureActionsWhereUniqueInputSchema),
-  create: z.union([ z.lazy(() => CreatureActionsCreateWithoutCreatureInputSchema),z.lazy(() => CreatureActionsUncheckedCreateWithoutCreatureInputSchema) ]),
-}).strict();
-
-export const CreatureActionsCreateManyCreatureInputEnvelopeSchema: z.ZodType<Prisma.CreatureActionsCreateManyCreatureInputEnvelope> = z.object({
-  data: z.union([ z.lazy(() => CreatureActionsCreateManyCreatureInputSchema),z.lazy(() => CreatureActionsCreateManyCreatureInputSchema).array() ]),
-}).strict();
-
-export const StatProfilUpsertWithoutCreatureInputSchema: z.ZodType<Prisma.StatProfilUpsertWithoutCreatureInput> = z.object({
-  update: z.union([ z.lazy(() => StatProfilUpdateWithoutCreatureInputSchema),z.lazy(() => StatProfilUncheckedUpdateWithoutCreatureInputSchema) ]),
-  create: z.union([ z.lazy(() => StatProfilCreateWithoutCreatureInputSchema),z.lazy(() => StatProfilUncheckedCreateWithoutCreatureInputSchema) ]),
-  where: z.lazy(() => StatProfilWhereInputSchema).optional()
-}).strict();
-
-export const StatProfilUpdateToOneWithWhereWithoutCreatureInputSchema: z.ZodType<Prisma.StatProfilUpdateToOneWithWhereWithoutCreatureInput> = z.object({
-  where: z.lazy(() => StatProfilWhereInputSchema).optional(),
-  data: z.union([ z.lazy(() => StatProfilUpdateWithoutCreatureInputSchema),z.lazy(() => StatProfilUncheckedUpdateWithoutCreatureInputSchema) ]),
-}).strict();
-
-export const StatProfilUpdateWithoutCreatureInputSchema: z.ZodType<Prisma.StatProfilUpdateWithoutCreatureInput> = z.object({
-  CEL: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  AGI: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  DEX: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  STR: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  END: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  VIT: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  COU: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  INS: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  SEN: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  CHA: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  SOC: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  ERU: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-}).strict();
-
-export const StatProfilUncheckedUpdateWithoutCreatureInputSchema: z.ZodType<Prisma.StatProfilUncheckedUpdateWithoutCreatureInput> = z.object({
-  CEL: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  AGI: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  DEX: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  STR: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  END: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  VIT: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  COU: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  INS: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  SEN: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  CHA: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  SOC: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  ERU: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-}).strict();
-
-export const ActionListUpsertWithoutCreatureInputSchema: z.ZodType<Prisma.ActionListUpsertWithoutCreatureInput> = z.object({
-  update: z.union([ z.lazy(() => ActionListUpdateWithoutCreatureInputSchema),z.lazy(() => ActionListUncheckedUpdateWithoutCreatureInputSchema) ]),
-  create: z.union([ z.lazy(() => ActionListCreateWithoutCreatureInputSchema),z.lazy(() => ActionListUncheckedCreateWithoutCreatureInputSchema) ]),
-  where: z.lazy(() => ActionListWhereInputSchema).optional()
-}).strict();
-
-export const ActionListUpdateToOneWithWhereWithoutCreatureInputSchema: z.ZodType<Prisma.ActionListUpdateToOneWithWhereWithoutCreatureInput> = z.object({
-  where: z.lazy(() => ActionListWhereInputSchema).optional(),
-  data: z.union([ z.lazy(() => ActionListUpdateWithoutCreatureInputSchema),z.lazy(() => ActionListUncheckedUpdateWithoutCreatureInputSchema) ]),
-}).strict();
-
-export const ActionListUpdateWithoutCreatureInputSchema: z.ZodType<Prisma.ActionListUpdateWithoutCreatureInput> = z.object({
-  main: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  limited: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  free: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  travel: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-}).strict();
-
-export const ActionListUncheckedUpdateWithoutCreatureInputSchema: z.ZodType<Prisma.ActionListUncheckedUpdateWithoutCreatureInput> = z.object({
-  main: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  limited: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  free: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  travel: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-}).strict();
-
-export const CreatureAttributeUpsertWithWhereUniqueWithoutCreatureInputSchema: z.ZodType<Prisma.CreatureAttributeUpsertWithWhereUniqueWithoutCreatureInput> = z.object({
-  where: z.lazy(() => CreatureAttributeWhereUniqueInputSchema),
-  update: z.union([ z.lazy(() => CreatureAttributeUpdateWithoutCreatureInputSchema),z.lazy(() => CreatureAttributeUncheckedUpdateWithoutCreatureInputSchema) ]),
-  create: z.union([ z.lazy(() => CreatureAttributeCreateWithoutCreatureInputSchema),z.lazy(() => CreatureAttributeUncheckedCreateWithoutCreatureInputSchema) ]),
-}).strict();
-
-export const CreatureAttributeUpdateWithWhereUniqueWithoutCreatureInputSchema: z.ZodType<Prisma.CreatureAttributeUpdateWithWhereUniqueWithoutCreatureInput> = z.object({
-  where: z.lazy(() => CreatureAttributeWhereUniqueInputSchema),
-  data: z.union([ z.lazy(() => CreatureAttributeUpdateWithoutCreatureInputSchema),z.lazy(() => CreatureAttributeUncheckedUpdateWithoutCreatureInputSchema) ]),
-}).strict();
-
-export const CreatureAttributeUpdateManyWithWhereWithoutCreatureInputSchema: z.ZodType<Prisma.CreatureAttributeUpdateManyWithWhereWithoutCreatureInput> = z.object({
-  where: z.lazy(() => CreatureAttributeScalarWhereInputSchema),
-  data: z.union([ z.lazy(() => CreatureAttributeUpdateManyMutationInputSchema),z.lazy(() => CreatureAttributeUncheckedUpdateManyWithoutCreatureInputSchema) ]),
-}).strict();
-
-export const CreatureAttributeScalarWhereInputSchema: z.ZodType<Prisma.CreatureAttributeScalarWhereInput> = z.object({
-  AND: z.union([ z.lazy(() => CreatureAttributeScalarWhereInputSchema),z.lazy(() => CreatureAttributeScalarWhereInputSchema).array() ]).optional(),
-  OR: z.lazy(() => CreatureAttributeScalarWhereInputSchema).array().optional(),
-  NOT: z.union([ z.lazy(() => CreatureAttributeScalarWhereInputSchema),z.lazy(() => CreatureAttributeScalarWhereInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
-  name: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
-  flavor: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  Description: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  creatureId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-}).strict();
-
-export const CreatureActionsUpsertWithWhereUniqueWithoutCreatureInputSchema: z.ZodType<Prisma.CreatureActionsUpsertWithWhereUniqueWithoutCreatureInput> = z.object({
-  where: z.lazy(() => CreatureActionsWhereUniqueInputSchema),
-  update: z.union([ z.lazy(() => CreatureActionsUpdateWithoutCreatureInputSchema),z.lazy(() => CreatureActionsUncheckedUpdateWithoutCreatureInputSchema) ]),
-  create: z.union([ z.lazy(() => CreatureActionsCreateWithoutCreatureInputSchema),z.lazy(() => CreatureActionsUncheckedCreateWithoutCreatureInputSchema) ]),
-}).strict();
-
-export const CreatureActionsUpdateWithWhereUniqueWithoutCreatureInputSchema: z.ZodType<Prisma.CreatureActionsUpdateWithWhereUniqueWithoutCreatureInput> = z.object({
-  where: z.lazy(() => CreatureActionsWhereUniqueInputSchema),
-  data: z.union([ z.lazy(() => CreatureActionsUpdateWithoutCreatureInputSchema),z.lazy(() => CreatureActionsUncheckedUpdateWithoutCreatureInputSchema) ]),
-}).strict();
-
-export const CreatureActionsUpdateManyWithWhereWithoutCreatureInputSchema: z.ZodType<Prisma.CreatureActionsUpdateManyWithWhereWithoutCreatureInput> = z.object({
-  where: z.lazy(() => CreatureActionsScalarWhereInputSchema),
-  data: z.union([ z.lazy(() => CreatureActionsUpdateManyMutationInputSchema),z.lazy(() => CreatureActionsUncheckedUpdateManyWithoutCreatureInputSchema) ]),
-}).strict();
-
-export const CreatureActionsScalarWhereInputSchema: z.ZodType<Prisma.CreatureActionsScalarWhereInput> = z.object({
-  AND: z.union([ z.lazy(() => CreatureActionsScalarWhereInputSchema),z.lazy(() => CreatureActionsScalarWhereInputSchema).array() ]).optional(),
-  OR: z.lazy(() => CreatureActionsScalarWhereInputSchema).array().optional(),
-  NOT: z.union([ z.lazy(() => CreatureActionsScalarWhereInputSchema),z.lazy(() => CreatureActionsScalarWhereInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
-  title: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
-  action: z.union([ z.lazy(() => EnumActionTypeFilterSchema),z.lazy(() => ActionTypeSchema) ]).optional(),
-  type: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
-  flavor: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  description: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
-  damages: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  effects: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  heal: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  target: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  range: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  creatureId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-}).strict();
-
-export const CreatureCreateWithoutAttributesInputSchema: z.ZodType<Prisma.CreatureCreateWithoutAttributesInput> = z.object({
-  id: z.string().optional(),
-  fullname: z.string(),
-  name: z.string(),
-  rank: z.string().optional().nullable(),
-  type: z.string(),
-  subtype: z.string().optional().nullable(),
-  size: z.lazy(() => CreatureSizeSchema),
-  createdAd: z.coerce.date().optional().nullable(),
-  updatedAt: z.coerce.date().optional().nullable(),
-  level: z.number().int(),
-  attack: z.number().int(),
-  defense: z.number().int(),
-  ranged: z.number().int(),
-  health: z.number().int(),
-  armor: z.number().int().optional().nullable(),
-  perception: z.number().int().optional().nullable(),
-  magic: z.number().int().optional().nullable(),
-  spirit: z.number().int().optional().nullable(),
-  loot: z.union([ z.lazy(() => CreatureCreatelootInputSchema),z.string().array() ]).optional(),
-  objects: z.union([ z.lazy(() => CreatureCreateobjectsInputSchema),z.string().array() ]).optional(),
-  flavor: z.string().optional().nullable(),
-  description: z.string().optional().nullable(),
-  stats: z.lazy(() => StatProfilCreateNestedOneWithoutCreatureInputSchema).optional(),
-  actionList: z.lazy(() => ActionListCreateNestedOneWithoutCreatureInputSchema).optional(),
-  actions: z.lazy(() => CreatureActionsCreateNestedManyWithoutCreatureInputSchema).optional()
-}).strict();
-
-export const CreatureUncheckedCreateWithoutAttributesInputSchema: z.ZodType<Prisma.CreatureUncheckedCreateWithoutAttributesInput> = z.object({
-  id: z.string().optional(),
-  fullname: z.string(),
-  name: z.string(),
-  rank: z.string().optional().nullable(),
-  type: z.string(),
-  subtype: z.string().optional().nullable(),
-  size: z.lazy(() => CreatureSizeSchema),
-  createdAd: z.coerce.date().optional().nullable(),
-  updatedAt: z.coerce.date().optional().nullable(),
-  level: z.number().int(),
-  attack: z.number().int(),
-  defense: z.number().int(),
-  ranged: z.number().int(),
-  health: z.number().int(),
-  armor: z.number().int().optional().nullable(),
-  perception: z.number().int().optional().nullable(),
-  magic: z.number().int().optional().nullable(),
-  spirit: z.number().int().optional().nullable(),
-  loot: z.union([ z.lazy(() => CreatureCreatelootInputSchema),z.string().array() ]).optional(),
-  objects: z.union([ z.lazy(() => CreatureCreateobjectsInputSchema),z.string().array() ]).optional(),
-  flavor: z.string().optional().nullable(),
-  description: z.string().optional().nullable(),
-  stats: z.lazy(() => StatProfilUncheckedCreateNestedOneWithoutCreatureInputSchema).optional(),
-  actionList: z.lazy(() => ActionListUncheckedCreateNestedOneWithoutCreatureInputSchema).optional(),
-  actions: z.lazy(() => CreatureActionsUncheckedCreateNestedManyWithoutCreatureInputSchema).optional()
-}).strict();
-
-export const CreatureCreateOrConnectWithoutAttributesInputSchema: z.ZodType<Prisma.CreatureCreateOrConnectWithoutAttributesInput> = z.object({
-  where: z.lazy(() => CreatureWhereUniqueInputSchema),
-  create: z.union([ z.lazy(() => CreatureCreateWithoutAttributesInputSchema),z.lazy(() => CreatureUncheckedCreateWithoutAttributesInputSchema) ]),
-}).strict();
-
-export const CreatureUpsertWithoutAttributesInputSchema: z.ZodType<Prisma.CreatureUpsertWithoutAttributesInput> = z.object({
-  update: z.union([ z.lazy(() => CreatureUpdateWithoutAttributesInputSchema),z.lazy(() => CreatureUncheckedUpdateWithoutAttributesInputSchema) ]),
-  create: z.union([ z.lazy(() => CreatureCreateWithoutAttributesInputSchema),z.lazy(() => CreatureUncheckedCreateWithoutAttributesInputSchema) ]),
-  where: z.lazy(() => CreatureWhereInputSchema).optional()
-}).strict();
-
-export const CreatureUpdateToOneWithWhereWithoutAttributesInputSchema: z.ZodType<Prisma.CreatureUpdateToOneWithWhereWithoutAttributesInput> = z.object({
-  where: z.lazy(() => CreatureWhereInputSchema).optional(),
-  data: z.union([ z.lazy(() => CreatureUpdateWithoutAttributesInputSchema),z.lazy(() => CreatureUncheckedUpdateWithoutAttributesInputSchema) ]),
-}).strict();
-
-export const CreatureUpdateWithoutAttributesInputSchema: z.ZodType<Prisma.CreatureUpdateWithoutAttributesInput> = z.object({
-  fullname: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+export const CreatureItemUpdateInputSchema: z.ZodType<Prisma.CreatureItemUpdateInput> = z.object({
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  rank: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  type: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  subtype: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  size: z.union([ z.lazy(() => CreatureSizeSchema),z.lazy(() => EnumCreatureSizeFieldUpdateOperationsInputSchema) ]).optional(),
-  createdAd: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  updatedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  level: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  attack: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  defense: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  ranged: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  health: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  armor: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  perception: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  magic: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  spirit: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  loot: z.union([ z.lazy(() => CreatureUpdatelootInputSchema),z.string().array() ]).optional(),
-  objects: z.union([ z.lazy(() => CreatureUpdateobjectsInputSchema),z.string().array() ]).optional(),
-  flavor: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  quantity: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  stats: z.lazy(() => StatProfilUpdateOneWithoutCreatureNestedInputSchema).optional(),
-  actionList: z.lazy(() => ActionListUpdateOneWithoutCreatureNestedInputSchema).optional(),
-  actions: z.lazy(() => CreatureActionsUpdateManyWithoutCreatureNestedInputSchema).optional()
-}).strict();
-
-export const CreatureUncheckedUpdateWithoutAttributesInputSchema: z.ZodType<Prisma.CreatureUncheckedUpdateWithoutAttributesInput> = z.object({
-  fullname: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  rank: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  type: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  subtype: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  size: z.union([ z.lazy(() => CreatureSizeSchema),z.lazy(() => EnumCreatureSizeFieldUpdateOperationsInputSchema) ]).optional(),
-  createdAd: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  updatedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  level: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  attack: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  defense: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  ranged: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  health: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  armor: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  perception: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  magic: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  spirit: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  loot: z.union([ z.lazy(() => CreatureUpdatelootInputSchema),z.string().array() ]).optional(),
-  objects: z.union([ z.lazy(() => CreatureUpdateobjectsInputSchema),z.string().array() ]).optional(),
-  flavor: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  stats: z.lazy(() => StatProfilUncheckedUpdateOneWithoutCreatureNestedInputSchema).optional(),
-  actionList: z.lazy(() => ActionListUncheckedUpdateOneWithoutCreatureNestedInputSchema).optional(),
-  actions: z.lazy(() => CreatureActionsUncheckedUpdateManyWithoutCreatureNestedInputSchema).optional()
-}).strict();
-
-export const CreatureCreateWithoutActionListInputSchema: z.ZodType<Prisma.CreatureCreateWithoutActionListInput> = z.object({
-  id: z.string().optional(),
-  fullname: z.string(),
-  name: z.string(),
-  rank: z.string().optional().nullable(),
-  type: z.string(),
-  subtype: z.string().optional().nullable(),
-  size: z.lazy(() => CreatureSizeSchema),
-  createdAd: z.coerce.date().optional().nullable(),
-  updatedAt: z.coerce.date().optional().nullable(),
-  level: z.number().int(),
-  attack: z.number().int(),
-  defense: z.number().int(),
-  ranged: z.number().int(),
-  health: z.number().int(),
-  armor: z.number().int().optional().nullable(),
-  perception: z.number().int().optional().nullable(),
-  magic: z.number().int().optional().nullable(),
-  spirit: z.number().int().optional().nullable(),
-  loot: z.union([ z.lazy(() => CreatureCreatelootInputSchema),z.string().array() ]).optional(),
-  objects: z.union([ z.lazy(() => CreatureCreateobjectsInputSchema),z.string().array() ]).optional(),
-  flavor: z.string().optional().nullable(),
-  description: z.string().optional().nullable(),
-  stats: z.lazy(() => StatProfilCreateNestedOneWithoutCreatureInputSchema).optional(),
-  attributes: z.lazy(() => CreatureAttributeCreateNestedManyWithoutCreatureInputSchema).optional(),
-  actions: z.lazy(() => CreatureActionsCreateNestedManyWithoutCreatureInputSchema).optional()
-}).strict();
-
-export const CreatureUncheckedCreateWithoutActionListInputSchema: z.ZodType<Prisma.CreatureUncheckedCreateWithoutActionListInput> = z.object({
-  id: z.string().optional(),
-  fullname: z.string(),
-  name: z.string(),
-  rank: z.string().optional().nullable(),
-  type: z.string(),
-  subtype: z.string().optional().nullable(),
-  size: z.lazy(() => CreatureSizeSchema),
-  createdAd: z.coerce.date().optional().nullable(),
-  updatedAt: z.coerce.date().optional().nullable(),
-  level: z.number().int(),
-  attack: z.number().int(),
-  defense: z.number().int(),
-  ranged: z.number().int(),
-  health: z.number().int(),
-  armor: z.number().int().optional().nullable(),
-  perception: z.number().int().optional().nullable(),
-  magic: z.number().int().optional().nullable(),
-  spirit: z.number().int().optional().nullable(),
-  loot: z.union([ z.lazy(() => CreatureCreatelootInputSchema),z.string().array() ]).optional(),
-  objects: z.union([ z.lazy(() => CreatureCreateobjectsInputSchema),z.string().array() ]).optional(),
-  flavor: z.string().optional().nullable(),
-  description: z.string().optional().nullable(),
-  stats: z.lazy(() => StatProfilUncheckedCreateNestedOneWithoutCreatureInputSchema).optional(),
-  attributes: z.lazy(() => CreatureAttributeUncheckedCreateNestedManyWithoutCreatureInputSchema).optional(),
-  actions: z.lazy(() => CreatureActionsUncheckedCreateNestedManyWithoutCreatureInputSchema).optional()
-}).strict();
-
-export const CreatureCreateOrConnectWithoutActionListInputSchema: z.ZodType<Prisma.CreatureCreateOrConnectWithoutActionListInput> = z.object({
-  where: z.lazy(() => CreatureWhereUniqueInputSchema),
-  create: z.union([ z.lazy(() => CreatureCreateWithoutActionListInputSchema),z.lazy(() => CreatureUncheckedCreateWithoutActionListInputSchema) ]),
-}).strict();
-
-export const CreatureUpsertWithoutActionListInputSchema: z.ZodType<Prisma.CreatureUpsertWithoutActionListInput> = z.object({
-  update: z.union([ z.lazy(() => CreatureUpdateWithoutActionListInputSchema),z.lazy(() => CreatureUncheckedUpdateWithoutActionListInputSchema) ]),
-  create: z.union([ z.lazy(() => CreatureCreateWithoutActionListInputSchema),z.lazy(() => CreatureUncheckedCreateWithoutActionListInputSchema) ]),
-  where: z.lazy(() => CreatureWhereInputSchema).optional()
-}).strict();
-
-export const CreatureUpdateToOneWithWhereWithoutActionListInputSchema: z.ZodType<Prisma.CreatureUpdateToOneWithWhereWithoutActionListInput> = z.object({
-  where: z.lazy(() => CreatureWhereInputSchema).optional(),
-  data: z.union([ z.lazy(() => CreatureUpdateWithoutActionListInputSchema),z.lazy(() => CreatureUncheckedUpdateWithoutActionListInputSchema) ]),
-}).strict();
-
-export const CreatureUpdateWithoutActionListInputSchema: z.ZodType<Prisma.CreatureUpdateWithoutActionListInput> = z.object({
-  fullname: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  rank: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  type: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  subtype: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  size: z.union([ z.lazy(() => CreatureSizeSchema),z.lazy(() => EnumCreatureSizeFieldUpdateOperationsInputSchema) ]).optional(),
-  createdAd: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  updatedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  level: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  attack: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  defense: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  ranged: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  health: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  armor: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  perception: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  magic: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  spirit: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  loot: z.union([ z.lazy(() => CreatureUpdatelootInputSchema),z.string().array() ]).optional(),
-  objects: z.union([ z.lazy(() => CreatureUpdateobjectsInputSchema),z.string().array() ]).optional(),
-  flavor: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  stats: z.lazy(() => StatProfilUpdateOneWithoutCreatureNestedInputSchema).optional(),
-  attributes: z.lazy(() => CreatureAttributeUpdateManyWithoutCreatureNestedInputSchema).optional(),
-  actions: z.lazy(() => CreatureActionsUpdateManyWithoutCreatureNestedInputSchema).optional()
-}).strict();
-
-export const CreatureUncheckedUpdateWithoutActionListInputSchema: z.ZodType<Prisma.CreatureUncheckedUpdateWithoutActionListInput> = z.object({
-  fullname: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  rank: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  type: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  subtype: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  size: z.union([ z.lazy(() => CreatureSizeSchema),z.lazy(() => EnumCreatureSizeFieldUpdateOperationsInputSchema) ]).optional(),
-  createdAd: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  updatedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  level: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  attack: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  defense: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  ranged: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  health: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  armor: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  perception: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  magic: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  spirit: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  loot: z.union([ z.lazy(() => CreatureUpdatelootInputSchema),z.string().array() ]).optional(),
-  objects: z.union([ z.lazy(() => CreatureUpdateobjectsInputSchema),z.string().array() ]).optional(),
-  flavor: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  stats: z.lazy(() => StatProfilUncheckedUpdateOneWithoutCreatureNestedInputSchema).optional(),
-  attributes: z.lazy(() => CreatureAttributeUncheckedUpdateManyWithoutCreatureNestedInputSchema).optional(),
-  actions: z.lazy(() => CreatureActionsUncheckedUpdateManyWithoutCreatureNestedInputSchema).optional()
-}).strict();
-
-export const CreatureCreateWithoutActionsInputSchema: z.ZodType<Prisma.CreatureCreateWithoutActionsInput> = z.object({
-  id: z.string().optional(),
-  fullname: z.string(),
-  name: z.string(),
-  rank: z.string().optional().nullable(),
-  type: z.string(),
-  subtype: z.string().optional().nullable(),
-  size: z.lazy(() => CreatureSizeSchema),
-  createdAd: z.coerce.date().optional().nullable(),
-  updatedAt: z.coerce.date().optional().nullable(),
-  level: z.number().int(),
-  attack: z.number().int(),
-  defense: z.number().int(),
-  ranged: z.number().int(),
-  health: z.number().int(),
-  armor: z.number().int().optional().nullable(),
-  perception: z.number().int().optional().nullable(),
-  magic: z.number().int().optional().nullable(),
-  spirit: z.number().int().optional().nullable(),
-  loot: z.union([ z.lazy(() => CreatureCreatelootInputSchema),z.string().array() ]).optional(),
-  objects: z.union([ z.lazy(() => CreatureCreateobjectsInputSchema),z.string().array() ]).optional(),
-  flavor: z.string().optional().nullable(),
-  description: z.string().optional().nullable(),
-  stats: z.lazy(() => StatProfilCreateNestedOneWithoutCreatureInputSchema).optional(),
-  actionList: z.lazy(() => ActionListCreateNestedOneWithoutCreatureInputSchema).optional(),
-  attributes: z.lazy(() => CreatureAttributeCreateNestedManyWithoutCreatureInputSchema).optional()
-}).strict();
-
-export const CreatureUncheckedCreateWithoutActionsInputSchema: z.ZodType<Prisma.CreatureUncheckedCreateWithoutActionsInput> = z.object({
-  id: z.string().optional(),
-  fullname: z.string(),
-  name: z.string(),
-  rank: z.string().optional().nullable(),
-  type: z.string(),
-  subtype: z.string().optional().nullable(),
-  size: z.lazy(() => CreatureSizeSchema),
-  createdAd: z.coerce.date().optional().nullable(),
-  updatedAt: z.coerce.date().optional().nullable(),
-  level: z.number().int(),
-  attack: z.number().int(),
-  defense: z.number().int(),
-  ranged: z.number().int(),
-  health: z.number().int(),
-  armor: z.number().int().optional().nullable(),
-  perception: z.number().int().optional().nullable(),
-  magic: z.number().int().optional().nullable(),
-  spirit: z.number().int().optional().nullable(),
-  loot: z.union([ z.lazy(() => CreatureCreatelootInputSchema),z.string().array() ]).optional(),
-  objects: z.union([ z.lazy(() => CreatureCreateobjectsInputSchema),z.string().array() ]).optional(),
-  flavor: z.string().optional().nullable(),
-  description: z.string().optional().nullable(),
-  stats: z.lazy(() => StatProfilUncheckedCreateNestedOneWithoutCreatureInputSchema).optional(),
-  actionList: z.lazy(() => ActionListUncheckedCreateNestedOneWithoutCreatureInputSchema).optional(),
-  attributes: z.lazy(() => CreatureAttributeUncheckedCreateNestedManyWithoutCreatureInputSchema).optional()
-}).strict();
-
-export const CreatureCreateOrConnectWithoutActionsInputSchema: z.ZodType<Prisma.CreatureCreateOrConnectWithoutActionsInput> = z.object({
-  where: z.lazy(() => CreatureWhereUniqueInputSchema),
-  create: z.union([ z.lazy(() => CreatureCreateWithoutActionsInputSchema),z.lazy(() => CreatureUncheckedCreateWithoutActionsInputSchema) ]),
-}).strict();
-
-export const CreatureUpsertWithoutActionsInputSchema: z.ZodType<Prisma.CreatureUpsertWithoutActionsInput> = z.object({
-  update: z.union([ z.lazy(() => CreatureUpdateWithoutActionsInputSchema),z.lazy(() => CreatureUncheckedUpdateWithoutActionsInputSchema) ]),
-  create: z.union([ z.lazy(() => CreatureCreateWithoutActionsInputSchema),z.lazy(() => CreatureUncheckedCreateWithoutActionsInputSchema) ]),
-  where: z.lazy(() => CreatureWhereInputSchema).optional()
-}).strict();
-
-export const CreatureUpdateToOneWithWhereWithoutActionsInputSchema: z.ZodType<Prisma.CreatureUpdateToOneWithWhereWithoutActionsInput> = z.object({
-  where: z.lazy(() => CreatureWhereInputSchema).optional(),
-  data: z.union([ z.lazy(() => CreatureUpdateWithoutActionsInputSchema),z.lazy(() => CreatureUncheckedUpdateWithoutActionsInputSchema) ]),
-}).strict();
-
-export const CreatureUpdateWithoutActionsInputSchema: z.ZodType<Prisma.CreatureUpdateWithoutActionsInput> = z.object({
-  fullname: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  rank: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  type: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  subtype: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  size: z.union([ z.lazy(() => CreatureSizeSchema),z.lazy(() => EnumCreatureSizeFieldUpdateOperationsInputSchema) ]).optional(),
-  createdAd: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  updatedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  level: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  attack: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  defense: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  ranged: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  health: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  armor: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  perception: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  magic: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  spirit: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  loot: z.union([ z.lazy(() => CreatureUpdatelootInputSchema),z.string().array() ]).optional(),
-  objects: z.union([ z.lazy(() => CreatureUpdateobjectsInputSchema),z.string().array() ]).optional(),
-  flavor: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  stats: z.lazy(() => StatProfilUpdateOneWithoutCreatureNestedInputSchema).optional(),
-  actionList: z.lazy(() => ActionListUpdateOneWithoutCreatureNestedInputSchema).optional(),
-  attributes: z.lazy(() => CreatureAttributeUpdateManyWithoutCreatureNestedInputSchema).optional()
-}).strict();
-
-export const CreatureUncheckedUpdateWithoutActionsInputSchema: z.ZodType<Prisma.CreatureUncheckedUpdateWithoutActionsInput> = z.object({
-  fullname: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  rank: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  type: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  subtype: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  size: z.union([ z.lazy(() => CreatureSizeSchema),z.lazy(() => EnumCreatureSizeFieldUpdateOperationsInputSchema) ]).optional(),
-  createdAd: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  updatedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  level: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  attack: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  defense: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  ranged: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  health: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  armor: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  perception: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  magic: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  spirit: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  loot: z.union([ z.lazy(() => CreatureUpdatelootInputSchema),z.string().array() ]).optional(),
-  objects: z.union([ z.lazy(() => CreatureUpdateobjectsInputSchema),z.string().array() ]).optional(),
-  flavor: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  stats: z.lazy(() => StatProfilUncheckedUpdateOneWithoutCreatureNestedInputSchema).optional(),
-  actionList: z.lazy(() => ActionListUncheckedUpdateOneWithoutCreatureNestedInputSchema).optional(),
-  attributes: z.lazy(() => CreatureAttributeUncheckedUpdateManyWithoutCreatureNestedInputSchema).optional()
-}).strict();
-
-export const CreatureCreateWithoutStatsInputSchema: z.ZodType<Prisma.CreatureCreateWithoutStatsInput> = z.object({
-  id: z.string().optional(),
-  fullname: z.string(),
-  name: z.string(),
-  rank: z.string().optional().nullable(),
-  type: z.string(),
-  subtype: z.string().optional().nullable(),
-  size: z.lazy(() => CreatureSizeSchema),
-  createdAd: z.coerce.date().optional().nullable(),
-  updatedAt: z.coerce.date().optional().nullable(),
-  level: z.number().int(),
-  attack: z.number().int(),
-  defense: z.number().int(),
-  ranged: z.number().int(),
-  health: z.number().int(),
-  armor: z.number().int().optional().nullable(),
-  perception: z.number().int().optional().nullable(),
-  magic: z.number().int().optional().nullable(),
-  spirit: z.number().int().optional().nullable(),
-  loot: z.union([ z.lazy(() => CreatureCreatelootInputSchema),z.string().array() ]).optional(),
-  objects: z.union([ z.lazy(() => CreatureCreateobjectsInputSchema),z.string().array() ]).optional(),
-  flavor: z.string().optional().nullable(),
-  description: z.string().optional().nullable(),
-  actionList: z.lazy(() => ActionListCreateNestedOneWithoutCreatureInputSchema).optional(),
-  attributes: z.lazy(() => CreatureAttributeCreateNestedManyWithoutCreatureInputSchema).optional(),
-  actions: z.lazy(() => CreatureActionsCreateNestedManyWithoutCreatureInputSchema).optional()
-}).strict();
-
-export const CreatureUncheckedCreateWithoutStatsInputSchema: z.ZodType<Prisma.CreatureUncheckedCreateWithoutStatsInput> = z.object({
-  id: z.string().optional(),
-  fullname: z.string(),
-  name: z.string(),
-  rank: z.string().optional().nullable(),
-  type: z.string(),
-  subtype: z.string().optional().nullable(),
-  size: z.lazy(() => CreatureSizeSchema),
-  createdAd: z.coerce.date().optional().nullable(),
-  updatedAt: z.coerce.date().optional().nullable(),
-  level: z.number().int(),
-  attack: z.number().int(),
-  defense: z.number().int(),
-  ranged: z.number().int(),
-  health: z.number().int(),
-  armor: z.number().int().optional().nullable(),
-  perception: z.number().int().optional().nullable(),
-  magic: z.number().int().optional().nullable(),
-  spirit: z.number().int().optional().nullable(),
-  loot: z.union([ z.lazy(() => CreatureCreatelootInputSchema),z.string().array() ]).optional(),
-  objects: z.union([ z.lazy(() => CreatureCreateobjectsInputSchema),z.string().array() ]).optional(),
-  flavor: z.string().optional().nullable(),
-  description: z.string().optional().nullable(),
-  actionList: z.lazy(() => ActionListUncheckedCreateNestedOneWithoutCreatureInputSchema).optional(),
-  attributes: z.lazy(() => CreatureAttributeUncheckedCreateNestedManyWithoutCreatureInputSchema).optional(),
-  actions: z.lazy(() => CreatureActionsUncheckedCreateNestedManyWithoutCreatureInputSchema).optional()
-}).strict();
-
-export const CreatureCreateOrConnectWithoutStatsInputSchema: z.ZodType<Prisma.CreatureCreateOrConnectWithoutStatsInput> = z.object({
-  where: z.lazy(() => CreatureWhereUniqueInputSchema),
-  create: z.union([ z.lazy(() => CreatureCreateWithoutStatsInputSchema),z.lazy(() => CreatureUncheckedCreateWithoutStatsInputSchema) ]),
-}).strict();
-
-export const CreatureUpsertWithoutStatsInputSchema: z.ZodType<Prisma.CreatureUpsertWithoutStatsInput> = z.object({
-  update: z.union([ z.lazy(() => CreatureUpdateWithoutStatsInputSchema),z.lazy(() => CreatureUncheckedUpdateWithoutStatsInputSchema) ]),
-  create: z.union([ z.lazy(() => CreatureCreateWithoutStatsInputSchema),z.lazy(() => CreatureUncheckedCreateWithoutStatsInputSchema) ]),
-  where: z.lazy(() => CreatureWhereInputSchema).optional()
-}).strict();
-
-export const CreatureUpdateToOneWithWhereWithoutStatsInputSchema: z.ZodType<Prisma.CreatureUpdateToOneWithWhereWithoutStatsInput> = z.object({
-  where: z.lazy(() => CreatureWhereInputSchema).optional(),
-  data: z.union([ z.lazy(() => CreatureUpdateWithoutStatsInputSchema),z.lazy(() => CreatureUncheckedUpdateWithoutStatsInputSchema) ]),
-}).strict();
-
-export const CreatureUpdateWithoutStatsInputSchema: z.ZodType<Prisma.CreatureUpdateWithoutStatsInput> = z.object({
-  fullname: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  rank: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  type: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  subtype: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  size: z.union([ z.lazy(() => CreatureSizeSchema),z.lazy(() => EnumCreatureSizeFieldUpdateOperationsInputSchema) ]).optional(),
-  createdAd: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  updatedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  level: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  attack: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  defense: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  ranged: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  health: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  armor: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  perception: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  magic: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  spirit: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  loot: z.union([ z.lazy(() => CreatureUpdatelootInputSchema),z.string().array() ]).optional(),
-  objects: z.union([ z.lazy(() => CreatureUpdateobjectsInputSchema),z.string().array() ]).optional(),
-  flavor: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  actionList: z.lazy(() => ActionListUpdateOneWithoutCreatureNestedInputSchema).optional(),
-  attributes: z.lazy(() => CreatureAttributeUpdateManyWithoutCreatureNestedInputSchema).optional(),
-  actions: z.lazy(() => CreatureActionsUpdateManyWithoutCreatureNestedInputSchema).optional()
-}).strict();
-
-export const CreatureUncheckedUpdateWithoutStatsInputSchema: z.ZodType<Prisma.CreatureUncheckedUpdateWithoutStatsInput> = z.object({
-  fullname: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  rank: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  type: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  subtype: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  size: z.union([ z.lazy(() => CreatureSizeSchema),z.lazy(() => EnumCreatureSizeFieldUpdateOperationsInputSchema) ]).optional(),
-  createdAd: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  updatedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  level: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  attack: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  defense: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  ranged: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  health: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  armor: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  perception: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  magic: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  spirit: z.union([ z.number().int(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  loot: z.union([ z.lazy(() => CreatureUpdatelootInputSchema),z.string().array() ]).optional(),
-  objects: z.union([ z.lazy(() => CreatureUpdateobjectsInputSchema),z.string().array() ]).optional(),
-  flavor: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  actionList: z.lazy(() => ActionListUncheckedUpdateOneWithoutCreatureNestedInputSchema).optional(),
-  attributes: z.lazy(() => CreatureAttributeUncheckedUpdateManyWithoutCreatureNestedInputSchema).optional(),
-  actions: z.lazy(() => CreatureActionsUncheckedUpdateManyWithoutCreatureNestedInputSchema).optional()
-}).strict();
-
-export const CreatureAttributeCreateManyCreatureInputSchema: z.ZodType<Prisma.CreatureAttributeCreateManyCreatureInput> = z.object({
-  id: z.string().optional(),
-  name: z.string(),
-  flavor: z.string().optional().nullable(),
-  Description: z.string().optional().nullable()
-}).strict();
-
-export const CreatureActionsCreateManyCreatureInputSchema: z.ZodType<Prisma.CreatureActionsCreateManyCreatureInput> = z.object({
-  id: z.string().optional(),
-  title: z.string(),
-  action: z.lazy(() => ActionTypeSchema),
-  type: z.string(),
-  flavor: z.string().optional().nullable(),
-  description: z.string(),
-  damages: z.string().optional().nullable(),
-  effects: z.string().optional().nullable(),
-  heal: z.string().optional().nullable(),
-  target: z.string().optional().nullable(),
-  range: z.string().optional().nullable()
-}).strict();
-
-export const CreatureAttributeUpdateWithoutCreatureInputSchema: z.ZodType<Prisma.CreatureAttributeUpdateWithoutCreatureInput> = z.object({
-  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  flavor: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  Description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-}).strict();
-
-export const CreatureAttributeUncheckedUpdateWithoutCreatureInputSchema: z.ZodType<Prisma.CreatureAttributeUncheckedUpdateWithoutCreatureInput> = z.object({
-  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  flavor: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  Description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-}).strict();
-
-export const CreatureAttributeUncheckedUpdateManyWithoutCreatureInputSchema: z.ZodType<Prisma.CreatureAttributeUncheckedUpdateManyWithoutCreatureInput> = z.object({
-  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  flavor: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  Description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-}).strict();
-
-export const CreatureActionsUpdateWithoutCreatureInputSchema: z.ZodType<Prisma.CreatureActionsUpdateWithoutCreatureInput> = z.object({
-  title: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  action: z.union([ z.lazy(() => ActionTypeSchema),z.lazy(() => EnumActionTypeFieldUpdateOperationsInputSchema) ]).optional(),
-  type: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  flavor: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  description: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  weight: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  value: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  valueWeight: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  rarity: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   damages: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  effects: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  heal: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  target: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  range: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  armor: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  properties: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  isRelic: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  magicWeight: z.union([ z.number(),z.lazy(() => NullableIntFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
-export const CreatureActionsUncheckedUpdateWithoutCreatureInputSchema: z.ZodType<Prisma.CreatureActionsUncheckedUpdateWithoutCreatureInput> = z.object({
-  title: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+export const CreatureComponentUpdateInputSchema: z.ZodType<Prisma.CreatureComponentUpdateInput> = z.object({
+  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  quantity: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  weight: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  value: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  valueWeight: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  rarity: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  uses: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+}).strict();
+
+export const CreatureAttributeUpdateInputSchema: z.ZodType<Prisma.CreatureAttributeUpdateInput> = z.object({
+  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  flavor: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+}).strict();
+
+export const CreatureActionUpdateInputSchema: z.ZodType<Prisma.CreatureActionUpdateInput> = z.object({
+  name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   action: z.union([ z.lazy(() => ActionTypeSchema),z.lazy(() => EnumActionTypeFieldUpdateOperationsInputSchema) ]).optional(),
   type: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   flavor: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  description: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  damages: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  effects: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  heal: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  target: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  range: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-}).strict();
-
-export const CreatureActionsUncheckedUpdateManyWithoutCreatureInputSchema: z.ZodType<Prisma.CreatureActionsUncheckedUpdateManyWithoutCreatureInput> = z.object({
-  title: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  action: z.union([ z.lazy(() => ActionTypeSchema),z.lazy(() => EnumActionTypeFieldUpdateOperationsInputSchema) ]).optional(),
-  type: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
-  flavor: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  description: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   damages: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   effects: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   heal: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -4600,252 +4179,118 @@ export const CreatureFindUniqueOrThrowArgsSchema: z.ZodType<Prisma.CreatureFindU
   where: CreatureWhereUniqueInputSchema,
 }).strict() ;
 
-export const CreatureAttributeFindFirstArgsSchema: z.ZodType<Prisma.CreatureAttributeFindFirstArgs> = z.object({
-  select: CreatureAttributeSelectSchema.optional(),
-  include: CreatureAttributeIncludeSchema.optional(),
-  where: CreatureAttributeWhereInputSchema.optional(),
-  orderBy: z.union([ CreatureAttributeOrderByWithRelationInputSchema.array(),CreatureAttributeOrderByWithRelationInputSchema ]).optional(),
-  cursor: CreatureAttributeWhereUniqueInputSchema.optional(),
+export const AttributeFindFirstArgsSchema: z.ZodType<Prisma.AttributeFindFirstArgs> = z.object({
+  select: AttributeSelectSchema.optional(),
+  where: AttributeWhereInputSchema.optional(),
+  orderBy: z.union([ AttributeOrderByWithRelationInputSchema.array(),AttributeOrderByWithRelationInputSchema ]).optional(),
+  cursor: AttributeWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
-  distinct: z.union([ CreatureAttributeScalarFieldEnumSchema,CreatureAttributeScalarFieldEnumSchema.array() ]).optional(),
+  distinct: z.union([ AttributeScalarFieldEnumSchema,AttributeScalarFieldEnumSchema.array() ]).optional(),
 }).strict() ;
 
-export const CreatureAttributeFindFirstOrThrowArgsSchema: z.ZodType<Prisma.CreatureAttributeFindFirstOrThrowArgs> = z.object({
-  select: CreatureAttributeSelectSchema.optional(),
-  include: CreatureAttributeIncludeSchema.optional(),
-  where: CreatureAttributeWhereInputSchema.optional(),
-  orderBy: z.union([ CreatureAttributeOrderByWithRelationInputSchema.array(),CreatureAttributeOrderByWithRelationInputSchema ]).optional(),
-  cursor: CreatureAttributeWhereUniqueInputSchema.optional(),
+export const AttributeFindFirstOrThrowArgsSchema: z.ZodType<Prisma.AttributeFindFirstOrThrowArgs> = z.object({
+  select: AttributeSelectSchema.optional(),
+  where: AttributeWhereInputSchema.optional(),
+  orderBy: z.union([ AttributeOrderByWithRelationInputSchema.array(),AttributeOrderByWithRelationInputSchema ]).optional(),
+  cursor: AttributeWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
-  distinct: z.union([ CreatureAttributeScalarFieldEnumSchema,CreatureAttributeScalarFieldEnumSchema.array() ]).optional(),
+  distinct: z.union([ AttributeScalarFieldEnumSchema,AttributeScalarFieldEnumSchema.array() ]).optional(),
 }).strict() ;
 
-export const CreatureAttributeFindManyArgsSchema: z.ZodType<Prisma.CreatureAttributeFindManyArgs> = z.object({
-  select: CreatureAttributeSelectSchema.optional(),
-  include: CreatureAttributeIncludeSchema.optional(),
-  where: CreatureAttributeWhereInputSchema.optional(),
-  orderBy: z.union([ CreatureAttributeOrderByWithRelationInputSchema.array(),CreatureAttributeOrderByWithRelationInputSchema ]).optional(),
-  cursor: CreatureAttributeWhereUniqueInputSchema.optional(),
+export const AttributeFindManyArgsSchema: z.ZodType<Prisma.AttributeFindManyArgs> = z.object({
+  select: AttributeSelectSchema.optional(),
+  where: AttributeWhereInputSchema.optional(),
+  orderBy: z.union([ AttributeOrderByWithRelationInputSchema.array(),AttributeOrderByWithRelationInputSchema ]).optional(),
+  cursor: AttributeWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
-  distinct: z.union([ CreatureAttributeScalarFieldEnumSchema,CreatureAttributeScalarFieldEnumSchema.array() ]).optional(),
+  distinct: z.union([ AttributeScalarFieldEnumSchema,AttributeScalarFieldEnumSchema.array() ]).optional(),
 }).strict() ;
 
-export const CreatureAttributeAggregateArgsSchema: z.ZodType<Prisma.CreatureAttributeAggregateArgs> = z.object({
-  where: CreatureAttributeWhereInputSchema.optional(),
-  orderBy: z.union([ CreatureAttributeOrderByWithRelationInputSchema.array(),CreatureAttributeOrderByWithRelationInputSchema ]).optional(),
-  cursor: CreatureAttributeWhereUniqueInputSchema.optional(),
+export const AttributeAggregateArgsSchema: z.ZodType<Prisma.AttributeAggregateArgs> = z.object({
+  where: AttributeWhereInputSchema.optional(),
+  orderBy: z.union([ AttributeOrderByWithRelationInputSchema.array(),AttributeOrderByWithRelationInputSchema ]).optional(),
+  cursor: AttributeWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
 }).strict() ;
 
-export const CreatureAttributeGroupByArgsSchema: z.ZodType<Prisma.CreatureAttributeGroupByArgs> = z.object({
-  where: CreatureAttributeWhereInputSchema.optional(),
-  orderBy: z.union([ CreatureAttributeOrderByWithAggregationInputSchema.array(),CreatureAttributeOrderByWithAggregationInputSchema ]).optional(),
-  by: CreatureAttributeScalarFieldEnumSchema.array(),
-  having: CreatureAttributeScalarWhereWithAggregatesInputSchema.optional(),
+export const AttributeGroupByArgsSchema: z.ZodType<Prisma.AttributeGroupByArgs> = z.object({
+  where: AttributeWhereInputSchema.optional(),
+  orderBy: z.union([ AttributeOrderByWithAggregationInputSchema.array(),AttributeOrderByWithAggregationInputSchema ]).optional(),
+  by: AttributeScalarFieldEnumSchema.array(),
+  having: AttributeScalarWhereWithAggregatesInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
 }).strict() ;
 
-export const CreatureAttributeFindUniqueArgsSchema: z.ZodType<Prisma.CreatureAttributeFindUniqueArgs> = z.object({
-  select: CreatureAttributeSelectSchema.optional(),
-  include: CreatureAttributeIncludeSchema.optional(),
-  where: CreatureAttributeWhereUniqueInputSchema,
+export const AttributeFindUniqueArgsSchema: z.ZodType<Prisma.AttributeFindUniqueArgs> = z.object({
+  select: AttributeSelectSchema.optional(),
+  where: AttributeWhereUniqueInputSchema,
 }).strict() ;
 
-export const CreatureAttributeFindUniqueOrThrowArgsSchema: z.ZodType<Prisma.CreatureAttributeFindUniqueOrThrowArgs> = z.object({
-  select: CreatureAttributeSelectSchema.optional(),
-  include: CreatureAttributeIncludeSchema.optional(),
-  where: CreatureAttributeWhereUniqueInputSchema,
+export const AttributeFindUniqueOrThrowArgsSchema: z.ZodType<Prisma.AttributeFindUniqueOrThrowArgs> = z.object({
+  select: AttributeSelectSchema.optional(),
+  where: AttributeWhereUniqueInputSchema,
 }).strict() ;
 
-export const ActionListFindFirstArgsSchema: z.ZodType<Prisma.ActionListFindFirstArgs> = z.object({
-  select: ActionListSelectSchema.optional(),
-  include: ActionListIncludeSchema.optional(),
-  where: ActionListWhereInputSchema.optional(),
-  orderBy: z.union([ ActionListOrderByWithRelationInputSchema.array(),ActionListOrderByWithRelationInputSchema ]).optional(),
-  cursor: ActionListWhereUniqueInputSchema.optional(),
+export const ActionFindFirstArgsSchema: z.ZodType<Prisma.ActionFindFirstArgs> = z.object({
+  select: ActionSelectSchema.optional(),
+  where: ActionWhereInputSchema.optional(),
+  orderBy: z.union([ ActionOrderByWithRelationInputSchema.array(),ActionOrderByWithRelationInputSchema ]).optional(),
+  cursor: ActionWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
-  distinct: z.union([ ActionListScalarFieldEnumSchema,ActionListScalarFieldEnumSchema.array() ]).optional(),
+  distinct: z.union([ ActionScalarFieldEnumSchema,ActionScalarFieldEnumSchema.array() ]).optional(),
 }).strict() ;
 
-export const ActionListFindFirstOrThrowArgsSchema: z.ZodType<Prisma.ActionListFindFirstOrThrowArgs> = z.object({
-  select: ActionListSelectSchema.optional(),
-  include: ActionListIncludeSchema.optional(),
-  where: ActionListWhereInputSchema.optional(),
-  orderBy: z.union([ ActionListOrderByWithRelationInputSchema.array(),ActionListOrderByWithRelationInputSchema ]).optional(),
-  cursor: ActionListWhereUniqueInputSchema.optional(),
+export const ActionFindFirstOrThrowArgsSchema: z.ZodType<Prisma.ActionFindFirstOrThrowArgs> = z.object({
+  select: ActionSelectSchema.optional(),
+  where: ActionWhereInputSchema.optional(),
+  orderBy: z.union([ ActionOrderByWithRelationInputSchema.array(),ActionOrderByWithRelationInputSchema ]).optional(),
+  cursor: ActionWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
-  distinct: z.union([ ActionListScalarFieldEnumSchema,ActionListScalarFieldEnumSchema.array() ]).optional(),
+  distinct: z.union([ ActionScalarFieldEnumSchema,ActionScalarFieldEnumSchema.array() ]).optional(),
 }).strict() ;
 
-export const ActionListFindManyArgsSchema: z.ZodType<Prisma.ActionListFindManyArgs> = z.object({
-  select: ActionListSelectSchema.optional(),
-  include: ActionListIncludeSchema.optional(),
-  where: ActionListWhereInputSchema.optional(),
-  orderBy: z.union([ ActionListOrderByWithRelationInputSchema.array(),ActionListOrderByWithRelationInputSchema ]).optional(),
-  cursor: ActionListWhereUniqueInputSchema.optional(),
+export const ActionFindManyArgsSchema: z.ZodType<Prisma.ActionFindManyArgs> = z.object({
+  select: ActionSelectSchema.optional(),
+  where: ActionWhereInputSchema.optional(),
+  orderBy: z.union([ ActionOrderByWithRelationInputSchema.array(),ActionOrderByWithRelationInputSchema ]).optional(),
+  cursor: ActionWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
-  distinct: z.union([ ActionListScalarFieldEnumSchema,ActionListScalarFieldEnumSchema.array() ]).optional(),
+  distinct: z.union([ ActionScalarFieldEnumSchema,ActionScalarFieldEnumSchema.array() ]).optional(),
 }).strict() ;
 
-export const ActionListAggregateArgsSchema: z.ZodType<Prisma.ActionListAggregateArgs> = z.object({
-  where: ActionListWhereInputSchema.optional(),
-  orderBy: z.union([ ActionListOrderByWithRelationInputSchema.array(),ActionListOrderByWithRelationInputSchema ]).optional(),
-  cursor: ActionListWhereUniqueInputSchema.optional(),
+export const ActionAggregateArgsSchema: z.ZodType<Prisma.ActionAggregateArgs> = z.object({
+  where: ActionWhereInputSchema.optional(),
+  orderBy: z.union([ ActionOrderByWithRelationInputSchema.array(),ActionOrderByWithRelationInputSchema ]).optional(),
+  cursor: ActionWhereUniqueInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
 }).strict() ;
 
-export const ActionListGroupByArgsSchema: z.ZodType<Prisma.ActionListGroupByArgs> = z.object({
-  where: ActionListWhereInputSchema.optional(),
-  orderBy: z.union([ ActionListOrderByWithAggregationInputSchema.array(),ActionListOrderByWithAggregationInputSchema ]).optional(),
-  by: ActionListScalarFieldEnumSchema.array(),
-  having: ActionListScalarWhereWithAggregatesInputSchema.optional(),
+export const ActionGroupByArgsSchema: z.ZodType<Prisma.ActionGroupByArgs> = z.object({
+  where: ActionWhereInputSchema.optional(),
+  orderBy: z.union([ ActionOrderByWithAggregationInputSchema.array(),ActionOrderByWithAggregationInputSchema ]).optional(),
+  by: ActionScalarFieldEnumSchema.array(),
+  having: ActionScalarWhereWithAggregatesInputSchema.optional(),
   take: z.number().optional(),
   skip: z.number().optional(),
 }).strict() ;
 
-export const ActionListFindUniqueArgsSchema: z.ZodType<Prisma.ActionListFindUniqueArgs> = z.object({
-  select: ActionListSelectSchema.optional(),
-  include: ActionListIncludeSchema.optional(),
-  where: ActionListWhereUniqueInputSchema,
+export const ActionFindUniqueArgsSchema: z.ZodType<Prisma.ActionFindUniqueArgs> = z.object({
+  select: ActionSelectSchema.optional(),
+  where: ActionWhereUniqueInputSchema,
 }).strict() ;
 
-export const ActionListFindUniqueOrThrowArgsSchema: z.ZodType<Prisma.ActionListFindUniqueOrThrowArgs> = z.object({
-  select: ActionListSelectSchema.optional(),
-  include: ActionListIncludeSchema.optional(),
-  where: ActionListWhereUniqueInputSchema,
-}).strict() ;
-
-export const CreatureActionsFindFirstArgsSchema: z.ZodType<Prisma.CreatureActionsFindFirstArgs> = z.object({
-  select: CreatureActionsSelectSchema.optional(),
-  include: CreatureActionsIncludeSchema.optional(),
-  where: CreatureActionsWhereInputSchema.optional(),
-  orderBy: z.union([ CreatureActionsOrderByWithRelationInputSchema.array(),CreatureActionsOrderByWithRelationInputSchema ]).optional(),
-  cursor: CreatureActionsWhereUniqueInputSchema.optional(),
-  take: z.number().optional(),
-  skip: z.number().optional(),
-  distinct: z.union([ CreatureActionsScalarFieldEnumSchema,CreatureActionsScalarFieldEnumSchema.array() ]).optional(),
-}).strict() ;
-
-export const CreatureActionsFindFirstOrThrowArgsSchema: z.ZodType<Prisma.CreatureActionsFindFirstOrThrowArgs> = z.object({
-  select: CreatureActionsSelectSchema.optional(),
-  include: CreatureActionsIncludeSchema.optional(),
-  where: CreatureActionsWhereInputSchema.optional(),
-  orderBy: z.union([ CreatureActionsOrderByWithRelationInputSchema.array(),CreatureActionsOrderByWithRelationInputSchema ]).optional(),
-  cursor: CreatureActionsWhereUniqueInputSchema.optional(),
-  take: z.number().optional(),
-  skip: z.number().optional(),
-  distinct: z.union([ CreatureActionsScalarFieldEnumSchema,CreatureActionsScalarFieldEnumSchema.array() ]).optional(),
-}).strict() ;
-
-export const CreatureActionsFindManyArgsSchema: z.ZodType<Prisma.CreatureActionsFindManyArgs> = z.object({
-  select: CreatureActionsSelectSchema.optional(),
-  include: CreatureActionsIncludeSchema.optional(),
-  where: CreatureActionsWhereInputSchema.optional(),
-  orderBy: z.union([ CreatureActionsOrderByWithRelationInputSchema.array(),CreatureActionsOrderByWithRelationInputSchema ]).optional(),
-  cursor: CreatureActionsWhereUniqueInputSchema.optional(),
-  take: z.number().optional(),
-  skip: z.number().optional(),
-  distinct: z.union([ CreatureActionsScalarFieldEnumSchema,CreatureActionsScalarFieldEnumSchema.array() ]).optional(),
-}).strict() ;
-
-export const CreatureActionsAggregateArgsSchema: z.ZodType<Prisma.CreatureActionsAggregateArgs> = z.object({
-  where: CreatureActionsWhereInputSchema.optional(),
-  orderBy: z.union([ CreatureActionsOrderByWithRelationInputSchema.array(),CreatureActionsOrderByWithRelationInputSchema ]).optional(),
-  cursor: CreatureActionsWhereUniqueInputSchema.optional(),
-  take: z.number().optional(),
-  skip: z.number().optional(),
-}).strict() ;
-
-export const CreatureActionsGroupByArgsSchema: z.ZodType<Prisma.CreatureActionsGroupByArgs> = z.object({
-  where: CreatureActionsWhereInputSchema.optional(),
-  orderBy: z.union([ CreatureActionsOrderByWithAggregationInputSchema.array(),CreatureActionsOrderByWithAggregationInputSchema ]).optional(),
-  by: CreatureActionsScalarFieldEnumSchema.array(),
-  having: CreatureActionsScalarWhereWithAggregatesInputSchema.optional(),
-  take: z.number().optional(),
-  skip: z.number().optional(),
-}).strict() ;
-
-export const CreatureActionsFindUniqueArgsSchema: z.ZodType<Prisma.CreatureActionsFindUniqueArgs> = z.object({
-  select: CreatureActionsSelectSchema.optional(),
-  include: CreatureActionsIncludeSchema.optional(),
-  where: CreatureActionsWhereUniqueInputSchema,
-}).strict() ;
-
-export const CreatureActionsFindUniqueOrThrowArgsSchema: z.ZodType<Prisma.CreatureActionsFindUniqueOrThrowArgs> = z.object({
-  select: CreatureActionsSelectSchema.optional(),
-  include: CreatureActionsIncludeSchema.optional(),
-  where: CreatureActionsWhereUniqueInputSchema,
-}).strict() ;
-
-export const StatProfilFindFirstArgsSchema: z.ZodType<Prisma.StatProfilFindFirstArgs> = z.object({
-  select: StatProfilSelectSchema.optional(),
-  include: StatProfilIncludeSchema.optional(),
-  where: StatProfilWhereInputSchema.optional(),
-  orderBy: z.union([ StatProfilOrderByWithRelationInputSchema.array(),StatProfilOrderByWithRelationInputSchema ]).optional(),
-  cursor: StatProfilWhereUniqueInputSchema.optional(),
-  take: z.number().optional(),
-  skip: z.number().optional(),
-  distinct: z.union([ StatProfilScalarFieldEnumSchema,StatProfilScalarFieldEnumSchema.array() ]).optional(),
-}).strict() ;
-
-export const StatProfilFindFirstOrThrowArgsSchema: z.ZodType<Prisma.StatProfilFindFirstOrThrowArgs> = z.object({
-  select: StatProfilSelectSchema.optional(),
-  include: StatProfilIncludeSchema.optional(),
-  where: StatProfilWhereInputSchema.optional(),
-  orderBy: z.union([ StatProfilOrderByWithRelationInputSchema.array(),StatProfilOrderByWithRelationInputSchema ]).optional(),
-  cursor: StatProfilWhereUniqueInputSchema.optional(),
-  take: z.number().optional(),
-  skip: z.number().optional(),
-  distinct: z.union([ StatProfilScalarFieldEnumSchema,StatProfilScalarFieldEnumSchema.array() ]).optional(),
-}).strict() ;
-
-export const StatProfilFindManyArgsSchema: z.ZodType<Prisma.StatProfilFindManyArgs> = z.object({
-  select: StatProfilSelectSchema.optional(),
-  include: StatProfilIncludeSchema.optional(),
-  where: StatProfilWhereInputSchema.optional(),
-  orderBy: z.union([ StatProfilOrderByWithRelationInputSchema.array(),StatProfilOrderByWithRelationInputSchema ]).optional(),
-  cursor: StatProfilWhereUniqueInputSchema.optional(),
-  take: z.number().optional(),
-  skip: z.number().optional(),
-  distinct: z.union([ StatProfilScalarFieldEnumSchema,StatProfilScalarFieldEnumSchema.array() ]).optional(),
-}).strict() ;
-
-export const StatProfilAggregateArgsSchema: z.ZodType<Prisma.StatProfilAggregateArgs> = z.object({
-  where: StatProfilWhereInputSchema.optional(),
-  orderBy: z.union([ StatProfilOrderByWithRelationInputSchema.array(),StatProfilOrderByWithRelationInputSchema ]).optional(),
-  cursor: StatProfilWhereUniqueInputSchema.optional(),
-  take: z.number().optional(),
-  skip: z.number().optional(),
-}).strict() ;
-
-export const StatProfilGroupByArgsSchema: z.ZodType<Prisma.StatProfilGroupByArgs> = z.object({
-  where: StatProfilWhereInputSchema.optional(),
-  orderBy: z.union([ StatProfilOrderByWithAggregationInputSchema.array(),StatProfilOrderByWithAggregationInputSchema ]).optional(),
-  by: StatProfilScalarFieldEnumSchema.array(),
-  having: StatProfilScalarWhereWithAggregatesInputSchema.optional(),
-  take: z.number().optional(),
-  skip: z.number().optional(),
-}).strict() ;
-
-export const StatProfilFindUniqueArgsSchema: z.ZodType<Prisma.StatProfilFindUniqueArgs> = z.object({
-  select: StatProfilSelectSchema.optional(),
-  include: StatProfilIncludeSchema.optional(),
-  where: StatProfilWhereUniqueInputSchema,
-}).strict() ;
-
-export const StatProfilFindUniqueOrThrowArgsSchema: z.ZodType<Prisma.StatProfilFindUniqueOrThrowArgs> = z.object({
-  select: StatProfilSelectSchema.optional(),
-  include: StatProfilIncludeSchema.optional(),
-  where: StatProfilWhereUniqueInputSchema,
+export const ActionFindUniqueOrThrowArgsSchema: z.ZodType<Prisma.ActionFindUniqueOrThrowArgs> = z.object({
+  select: ActionSelectSchema.optional(),
+  where: ActionWhereUniqueInputSchema,
 }).strict() ;
 
 export const SpellFindFirstArgsSchema: z.ZodType<Prisma.SpellFindFirstArgs> = z.object({
@@ -4962,6 +4407,63 @@ export const ComponentFindUniqueOrThrowArgsSchema: z.ZodType<Prisma.ComponentFin
   where: ComponentWhereUniqueInputSchema,
 }).strict() ;
 
+export const ItemFindFirstArgsSchema: z.ZodType<Prisma.ItemFindFirstArgs> = z.object({
+  select: ItemSelectSchema.optional(),
+  where: ItemWhereInputSchema.optional(),
+  orderBy: z.union([ ItemOrderByWithRelationInputSchema.array(),ItemOrderByWithRelationInputSchema ]).optional(),
+  cursor: ItemWhereUniqueInputSchema.optional(),
+  take: z.number().optional(),
+  skip: z.number().optional(),
+  distinct: z.union([ ItemScalarFieldEnumSchema,ItemScalarFieldEnumSchema.array() ]).optional(),
+}).strict() ;
+
+export const ItemFindFirstOrThrowArgsSchema: z.ZodType<Prisma.ItemFindFirstOrThrowArgs> = z.object({
+  select: ItemSelectSchema.optional(),
+  where: ItemWhereInputSchema.optional(),
+  orderBy: z.union([ ItemOrderByWithRelationInputSchema.array(),ItemOrderByWithRelationInputSchema ]).optional(),
+  cursor: ItemWhereUniqueInputSchema.optional(),
+  take: z.number().optional(),
+  skip: z.number().optional(),
+  distinct: z.union([ ItemScalarFieldEnumSchema,ItemScalarFieldEnumSchema.array() ]).optional(),
+}).strict() ;
+
+export const ItemFindManyArgsSchema: z.ZodType<Prisma.ItemFindManyArgs> = z.object({
+  select: ItemSelectSchema.optional(),
+  where: ItemWhereInputSchema.optional(),
+  orderBy: z.union([ ItemOrderByWithRelationInputSchema.array(),ItemOrderByWithRelationInputSchema ]).optional(),
+  cursor: ItemWhereUniqueInputSchema.optional(),
+  take: z.number().optional(),
+  skip: z.number().optional(),
+  distinct: z.union([ ItemScalarFieldEnumSchema,ItemScalarFieldEnumSchema.array() ]).optional(),
+}).strict() ;
+
+export const ItemAggregateArgsSchema: z.ZodType<Prisma.ItemAggregateArgs> = z.object({
+  where: ItemWhereInputSchema.optional(),
+  orderBy: z.union([ ItemOrderByWithRelationInputSchema.array(),ItemOrderByWithRelationInputSchema ]).optional(),
+  cursor: ItemWhereUniqueInputSchema.optional(),
+  take: z.number().optional(),
+  skip: z.number().optional(),
+}).strict() ;
+
+export const ItemGroupByArgsSchema: z.ZodType<Prisma.ItemGroupByArgs> = z.object({
+  where: ItemWhereInputSchema.optional(),
+  orderBy: z.union([ ItemOrderByWithAggregationInputSchema.array(),ItemOrderByWithAggregationInputSchema ]).optional(),
+  by: ItemScalarFieldEnumSchema.array(),
+  having: ItemScalarWhereWithAggregatesInputSchema.optional(),
+  take: z.number().optional(),
+  skip: z.number().optional(),
+}).strict() ;
+
+export const ItemFindUniqueArgsSchema: z.ZodType<Prisma.ItemFindUniqueArgs> = z.object({
+  select: ItemSelectSchema.optional(),
+  where: ItemWhereUniqueInputSchema,
+}).strict() ;
+
+export const ItemFindUniqueOrThrowArgsSchema: z.ZodType<Prisma.ItemFindUniqueOrThrowArgs> = z.object({
+  select: ItemSelectSchema.optional(),
+  where: ItemWhereUniqueInputSchema,
+}).strict() ;
+
 export const UserCreateArgsSchema: z.ZodType<Prisma.UserCreateArgs> = z.object({
   select: UserSelectSchema.optional(),
   data: z.union([ UserCreateInputSchema,UserUncheckedCreateInputSchema ]),
@@ -5038,164 +4540,76 @@ export const CreatureDeleteManyArgsSchema: z.ZodType<Prisma.CreatureDeleteManyAr
   where: CreatureWhereInputSchema.optional(),
 }).strict() ;
 
-export const CreatureAttributeCreateArgsSchema: z.ZodType<Prisma.CreatureAttributeCreateArgs> = z.object({
-  select: CreatureAttributeSelectSchema.optional(),
-  include: CreatureAttributeIncludeSchema.optional(),
-  data: z.union([ CreatureAttributeCreateInputSchema,CreatureAttributeUncheckedCreateInputSchema ]),
+export const AttributeCreateArgsSchema: z.ZodType<Prisma.AttributeCreateArgs> = z.object({
+  select: AttributeSelectSchema.optional(),
+  data: z.union([ AttributeCreateInputSchema,AttributeUncheckedCreateInputSchema ]),
 }).strict() ;
 
-export const CreatureAttributeUpsertArgsSchema: z.ZodType<Prisma.CreatureAttributeUpsertArgs> = z.object({
-  select: CreatureAttributeSelectSchema.optional(),
-  include: CreatureAttributeIncludeSchema.optional(),
-  where: CreatureAttributeWhereUniqueInputSchema,
-  create: z.union([ CreatureAttributeCreateInputSchema,CreatureAttributeUncheckedCreateInputSchema ]),
-  update: z.union([ CreatureAttributeUpdateInputSchema,CreatureAttributeUncheckedUpdateInputSchema ]),
+export const AttributeUpsertArgsSchema: z.ZodType<Prisma.AttributeUpsertArgs> = z.object({
+  select: AttributeSelectSchema.optional(),
+  where: AttributeWhereUniqueInputSchema,
+  create: z.union([ AttributeCreateInputSchema,AttributeUncheckedCreateInputSchema ]),
+  update: z.union([ AttributeUpdateInputSchema,AttributeUncheckedUpdateInputSchema ]),
 }).strict() ;
 
-export const CreatureAttributeCreateManyArgsSchema: z.ZodType<Prisma.CreatureAttributeCreateManyArgs> = z.object({
-  data: z.union([ CreatureAttributeCreateManyInputSchema,CreatureAttributeCreateManyInputSchema.array() ]),
+export const AttributeCreateManyArgsSchema: z.ZodType<Prisma.AttributeCreateManyArgs> = z.object({
+  data: z.union([ AttributeCreateManyInputSchema,AttributeCreateManyInputSchema.array() ]),
 }).strict() ;
 
-export const CreatureAttributeDeleteArgsSchema: z.ZodType<Prisma.CreatureAttributeDeleteArgs> = z.object({
-  select: CreatureAttributeSelectSchema.optional(),
-  include: CreatureAttributeIncludeSchema.optional(),
-  where: CreatureAttributeWhereUniqueInputSchema,
+export const AttributeDeleteArgsSchema: z.ZodType<Prisma.AttributeDeleteArgs> = z.object({
+  select: AttributeSelectSchema.optional(),
+  where: AttributeWhereUniqueInputSchema,
 }).strict() ;
 
-export const CreatureAttributeUpdateArgsSchema: z.ZodType<Prisma.CreatureAttributeUpdateArgs> = z.object({
-  select: CreatureAttributeSelectSchema.optional(),
-  include: CreatureAttributeIncludeSchema.optional(),
-  data: z.union([ CreatureAttributeUpdateInputSchema,CreatureAttributeUncheckedUpdateInputSchema ]),
-  where: CreatureAttributeWhereUniqueInputSchema,
+export const AttributeUpdateArgsSchema: z.ZodType<Prisma.AttributeUpdateArgs> = z.object({
+  select: AttributeSelectSchema.optional(),
+  data: z.union([ AttributeUpdateInputSchema,AttributeUncheckedUpdateInputSchema ]),
+  where: AttributeWhereUniqueInputSchema,
 }).strict() ;
 
-export const CreatureAttributeUpdateManyArgsSchema: z.ZodType<Prisma.CreatureAttributeUpdateManyArgs> = z.object({
-  data: z.union([ CreatureAttributeUpdateManyMutationInputSchema,CreatureAttributeUncheckedUpdateManyInputSchema ]),
-  where: CreatureAttributeWhereInputSchema.optional(),
+export const AttributeUpdateManyArgsSchema: z.ZodType<Prisma.AttributeUpdateManyArgs> = z.object({
+  data: z.union([ AttributeUpdateManyMutationInputSchema,AttributeUncheckedUpdateManyInputSchema ]),
+  where: AttributeWhereInputSchema.optional(),
 }).strict() ;
 
-export const CreatureAttributeDeleteManyArgsSchema: z.ZodType<Prisma.CreatureAttributeDeleteManyArgs> = z.object({
-  where: CreatureAttributeWhereInputSchema.optional(),
+export const AttributeDeleteManyArgsSchema: z.ZodType<Prisma.AttributeDeleteManyArgs> = z.object({
+  where: AttributeWhereInputSchema.optional(),
 }).strict() ;
 
-export const ActionListCreateArgsSchema: z.ZodType<Prisma.ActionListCreateArgs> = z.object({
-  select: ActionListSelectSchema.optional(),
-  include: ActionListIncludeSchema.optional(),
-  data: z.union([ ActionListCreateInputSchema,ActionListUncheckedCreateInputSchema ]),
+export const ActionCreateArgsSchema: z.ZodType<Prisma.ActionCreateArgs> = z.object({
+  select: ActionSelectSchema.optional(),
+  data: z.union([ ActionCreateInputSchema,ActionUncheckedCreateInputSchema ]),
 }).strict() ;
 
-export const ActionListUpsertArgsSchema: z.ZodType<Prisma.ActionListUpsertArgs> = z.object({
-  select: ActionListSelectSchema.optional(),
-  include: ActionListIncludeSchema.optional(),
-  where: ActionListWhereUniqueInputSchema,
-  create: z.union([ ActionListCreateInputSchema,ActionListUncheckedCreateInputSchema ]),
-  update: z.union([ ActionListUpdateInputSchema,ActionListUncheckedUpdateInputSchema ]),
+export const ActionUpsertArgsSchema: z.ZodType<Prisma.ActionUpsertArgs> = z.object({
+  select: ActionSelectSchema.optional(),
+  where: ActionWhereUniqueInputSchema,
+  create: z.union([ ActionCreateInputSchema,ActionUncheckedCreateInputSchema ]),
+  update: z.union([ ActionUpdateInputSchema,ActionUncheckedUpdateInputSchema ]),
 }).strict() ;
 
-export const ActionListCreateManyArgsSchema: z.ZodType<Prisma.ActionListCreateManyArgs> = z.object({
-  data: z.union([ ActionListCreateManyInputSchema,ActionListCreateManyInputSchema.array() ]),
+export const ActionCreateManyArgsSchema: z.ZodType<Prisma.ActionCreateManyArgs> = z.object({
+  data: z.union([ ActionCreateManyInputSchema,ActionCreateManyInputSchema.array() ]),
 }).strict() ;
 
-export const ActionListDeleteArgsSchema: z.ZodType<Prisma.ActionListDeleteArgs> = z.object({
-  select: ActionListSelectSchema.optional(),
-  include: ActionListIncludeSchema.optional(),
-  where: ActionListWhereUniqueInputSchema,
+export const ActionDeleteArgsSchema: z.ZodType<Prisma.ActionDeleteArgs> = z.object({
+  select: ActionSelectSchema.optional(),
+  where: ActionWhereUniqueInputSchema,
 }).strict() ;
 
-export const ActionListUpdateArgsSchema: z.ZodType<Prisma.ActionListUpdateArgs> = z.object({
-  select: ActionListSelectSchema.optional(),
-  include: ActionListIncludeSchema.optional(),
-  data: z.union([ ActionListUpdateInputSchema,ActionListUncheckedUpdateInputSchema ]),
-  where: ActionListWhereUniqueInputSchema,
+export const ActionUpdateArgsSchema: z.ZodType<Prisma.ActionUpdateArgs> = z.object({
+  select: ActionSelectSchema.optional(),
+  data: z.union([ ActionUpdateInputSchema,ActionUncheckedUpdateInputSchema ]),
+  where: ActionWhereUniqueInputSchema,
 }).strict() ;
 
-export const ActionListUpdateManyArgsSchema: z.ZodType<Prisma.ActionListUpdateManyArgs> = z.object({
-  data: z.union([ ActionListUpdateManyMutationInputSchema,ActionListUncheckedUpdateManyInputSchema ]),
-  where: ActionListWhereInputSchema.optional(),
+export const ActionUpdateManyArgsSchema: z.ZodType<Prisma.ActionUpdateManyArgs> = z.object({
+  data: z.union([ ActionUpdateManyMutationInputSchema,ActionUncheckedUpdateManyInputSchema ]),
+  where: ActionWhereInputSchema.optional(),
 }).strict() ;
 
-export const ActionListDeleteManyArgsSchema: z.ZodType<Prisma.ActionListDeleteManyArgs> = z.object({
-  where: ActionListWhereInputSchema.optional(),
-}).strict() ;
-
-export const CreatureActionsCreateArgsSchema: z.ZodType<Prisma.CreatureActionsCreateArgs> = z.object({
-  select: CreatureActionsSelectSchema.optional(),
-  include: CreatureActionsIncludeSchema.optional(),
-  data: z.union([ CreatureActionsCreateInputSchema,CreatureActionsUncheckedCreateInputSchema ]),
-}).strict() ;
-
-export const CreatureActionsUpsertArgsSchema: z.ZodType<Prisma.CreatureActionsUpsertArgs> = z.object({
-  select: CreatureActionsSelectSchema.optional(),
-  include: CreatureActionsIncludeSchema.optional(),
-  where: CreatureActionsWhereUniqueInputSchema,
-  create: z.union([ CreatureActionsCreateInputSchema,CreatureActionsUncheckedCreateInputSchema ]),
-  update: z.union([ CreatureActionsUpdateInputSchema,CreatureActionsUncheckedUpdateInputSchema ]),
-}).strict() ;
-
-export const CreatureActionsCreateManyArgsSchema: z.ZodType<Prisma.CreatureActionsCreateManyArgs> = z.object({
-  data: z.union([ CreatureActionsCreateManyInputSchema,CreatureActionsCreateManyInputSchema.array() ]),
-}).strict() ;
-
-export const CreatureActionsDeleteArgsSchema: z.ZodType<Prisma.CreatureActionsDeleteArgs> = z.object({
-  select: CreatureActionsSelectSchema.optional(),
-  include: CreatureActionsIncludeSchema.optional(),
-  where: CreatureActionsWhereUniqueInputSchema,
-}).strict() ;
-
-export const CreatureActionsUpdateArgsSchema: z.ZodType<Prisma.CreatureActionsUpdateArgs> = z.object({
-  select: CreatureActionsSelectSchema.optional(),
-  include: CreatureActionsIncludeSchema.optional(),
-  data: z.union([ CreatureActionsUpdateInputSchema,CreatureActionsUncheckedUpdateInputSchema ]),
-  where: CreatureActionsWhereUniqueInputSchema,
-}).strict() ;
-
-export const CreatureActionsUpdateManyArgsSchema: z.ZodType<Prisma.CreatureActionsUpdateManyArgs> = z.object({
-  data: z.union([ CreatureActionsUpdateManyMutationInputSchema,CreatureActionsUncheckedUpdateManyInputSchema ]),
-  where: CreatureActionsWhereInputSchema.optional(),
-}).strict() ;
-
-export const CreatureActionsDeleteManyArgsSchema: z.ZodType<Prisma.CreatureActionsDeleteManyArgs> = z.object({
-  where: CreatureActionsWhereInputSchema.optional(),
-}).strict() ;
-
-export const StatProfilCreateArgsSchema: z.ZodType<Prisma.StatProfilCreateArgs> = z.object({
-  select: StatProfilSelectSchema.optional(),
-  include: StatProfilIncludeSchema.optional(),
-  data: z.union([ StatProfilCreateInputSchema,StatProfilUncheckedCreateInputSchema ]),
-}).strict() ;
-
-export const StatProfilUpsertArgsSchema: z.ZodType<Prisma.StatProfilUpsertArgs> = z.object({
-  select: StatProfilSelectSchema.optional(),
-  include: StatProfilIncludeSchema.optional(),
-  where: StatProfilWhereUniqueInputSchema,
-  create: z.union([ StatProfilCreateInputSchema,StatProfilUncheckedCreateInputSchema ]),
-  update: z.union([ StatProfilUpdateInputSchema,StatProfilUncheckedUpdateInputSchema ]),
-}).strict() ;
-
-export const StatProfilCreateManyArgsSchema: z.ZodType<Prisma.StatProfilCreateManyArgs> = z.object({
-  data: z.union([ StatProfilCreateManyInputSchema,StatProfilCreateManyInputSchema.array() ]),
-}).strict() ;
-
-export const StatProfilDeleteArgsSchema: z.ZodType<Prisma.StatProfilDeleteArgs> = z.object({
-  select: StatProfilSelectSchema.optional(),
-  include: StatProfilIncludeSchema.optional(),
-  where: StatProfilWhereUniqueInputSchema,
-}).strict() ;
-
-export const StatProfilUpdateArgsSchema: z.ZodType<Prisma.StatProfilUpdateArgs> = z.object({
-  select: StatProfilSelectSchema.optional(),
-  include: StatProfilIncludeSchema.optional(),
-  data: z.union([ StatProfilUpdateInputSchema,StatProfilUncheckedUpdateInputSchema ]),
-  where: StatProfilWhereUniqueInputSchema,
-}).strict() ;
-
-export const StatProfilUpdateManyArgsSchema: z.ZodType<Prisma.StatProfilUpdateManyArgs> = z.object({
-  data: z.union([ StatProfilUpdateManyMutationInputSchema,StatProfilUncheckedUpdateManyInputSchema ]),
-  where: StatProfilWhereInputSchema.optional(),
-}).strict() ;
-
-export const StatProfilDeleteManyArgsSchema: z.ZodType<Prisma.StatProfilDeleteManyArgs> = z.object({
-  where: StatProfilWhereInputSchema.optional(),
+export const ActionDeleteManyArgsSchema: z.ZodType<Prisma.ActionDeleteManyArgs> = z.object({
+  where: ActionWhereInputSchema.optional(),
 }).strict() ;
 
 export const SpellCreateArgsSchema: z.ZodType<Prisma.SpellCreateArgs> = z.object({
@@ -5268,4 +4682,40 @@ export const ComponentUpdateManyArgsSchema: z.ZodType<Prisma.ComponentUpdateMany
 
 export const ComponentDeleteManyArgsSchema: z.ZodType<Prisma.ComponentDeleteManyArgs> = z.object({
   where: ComponentWhereInputSchema.optional(),
+}).strict() ;
+
+export const ItemCreateArgsSchema: z.ZodType<Prisma.ItemCreateArgs> = z.object({
+  select: ItemSelectSchema.optional(),
+  data: z.union([ ItemCreateInputSchema,ItemUncheckedCreateInputSchema ]),
+}).strict() ;
+
+export const ItemUpsertArgsSchema: z.ZodType<Prisma.ItemUpsertArgs> = z.object({
+  select: ItemSelectSchema.optional(),
+  where: ItemWhereUniqueInputSchema,
+  create: z.union([ ItemCreateInputSchema,ItemUncheckedCreateInputSchema ]),
+  update: z.union([ ItemUpdateInputSchema,ItemUncheckedUpdateInputSchema ]),
+}).strict() ;
+
+export const ItemCreateManyArgsSchema: z.ZodType<Prisma.ItemCreateManyArgs> = z.object({
+  data: z.union([ ItemCreateManyInputSchema,ItemCreateManyInputSchema.array() ]),
+}).strict() ;
+
+export const ItemDeleteArgsSchema: z.ZodType<Prisma.ItemDeleteArgs> = z.object({
+  select: ItemSelectSchema.optional(),
+  where: ItemWhereUniqueInputSchema,
+}).strict() ;
+
+export const ItemUpdateArgsSchema: z.ZodType<Prisma.ItemUpdateArgs> = z.object({
+  select: ItemSelectSchema.optional(),
+  data: z.union([ ItemUpdateInputSchema,ItemUncheckedUpdateInputSchema ]),
+  where: ItemWhereUniqueInputSchema,
+}).strict() ;
+
+export const ItemUpdateManyArgsSchema: z.ZodType<Prisma.ItemUpdateManyArgs> = z.object({
+  data: z.union([ ItemUpdateManyMutationInputSchema,ItemUncheckedUpdateManyInputSchema ]),
+  where: ItemWhereInputSchema.optional(),
+}).strict() ;
+
+export const ItemDeleteManyArgsSchema: z.ZodType<Prisma.ItemDeleteManyArgs> = z.object({
+  where: ItemWhereInputSchema.optional(),
 }).strict() ;

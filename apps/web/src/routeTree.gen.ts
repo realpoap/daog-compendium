@@ -18,8 +18,10 @@ import { Route as SpellsAddImport } from './routes/spells/add'
 import { Route as SpellsIdImport } from './routes/spells/$id'
 import { Route as MeRegisterImport } from './routes/me/register'
 import { Route as MeLoginImport } from './routes/me/login'
+import { Route as BestiaryAddImport } from './routes/bestiary/add'
 import { Route as BestiaryIdImport } from './routes/bestiary/$id'
 import { Route as SpellsEditIdImport } from './routes/spells/edit/$id'
+import { Route as BestiaryEditIdImport } from './routes/bestiary/edit/$id'
 
 // Create Virtual Routes
 
@@ -77,6 +79,12 @@ const MeLoginRoute = MeLoginImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const BestiaryAddRoute = BestiaryAddImport.update({
+  id: '/bestiary/add',
+  path: '/bestiary/add',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const BestiaryIdRoute = BestiaryIdImport.update({
   id: '/bestiary/$id',
   path: '/bestiary/$id',
@@ -86,6 +94,12 @@ const BestiaryIdRoute = BestiaryIdImport.update({
 const SpellsEditIdRoute = SpellsEditIdImport.update({
   id: '/spells/edit/$id',
   path: '/spells/edit/$id',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const BestiaryEditIdRoute = BestiaryEditIdImport.update({
+  id: '/bestiary/edit/$id',
+  path: '/bestiary/edit/$id',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -112,6 +126,13 @@ declare module '@tanstack/react-router' {
       path: '/bestiary/$id'
       fullPath: '/bestiary/$id'
       preLoaderRoute: typeof BestiaryIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/bestiary/add': {
+      id: '/bestiary/add'
+      path: '/bestiary/add'
+      fullPath: '/bestiary/add'
+      preLoaderRoute: typeof BestiaryAddImport
       parentRoute: typeof rootRoute
     }
     '/me/login': {
@@ -156,6 +177,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SpellsIndexLazyImport
       parentRoute: typeof rootRoute
     }
+    '/bestiary/edit/$id': {
+      id: '/bestiary/edit/$id'
+      path: '/bestiary/edit/$id'
+      fullPath: '/bestiary/edit/$id'
+      preLoaderRoute: typeof BestiaryEditIdImport
+      parentRoute: typeof rootRoute
+    }
     '/spells/edit/$id': {
       id: '/spells/edit/$id'
       path: '/spells/edit/$id'
@@ -172,12 +200,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
   '/rules': typeof RulesLazyRoute
   '/bestiary/$id': typeof BestiaryIdRoute
+  '/bestiary/add': typeof BestiaryAddRoute
   '/me/login': typeof MeLoginRoute
   '/me/register': typeof MeRegisterRoute
   '/spells/$id': typeof SpellsIdRoute
   '/spells/add': typeof SpellsAddRoute
   '/bestiary': typeof BestiaryIndexRoute
   '/spells': typeof SpellsIndexLazyRoute
+  '/bestiary/edit/$id': typeof BestiaryEditIdRoute
   '/spells/edit/$id': typeof SpellsEditIdRoute
 }
 
@@ -185,12 +215,14 @@ export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
   '/rules': typeof RulesLazyRoute
   '/bestiary/$id': typeof BestiaryIdRoute
+  '/bestiary/add': typeof BestiaryAddRoute
   '/me/login': typeof MeLoginRoute
   '/me/register': typeof MeRegisterRoute
   '/spells/$id': typeof SpellsIdRoute
   '/spells/add': typeof SpellsAddRoute
   '/bestiary': typeof BestiaryIndexRoute
   '/spells': typeof SpellsIndexLazyRoute
+  '/bestiary/edit/$id': typeof BestiaryEditIdRoute
   '/spells/edit/$id': typeof SpellsEditIdRoute
 }
 
@@ -199,12 +231,14 @@ export interface FileRoutesById {
   '/': typeof IndexLazyRoute
   '/rules': typeof RulesLazyRoute
   '/bestiary/$id': typeof BestiaryIdRoute
+  '/bestiary/add': typeof BestiaryAddRoute
   '/me/login': typeof MeLoginRoute
   '/me/register': typeof MeRegisterRoute
   '/spells/$id': typeof SpellsIdRoute
   '/spells/add': typeof SpellsAddRoute
   '/bestiary/': typeof BestiaryIndexRoute
   '/spells/': typeof SpellsIndexLazyRoute
+  '/bestiary/edit/$id': typeof BestiaryEditIdRoute
   '/spells/edit/$id': typeof SpellsEditIdRoute
 }
 
@@ -214,36 +248,42 @@ export interface FileRouteTypes {
     | '/'
     | '/rules'
     | '/bestiary/$id'
+    | '/bestiary/add'
     | '/me/login'
     | '/me/register'
     | '/spells/$id'
     | '/spells/add'
     | '/bestiary'
     | '/spells'
+    | '/bestiary/edit/$id'
     | '/spells/edit/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/rules'
     | '/bestiary/$id'
+    | '/bestiary/add'
     | '/me/login'
     | '/me/register'
     | '/spells/$id'
     | '/spells/add'
     | '/bestiary'
     | '/spells'
+    | '/bestiary/edit/$id'
     | '/spells/edit/$id'
   id:
     | '__root__'
     | '/'
     | '/rules'
     | '/bestiary/$id'
+    | '/bestiary/add'
     | '/me/login'
     | '/me/register'
     | '/spells/$id'
     | '/spells/add'
     | '/bestiary/'
     | '/spells/'
+    | '/bestiary/edit/$id'
     | '/spells/edit/$id'
   fileRoutesById: FileRoutesById
 }
@@ -252,12 +292,14 @@ export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
   RulesLazyRoute: typeof RulesLazyRoute
   BestiaryIdRoute: typeof BestiaryIdRoute
+  BestiaryAddRoute: typeof BestiaryAddRoute
   MeLoginRoute: typeof MeLoginRoute
   MeRegisterRoute: typeof MeRegisterRoute
   SpellsIdRoute: typeof SpellsIdRoute
   SpellsAddRoute: typeof SpellsAddRoute
   BestiaryIndexRoute: typeof BestiaryIndexRoute
   SpellsIndexLazyRoute: typeof SpellsIndexLazyRoute
+  BestiaryEditIdRoute: typeof BestiaryEditIdRoute
   SpellsEditIdRoute: typeof SpellsEditIdRoute
 }
 
@@ -265,12 +307,14 @@ const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   RulesLazyRoute: RulesLazyRoute,
   BestiaryIdRoute: BestiaryIdRoute,
+  BestiaryAddRoute: BestiaryAddRoute,
   MeLoginRoute: MeLoginRoute,
   MeRegisterRoute: MeRegisterRoute,
   SpellsIdRoute: SpellsIdRoute,
   SpellsAddRoute: SpellsAddRoute,
   BestiaryIndexRoute: BestiaryIndexRoute,
   SpellsIndexLazyRoute: SpellsIndexLazyRoute,
+  BestiaryEditIdRoute: BestiaryEditIdRoute,
   SpellsEditIdRoute: SpellsEditIdRoute,
 }
 
@@ -287,12 +331,14 @@ export const routeTree = rootRoute
         "/",
         "/rules",
         "/bestiary/$id",
+        "/bestiary/add",
         "/me/login",
         "/me/register",
         "/spells/$id",
         "/spells/add",
         "/bestiary/",
         "/spells/",
+        "/bestiary/edit/$id",
         "/spells/edit/$id"
       ]
     },
@@ -304,6 +350,9 @@ export const routeTree = rootRoute
     },
     "/bestiary/$id": {
       "filePath": "bestiary/$id.tsx"
+    },
+    "/bestiary/add": {
+      "filePath": "bestiary/add.tsx"
     },
     "/me/login": {
       "filePath": "me/login.tsx"
@@ -322,6 +371,9 @@ export const routeTree = rootRoute
     },
     "/spells/": {
       "filePath": "spells/index.lazy.tsx"
+    },
+    "/bestiary/edit/$id": {
+      "filePath": "bestiary/edit/$id.tsx"
     },
     "/spells/edit/$id": {
       "filePath": "spells/edit/$id.tsx"
