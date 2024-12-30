@@ -1,9 +1,6 @@
 import { trpc } from '@/utils/trpc';
-import {
-	CreatureComponent,
-	CreatureItem,
-	NewCreature,
-} from '@api/lib/ZodCreature';
+import { CreatureComponent } from '@api/lib/ZodComponent';
+import { CreatureItem, NewCreature } from '@api/lib/ZodCreature';
 import { useEffect, useState } from 'react';
 import { UseFormSetValue } from 'react-hook-form';
 import { Field } from '../../../RHFComponents';

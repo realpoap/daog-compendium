@@ -130,7 +130,8 @@ type CreatureAction {
 
 model Action {
   id          String     @id @default(auto()) @map("_id") @db.ObjectId
-  name        String     @unique
+  searchName        String     @unique
+  name  String
   action      ActionType
   type        String
   flavor      String?
@@ -201,8 +202,9 @@ model Spell {
 
 model Component {
   id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  searchName  String    @unique
+  name  String
   quantity    Float?
-  name        String    @unique
   description String?
   weight      Float?
   value       Float?
@@ -225,7 +227,8 @@ type CreatureComponent {
 model Item {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   quantity    Float?
-  name        String   @unique
+  searchName        String   @unique
+  name  String
   description String?
   weight      Float?
   value       Float?

@@ -1,5 +1,8 @@
 import { z } from 'zod';
 import { ComponentSchema, ItemSchema } from './ZodItem';
+import { CreatureComponentSchema } from './ZodComponent';
+import { CreatureActionSchema } from './ZodAction';
+
 
 export const StatProfilSchema = z.object({
   CEL: z.number().int(),
@@ -18,30 +21,6 @@ export const StatProfilSchema = z.object({
 
 export type StatProfil = z.infer<typeof StatProfilSchema>
 
-export const ActionTypeSchema = z.enum(['main','limited','free','travel','epic']);
-
-export const CreatureActionSchema = z.object({
-	action: ActionTypeSchema,
-	name: z.string(),
-	type: z.string(),
-	flavor: z.string().nullable(),
-	description: z.string().nullable(),
-	damages: z.string().nullable(),
-	effects: z.string().nullable(),
-	heal: z.string().nullable(),
-	target: z.string().nullable(),
-	range: z.string().nullable(),
-})
-
-export const ActionWithCreatureIdSchema = CreatureActionSchema.extend({
-  id: z.string(),
-})
-
-export type ActionWithCreatureId = z.infer<typeof ActionWithCreatureIdSchema>
-
-export type CreatureAction = z.infer<typeof CreatureActionSchema>
-
-
 export const ActionListSchema = z.object({
   main: z.number().int(),
   limited: z.number().int().nullable(),
@@ -53,7 +32,7 @@ export const ActionListSchema = z.object({
 export type ActionList = z.infer<typeof ActionListSchema>
 
 export const CreatureAttributeSchema = z.object({
-  name: z.string(),
+  name: z.string({required_error: 'Name is required'}).min(4,'Name must be greater than 3'),
   flavor: z.string().nullable(),
   description: z.string().nullable(),
 })
@@ -68,21 +47,9 @@ export const NewAttributeSchema = z.object({
 
 export type NewAttribute = z.infer<typeof NewAttributeSchema>
 
-export const CreatureComponentSchema = z.object({
-  name: z.string(),
-  quantity: z.number().nullable(),
-  description: z.string().nullable(),
-  weight: z.number().nullable(),
-  value: z.number().nullable(),
-  valueWeight: z.number().nullable(),
-  rarity: z.string().nullable(),
-  uses: z.string().nullable(),
-})
-
-export type CreatureComponent = z.infer<typeof CreatureComponentSchema>
-
 export const CreatureItemSchema = z.object({
-  name: z.string(),
+  searchName: z.string(),
+  name: z.string({required_error: 'Name is required'}).min(4,'Name must be greater than 3'),
   quantity: z.number().nullable(),
   description: z.string().nullable(),
   weight: z.number().nullable(),

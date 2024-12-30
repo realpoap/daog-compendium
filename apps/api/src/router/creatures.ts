@@ -1,4 +1,5 @@
 import { prisma } from '@api/index';
+import { ActionSchema } from '@api/lib/ZodAction';
 import { ActionWithCreatureIdSchema, CreatureActionSchema, ZodCreature, ZodNewCreature } from '@api/lib/ZodCreature';
 import { procedure, router } from '@api/trpc';
 import { z } from 'zod';
@@ -95,10 +96,10 @@ export const creaturesRouter = router({
 			})
 		}),
 	addAction: procedure
-		.input(ActionWithCreatureIdSchema)
+		.input(ActionSchema)
 		.mutation(async({input}) =>{
 			console.log('💌 updating creature action :', input.name, 'with id:', input.id)
-			const {id, ...action} = input
+			const {id,searchName, ...action} = input
 			return await prisma.creature.update({
 				where: {id: input.id},
 				data: {

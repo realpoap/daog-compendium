@@ -1,5 +1,5 @@
 import { prisma } from '@api/index';
-import { ComponentSchema, NewComponentSchema } from '@api/lib/ZodItem';
+import { ComponentSchema, CreatureComponentSchema } from '@api/lib/ZodComponent';
 import { procedure, router } from '@api/trpc';
 import { z } from 'zod';
 
@@ -37,7 +37,7 @@ export const componentsRouter = router({
 			})
 		}),
 	create: procedure
-		.input(NewComponentSchema)
+		.input(ComponentSchema)
 		.mutation(async({input}) => {
 			console.log('💌 creating component #', input.name)
 			return await prisma.component.create({
@@ -45,7 +45,7 @@ export const componentsRouter = router({
 			})
 		}),
 	createMany: procedure
-		.input(NewComponentSchema)
+		.input(ComponentSchema)
 		.mutation(async({input}) => {
 			console.log('💌 creating multiple components ...');
 			return await prisma.component.createMany({
@@ -55,9 +55,9 @@ export const componentsRouter = router({
 	update: procedure
 		.input(ComponentSchema)
 		.mutation(async({input}) =>{
-			console.log('💌 updating component :', input.name)
+			console.log('💌 updating component :', input.searchName)
 			return await prisma.component.update({
-				where: {name: input.name},
+				where: {searchName: input.searchName},
 				data: input
 			})
 		}),
