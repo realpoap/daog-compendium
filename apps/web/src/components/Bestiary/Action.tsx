@@ -1,5 +1,5 @@
 import { cn } from '@/utils/classNames';
-import { CreatureAction } from '@api/lib/ZodCreature';
+import { CreatureAction } from '@api/lib/ZodAction';
 
 type ActionProps = {
 	action: CreatureAction;

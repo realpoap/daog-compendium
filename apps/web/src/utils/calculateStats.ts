@@ -1,5 +1,6 @@
-import { Creature,  CreatureAttribute, CreatureItem, NewCreature } from "@api/lib/ZodCreature";
+import { Creature,  CreatureAttribute, NewCreature } from "@api/lib/ZodCreature";
 import { CreatureAction } from "@api/lib/ZodAction";
+import { CreatureItem } from "@api/lib/ZodItem";
 import { CreatureComponent } from "@api/lib/ZodComponent";
 
 export const calculateStats = (creature: Creature | NewCreature) => {

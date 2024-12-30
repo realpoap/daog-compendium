@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { ComponentSchema, ItemSchema } from './ZodItem';
+import { CreatureItemSchema } from './ZodItem';
 import { CreatureComponentSchema } from './ZodComponent';
 import { CreatureActionSchema } from './ZodAction';
 
@@ -46,24 +46,6 @@ export const NewAttributeSchema = z.object({
 })
 
 export type NewAttribute = z.infer<typeof NewAttributeSchema>
-
-export const CreatureItemSchema = z.object({
-  searchName: z.string(),
-  name: z.string({required_error: 'Name is required'}).min(4,'Name must be greater than 3'),
-  quantity: z.number().nullable(),
-  description: z.string().nullable(),
-  weight: z.number().nullable(),
-  value: z.number().nullable(),
-  valueWeight: z.number().nullable(),
-  rarity: z.string().nullable(),
-  damages: z.string().nullable(),
-  armor: z.number().int().nullable(),
-  properties: z.string().nullable(),
-  isRelic: z.boolean().nullable(),
-  magicWeight: z.number().int().nullable(),
-})
-
-export type CreatureItem = z.infer<typeof CreatureItemSchema>
 
 export const ZodCreature = z.object({
 	size: z.enum(['tiny','small','average','large','huge','gigantic'],{
