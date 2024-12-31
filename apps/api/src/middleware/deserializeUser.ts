@@ -28,7 +28,7 @@ export const deserializeUser = async ({
     };
 
     if (!access_token) {
-      console.warn('Did not find access token');
+      //console.warn('Did not find access token');
       return notAuthenticated;
     }
 

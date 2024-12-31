@@ -8,10 +8,10 @@ const SubmitButton = ({ text, isLoading }: Props) => {
 		<button
 			type='submit'
 			disabled={isLoading}
-			className='bg-accent font-grenze m-y-2 mt-8 flex w-2/3 flex-col items-center justify-center self-center rounded-lg px-4 py-2 text-xl font-bold transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:bg-stone-500'
+			className='bg-accent font-cabin m-y-2 disabled:bg-accent disabled:hover:glass disabled:hover:bg-accent mt-8 flex max-h-fit max-w-fit cursor-pointer flex-col items-center justify-center self-center rounded-full px-8 py-2 text-base font-bold uppercase text-stone-900 transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:opacity-100 disabled:hover:ring-0'
 		>
 			{!isLoading ? (
-				<span className='text-center'>{text}</span>
+				<span className='text-center drop-shadow-lg'>{text}</span>
 			) : (
 				<span className='loading loading-dots loading-md align-baseline'></span>
 			)}

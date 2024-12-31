@@ -43,10 +43,10 @@ model Creature {
   name            String
   rank            String?
   isBoss          Boolean?     @default(false)
-  type            Type
+  type            Type?
   subtype         String?
-  alignment       Alignment
-  size            CreatureSize
+  alignment       Alignment?
+  size            CreatureSize?
   createdAt       DateTime?    @default(now())
   updatedAt       DateTime?    @updatedAt
   level           Int
@@ -87,6 +87,7 @@ model Attribute {
 }
 
 enum Type {
+  oddity
   plant
   demon
   fae
@@ -97,6 +98,7 @@ enum Type {
   undead
   wyrm
   golem
+
 }
 
 enum Alignment {
@@ -115,16 +117,25 @@ type ActionList {
   epic    Int  @default(0)
 }
 
+enum ActionTarget {
+  single
+  multiple
+  random
+  self
+  terrain
+  none
+}
+
 type CreatureAction {
   name        String
   action      ActionType
-  type        String
+  type        SpellAction
   flavor      String?
   description String?
   damages     String?
   effects     String?
   heal        String?
-  target      String?
+  target      ActionTarget
   range       String?
 }
 
@@ -282,6 +293,7 @@ enum SpellAction {
   transform
   move
   remove
+  restrain
   puzzle
 }
 
@@ -298,5 +310,6 @@ enum SpellTarget {
   multiple
   random
   self
+  terrain
   none
 }

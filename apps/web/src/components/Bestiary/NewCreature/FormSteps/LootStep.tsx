@@ -1,7 +1,7 @@
 import { trpc } from '@/utils/trpc';
 import { CreatureComponent } from '@api/lib/ZodComponent';
-import { CreatureItem } from '@api/lib/ZodItem';
 import { NewCreature } from '@api/lib/ZodCreature';
+import { CreatureItem } from '@api/lib/ZodItem';
 import { useEffect, useState } from 'react';
 import { UseFormSetValue } from 'react-hook-form';
 import { Field } from '../../../RHFComponents';
@@ -90,7 +90,7 @@ const LootStep = ({
 						<div className='skeleton h-10 w-full dark:bg-stone-700'></div>
 					)}
 				</Field>
-				<div className='divider h-1 rounded bg-stone-700'></div>
+				<div className='divider h-1 rounded bg-stone-700 shadow'></div>
 				<h3 className='font-grenze text-left text-4xl text-purple-400'>
 					Scavenge
 				</h3>

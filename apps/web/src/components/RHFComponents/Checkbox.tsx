@@ -28,7 +28,7 @@ export const Checkbox = ({
 				{...register(name)}
 				id={id}
 			/>
-			<span className='label-text font-noto text-accent text-sm'>
+			<span className='label-text font-cabin text-accent text-sm'>
 				{label ?? name}
 			</span>
 		</div>

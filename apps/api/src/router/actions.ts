@@ -1,5 +1,5 @@
 import { prisma } from '@api/index';
-import { ActionSchema } from '@api/lib/ZodAction';
+import { ActionSchema, NewActionSchema } from '@api/lib/ZodAction';
 import { procedure, router } from '@api/trpc';
 import { z } from 'zod';
 
@@ -37,15 +37,19 @@ export const actionsRouter = router({
 			})
 		}),
 	create: procedure
-		.input(ActionSchema)
+		.input(NewActionSchema)
 		.mutation(async({input}) => {
-			console.log('💌 creating action #', input.searchName)
+			try {
+				console.log('💌 creating action #', input.searchName)
 			return await prisma.action.create({
 				data: input,
 			})
+			} catch (error) {
+				
+			}
 		}),
 	createMany: procedure
-		.input(ActionSchema)
+		.input(NewActionSchema)
 		.mutation(async({input}) => {
 			console.log('💌 creating multiple actions ...');
 			return await prisma.action.createMany({
@@ -55,10 +59,15 @@ export const actionsRouter = router({
 	update: procedure
 		.input(ActionSchema)
 		.mutation(async({input}) =>{
-			console.log('💌 updating action :', input.searchName)
+			try {
+					console.log('💌 updating action :', input.searchName)
 			return await prisma.action.update({
 				where: {searchName: input.searchName},
 				data: input
 			})
+			} catch (error) {
+				console.error("Error in action.count:", error)
+			throw new Error(`Internal server error`);
+			}
 		}),
 })

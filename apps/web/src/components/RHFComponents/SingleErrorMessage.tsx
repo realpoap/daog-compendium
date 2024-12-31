@@ -5,7 +5,7 @@ export const SingleErrorMessage = ({ name }: { name: string }) => {
 		<Controller
 			name={name}
 			render={({ fieldState: { error } }) => (
-				<p className='label-text text-error font-noto text-xs italic'>
+				<p className='label-text text-error font-cabin pt-1 text-sm italic'>
 					{error?.message}
 				</p>
 			)}

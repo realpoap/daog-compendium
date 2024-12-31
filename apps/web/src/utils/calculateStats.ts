@@ -29,7 +29,7 @@ const calcLevel = (creature: Creature | NewCreature) => {
 }
 
 export const defaultCreature : NewCreature = {
-			size: 'average',
+			size: null,
 			stats: {
 				CEL: 15,
 				AGI: 15,
@@ -44,13 +44,13 @@ export const defaultCreature : NewCreature = {
 				SOC: 15,
 				ERU: 15,
 			},
-			fullname: 'test',
-			name: 'test',
+			fullname: '',
+			name: '',
 			rank: null,
 			isBoss: false,
-			type: 'plant',
+			type: null,
 			subtype: null,
-			alignment: 'neutral',
+			alignment: null,
 			level: 0,
 			attack: 0,
 			attackBonus: null,
@@ -65,8 +65,8 @@ export const defaultCreature : NewCreature = {
 			magic: null,
 			spirit: null,
 			glory: null,
-			flavor: 'flavor text',
-			description: 'description text',
+			flavor: '',
+			description: '',
 			actionList: {
 				main: 1,
 				epic:0,

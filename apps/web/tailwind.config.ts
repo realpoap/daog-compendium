@@ -1,3 +1,4 @@
+/** @type {import('tailwindcss').Config} */
 import daisyui from 'daisyui';
 import icons from 'rocketicons/tailwind';
 import type { Config } from 'tailwindcss';
@@ -8,7 +9,7 @@ const config: Pick<Config, 'content' | 'presets' | 'darkMode' | 'plugins' | 'the
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   presets: [sharedConfig],
   darkMode: 'media',
-  plugins: [icons, daisyui],
+  plugins: [icons, daisyui ],
   theme: {
     extend: {
       screen: {
@@ -16,8 +17,36 @@ const config: Pick<Config, 'content' | 'presets' | 'darkMode' | 'plugins' | 'the
       },
       fontFamily: {
         grenze: ["Grenze", "serif"],
-        garamond: ["EB Garamond", "sans-serif"],
-        noto: ["Noto Serif", "sans-serif"],
+        noto: ["Cabin", "sans-serif"],
+        cabin: ["Cabin", "sans-serif"],
+      },
+      keyframes: {
+        wiggle: {
+          '0%, 100%': {
+            transform: 'rotate(-3deg)'
+          },
+          '50%': {
+            transform: 'rotate(3deg)'
+          },
+        },
+        shake: {
+          '10%, 90%': {
+            transform: 'translate3d(0px, 0, 0)'
+          },
+          '20%, 80%': {
+            transform: 'translate3d(-1px, 0, 0)'
+          },
+          '30%, 50%, 70%': {
+            transform: 'translate3d(0px, 0, 0)'
+          },
+
+          '40%, 60%': {
+            transform: 'translate3d(1px, 0, 0)'
+          },
+      }},
+      animation: {
+        wiggle: 'wiggle 1s ease-in-out infinite',
+        shake: 'shake 0.5s infinite',
       },
     },
   },

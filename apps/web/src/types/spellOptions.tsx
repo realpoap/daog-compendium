@@ -142,47 +142,51 @@ export const castingOptions = [
 
 export const actionOptions = [
 	{
-		label: 'charm',
+		label: 'Charm',
 		value: 'charm',
 	},
 	{
-		label: 'create',
+		label: 'Create',
 		value: 'create',
 	},
 	{
-		label: 'damage',
+		label: 'Damage',
 		value: 'damage',
 	},
 	{
-		label: 'enhance',
+		label: 'Enhance',
 		value: 'enhance',
 	},
 	{
-		label: 'heal',
+		label: 'Heal',
 		value: 'heal',
 	},
 	{
-		label: 'link',
+		label: 'Link',
 		value: 'link',
 	},
 	{
-		label: 'move',
+		label: 'Move',
 		value: 'move',
 	},
 	{
-		label: 'protect',
+		label: 'Protect',
 		value: 'protect',
 	},
 	{
-		label: 'puzzle',
+		label: 'Puzzle',
 		value: 'puzzle',
 	},
 	{
-		label: 'transform',
-		value: 'transform',
+		label: 'Remove',
+		value: 'remove',
 	},
 	{
-		label: 'remove',
-		value: 'remove',
+		label: 'Restrain',
+		value: 'restrain',
+	},
+	{
+		label: 'Transform',
+		value: 'transform',
 	},
 ];

@@ -24,6 +24,10 @@ export const creatureTypeOptions = [
 		value: 'monster',
 	},
 	{
+		label: 'Oddity',
+		value: 'oddity',
+	},
+	{
 		label: 'Person',
 		value: 'person',
 	},

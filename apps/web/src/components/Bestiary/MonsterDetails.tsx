@@ -1,6 +1,7 @@
 import { cn } from '@/utils/classNames';
 import { trpc } from '@/utils/trpc';
 import { CreatureAction } from '@api/lib/zod-prisma';
+import { CreatureAttribute } from '@api/lib/ZodCreature';
 import { useNavigate, useParams } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
@@ -14,19 +15,24 @@ import {
 import Ability from './Ability';
 import Action from './Action';
 import ActionForm from './utils/ActionForm';
+import AttributeForm from './utils/AttributeForm';
 
 const MonsterDetails = () => {
 	const navigate = useNavigate();
 	const { id } = useParams({ strict: false });
 	const [actions, setActions] = useState<CreatureAction[]>([]);
+	const [attributes, setAttributes] = useState<CreatureAttribute[]>([]);
 
 	const monsterById = trpc.creatures.getById.useQuery(id as string);
 
 	useEffect(() => {
-		if (monsterById.data) setActions(monster?.actions);
+		if (monsterById.data) {
+			monster?.actions && setActions(monster?.actions);
+			monster?.attributes && setAttributes(monster?.attributes);
+		}
 	}, [monsterById.data]);
 
-	if (!monsterById.data) {
+	if (monsterById.isPending) {
 		return <div>loading</div>;
 	}
 
@@ -100,9 +106,29 @@ const MonsterDetails = () => {
 						{monster?.defense || '~'}
 					</span>
 				</div>
+				<button
+					className='bg-accent font-cabin m-y-2 mt-8 flex max-h-fit max-w-fit flex-col items-center justify-center self-center rounded-full px-8 py-2 text-base font-extrabold uppercase text-stone-900 transition-all duration-100 hover:ring-2 hover:ring-stone-200'
+					onClick={e => {
+						e.stopPropagation();
+
+						(
+							document.getElementById('attribute-form') as HTMLDialogElement
+						).showModal();
+					}}
+				>
+					Add attribute
+				</button>
+				{createPortal(
+					<AttributeForm
+						id={monster?.id as string}
+						attributes={attributes}
+						setAttributes={setAttributes}
+					/>,
+					document.body,
+				)}
 				{monster?.attributes && (
 					<div className='flex w-full flex-row flex-wrap items-center justify-center gap-2 overflow-visible px-2'>
-						{monster.attributes.map(a => (
+						{attributes.map(a => (
 							<Ability
 								key={a.name}
 								name={a.name}
@@ -113,7 +139,7 @@ const MonsterDetails = () => {
 				)}
 
 				<button
-					className='bg-accent font-grenze m-y-2 mt-8 flex w-1/3 flex-col items-center justify-center self-center rounded-lg px-4 py-2 text-xl font-bold'
+					className='bg-accent font-cabin m-y-2 mt-8 flex max-h-fit max-w-fit flex-col items-center justify-center self-center rounded-full px-8 py-2 text-base font-extrabold uppercase text-stone-900 transition-all duration-100 hover:ring-2 hover:ring-stone-200'
 					onClick={e => {
 						e.stopPropagation();
 
@@ -126,8 +152,8 @@ const MonsterDetails = () => {
 				</button>
 				{createPortal(
 					<ActionForm
-						id={monster?.id}
-						name={monster?.name}
+						id={monster?.id as string}
+						name={monster?.name as string}
 						actions={actions}
 						setActions={setActions}
 					/>,
@@ -139,7 +165,12 @@ const MonsterDetails = () => {
 					</h3>
 					{actions
 						?.filter(a => a.action !== 'epic')
-						.map(a => <Action action={a} />)}
+						.map(a => (
+							<Action
+								key={a.name}
+								action={a}
+							/>
+						))}
 				</div>
 
 				{monster?.isBoss && (
@@ -149,7 +180,12 @@ const MonsterDetails = () => {
 						</h3>
 						{actions
 							?.filter(a => a.action === 'epic')
-							.map(a => <Action action={a} />)}
+							.map(a => (
+								<Action
+									key={a.name}
+									action={a}
+								/>
+							))}
 					</div>
 				)}
 			</div>

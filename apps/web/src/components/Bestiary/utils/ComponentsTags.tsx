@@ -41,13 +41,13 @@ export const ComponentsTags = ({ setTags, tags, list }: Props) => {
 	return (
 		<div
 			className={cn(
-				'font-grenze flex w-full flex-row flex-wrap items-center gap-2 rounded-lg p-2 text-lg text-purple-900 caret-purple-900 shadow-sm placeholder:italic focus:border-purple-900 focus:outline-none focus:ring-1 focus:ring-purple-900 dark:bg-stone-700 dark:text-purple-400 dark:caret-purple-400 dark:placeholder:text-stone-400 dark:focus:border-purple-400 dark:focus:ring-purple-400',
+				'font-cabin flex w-full flex-row flex-wrap items-center gap-2 rounded-lg p-2 text-lg text-purple-900 caret-purple-900 shadow-sm focus:border-purple-900 focus:outline-none focus:ring-1 focus:ring-purple-900 dark:bg-stone-700 dark:text-purple-400 dark:caret-purple-400 dark:placeholder:text-stone-400 dark:focus:border-purple-400 dark:focus:ring-purple-400',
 			)}
 		>
 			{tags.map((tag, index) => (
 				<span
 					key={index}
-					className='badge font-grenze inline-flex cursor-pointer border-0 bg-purple-500 text-center align-middle text-lg font-semibold text-stone-800 hover:bg-stone-500 hover:text-red-500'
+					className='badge font-cabin inline-flex cursor-pointer border-0 bg-purple-500 text-center align-middle text-lg font-semibold text-stone-800 hover:bg-stone-500 hover:text-red-500'
 					onClick={() => removeTag(index)}
 				>
 					{tag}
@@ -56,7 +56,7 @@ export const ComponentsTags = ({ setTags, tags, list }: Props) => {
 			<div className='items-left flex flex-1 flex-col justify-between gap-2 text-left'>
 				<input
 					className={cn(
-						'flex-1 bg-transparent px-2 focus:outline-none focus:ring-0',
+						'flex-1 bg-transparent px-2 placeholder:italic placeholder:text-stone-500 focus:outline-none focus:ring-0',
 					)}
 					placeholder='Write components separated by a comma'
 					type='text'
@@ -66,7 +66,7 @@ export const ComponentsTags = ({ setTags, tags, list }: Props) => {
 					onKeyUp={handleKeyUp}
 				/>
 				{searchTerm && (
-					<div className='absolute z-10 max-h-svh rounded shadow-lg dark:bg-stone-700'>
+					<div className='align-center absolute z-10 ml-2 mt-10 flex max-h-svh flex-col justify-start rounded dark:bg-stone-700'>
 						<ResultList
 							tags={tags}
 							results={list}
@@ -109,7 +109,11 @@ function ResultList({
 		);
 	};
 	if (results.length === 0) {
-		return <div>No component found</div>;
+		return (
+			<div className='px-2 py-1 align-baseline text-sm italic text-red-500'>
+				No component found
+			</div>
+		);
 	}
 	return (
 		<>
