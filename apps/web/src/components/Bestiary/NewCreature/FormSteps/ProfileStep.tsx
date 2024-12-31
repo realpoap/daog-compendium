@@ -1,5 +1,7 @@
+import { ActionButton } from '@/components/Buttons';
 import { cn } from '@/utils/classNames';
 import { NewCreature } from '@api/lib/ZodCreature';
+import { RiArrowDropLeftLine, RiArrowDropRightLine } from 'rocketicons/ri';
 import { Field, InputNumber } from '../../../RHFComponents/index';
 
 const ProfileStep = ({
@@ -136,8 +138,14 @@ const ProfileStep = ({
 					type='checkbox'
 					className='peer min-h-2'
 				/>
-				<div className='collapse-title font-noto m-0 ml-[5vw] mt-2 min-h-2 py-0 text-xs text-purple-400'>
-					+ modifiers
+				<div className='collapse-title min-h-fit px-10 py-0'>
+					<div
+						className={cn(
+							'font-cabin font-stone-200 m-0 border-0 text-sm font-bold text-purple-400',
+						)}
+					>
+						+ modifiers
+					</div>
 				</div>
 				<div
 					className={cn(
@@ -197,18 +205,24 @@ const ProfileStep = ({
 			</div>
 
 			<div className='flex w-full flex-row items-center justify-center gap-4'>
-				<button
-					className='font-grenze m-y-2 mt-8 flex w-1/3 flex-col items-center justify-center self-center rounded-lg bg-purple-500 px-4 py-2 text-xl font-bold transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:bg-stone-500'
+				<ActionButton
+					color='purple-500'
+					textColor='stone-800'
 					onClick={() => handlePrevious(1)}
 				>
-					&#10094; Prev
-				</button>
-				<button
-					className='font-grenze m-y-2 mt-8 flex w-1/3 flex-col items-center justify-center self-center rounded-lg bg-purple-500 px-4 py-2 text-xl font-bold transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:bg-stone-500'
+					<span className='pr-4 align-middle'>
+						<RiArrowDropLeftLine className='icon-stone-800-base' /> Prev
+					</span>
+				</ActionButton>
+				<ActionButton
+					color='purple-500'
+					textColor='stone-800'
 					onClick={() => handleNext(['stats'], 3)}
 				>
-					Next &#10095;
-				</button>
+					<span className='pl-4 align-middle'>
+						Next <RiArrowDropRightLine className='icon-stone-800-base' />
+					</span>
+				</ActionButton>
 			</div>
 		</div>
 	);

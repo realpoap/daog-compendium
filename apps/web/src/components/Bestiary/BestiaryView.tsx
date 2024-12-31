@@ -19,7 +19,6 @@ const BestiaryView = () => {
 	});
 
 	const { user } = useAuth();
-
 	const isEditor = user?.role === 'ADMIN' || user?.role === 'EDITOR';
 
 	const keys = ['name', 'description', 'type', 'alignment', 'subtype'];

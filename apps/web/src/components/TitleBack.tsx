@@ -2,7 +2,7 @@ const TitleBack = ({ title }: { title: string }) => {
 	return (
 		<>
 			<button
-				className='font-grenze mt-1 align-middle text-2xl text-stone-500 hover:text-stone-200'
+				className='badge font-cabin mt-1 align-middle text-base uppercase text-stone-500 hover:text-stone-200'
 				onClick={() => history.go(-1)}
 			>
 				<span className='text-2xl'>&#8249;</span> Back

@@ -278,6 +278,7 @@ export const CreatureActionSchema = z.object({
   action: ActionTypeSchema,
   type: SpellActionSchema,
   target: ActionTargetSchema,
+  searchName: z.string(),
   name: z.string(),
   flavor: z.string().nullable(),
   description: z.string().nullable(),
@@ -635,6 +636,7 @@ export const CreatureActionArgsSchema: z.ZodType<Prisma.CreatureActionDefaultArg
 }).strict();
 
 export const CreatureActionSelectSchema: z.ZodType<Prisma.CreatureActionSelect> = z.object({
+  searchName: z.boolean().optional(),
   name: z.boolean().optional(),
   action: z.boolean().optional(),
   type: z.boolean().optional(),
@@ -2625,6 +2627,7 @@ export const CreatureActionCompositeListFilterSchema: z.ZodType<Prisma.CreatureA
 }).strict();
 
 export const CreatureActionObjectEqualityInputSchema: z.ZodType<Prisma.CreatureActionObjectEqualityInput> = z.object({
+  searchName: z.string(),
   name: z.string(),
   action: z.lazy(() => ActionTypeSchema),
   type: z.lazy(() => SpellActionSchema),
@@ -3402,6 +3405,7 @@ export const CreatureActionListCreateEnvelopeInputSchema: z.ZodType<Prisma.Creat
 }).strict();
 
 export const CreatureActionCreateInputSchema: z.ZodType<Prisma.CreatureActionCreateInput> = z.object({
+  searchName: z.string(),
   name: z.string(),
   action: z.lazy(() => ActionTypeSchema),
   type: z.lazy(() => SpellActionSchema),
@@ -3771,6 +3775,7 @@ export const CreatureActionWhereInputSchema: z.ZodType<Prisma.CreatureActionWher
   AND: z.union([ z.lazy(() => CreatureActionWhereInputSchema),z.lazy(() => CreatureActionWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => CreatureActionWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => CreatureActionWhereInputSchema),z.lazy(() => CreatureActionWhereInputSchema).array() ]).optional(),
+  searchName: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   name: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   action: z.union([ z.lazy(() => EnumActionTypeFilterSchema),z.lazy(() => ActionTypeSchema) ]).optional(),
   type: z.union([ z.lazy(() => EnumSpellActionFilterSchema),z.lazy(() => SpellActionSchema) ]).optional(),
@@ -4128,6 +4133,7 @@ export const CreatureAttributeUpdateInputSchema: z.ZodType<Prisma.CreatureAttrib
 }).strict();
 
 export const CreatureActionUpdateInputSchema: z.ZodType<Prisma.CreatureActionUpdateInput> = z.object({
+  searchName: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   action: z.union([ z.lazy(() => ActionTypeSchema),z.lazy(() => EnumActionTypeFieldUpdateOperationsInputSchema) ]).optional(),
   type: z.union([ z.lazy(() => SpellActionSchema),z.lazy(() => EnumSpellActionFieldUpdateOperationsInputSchema) ]).optional(),

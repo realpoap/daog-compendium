@@ -18,7 +18,7 @@ export const Checkbox = ({
 	return (
 		<div className='form-control flex cursor-pointer flex-row items-center gap-2 space-x-1'>
 			<input
-				className={cn('label checkbox checkbox-accent cursor-pointer', {
+				className={cn('label checkbox checkbox-primary cursor-pointer', {
 					'select-error': errors[name],
 					'ring-error': errors[name],
 					'ring-2': errors[name],
@@ -28,7 +28,7 @@ export const Checkbox = ({
 				{...register(name)}
 				id={id}
 			/>
-			<span className='label-text font-cabin text-accent text-sm'>
+			<span className='label-text font-cabin text-primary text-base font-bold'>
 				{label ?? name}
 			</span>
 		</div>

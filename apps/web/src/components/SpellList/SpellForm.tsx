@@ -12,6 +12,7 @@ import { useRouter } from '@tanstack/react-router';
 import { FormProvider, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
+import { SubmitButton } from '../Buttons';
 import {
 	Field,
 	Input,
@@ -20,6 +21,7 @@ import {
 	Textarea,
 } from '../RHFComponents/index';
 import TitleBack from '../TitleBack';
+import TitleCollapse from '../TitleCollapse';
 
 type NewSpell = z.infer<typeof ZodNewSpell>; // Types for New Spell to tRPC
 
@@ -101,9 +103,7 @@ const SpellForm = () => {
 							type='checkbox'
 							className='peer min-h-2'
 						/>
-						<div className='collapse-title font-noto m-0 ml-4 mt-2 min-h-2 py-0 text-xs text-purple-400'>
-							+ add glaise name
-						</div>
+						<TitleCollapse title='add glaise name' />
 						<div
 							className={cn(
 								'collapse-content peer-checked:collapse-open flex flex-col items-center pb-0 pr-0',
@@ -222,9 +222,7 @@ const SpellForm = () => {
 							type='checkbox'
 							className='peer min-h-2 w-full py-0'
 						/>
-						<div className='collapse-title font-noto m-0 ml-4 mt-2 min-h-2 py-0 text-xs text-purple-400'>
-							+ add details
-						</div>
+						<TitleCollapse title='add details' />
 						<div
 							className={cn(
 								'collapse-content flex flex-col items-center justify-start p-0 pb-0 peer-checked:visible',
@@ -290,17 +288,12 @@ const SpellForm = () => {
 					</div>
 
 					{/* SUBMIT ------------------------------------------------- */}
-					<button
-						type='submit'
-						disabled={methods.formState.isSubmitting}
-						className='bg-accent font-grenze w-1/2 self-center rounded-lg px-4 py-2 text-lg font-bold transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:bg-stone-500 md:w-1/4'
-					>
-						{!methods.formState.isSubmitting ? (
-							<span className='text-center'>Create</span>
-						) : (
-							<span className='loading loading-dots loading-md'></span>
-						)}
-					</button>
+					<SubmitButton
+						isLoading={methods.formState.isSubmitting}
+						color='accent'
+						textColor='stone-800'
+						text='Create'
+					/>
 				</form>
 			</FormProvider>
 		</div>

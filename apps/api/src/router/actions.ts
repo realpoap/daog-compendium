@@ -12,7 +12,6 @@ export const actionsRouter = router({
 				}
 			});
 		} catch (error) {
-			console.error("Error in actions.getAll:", error); // Log the error for debugging
 			throw new Error(`Internal server error`);
 		}
 	}),
@@ -25,7 +24,6 @@ export const actionsRouter = router({
 				}
 			});
 		} catch (error) {
-			console.error("Error in action.count:", error)
 			throw new Error(`Internal server error`);
 		}
 	}),
@@ -36,11 +34,22 @@ export const actionsRouter = router({
 				where:{id:input}
 			})
 		}),
+	getBySearchName: procedure
+		.input(z.string())
+		.query(async({input}) => {
+			try {
+				return await prisma.action.findFirstOrThrow({
+				where:{searchName:input}
+			})
+			} catch (error) {
+				throw new Error(`Internal server error`);
+			}
+		
+		}),
 	create: procedure
 		.input(NewActionSchema)
 		.mutation(async({input}) => {
 			try {
-				console.log('💌 creating action #', input.searchName)
 			return await prisma.action.create({
 				data: input,
 			})
@@ -51,7 +60,6 @@ export const actionsRouter = router({
 	createMany: procedure
 		.input(NewActionSchema)
 		.mutation(async({input}) => {
-			console.log('💌 creating multiple actions ...');
 			return await prisma.action.createMany({
 				data: input
 			})
@@ -60,14 +68,24 @@ export const actionsRouter = router({
 		.input(ActionSchema)
 		.mutation(async({input}) =>{
 			try {
-					console.log('💌 updating action :', input.searchName)
 			return await prisma.action.update({
 				where: {searchName: input.searchName},
 				data: input
 			})
 			} catch (error) {
-				console.error("Error in action.count:", error)
 			throw new Error(`Internal server error`);
 			}
 		}),
+	delete: procedure
+		.input(z.string())
+		.mutation(async({input}) =>{
+			try {
+			return await prisma.action.delete({
+				where: {searchName: input},
+			})
+			} catch (error) {
+			throw new Error(`Internal server error`);
+			}
+		}),
+	
 })

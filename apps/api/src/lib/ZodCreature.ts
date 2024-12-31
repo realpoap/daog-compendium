@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { CreatureActionSchema } from './ZodAction';
+import { ActionSchema, NewActionSchema } from './ZodAction';
 import { CreatureComponentSchema } from './ZodComponent';
 import { CreatureItemSchema } from './ZodItem';
 
@@ -57,7 +57,7 @@ export const ZodCreature = z.object({
 	fullname: z.string(),
 	name: z.string({required_error: 'It shall be named !'}),
 	rank: z.string().nullable(),
-	type: z.enum(['plant','demon','fae','insect','person','beast','monster','undead','wyrm','golem'],{
+	type: z.enum(['plant','demon','fae','insect','person','beast','monster','undead','wyrm','golem','oddity'],{
   errorMap: () => ({ message: 'A creature must have a type' })}).nullable(),
 	subtype: z.string().nullable(),
 	alignment: z.enum(['saint','good','neutral','bad','evil'],{
@@ -84,7 +84,7 @@ export const ZodCreature = z.object({
 	loot:z.array(CreatureItemSchema),
 	scavenge:z.array(CreatureComponentSchema),
 	attributes:z.array(CreatureAttributeSchema),
-	actions:z.array(CreatureActionSchema),
+	actions:z.array(NewActionSchema),
 })
 
 export type Creature = z.infer<typeof ZodCreature>
@@ -122,7 +122,7 @@ export const ZodNewCreature = z.object({
 	loot:z.array(CreatureItemSchema),
 	scavenge:z.array(CreatureComponentSchema),
 	attributes:z.array(CreatureAttributeSchema),
-	actions:z.array(CreatureActionSchema),
+	actions:z.array(NewActionSchema),
 })
 
 export type NewCreature = z.infer<typeof ZodNewCreature>

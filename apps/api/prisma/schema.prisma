@@ -127,6 +127,7 @@ enum ActionTarget {
 }
 
 type CreatureAction {
+  searchName        String
   name        String
   action      ActionType
   type        SpellAction

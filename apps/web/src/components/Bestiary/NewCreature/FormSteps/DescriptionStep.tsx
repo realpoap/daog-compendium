@@ -1,3 +1,4 @@
+import { ActionButton } from '@/components/Buttons';
 import {
 	creatureAlignmentOptions,
 	creatureSizeOptions,
@@ -66,7 +67,7 @@ const DescriptionStep = ({
 			>
 				<Checkbox
 					name='isBoss'
-					label='is legendary'
+					label='legendary creature'
 				/>
 			</Field>
 			<div className='flex w-full justify-center gap-4 md:flex-row'>
@@ -112,8 +113,14 @@ const DescriptionStep = ({
 					type='checkbox'
 					className='peer min-h-2'
 				/>
-				<div className='collapse-title font-cabin m-0 ml-4 mt-2 min-h-2 py-0 text-sm text-purple-400'>
-					+ sub-type
+				<div className='collapse-title min-h-fit px-10 py-0'>
+					<div
+						className={cn(
+							'font-cabin font-stone-200 m-0 border-0 text-sm font-bold text-purple-400',
+						)}
+					>
+						+ sub-type
+					</div>
 				</div>
 				<div
 					className={cn(
@@ -159,8 +166,9 @@ const DescriptionStep = ({
 			>
 				<Textarea name='description' />
 			</Field>
-			<button
-				className='font-cabin m-y-2 disabled:glass mt-8 flex w-2/3 flex-row items-center justify-center self-center rounded-lg bg-purple-500 px-4 py-2 text-xl font-bold uppercase transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:bg-stone-500'
+			<ActionButton
+				color='purple-500'
+				textColor='stone-800'
 				onClick={() =>
 					handleNext(
 						[
@@ -179,8 +187,10 @@ const DescriptionStep = ({
 				}
 				type='button'
 			>
-				Next <RiArrowDropRightLine className='icon-stone-200-2xl' />
-			</button>
+				<span className='pl-4 align-middle'>
+					Next <RiArrowDropRightLine className='icon-stone-800-base' />
+				</span>
+			</ActionButton>
 		</div>
 	);
 };

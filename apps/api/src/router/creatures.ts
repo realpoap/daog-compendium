@@ -1,7 +1,8 @@
 import { prisma } from '@api/index';
-import { ActionWithCreatureIdSchema } from '@api/lib/ZodAction';
+import { ActionArraySchema, ActionSchema, NewActionSchema } from '@api/lib/ZodAction';
 import { AttributeSchema, ZodCreature, ZodNewCreature } from '@api/lib/ZodCreature';
 import { procedure, router } from '@api/trpc';
+import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
 export const creaturesRouter = router({
@@ -81,7 +82,6 @@ export const creaturesRouter = router({
 	createMany: procedure
 		.input(ZodNewCreature)
 		.mutation(async({input}) => {
-			console.log('💌 creating multiple creatures ...');
 			return await prisma.creature.createMany({
 				data: input
 			})
@@ -89,17 +89,15 @@ export const creaturesRouter = router({
 	update: procedure
 		.input(ZodCreature)
 		.mutation(async({input}) =>{
-			console.log('💌 updating creature :', input.fullname)
 			return await prisma.creature.update({
 				where: {id: input.id},
 				data: input
 			})
 		}),
 	addAction: procedure
-		.input(ActionWithCreatureIdSchema)
+		.input(ActionSchema)
 		.mutation(async({input}) =>{
-			console.log('💌 updating creature action :', input.name, 'with id:', input.id)
-			const {id, ...action} = input
+			const {id, ...action} = input // id is not action.id
 			return await prisma.creature.update({
 				where: {id: id},
 				data: {
@@ -109,10 +107,23 @@ export const creaturesRouter = router({
 				}
 			})
 		}),
+		removeAction: procedure
+		.input(ActionArraySchema)
+		.mutation(async({input}) => {
+			try {
+				return await prisma.creature.update({
+				where: {id: input.id},
+				data: {
+					actions: input.actions}
+				})
+			} catch (error) {
+				if (error === typeof Error)
+				throw new TRPCError({code:'INTERNAL_SERVER_ERROR'})
+			}
+		}),
 		addAttribute: procedure
 		.input(AttributeSchema)
 		.mutation(async({input}) =>{
-			console.log('💌 updating creature attribute :', input.name, 'with id:', input.id)
 			const {id, ...attribute} = input
 			return await prisma.creature.update({
 				where: {id: id},

@@ -5,8 +5,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { dataTagSymbol } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitButton } from '../Buttons';
 import { Field, Input } from '../RHFComponents';
-import SubmitButton from '../SubmitButton';
 
 const RegisterForm = () => {
 	const navigate = useNavigate();
@@ -72,6 +72,8 @@ const RegisterForm = () => {
 					<SubmitButton
 						text={'Sign in'}
 						isLoading={isAuthLoading}
+						color='accent'
+						textColor='stone-800'
 					/>
 				</form>
 			</FormProvider>

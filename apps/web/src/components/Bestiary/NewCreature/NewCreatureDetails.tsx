@@ -2,18 +2,17 @@ import { capitalizeFirstLetter } from '@/utils/capitalize';
 import { NewCreature } from '@api/lib/ZodCreature';
 import {
 	GiArmorVest,
-	GiBrain,
 	GiBullseye,
 	GiCheckedShield,
 	GiCrownedSkull,
 	GiFairyWand,
 	GiGlassHeart,
-	GiHeartDrop,
 	GiRoundStar,
 	GiSemiClosedEye,
 	GiSwordWound,
 	GiTentacleHeart,
 } from 'rocketicons/gi';
+import Ability from '../Ability';
 
 const NewCreatureDetails = ({
 	creature,
@@ -28,7 +27,7 @@ const NewCreatureDetails = ({
 				<div className='flex w-full flex-row items-start justify-end'>
 					<div className='indicator -right-6 -top-4'>
 						{creature?.isBoss && (
-							<div className='indicator-item badge badge-accent badge-lg absolute size-6 animate-bounce content-center items-center rounded-full p-0 shadow-sm shadow-stone-900'>
+							<div className='indicator-item badge bg-goldenrod-500 glass badge-lg absolute size-6 animate-bounce content-center items-center rounded-full p-0 shadow-sm shadow-stone-900'>
 								<GiCrownedSkull className='dark:icon-stone-800-sm' />
 							</div>
 						)}
@@ -51,6 +50,18 @@ const NewCreatureDetails = ({
 					{creature?.size as string} {creature?.alignment as string}{' '}
 					{creature?.type as string}
 				</p>
+				{creature?.attributes && (
+					<div className='flex w-full flex-row flex-wrap items-center justify-center gap-2 overflow-visible px-2'>
+						{creature.attributes.map(a => (
+							<div
+								key={a.name}
+								className='badge badge-md font-cabin cursor-pointer border-none bg-stone-500 px-4 py-3 font-semibold text-stone-700 shadow-sm'
+							>
+								{a.name}
+							</div>
+						))}
+					</div>
+				)}
 
 				{step > 1 && (
 					<>
@@ -88,7 +99,7 @@ const NewCreatureDetails = ({
 									<p>{creature.defense}</p>
 								</div>
 							)}
-							{creature.armor && (
+							{creature.armor != null && (
 								<div className='flex flex-row items-center justify-center gap-1'>
 									<GiArmorVest className='icon-base icon-stone-500' />
 									<p>Armor :</p>

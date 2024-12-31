@@ -1,28 +1,22 @@
+import { LockButton } from '@/components/Buttons';
 import { Field, Input, Select, Textarea } from '@/components/RHFComponents';
+import TitleCollapse from '@/components/TitleCollapse';
 import { actionTargetOptions } from '@/types/actionOptions';
 import { ActionOptions } from '@/types/creatureOptions';
 import { actionOptions } from '@/types/spellOptions';
 import { cn } from '@/utils/classNames';
 import { trpc } from '@/utils/trpc';
-import {
-	Action,
-	ActionSchema,
-	ActionWithCreatureId,
-	CreatureAction,
-	NewAction,
-} from '@api/lib/ZodAction';
+import { Action, ActionSchema, NewAction } from '@api/lib/ZodAction';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SetStateAction, useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { BiSolidLock } from 'rocketicons/bi';
-import { GiPadlock, GiTripleLock } from 'rocketicons/gi';
 
 type Props = {
 	id: string;
 	name: string;
-	actions: CreatureAction[];
-	setActions: React.Dispatch<SetStateAction<CreatureAction[]>>;
+	actions: NewAction[];
+	setActions: React.Dispatch<SetStateAction<NewAction[]>>;
 };
 
 const ActionForm = ({ id, name, actions, setActions }: Props) => {
@@ -63,15 +57,13 @@ const ActionForm = ({ id, name, actions, setActions }: Props) => {
 	useEffect(() => {
 		methods.setValue('id', id);
 		methods.setValue('searchName', `${methods.getValues('name')} (${name})`);
-	}, []);
+	}, [methods.getValues('name')]);
 
 	const onActionSubmit = (data: Action) => {
-		const { id, searchName, ...action } = data;
-		const actionForCreate = { ...action, searchName };
-		const actionForAddTo = { ...action, id };
+		const { id, ...action } = data;
 		setActions([...actions, action]);
-		createAction.mutate(actionForCreate as NewAction);
-		addActionOnCreature.mutate(actionForAddTo as ActionWithCreatureId);
+		createAction.mutate(action as NewAction);
+		addActionOnCreature.mutate(data);
 		(document.getElementById('action-form') as HTMLDialogElement).close();
 	};
 	return (
@@ -90,7 +82,6 @@ const ActionForm = ({ id, name, actions, setActions }: Props) => {
 							onSubmit={e => {
 								e.stopPropagation();
 								e.preventDefault();
-
 								methods.handleSubmit(onActionSubmit)(e);
 							}}
 						>
@@ -123,6 +114,13 @@ const ActionForm = ({ id, name, actions, setActions }: Props) => {
 									defaultValue=''
 								/>
 							</Field>
+							<Field name='target'>
+								<Select
+									name='target'
+									options={actionTargetOptions}
+									defaultValue=''
+								/>
+							</Field>
 							<Field name='flavor'>
 								<Input name='flavor' />
 							</Field>
@@ -130,16 +128,14 @@ const ActionForm = ({ id, name, actions, setActions }: Props) => {
 								<Textarea name='description' />
 							</Field>
 							<div
-								className='collapse'
+								className='collapse w-full'
 								tabIndex={0}
 							>
 								<input
 									type='checkbox'
 									className='peer min-h-2'
 								/>
-								<div className='collapse-title font-noto m-0 ml-[5vw] mt-2 min-h-2 py-0 text-xs text-purple-400'>
-									+ modifiers
-								</div>
+								<TitleCollapse title='add details' />
 								<div
 									className={cn(
 										'collapse-content peer-checked:collapse-open flex w-full flex-wrap items-center justify-center gap-4 pb-0 pr-0 md:flex-row',
@@ -154,36 +150,19 @@ const ActionForm = ({ id, name, actions, setActions }: Props) => {
 									<Field name='heal'>
 										<Input name='heal'></Input>
 									</Field>
-									<Field name='target'>
-										<Select
-											name='target'
-											options={actionTargetOptions}
-											defaultValue=''
-										/>
-									</Field>
 									<Field name='range'>
 										<Input name='range'></Input>
 									</Field>
 								</div>
 							</div>
 
-							<button
-								type='submit'
-								disabled={createAction.isPending || !methods.formState.isValid}
-								className='bg-accent font-cabin m-y-2 disabled:bg-accent disabled:hover:glass disabled:hover:bg-accent mt-8 flex w-2/3 cursor-pointer flex-col items-center justify-center self-center rounded-lg px-4 py-2 text-xl font-bold uppercase text-stone-800 transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:opacity-100 disabled:hover:ring-0'
-							>
-								{!createAction.isPending ? (
-									<span className='text-center'>
-										{!methods.formState.isValid ? (
-											<BiSolidLock className='icon-stone-500-lg' />
-										) : (
-											'Add Action'
-										)}
-									</span>
-								) : (
-									<span className='loading loading-dots loading-md align-baseline'></span>
-								)}
-							</button>
+							<LockButton
+								isLoading={createAction.isPending}
+								isValid={methods.formState.isValid}
+								color='accent'
+								textColor='stone-800'
+								text='Add Action'
+							/>
 						</form>
 					</FormProvider>
 					<p className='py-4 text-center text-stone-500'>

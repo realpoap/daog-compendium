@@ -1,9 +1,11 @@
+import { ActionButton } from '@/components/Buttons';
 import { trpc } from '@/utils/trpc';
 import { CreatureComponent } from '@api/lib/ZodComponent';
 import { NewCreature } from '@api/lib/ZodCreature';
 import { CreatureItem } from '@api/lib/ZodItem';
 import { useEffect, useState } from 'react';
 import { UseFormSetValue } from 'react-hook-form';
+import { RiArrowDropLeftLine, RiArrowDropRightLine } from 'rocketicons/ri';
 import { Field } from '../../../RHFComponents';
 import { ComponentsTags } from '../../utils/ComponentsTags';
 import { ItemsTags } from '../../utils/ItemsTag';
@@ -120,18 +122,24 @@ const LootStep = ({
 				</Field>
 			</div>
 			<div className='flex w-full flex-row items-center justify-center gap-4'>
-				<button
-					className='font-grenze m-y-2 mt-8 flex w-1/3 flex-col items-center justify-center self-center rounded-lg bg-purple-500 px-4 py-2 text-xl font-bold transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:bg-stone-500'
+				<ActionButton
+					color='purple-500'
+					textColor='stone-800'
 					onClick={() => handlePrevious(3)}
 				>
-					&#10094; Prev
-				</button>
-				<button
-					className='font-grenze m-y-2 mt-8 flex w-1/3 flex-col items-center justify-center self-center rounded-lg bg-purple-500 px-4 py-2 text-xl font-bold transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:bg-stone-500'
+					<span className='align-base pr-4'>
+						<RiArrowDropLeftLine className='icon-stone-800-base' /> Prev
+					</span>
+				</ActionButton>
+				<ActionButton
+					color='purple-500'
+					textColor='stone-800'
 					onClick={() => handleNext([], 5)}
 				>
-					Next &#10095;
-				</button>
+					<span className='pl-4 align-middle'>
+						Next <RiArrowDropRightLine className='icon-stone-800-base' />
+					</span>
+				</ActionButton>
 			</div>
 		</div>
 	);

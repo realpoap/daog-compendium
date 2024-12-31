@@ -1,3 +1,4 @@
+import { LockButton } from '@/components/Buttons';
 import { Field, Input, Select, Textarea } from '@/components/RHFComponents';
 import { cn } from '@/utils/classNames';
 import { trpc } from '@/utils/trpc';
@@ -107,25 +108,13 @@ const AttributeForm = ({ id, attributes, setAttributes }: Props) => {
 							<Field name='description'>
 								<Textarea name='description' />
 							</Field>
-							<button
-								type='submit'
-								disabled={
-									createAttribute.isPending || !methods.formState.isValid
-								}
-								className='bg-accent font-cabin m-y-2 disabled:bg-accent disabled:hover:glass disabled:hover:bg-accent mt-8 flex w-2/3 cursor-pointer flex-col items-center justify-center self-center rounded-lg px-4 py-2 text-xl font-bold uppercase text-stone-800 transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:opacity-100 disabled:hover:ring-0'
-							>
-								{!createAttribute.isPending ? (
-									<span className='text-center'>
-										{!methods.formState.isValid ? (
-											<BiSolidLock className='icon-stone-500-lg' />
-										) : (
-											'Add Attribute'
-										)}
-									</span>
-								) : (
-									<span className='loading loading-dots loading-md align-baseline'></span>
-								)}
-							</button>
+							<LockButton
+								isLoading={createAttribute.isPending}
+								isValid={methods.formState.isValid}
+								color='accent'
+								textColor='stone-800'
+								text='Add Attribute'
+							/>
 						</form>
 					</FormProvider>
 					<p className='py-4 text-center text-stone-500'>

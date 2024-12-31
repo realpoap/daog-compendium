@@ -8,6 +8,16 @@ import LootStep from './FormSteps/LootStep';
 import ProfileStep from './FormSteps/ProfileStep';
 import ResumeStep from './FormSteps/ResumeStep';
 
+type CreatureFormProps = {
+	handleSubmit: React.FormEventHandler<HTMLFormElement>;
+	setStep: React.Dispatch<SetStateAction<number>>;
+	setValue: UseFormSetValue<NewCreature>;
+	step: number;
+	trigger: UseFormTrigger<NewCreature>;
+	isLoading: boolean;
+	creature: NewCreature;
+};
+
 const NewCreatureForm = ({
 	handleSubmit,
 	setStep,
@@ -15,21 +25,14 @@ const NewCreatureForm = ({
 	step,
 	trigger,
 	isLoading,
-}: {
-	handleSubmit: React.FormEventHandler<HTMLFormElement>;
-	setStep: React.Dispatch<SetStateAction<number>>;
-	setValue: UseFormSetValue<NewCreature>;
-	step: number;
-	trigger: UseFormTrigger<NewCreature>;
-	isLoading: boolean;
-}) => {
+	creature,
+}: CreatureFormProps) => {
 	const handleNext = async (
 		inputs: (keyof NewCreature)[],
 		nextStep: number,
 	) => {
 		const output = await trigger(inputs);
-		if (!output)
-			toast.error('Please fix your inputs before moving on to the next step.');
+		if (!output) toast.error('Please fix your inputs');
 		if (output) setStep(nextStep);
 	};
 
@@ -61,6 +64,7 @@ const NewCreatureForm = ({
 				<ActionsStep
 					handlePrevious={handlePrevious}
 					handleNext={handleNext}
+					creature={creature}
 				/>
 			)}
 			{/* EQUIPMENT STEP ----------------------------------------- */}
