@@ -10,9 +10,11 @@ const Sidebar = () => {
 	const navigate = useNavigate();
 
 	const toggleMenu = () => {
-		open
-			? document.getElementsByTagName('body')[0].classList.remove('fixed')
-			: document.getElementsByTagName('body')[0].classList.add('fixed');
+		if (open) {
+			document.getElementsByTagName('body')[0].classList.remove('fixed');
+		} else {
+			document.getElementsByTagName('body')[0].classList.add('fixed');
+		}
 		setOpen(prev => !prev);
 	};
 

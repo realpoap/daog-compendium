@@ -16,13 +16,13 @@ export const CreatureScalarFieldEnumSchema = z.enum(['id','fullname','name','ran
 
 export const AttributeScalarFieldEnumSchema = z.enum(['id','name','flavor','description']);
 
-export const ActionScalarFieldEnumSchema = z.enum(['id','name','action','type','flavor','description','damages','effects','heal','target','range']);
+export const ActionScalarFieldEnumSchema = z.enum(['id','searchName','name','action','type','flavor','description','damages','effects','heal','target','range']);
 
 export const SpellScalarFieldEnumSchema = z.enum(['id','number','titleGlaise','titleCommon','createdAt','updatedAt','level','type','cost','difficulty','casting','targetType','action','flavor','description','damages','heal','effects','range','duration','target','components']);
 
-export const ComponentScalarFieldEnumSchema = z.enum(['id','quantity','name','description','weight','value','valueWeight','rarity','uses']);
+export const ComponentScalarFieldEnumSchema = z.enum(['id','searchName','name','quantity','description','weight','value','valueWeight','rarity','uses']);
 
-export const ItemScalarFieldEnumSchema = z.enum(['id','quantity','name','description','weight','value','valueWeight','rarity','damages','armor','properties','isRelic','magicWeight']);
+export const ItemScalarFieldEnumSchema = z.enum(['id','quantity','searchName','name','description','weight','value','valueWeight','rarity','damages','armor','properties','isRelic','magicWeight']);
 
 export const SortOrderSchema = z.enum(['asc','desc']);
 
@@ -32,13 +32,17 @@ export const RoleSchema = z.enum(['VIEWER','EDITOR','ADMIN']);
 
 export type RoleType = `${z.infer<typeof RoleSchema>}`
 
-export const TypeSchema = z.enum(['plant','demon','fae','insect','person','beast','monster','undead','wyrm','golem']);
+export const TypeSchema = z.enum(['oddity','plant','demon','fae','insect','person','beast','monster','undead','wyrm','golem']);
 
 export type TypeType = `${z.infer<typeof TypeSchema>}`
 
 export const AlignmentSchema = z.enum(['saint','good','neutral','bad','evil']);
 
 export type AlignmentType = `${z.infer<typeof AlignmentSchema>}`
+
+export const ActionTargetSchema = z.enum(['single','multiple','random','self','terrain','none']);
+
+export type ActionTargetType = `${z.infer<typeof ActionTargetSchema>}`
 
 export const ActionTypeSchema = z.enum(['main','limited','free','travel','epic']);
 
@@ -52,7 +56,7 @@ export const SpellTypeSchema = z.enum(['mouflette','beast','nature','scourge','s
 
 export type SpellTypeType = `${z.infer<typeof SpellTypeSchema>}`
 
-export const SpellActionSchema = z.enum(['charm','damage','heal','protect','enhance','link','create','transform','move','remove','puzzle']);
+export const SpellActionSchema = z.enum(['charm','damage','heal','protect','enhance','link','create','transform','move','remove','restrain','puzzle']);
 
 export type SpellActionType = `${z.infer<typeof SpellActionSchema>}`
 
@@ -60,7 +64,7 @@ export const SpellCastingSchema = z.enum(['instant','delayed','ritual','concentr
 
 export type SpellCastingType = `${z.infer<typeof SpellCastingSchema>}`
 
-export const SpellTargetSchema = z.enum(['single','multiple','random','self','none']);
+export const SpellTargetSchema = z.enum(['single','multiple','random','self','terrain','none']);
 
 export type SpellTargetType = `${z.infer<typeof SpellTargetSchema>}`
 
@@ -89,9 +93,9 @@ export type User = z.infer<typeof UserSchema>
 /////////////////////////////////////////
 
 export const CreatureSchema = z.object({
-  type: TypeSchema,
-  alignment: AlignmentSchema,
-  size: CreatureSizeSchema,
+  type: TypeSchema.nullable(),
+  alignment: AlignmentSchema.nullable(),
+  size: CreatureSizeSchema.nullable(),
   id: z.string(),
   fullname: z.string(),
   name: z.string(),
@@ -140,6 +144,7 @@ export type Attribute = z.infer<typeof AttributeSchema>
 export const ActionSchema = z.object({
   action: ActionTypeSchema,
   id: z.string(),
+  searchName: z.string(),
   name: z.string(),
   type: z.string(),
   flavor: z.string().nullable(),
@@ -190,8 +195,9 @@ export type Spell = z.infer<typeof SpellSchema>
 
 export const ComponentSchema = z.object({
   id: z.string(),
-  quantity: z.number().nullable(),
+  searchName: z.string(),
   name: z.string(),
+  quantity: z.number().nullable(),
   description: z.string().nullable(),
   weight: z.number().nullable(),
   value: z.number().nullable(),
@@ -209,6 +215,7 @@ export type Component = z.infer<typeof ComponentSchema>
 export const ItemSchema = z.object({
   id: z.string(),
   quantity: z.number().nullable(),
+  searchName: z.string(),
   name: z.string(),
   description: z.string().nullable(),
   weight: z.number().nullable(),
@@ -269,14 +276,15 @@ export type ActionList = z.infer<typeof ActionListSchema>
 
 export const CreatureActionSchema = z.object({
   action: ActionTypeSchema,
+  type: SpellActionSchema,
+  target: ActionTargetSchema,
+  searchName: z.string(),
   name: z.string(),
-  type: z.string(),
   flavor: z.string().nullable(),
   description: z.string().nullable(),
   damages: z.string().nullable(),
   effects: z.string().nullable(),
   heal: z.string().nullable(),
-  target: z.string().nullable(),
   range: z.string().nullable(),
 })
 
@@ -441,6 +449,7 @@ export const ActionArgsSchema: z.ZodType<Prisma.ActionDefaultArgs> = z.object({
 
 export const ActionSelectSchema: z.ZodType<Prisma.ActionSelect> = z.object({
   id: z.boolean().optional(),
+  searchName: z.boolean().optional(),
   name: z.boolean().optional(),
   action: z.boolean().optional(),
   type: z.boolean().optional(),
@@ -494,8 +503,9 @@ export const ComponentArgsSchema: z.ZodType<Prisma.ComponentDefaultArgs> = z.obj
 
 export const ComponentSelectSchema: z.ZodType<Prisma.ComponentSelect> = z.object({
   id: z.boolean().optional(),
-  quantity: z.boolean().optional(),
+  searchName: z.boolean().optional(),
   name: z.boolean().optional(),
+  quantity: z.boolean().optional(),
   description: z.boolean().optional(),
   weight: z.boolean().optional(),
   value: z.boolean().optional(),
@@ -514,6 +524,7 @@ export const ItemArgsSchema: z.ZodType<Prisma.ItemDefaultArgs> = z.object({
 export const ItemSelectSchema: z.ZodType<Prisma.ItemSelect> = z.object({
   id: z.boolean().optional(),
   quantity: z.boolean().optional(),
+  searchName: z.boolean().optional(),
   name: z.boolean().optional(),
   description: z.boolean().optional(),
   weight: z.boolean().optional(),
@@ -625,6 +636,7 @@ export const CreatureActionArgsSchema: z.ZodType<Prisma.CreatureActionDefaultArg
 }).strict();
 
 export const CreatureActionSelectSchema: z.ZodType<Prisma.CreatureActionSelect> = z.object({
+  searchName: z.boolean().optional(),
   name: z.boolean().optional(),
   action: z.boolean().optional(),
   type: z.boolean().optional(),
@@ -778,10 +790,10 @@ export const CreatureWhereInputSchema: z.ZodType<Prisma.CreatureWhereInput> = z.
   name: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   rank: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   isBoss: z.union([ z.lazy(() => BoolNullableFilterSchema),z.boolean() ]).optional().nullable(),
-  type: z.union([ z.lazy(() => EnumTypeFilterSchema),z.lazy(() => TypeSchema) ]).optional(),
+  type: z.union([ z.lazy(() => EnumTypeNullableFilterSchema),z.lazy(() => TypeSchema) ]).optional().nullable(),
   subtype: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  alignment: z.union([ z.lazy(() => EnumAlignmentFilterSchema),z.lazy(() => AlignmentSchema) ]).optional(),
-  size: z.union([ z.lazy(() => EnumCreatureSizeFilterSchema),z.lazy(() => CreatureSizeSchema) ]).optional(),
+  alignment: z.union([ z.lazy(() => EnumAlignmentNullableFilterSchema),z.lazy(() => AlignmentSchema) ]).optional().nullable(),
+  size: z.union([ z.lazy(() => EnumCreatureSizeNullableFilterSchema),z.lazy(() => CreatureSizeSchema) ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
   updatedAt: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
   level: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
@@ -865,10 +877,10 @@ export const CreatureWhereUniqueInputSchema: z.ZodType<Prisma.CreatureWhereUniqu
   name: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   rank: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   isBoss: z.union([ z.lazy(() => BoolNullableFilterSchema),z.boolean() ]).optional().nullable(),
-  type: z.union([ z.lazy(() => EnumTypeFilterSchema),z.lazy(() => TypeSchema) ]).optional(),
+  type: z.union([ z.lazy(() => EnumTypeNullableFilterSchema),z.lazy(() => TypeSchema) ]).optional().nullable(),
   subtype: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  alignment: z.union([ z.lazy(() => EnumAlignmentFilterSchema),z.lazy(() => AlignmentSchema) ]).optional(),
-  size: z.union([ z.lazy(() => EnumCreatureSizeFilterSchema),z.lazy(() => CreatureSizeSchema) ]).optional(),
+  alignment: z.union([ z.lazy(() => EnumAlignmentNullableFilterSchema),z.lazy(() => AlignmentSchema) ]).optional().nullable(),
+  size: z.union([ z.lazy(() => EnumCreatureSizeNullableFilterSchema),z.lazy(() => CreatureSizeSchema) ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
   updatedAt: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
   level: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
@@ -939,10 +951,10 @@ export const CreatureScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.Crea
   name: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   rank: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   isBoss: z.union([ z.lazy(() => BoolNullableWithAggregatesFilterSchema),z.boolean() ]).optional().nullable(),
-  type: z.union([ z.lazy(() => EnumTypeWithAggregatesFilterSchema),z.lazy(() => TypeSchema) ]).optional(),
+  type: z.union([ z.lazy(() => EnumTypeNullableWithAggregatesFilterSchema),z.lazy(() => TypeSchema) ]).optional().nullable(),
   subtype: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
-  alignment: z.union([ z.lazy(() => EnumAlignmentWithAggregatesFilterSchema),z.lazy(() => AlignmentSchema) ]).optional(),
-  size: z.union([ z.lazy(() => EnumCreatureSizeWithAggregatesFilterSchema),z.lazy(() => CreatureSizeSchema) ]).optional(),
+  alignment: z.union([ z.lazy(() => EnumAlignmentNullableWithAggregatesFilterSchema),z.lazy(() => AlignmentSchema) ]).optional().nullable(),
+  size: z.union([ z.lazy(() => EnumCreatureSizeNullableWithAggregatesFilterSchema),z.lazy(() => CreatureSizeSchema) ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeNullableWithAggregatesFilterSchema),z.coerce.date() ]).optional().nullable(),
   updatedAt: z.union([ z.lazy(() => DateTimeNullableWithAggregatesFilterSchema),z.coerce.date() ]).optional().nullable(),
   level: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
@@ -1027,6 +1039,7 @@ export const ActionWhereInputSchema: z.ZodType<Prisma.ActionWhereInput> = z.obje
   OR: z.lazy(() => ActionWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => ActionWhereInputSchema),z.lazy(() => ActionWhereInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  searchName: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   name: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   action: z.union([ z.lazy(() => EnumActionTypeFilterSchema),z.lazy(() => ActionTypeSchema) ]).optional(),
   type: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
@@ -1041,6 +1054,7 @@ export const ActionWhereInputSchema: z.ZodType<Prisma.ActionWhereInput> = z.obje
 
 export const ActionOrderByWithRelationInputSchema: z.ZodType<Prisma.ActionOrderByWithRelationInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
+  searchName: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   action: z.lazy(() => SortOrderSchema).optional(),
   type: z.lazy(() => SortOrderSchema).optional(),
@@ -1056,21 +1070,22 @@ export const ActionOrderByWithRelationInputSchema: z.ZodType<Prisma.ActionOrderB
 export const ActionWhereUniqueInputSchema: z.ZodType<Prisma.ActionWhereUniqueInput> = z.union([
   z.object({
     id: z.string(),
-    name: z.string()
+    searchName: z.string()
   }),
   z.object({
     id: z.string(),
   }),
   z.object({
-    name: z.string(),
+    searchName: z.string(),
   }),
 ])
 .and(z.object({
   id: z.string().optional(),
-  name: z.string().optional(),
+  searchName: z.string().optional(),
   AND: z.union([ z.lazy(() => ActionWhereInputSchema),z.lazy(() => ActionWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => ActionWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => ActionWhereInputSchema),z.lazy(() => ActionWhereInputSchema).array() ]).optional(),
+  name: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   action: z.union([ z.lazy(() => EnumActionTypeFilterSchema),z.lazy(() => ActionTypeSchema) ]).optional(),
   type: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   flavor: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
@@ -1084,6 +1099,7 @@ export const ActionWhereUniqueInputSchema: z.ZodType<Prisma.ActionWhereUniqueInp
 
 export const ActionOrderByWithAggregationInputSchema: z.ZodType<Prisma.ActionOrderByWithAggregationInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
+  searchName: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   action: z.lazy(() => SortOrderSchema).optional(),
   type: z.lazy(() => SortOrderSchema).optional(),
@@ -1104,6 +1120,7 @@ export const ActionScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.Action
   OR: z.lazy(() => ActionScalarWhereWithAggregatesInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => ActionScalarWhereWithAggregatesInputSchema),z.lazy(() => ActionScalarWhereWithAggregatesInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  searchName: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   name: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   action: z.union([ z.lazy(() => EnumActionTypeWithAggregatesFilterSchema),z.lazy(() => ActionTypeSchema) ]).optional(),
   type: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
@@ -1272,8 +1289,9 @@ export const ComponentWhereInputSchema: z.ZodType<Prisma.ComponentWhereInput> = 
   OR: z.lazy(() => ComponentWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => ComponentWhereInputSchema),z.lazy(() => ComponentWhereInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
-  quantity: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  searchName: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   name: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  quantity: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
   description: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   weight: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
   value: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
@@ -1284,8 +1302,9 @@ export const ComponentWhereInputSchema: z.ZodType<Prisma.ComponentWhereInput> = 
 
 export const ComponentOrderByWithRelationInputSchema: z.ZodType<Prisma.ComponentOrderByWithRelationInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
-  quantity: z.lazy(() => SortOrderSchema).optional(),
+  searchName: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
+  quantity: z.lazy(() => SortOrderSchema).optional(),
   description: z.lazy(() => SortOrderSchema).optional(),
   weight: z.lazy(() => SortOrderSchema).optional(),
   value: z.lazy(() => SortOrderSchema).optional(),
@@ -1297,21 +1316,22 @@ export const ComponentOrderByWithRelationInputSchema: z.ZodType<Prisma.Component
 export const ComponentWhereUniqueInputSchema: z.ZodType<Prisma.ComponentWhereUniqueInput> = z.union([
   z.object({
     id: z.string(),
-    name: z.string()
+    searchName: z.string()
   }),
   z.object({
     id: z.string(),
   }),
   z.object({
-    name: z.string(),
+    searchName: z.string(),
   }),
 ])
 .and(z.object({
   id: z.string().optional(),
-  name: z.string().optional(),
+  searchName: z.string().optional(),
   AND: z.union([ z.lazy(() => ComponentWhereInputSchema),z.lazy(() => ComponentWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => ComponentWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => ComponentWhereInputSchema),z.lazy(() => ComponentWhereInputSchema).array() ]).optional(),
+  name: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   quantity: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
   description: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   weight: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
@@ -1323,8 +1343,9 @@ export const ComponentWhereUniqueInputSchema: z.ZodType<Prisma.ComponentWhereUni
 
 export const ComponentOrderByWithAggregationInputSchema: z.ZodType<Prisma.ComponentOrderByWithAggregationInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
-  quantity: z.lazy(() => SortOrderSchema).optional(),
+  searchName: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
+  quantity: z.lazy(() => SortOrderSchema).optional(),
   description: z.lazy(() => SortOrderSchema).optional(),
   weight: z.lazy(() => SortOrderSchema).optional(),
   value: z.lazy(() => SortOrderSchema).optional(),
@@ -1343,8 +1364,9 @@ export const ComponentScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.Com
   OR: z.lazy(() => ComponentScalarWhereWithAggregatesInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => ComponentScalarWhereWithAggregatesInputSchema),z.lazy(() => ComponentScalarWhereWithAggregatesInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
-  quantity: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  searchName: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   name: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  quantity: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
   description: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   weight: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
   value: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
@@ -1359,6 +1381,7 @@ export const ItemWhereInputSchema: z.ZodType<Prisma.ItemWhereInput> = z.object({
   NOT: z.union([ z.lazy(() => ItemWhereInputSchema),z.lazy(() => ItemWhereInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   quantity: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  searchName: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   name: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   description: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   weight: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
@@ -1375,6 +1398,7 @@ export const ItemWhereInputSchema: z.ZodType<Prisma.ItemWhereInput> = z.object({
 export const ItemOrderByWithRelationInputSchema: z.ZodType<Prisma.ItemOrderByWithRelationInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   quantity: z.lazy(() => SortOrderSchema).optional(),
+  searchName: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   description: z.lazy(() => SortOrderSchema).optional(),
   weight: z.lazy(() => SortOrderSchema).optional(),
@@ -1391,22 +1415,23 @@ export const ItemOrderByWithRelationInputSchema: z.ZodType<Prisma.ItemOrderByWit
 export const ItemWhereUniqueInputSchema: z.ZodType<Prisma.ItemWhereUniqueInput> = z.union([
   z.object({
     id: z.string(),
-    name: z.string()
+    searchName: z.string()
   }),
   z.object({
     id: z.string(),
   }),
   z.object({
-    name: z.string(),
+    searchName: z.string(),
   }),
 ])
 .and(z.object({
   id: z.string().optional(),
-  name: z.string().optional(),
+  searchName: z.string().optional(),
   AND: z.union([ z.lazy(() => ItemWhereInputSchema),z.lazy(() => ItemWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => ItemWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => ItemWhereInputSchema),z.lazy(() => ItemWhereInputSchema).array() ]).optional(),
   quantity: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
+  name: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   description: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   weight: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
   value: z.union([ z.lazy(() => FloatNullableFilterSchema),z.number() ]).optional().nullable(),
@@ -1422,6 +1447,7 @@ export const ItemWhereUniqueInputSchema: z.ZodType<Prisma.ItemWhereUniqueInput> 
 export const ItemOrderByWithAggregationInputSchema: z.ZodType<Prisma.ItemOrderByWithAggregationInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   quantity: z.lazy(() => SortOrderSchema).optional(),
+  searchName: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   description: z.lazy(() => SortOrderSchema).optional(),
   weight: z.lazy(() => SortOrderSchema).optional(),
@@ -1446,6 +1472,7 @@ export const ItemScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.ItemScal
   NOT: z.union([ z.lazy(() => ItemScalarWhereWithAggregatesInputSchema),z.lazy(() => ItemScalarWhereWithAggregatesInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   quantity: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
+  searchName: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   name: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   description: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   weight: z.union([ z.lazy(() => FloatNullableWithAggregatesFilterSchema),z.number() ]).optional().nullable(),
@@ -1531,10 +1558,10 @@ export const CreatureCreateInputSchema: z.ZodType<Prisma.CreatureCreateInput> = 
   name: z.string(),
   rank: z.string().optional().nullable(),
   isBoss: z.boolean().optional().nullable(),
-  type: z.lazy(() => TypeSchema),
+  type: z.lazy(() => TypeSchema).optional().nullable(),
   subtype: z.string().optional().nullable(),
-  alignment: z.lazy(() => AlignmentSchema),
-  size: z.lazy(() => CreatureSizeSchema),
+  alignment: z.lazy(() => AlignmentSchema).optional().nullable(),
+  size: z.lazy(() => CreatureSizeSchema).optional().nullable(),
   createdAt: z.coerce.date().optional().nullable(),
   updatedAt: z.coerce.date().optional().nullable(),
   level: z.number().int(),
@@ -1567,10 +1594,10 @@ export const CreatureUncheckedCreateInputSchema: z.ZodType<Prisma.CreatureUnchec
   name: z.string(),
   rank: z.string().optional().nullable(),
   isBoss: z.boolean().optional().nullable(),
-  type: z.lazy(() => TypeSchema),
+  type: z.lazy(() => TypeSchema).optional().nullable(),
   subtype: z.string().optional().nullable(),
-  alignment: z.lazy(() => AlignmentSchema),
-  size: z.lazy(() => CreatureSizeSchema),
+  alignment: z.lazy(() => AlignmentSchema).optional().nullable(),
+  size: z.lazy(() => CreatureSizeSchema).optional().nullable(),
   createdAt: z.coerce.date().optional().nullable(),
   updatedAt: z.coerce.date().optional().nullable(),
   level: z.number().int(),
@@ -1602,10 +1629,10 @@ export const CreatureUpdateInputSchema: z.ZodType<Prisma.CreatureUpdateInput> = 
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   rank: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   isBoss: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  type: z.union([ z.lazy(() => TypeSchema),z.lazy(() => EnumTypeFieldUpdateOperationsInputSchema) ]).optional(),
+  type: z.union([ z.lazy(() => TypeSchema),z.lazy(() => NullableEnumTypeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   subtype: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  alignment: z.union([ z.lazy(() => AlignmentSchema),z.lazy(() => EnumAlignmentFieldUpdateOperationsInputSchema) ]).optional(),
-  size: z.union([ z.lazy(() => CreatureSizeSchema),z.lazy(() => EnumCreatureSizeFieldUpdateOperationsInputSchema) ]).optional(),
+  alignment: z.union([ z.lazy(() => AlignmentSchema),z.lazy(() => NullableEnumAlignmentFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  size: z.union([ z.lazy(() => CreatureSizeSchema),z.lazy(() => NullableEnumCreatureSizeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   level: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
@@ -1637,10 +1664,10 @@ export const CreatureUncheckedUpdateInputSchema: z.ZodType<Prisma.CreatureUnchec
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   rank: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   isBoss: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  type: z.union([ z.lazy(() => TypeSchema),z.lazy(() => EnumTypeFieldUpdateOperationsInputSchema) ]).optional(),
+  type: z.union([ z.lazy(() => TypeSchema),z.lazy(() => NullableEnumTypeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   subtype: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  alignment: z.union([ z.lazy(() => AlignmentSchema),z.lazy(() => EnumAlignmentFieldUpdateOperationsInputSchema) ]).optional(),
-  size: z.union([ z.lazy(() => CreatureSizeSchema),z.lazy(() => EnumCreatureSizeFieldUpdateOperationsInputSchema) ]).optional(),
+  alignment: z.union([ z.lazy(() => AlignmentSchema),z.lazy(() => NullableEnumAlignmentFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  size: z.union([ z.lazy(() => CreatureSizeSchema),z.lazy(() => NullableEnumCreatureSizeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   level: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
@@ -1673,10 +1700,10 @@ export const CreatureCreateManyInputSchema: z.ZodType<Prisma.CreatureCreateManyI
   name: z.string(),
   rank: z.string().optional().nullable(),
   isBoss: z.boolean().optional().nullable(),
-  type: z.lazy(() => TypeSchema),
+  type: z.lazy(() => TypeSchema).optional().nullable(),
   subtype: z.string().optional().nullable(),
-  alignment: z.lazy(() => AlignmentSchema),
-  size: z.lazy(() => CreatureSizeSchema),
+  alignment: z.lazy(() => AlignmentSchema).optional().nullable(),
+  size: z.lazy(() => CreatureSizeSchema).optional().nullable(),
   createdAt: z.coerce.date().optional().nullable(),
   updatedAt: z.coerce.date().optional().nullable(),
   level: z.number().int(),
@@ -1708,10 +1735,10 @@ export const CreatureUpdateManyMutationInputSchema: z.ZodType<Prisma.CreatureUpd
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   rank: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   isBoss: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  type: z.union([ z.lazy(() => TypeSchema),z.lazy(() => EnumTypeFieldUpdateOperationsInputSchema) ]).optional(),
+  type: z.union([ z.lazy(() => TypeSchema),z.lazy(() => NullableEnumTypeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   subtype: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  alignment: z.union([ z.lazy(() => AlignmentSchema),z.lazy(() => EnumAlignmentFieldUpdateOperationsInputSchema) ]).optional(),
-  size: z.union([ z.lazy(() => CreatureSizeSchema),z.lazy(() => EnumCreatureSizeFieldUpdateOperationsInputSchema) ]).optional(),
+  alignment: z.union([ z.lazy(() => AlignmentSchema),z.lazy(() => NullableEnumAlignmentFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  size: z.union([ z.lazy(() => CreatureSizeSchema),z.lazy(() => NullableEnumCreatureSizeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   level: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
@@ -1743,10 +1770,10 @@ export const CreatureUncheckedUpdateManyInputSchema: z.ZodType<Prisma.CreatureUn
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   rank: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   isBoss: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  type: z.union([ z.lazy(() => TypeSchema),z.lazy(() => EnumTypeFieldUpdateOperationsInputSchema) ]).optional(),
+  type: z.union([ z.lazy(() => TypeSchema),z.lazy(() => NullableEnumTypeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   subtype: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  alignment: z.union([ z.lazy(() => AlignmentSchema),z.lazy(() => EnumAlignmentFieldUpdateOperationsInputSchema) ]).optional(),
-  size: z.union([ z.lazy(() => CreatureSizeSchema),z.lazy(() => EnumCreatureSizeFieldUpdateOperationsInputSchema) ]).optional(),
+  alignment: z.union([ z.lazy(() => AlignmentSchema),z.lazy(() => NullableEnumAlignmentFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  size: z.union([ z.lazy(() => CreatureSizeSchema),z.lazy(() => NullableEnumCreatureSizeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => NullableDateTimeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   level: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
@@ -1820,6 +1847,7 @@ export const AttributeUncheckedUpdateManyInputSchema: z.ZodType<Prisma.Attribute
 
 export const ActionCreateInputSchema: z.ZodType<Prisma.ActionCreateInput> = z.object({
   id: z.string().optional(),
+  searchName: z.string(),
   name: z.string(),
   action: z.lazy(() => ActionTypeSchema),
   type: z.string(),
@@ -1834,6 +1862,7 @@ export const ActionCreateInputSchema: z.ZodType<Prisma.ActionCreateInput> = z.ob
 
 export const ActionUncheckedCreateInputSchema: z.ZodType<Prisma.ActionUncheckedCreateInput> = z.object({
   id: z.string().optional(),
+  searchName: z.string(),
   name: z.string(),
   action: z.lazy(() => ActionTypeSchema),
   type: z.string(),
@@ -1847,6 +1876,7 @@ export const ActionUncheckedCreateInputSchema: z.ZodType<Prisma.ActionUncheckedC
 }).strict();
 
 export const ActionUpdateInputSchema: z.ZodType<Prisma.ActionUpdateInput> = z.object({
+  searchName: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   action: z.union([ z.lazy(() => ActionTypeSchema),z.lazy(() => EnumActionTypeFieldUpdateOperationsInputSchema) ]).optional(),
   type: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
@@ -1860,6 +1890,7 @@ export const ActionUpdateInputSchema: z.ZodType<Prisma.ActionUpdateInput> = z.ob
 }).strict();
 
 export const ActionUncheckedUpdateInputSchema: z.ZodType<Prisma.ActionUncheckedUpdateInput> = z.object({
+  searchName: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   action: z.union([ z.lazy(() => ActionTypeSchema),z.lazy(() => EnumActionTypeFieldUpdateOperationsInputSchema) ]).optional(),
   type: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
@@ -1874,6 +1905,7 @@ export const ActionUncheckedUpdateInputSchema: z.ZodType<Prisma.ActionUncheckedU
 
 export const ActionCreateManyInputSchema: z.ZodType<Prisma.ActionCreateManyInput> = z.object({
   id: z.string().optional(),
+  searchName: z.string(),
   name: z.string(),
   action: z.lazy(() => ActionTypeSchema),
   type: z.string(),
@@ -1887,6 +1919,7 @@ export const ActionCreateManyInputSchema: z.ZodType<Prisma.ActionCreateManyInput
 }).strict();
 
 export const ActionUpdateManyMutationInputSchema: z.ZodType<Prisma.ActionUpdateManyMutationInput> = z.object({
+  searchName: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   action: z.union([ z.lazy(() => ActionTypeSchema),z.lazy(() => EnumActionTypeFieldUpdateOperationsInputSchema) ]).optional(),
   type: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
@@ -1900,6 +1933,7 @@ export const ActionUpdateManyMutationInputSchema: z.ZodType<Prisma.ActionUpdateM
 }).strict();
 
 export const ActionUncheckedUpdateManyInputSchema: z.ZodType<Prisma.ActionUncheckedUpdateManyInput> = z.object({
+  searchName: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   action: z.union([ z.lazy(() => ActionTypeSchema),z.lazy(() => EnumActionTypeFieldUpdateOperationsInputSchema) ]).optional(),
   type: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
@@ -2085,8 +2119,9 @@ export const SpellUncheckedUpdateManyInputSchema: z.ZodType<Prisma.SpellUnchecke
 
 export const ComponentCreateInputSchema: z.ZodType<Prisma.ComponentCreateInput> = z.object({
   id: z.string().optional(),
-  quantity: z.number().optional().nullable(),
+  searchName: z.string(),
   name: z.string(),
+  quantity: z.number().optional().nullable(),
   description: z.string().optional().nullable(),
   weight: z.number().optional().nullable(),
   value: z.number().optional().nullable(),
@@ -2097,8 +2132,9 @@ export const ComponentCreateInputSchema: z.ZodType<Prisma.ComponentCreateInput> 
 
 export const ComponentUncheckedCreateInputSchema: z.ZodType<Prisma.ComponentUncheckedCreateInput> = z.object({
   id: z.string().optional(),
-  quantity: z.number().optional().nullable(),
+  searchName: z.string(),
   name: z.string(),
+  quantity: z.number().optional().nullable(),
   description: z.string().optional().nullable(),
   weight: z.number().optional().nullable(),
   value: z.number().optional().nullable(),
@@ -2108,8 +2144,9 @@ export const ComponentUncheckedCreateInputSchema: z.ZodType<Prisma.ComponentUnch
 }).strict();
 
 export const ComponentUpdateInputSchema: z.ZodType<Prisma.ComponentUpdateInput> = z.object({
-  quantity: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  searchName: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  quantity: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   weight: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   value: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -2119,8 +2156,9 @@ export const ComponentUpdateInputSchema: z.ZodType<Prisma.ComponentUpdateInput> 
 }).strict();
 
 export const ComponentUncheckedUpdateInputSchema: z.ZodType<Prisma.ComponentUncheckedUpdateInput> = z.object({
-  quantity: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  searchName: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  quantity: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   weight: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   value: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -2131,8 +2169,9 @@ export const ComponentUncheckedUpdateInputSchema: z.ZodType<Prisma.ComponentUnch
 
 export const ComponentCreateManyInputSchema: z.ZodType<Prisma.ComponentCreateManyInput> = z.object({
   id: z.string().optional(),
-  quantity: z.number().optional().nullable(),
+  searchName: z.string(),
   name: z.string(),
+  quantity: z.number().optional().nullable(),
   description: z.string().optional().nullable(),
   weight: z.number().optional().nullable(),
   value: z.number().optional().nullable(),
@@ -2142,8 +2181,9 @@ export const ComponentCreateManyInputSchema: z.ZodType<Prisma.ComponentCreateMan
 }).strict();
 
 export const ComponentUpdateManyMutationInputSchema: z.ZodType<Prisma.ComponentUpdateManyMutationInput> = z.object({
-  quantity: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  searchName: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  quantity: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   weight: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   value: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -2153,8 +2193,9 @@ export const ComponentUpdateManyMutationInputSchema: z.ZodType<Prisma.ComponentU
 }).strict();
 
 export const ComponentUncheckedUpdateManyInputSchema: z.ZodType<Prisma.ComponentUncheckedUpdateManyInput> = z.object({
-  quantity: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  searchName: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  quantity: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   weight: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   value: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -2166,6 +2207,7 @@ export const ComponentUncheckedUpdateManyInputSchema: z.ZodType<Prisma.Component
 export const ItemCreateInputSchema: z.ZodType<Prisma.ItemCreateInput> = z.object({
   id: z.string().optional(),
   quantity: z.number().optional().nullable(),
+  searchName: z.string(),
   name: z.string(),
   description: z.string().optional().nullable(),
   weight: z.number().optional().nullable(),
@@ -2182,6 +2224,7 @@ export const ItemCreateInputSchema: z.ZodType<Prisma.ItemCreateInput> = z.object
 export const ItemUncheckedCreateInputSchema: z.ZodType<Prisma.ItemUncheckedCreateInput> = z.object({
   id: z.string().optional(),
   quantity: z.number().optional().nullable(),
+  searchName: z.string(),
   name: z.string(),
   description: z.string().optional().nullable(),
   weight: z.number().optional().nullable(),
@@ -2197,6 +2240,7 @@ export const ItemUncheckedCreateInputSchema: z.ZodType<Prisma.ItemUncheckedCreat
 
 export const ItemUpdateInputSchema: z.ZodType<Prisma.ItemUpdateInput> = z.object({
   quantity: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  searchName: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   weight: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -2212,6 +2256,7 @@ export const ItemUpdateInputSchema: z.ZodType<Prisma.ItemUpdateInput> = z.object
 
 export const ItemUncheckedUpdateInputSchema: z.ZodType<Prisma.ItemUncheckedUpdateInput> = z.object({
   quantity: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  searchName: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   weight: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -2228,6 +2273,7 @@ export const ItemUncheckedUpdateInputSchema: z.ZodType<Prisma.ItemUncheckedUpdat
 export const ItemCreateManyInputSchema: z.ZodType<Prisma.ItemCreateManyInput> = z.object({
   id: z.string().optional(),
   quantity: z.number().optional().nullable(),
+  searchName: z.string(),
   name: z.string(),
   description: z.string().optional().nullable(),
   weight: z.number().optional().nullable(),
@@ -2243,6 +2289,7 @@ export const ItemCreateManyInputSchema: z.ZodType<Prisma.ItemCreateManyInput> = 
 
 export const ItemUpdateManyMutationInputSchema: z.ZodType<Prisma.ItemUpdateManyMutationInput> = z.object({
   quantity: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  searchName: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   weight: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -2258,6 +2305,7 @@ export const ItemUpdateManyMutationInputSchema: z.ZodType<Prisma.ItemUpdateManyM
 
 export const ItemUncheckedUpdateManyInputSchema: z.ZodType<Prisma.ItemUncheckedUpdateManyInput> = z.object({
   quantity: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  searchName: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   weight: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -2416,25 +2464,28 @@ export const BoolNullableFilterSchema: z.ZodType<Prisma.BoolNullableFilter> = z.
   isSet: z.boolean().optional()
 }).strict();
 
-export const EnumTypeFilterSchema: z.ZodType<Prisma.EnumTypeFilter> = z.object({
-  equals: z.lazy(() => TypeSchema).optional(),
-  in: z.lazy(() => TypeSchema).array().optional(),
-  notIn: z.lazy(() => TypeSchema).array().optional(),
-  not: z.union([ z.lazy(() => TypeSchema),z.lazy(() => NestedEnumTypeFilterSchema) ]).optional(),
+export const EnumTypeNullableFilterSchema: z.ZodType<Prisma.EnumTypeNullableFilter> = z.object({
+  equals: z.lazy(() => TypeSchema).optional().nullable(),
+  in: z.lazy(() => TypeSchema).array().optional().nullable(),
+  notIn: z.lazy(() => TypeSchema).array().optional().nullable(),
+  not: z.union([ z.lazy(() => TypeSchema),z.lazy(() => NestedEnumTypeNullableFilterSchema) ]).optional().nullable(),
+  isSet: z.boolean().optional()
 }).strict();
 
-export const EnumAlignmentFilterSchema: z.ZodType<Prisma.EnumAlignmentFilter> = z.object({
-  equals: z.lazy(() => AlignmentSchema).optional(),
-  in: z.lazy(() => AlignmentSchema).array().optional(),
-  notIn: z.lazy(() => AlignmentSchema).array().optional(),
-  not: z.union([ z.lazy(() => AlignmentSchema),z.lazy(() => NestedEnumAlignmentFilterSchema) ]).optional(),
+export const EnumAlignmentNullableFilterSchema: z.ZodType<Prisma.EnumAlignmentNullableFilter> = z.object({
+  equals: z.lazy(() => AlignmentSchema).optional().nullable(),
+  in: z.lazy(() => AlignmentSchema).array().optional().nullable(),
+  notIn: z.lazy(() => AlignmentSchema).array().optional().nullable(),
+  not: z.union([ z.lazy(() => AlignmentSchema),z.lazy(() => NestedEnumAlignmentNullableFilterSchema) ]).optional().nullable(),
+  isSet: z.boolean().optional()
 }).strict();
 
-export const EnumCreatureSizeFilterSchema: z.ZodType<Prisma.EnumCreatureSizeFilter> = z.object({
-  equals: z.lazy(() => CreatureSizeSchema).optional(),
-  in: z.lazy(() => CreatureSizeSchema).array().optional(),
-  notIn: z.lazy(() => CreatureSizeSchema).array().optional(),
-  not: z.union([ z.lazy(() => CreatureSizeSchema),z.lazy(() => NestedEnumCreatureSizeFilterSchema) ]).optional(),
+export const EnumCreatureSizeNullableFilterSchema: z.ZodType<Prisma.EnumCreatureSizeNullableFilter> = z.object({
+  equals: z.lazy(() => CreatureSizeSchema).optional().nullable(),
+  in: z.lazy(() => CreatureSizeSchema).array().optional().nullable(),
+  notIn: z.lazy(() => CreatureSizeSchema).array().optional().nullable(),
+  not: z.union([ z.lazy(() => CreatureSizeSchema),z.lazy(() => NestedEnumCreatureSizeNullableFilterSchema) ]).optional().nullable(),
+  isSet: z.boolean().optional()
 }).strict();
 
 export const DateTimeNullableFilterSchema: z.ZodType<Prisma.DateTimeNullableFilter> = z.object({
@@ -2576,15 +2627,16 @@ export const CreatureActionCompositeListFilterSchema: z.ZodType<Prisma.CreatureA
 }).strict();
 
 export const CreatureActionObjectEqualityInputSchema: z.ZodType<Prisma.CreatureActionObjectEqualityInput> = z.object({
+  searchName: z.string(),
   name: z.string(),
   action: z.lazy(() => ActionTypeSchema),
-  type: z.string(),
+  type: z.lazy(() => SpellActionSchema),
   flavor: z.string().optional().nullable(),
   description: z.string().optional().nullable(),
   damages: z.string().optional().nullable(),
   effects: z.string().optional().nullable(),
   heal: z.string().optional().nullable(),
-  target: z.string().optional().nullable(),
+  target: z.lazy(() => ActionTargetSchema),
   range: z.string().optional().nullable()
 }).strict();
 
@@ -2779,34 +2831,37 @@ export const BoolNullableWithAggregatesFilterSchema: z.ZodType<Prisma.BoolNullab
   isSet: z.boolean().optional()
 }).strict();
 
-export const EnumTypeWithAggregatesFilterSchema: z.ZodType<Prisma.EnumTypeWithAggregatesFilter> = z.object({
-  equals: z.lazy(() => TypeSchema).optional(),
-  in: z.lazy(() => TypeSchema).array().optional(),
-  notIn: z.lazy(() => TypeSchema).array().optional(),
-  not: z.union([ z.lazy(() => TypeSchema),z.lazy(() => NestedEnumTypeWithAggregatesFilterSchema) ]).optional(),
-  _count: z.lazy(() => NestedIntFilterSchema).optional(),
-  _min: z.lazy(() => NestedEnumTypeFilterSchema).optional(),
-  _max: z.lazy(() => NestedEnumTypeFilterSchema).optional()
+export const EnumTypeNullableWithAggregatesFilterSchema: z.ZodType<Prisma.EnumTypeNullableWithAggregatesFilter> = z.object({
+  equals: z.lazy(() => TypeSchema).optional().nullable(),
+  in: z.lazy(() => TypeSchema).array().optional().nullable(),
+  notIn: z.lazy(() => TypeSchema).array().optional().nullable(),
+  not: z.union([ z.lazy(() => TypeSchema),z.lazy(() => NestedEnumTypeNullableWithAggregatesFilterSchema) ]).optional().nullable(),
+  _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
+  _min: z.lazy(() => NestedEnumTypeNullableFilterSchema).optional(),
+  _max: z.lazy(() => NestedEnumTypeNullableFilterSchema).optional(),
+  isSet: z.boolean().optional()
 }).strict();
 
-export const EnumAlignmentWithAggregatesFilterSchema: z.ZodType<Prisma.EnumAlignmentWithAggregatesFilter> = z.object({
-  equals: z.lazy(() => AlignmentSchema).optional(),
-  in: z.lazy(() => AlignmentSchema).array().optional(),
-  notIn: z.lazy(() => AlignmentSchema).array().optional(),
-  not: z.union([ z.lazy(() => AlignmentSchema),z.lazy(() => NestedEnumAlignmentWithAggregatesFilterSchema) ]).optional(),
-  _count: z.lazy(() => NestedIntFilterSchema).optional(),
-  _min: z.lazy(() => NestedEnumAlignmentFilterSchema).optional(),
-  _max: z.lazy(() => NestedEnumAlignmentFilterSchema).optional()
+export const EnumAlignmentNullableWithAggregatesFilterSchema: z.ZodType<Prisma.EnumAlignmentNullableWithAggregatesFilter> = z.object({
+  equals: z.lazy(() => AlignmentSchema).optional().nullable(),
+  in: z.lazy(() => AlignmentSchema).array().optional().nullable(),
+  notIn: z.lazy(() => AlignmentSchema).array().optional().nullable(),
+  not: z.union([ z.lazy(() => AlignmentSchema),z.lazy(() => NestedEnumAlignmentNullableWithAggregatesFilterSchema) ]).optional().nullable(),
+  _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
+  _min: z.lazy(() => NestedEnumAlignmentNullableFilterSchema).optional(),
+  _max: z.lazy(() => NestedEnumAlignmentNullableFilterSchema).optional(),
+  isSet: z.boolean().optional()
 }).strict();
 
-export const EnumCreatureSizeWithAggregatesFilterSchema: z.ZodType<Prisma.EnumCreatureSizeWithAggregatesFilter> = z.object({
-  equals: z.lazy(() => CreatureSizeSchema).optional(),
-  in: z.lazy(() => CreatureSizeSchema).array().optional(),
-  notIn: z.lazy(() => CreatureSizeSchema).array().optional(),
-  not: z.union([ z.lazy(() => CreatureSizeSchema),z.lazy(() => NestedEnumCreatureSizeWithAggregatesFilterSchema) ]).optional(),
-  _count: z.lazy(() => NestedIntFilterSchema).optional(),
-  _min: z.lazy(() => NestedEnumCreatureSizeFilterSchema).optional(),
-  _max: z.lazy(() => NestedEnumCreatureSizeFilterSchema).optional()
+export const EnumCreatureSizeNullableWithAggregatesFilterSchema: z.ZodType<Prisma.EnumCreatureSizeNullableWithAggregatesFilter> = z.object({
+  equals: z.lazy(() => CreatureSizeSchema).optional().nullable(),
+  in: z.lazy(() => CreatureSizeSchema).array().optional().nullable(),
+  notIn: z.lazy(() => CreatureSizeSchema).array().optional().nullable(),
+  not: z.union([ z.lazy(() => CreatureSizeSchema),z.lazy(() => NestedEnumCreatureSizeNullableWithAggregatesFilterSchema) ]).optional().nullable(),
+  _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
+  _min: z.lazy(() => NestedEnumCreatureSizeNullableFilterSchema).optional(),
+  _max: z.lazy(() => NestedEnumCreatureSizeNullableFilterSchema).optional(),
+  isSet: z.boolean().optional()
 }).strict();
 
 export const DateTimeNullableWithAggregatesFilterSchema: z.ZodType<Prisma.DateTimeNullableWithAggregatesFilter> = z.object({
@@ -2887,6 +2942,7 @@ export const EnumActionTypeFilterSchema: z.ZodType<Prisma.EnumActionTypeFilter> 
 
 export const ActionCountOrderByAggregateInputSchema: z.ZodType<Prisma.ActionCountOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
+  searchName: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   action: z.lazy(() => SortOrderSchema).optional(),
   type: z.lazy(() => SortOrderSchema).optional(),
@@ -2901,6 +2957,7 @@ export const ActionCountOrderByAggregateInputSchema: z.ZodType<Prisma.ActionCoun
 
 export const ActionMaxOrderByAggregateInputSchema: z.ZodType<Prisma.ActionMaxOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
+  searchName: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   action: z.lazy(() => SortOrderSchema).optional(),
   type: z.lazy(() => SortOrderSchema).optional(),
@@ -2915,6 +2972,7 @@ export const ActionMaxOrderByAggregateInputSchema: z.ZodType<Prisma.ActionMaxOrd
 
 export const ActionMinOrderByAggregateInputSchema: z.ZodType<Prisma.ActionMinOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
+  searchName: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   action: z.lazy(() => SortOrderSchema).optional(),
   type: z.lazy(() => SortOrderSchema).optional(),
@@ -3114,8 +3172,9 @@ export const FloatNullableFilterSchema: z.ZodType<Prisma.FloatNullableFilter> = 
 
 export const ComponentCountOrderByAggregateInputSchema: z.ZodType<Prisma.ComponentCountOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
-  quantity: z.lazy(() => SortOrderSchema).optional(),
+  searchName: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
+  quantity: z.lazy(() => SortOrderSchema).optional(),
   description: z.lazy(() => SortOrderSchema).optional(),
   weight: z.lazy(() => SortOrderSchema).optional(),
   value: z.lazy(() => SortOrderSchema).optional(),
@@ -3133,8 +3192,9 @@ export const ComponentAvgOrderByAggregateInputSchema: z.ZodType<Prisma.Component
 
 export const ComponentMaxOrderByAggregateInputSchema: z.ZodType<Prisma.ComponentMaxOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
-  quantity: z.lazy(() => SortOrderSchema).optional(),
+  searchName: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
+  quantity: z.lazy(() => SortOrderSchema).optional(),
   description: z.lazy(() => SortOrderSchema).optional(),
   weight: z.lazy(() => SortOrderSchema).optional(),
   value: z.lazy(() => SortOrderSchema).optional(),
@@ -3145,8 +3205,9 @@ export const ComponentMaxOrderByAggregateInputSchema: z.ZodType<Prisma.Component
 
 export const ComponentMinOrderByAggregateInputSchema: z.ZodType<Prisma.ComponentMinOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
-  quantity: z.lazy(() => SortOrderSchema).optional(),
+  searchName: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
+  quantity: z.lazy(() => SortOrderSchema).optional(),
   description: z.lazy(() => SortOrderSchema).optional(),
   weight: z.lazy(() => SortOrderSchema).optional(),
   value: z.lazy(() => SortOrderSchema).optional(),
@@ -3182,6 +3243,7 @@ export const FloatNullableWithAggregatesFilterSchema: z.ZodType<Prisma.FloatNull
 export const ItemCountOrderByAggregateInputSchema: z.ZodType<Prisma.ItemCountOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   quantity: z.lazy(() => SortOrderSchema).optional(),
+  searchName: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   description: z.lazy(() => SortOrderSchema).optional(),
   weight: z.lazy(() => SortOrderSchema).optional(),
@@ -3207,6 +3269,7 @@ export const ItemAvgOrderByAggregateInputSchema: z.ZodType<Prisma.ItemAvgOrderBy
 export const ItemMaxOrderByAggregateInputSchema: z.ZodType<Prisma.ItemMaxOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   quantity: z.lazy(() => SortOrderSchema).optional(),
+  searchName: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   description: z.lazy(() => SortOrderSchema).optional(),
   weight: z.lazy(() => SortOrderSchema).optional(),
@@ -3223,6 +3286,7 @@ export const ItemMaxOrderByAggregateInputSchema: z.ZodType<Prisma.ItemMaxOrderBy
 export const ItemMinOrderByAggregateInputSchema: z.ZodType<Prisma.ItemMinOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   quantity: z.lazy(() => SortOrderSchema).optional(),
+  searchName: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   description: z.lazy(() => SortOrderSchema).optional(),
   weight: z.lazy(() => SortOrderSchema).optional(),
@@ -3341,15 +3405,16 @@ export const CreatureActionListCreateEnvelopeInputSchema: z.ZodType<Prisma.Creat
 }).strict();
 
 export const CreatureActionCreateInputSchema: z.ZodType<Prisma.CreatureActionCreateInput> = z.object({
+  searchName: z.string(),
   name: z.string(),
   action: z.lazy(() => ActionTypeSchema),
-  type: z.string(),
+  type: z.lazy(() => SpellActionSchema),
   flavor: z.string().optional().nullable(),
   description: z.string().optional().nullable(),
   damages: z.string().optional().nullable(),
   effects: z.string().optional().nullable(),
   heal: z.string().optional().nullable(),
-  target: z.string().optional().nullable(),
+  target: z.lazy(() => ActionTargetSchema),
   range: z.string().optional().nullable()
 }).strict();
 
@@ -3363,16 +3428,19 @@ export const NullableBoolFieldUpdateOperationsInputSchema: z.ZodType<Prisma.Null
   unset: z.boolean().optional()
 }).strict();
 
-export const EnumTypeFieldUpdateOperationsInputSchema: z.ZodType<Prisma.EnumTypeFieldUpdateOperationsInput> = z.object({
-  set: z.lazy(() => TypeSchema).optional()
+export const NullableEnumTypeFieldUpdateOperationsInputSchema: z.ZodType<Prisma.NullableEnumTypeFieldUpdateOperationsInput> = z.object({
+  set: z.lazy(() => TypeSchema).optional().nullable(),
+  unset: z.boolean().optional()
 }).strict();
 
-export const EnumAlignmentFieldUpdateOperationsInputSchema: z.ZodType<Prisma.EnumAlignmentFieldUpdateOperationsInput> = z.object({
-  set: z.lazy(() => AlignmentSchema).optional()
+export const NullableEnumAlignmentFieldUpdateOperationsInputSchema: z.ZodType<Prisma.NullableEnumAlignmentFieldUpdateOperationsInput> = z.object({
+  set: z.lazy(() => AlignmentSchema).optional().nullable(),
+  unset: z.boolean().optional()
 }).strict();
 
-export const EnumCreatureSizeFieldUpdateOperationsInputSchema: z.ZodType<Prisma.EnumCreatureSizeFieldUpdateOperationsInput> = z.object({
-  set: z.lazy(() => CreatureSizeSchema).optional()
+export const NullableEnumCreatureSizeFieldUpdateOperationsInputSchema: z.ZodType<Prisma.NullableEnumCreatureSizeFieldUpdateOperationsInput> = z.object({
+  set: z.lazy(() => CreatureSizeSchema).optional().nullable(),
+  unset: z.boolean().optional()
 }).strict();
 
 export const NullableDateTimeFieldUpdateOperationsInputSchema: z.ZodType<Prisma.NullableDateTimeFieldUpdateOperationsInput> = z.object({
@@ -3585,25 +3653,28 @@ export const NestedBoolNullableFilterSchema: z.ZodType<Prisma.NestedBoolNullable
   isSet: z.boolean().optional()
 }).strict();
 
-export const NestedEnumTypeFilterSchema: z.ZodType<Prisma.NestedEnumTypeFilter> = z.object({
-  equals: z.lazy(() => TypeSchema).optional(),
-  in: z.lazy(() => TypeSchema).array().optional(),
-  notIn: z.lazy(() => TypeSchema).array().optional(),
-  not: z.union([ z.lazy(() => TypeSchema),z.lazy(() => NestedEnumTypeFilterSchema) ]).optional(),
+export const NestedEnumTypeNullableFilterSchema: z.ZodType<Prisma.NestedEnumTypeNullableFilter> = z.object({
+  equals: z.lazy(() => TypeSchema).optional().nullable(),
+  in: z.lazy(() => TypeSchema).array().optional().nullable(),
+  notIn: z.lazy(() => TypeSchema).array().optional().nullable(),
+  not: z.union([ z.lazy(() => TypeSchema),z.lazy(() => NestedEnumTypeNullableFilterSchema) ]).optional().nullable(),
+  isSet: z.boolean().optional()
 }).strict();
 
-export const NestedEnumAlignmentFilterSchema: z.ZodType<Prisma.NestedEnumAlignmentFilter> = z.object({
-  equals: z.lazy(() => AlignmentSchema).optional(),
-  in: z.lazy(() => AlignmentSchema).array().optional(),
-  notIn: z.lazy(() => AlignmentSchema).array().optional(),
-  not: z.union([ z.lazy(() => AlignmentSchema),z.lazy(() => NestedEnumAlignmentFilterSchema) ]).optional(),
+export const NestedEnumAlignmentNullableFilterSchema: z.ZodType<Prisma.NestedEnumAlignmentNullableFilter> = z.object({
+  equals: z.lazy(() => AlignmentSchema).optional().nullable(),
+  in: z.lazy(() => AlignmentSchema).array().optional().nullable(),
+  notIn: z.lazy(() => AlignmentSchema).array().optional().nullable(),
+  not: z.union([ z.lazy(() => AlignmentSchema),z.lazy(() => NestedEnumAlignmentNullableFilterSchema) ]).optional().nullable(),
+  isSet: z.boolean().optional()
 }).strict();
 
-export const NestedEnumCreatureSizeFilterSchema: z.ZodType<Prisma.NestedEnumCreatureSizeFilter> = z.object({
-  equals: z.lazy(() => CreatureSizeSchema).optional(),
-  in: z.lazy(() => CreatureSizeSchema).array().optional(),
-  notIn: z.lazy(() => CreatureSizeSchema).array().optional(),
-  not: z.union([ z.lazy(() => CreatureSizeSchema),z.lazy(() => NestedEnumCreatureSizeFilterSchema) ]).optional(),
+export const NestedEnumCreatureSizeNullableFilterSchema: z.ZodType<Prisma.NestedEnumCreatureSizeNullableFilter> = z.object({
+  equals: z.lazy(() => CreatureSizeSchema).optional().nullable(),
+  in: z.lazy(() => CreatureSizeSchema).array().optional().nullable(),
+  notIn: z.lazy(() => CreatureSizeSchema).array().optional().nullable(),
+  not: z.union([ z.lazy(() => CreatureSizeSchema),z.lazy(() => NestedEnumCreatureSizeNullableFilterSchema) ]).optional().nullable(),
+  isSet: z.boolean().optional()
 }).strict();
 
 export const NestedDateTimeNullableFilterSchema: z.ZodType<Prisma.NestedDateTimeNullableFilter> = z.object({
@@ -3704,15 +3775,16 @@ export const CreatureActionWhereInputSchema: z.ZodType<Prisma.CreatureActionWher
   AND: z.union([ z.lazy(() => CreatureActionWhereInputSchema),z.lazy(() => CreatureActionWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => CreatureActionWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => CreatureActionWhereInputSchema),z.lazy(() => CreatureActionWhereInputSchema).array() ]).optional(),
+  searchName: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   name: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   action: z.union([ z.lazy(() => EnumActionTypeFilterSchema),z.lazy(() => ActionTypeSchema) ]).optional(),
-  type: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  type: z.union([ z.lazy(() => EnumSpellActionFilterSchema),z.lazy(() => SpellActionSchema) ]).optional(),
   flavor: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   description: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   damages: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   effects: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   heal: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  target: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  target: z.union([ z.lazy(() => EnumActionTargetFilterSchema),z.lazy(() => ActionTargetSchema) ]).optional(),
   range: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
 }).strict();
 
@@ -3743,34 +3815,37 @@ export const NestedBoolNullableWithAggregatesFilterSchema: z.ZodType<Prisma.Nest
   isSet: z.boolean().optional()
 }).strict();
 
-export const NestedEnumTypeWithAggregatesFilterSchema: z.ZodType<Prisma.NestedEnumTypeWithAggregatesFilter> = z.object({
-  equals: z.lazy(() => TypeSchema).optional(),
-  in: z.lazy(() => TypeSchema).array().optional(),
-  notIn: z.lazy(() => TypeSchema).array().optional(),
-  not: z.union([ z.lazy(() => TypeSchema),z.lazy(() => NestedEnumTypeWithAggregatesFilterSchema) ]).optional(),
-  _count: z.lazy(() => NestedIntFilterSchema).optional(),
-  _min: z.lazy(() => NestedEnumTypeFilterSchema).optional(),
-  _max: z.lazy(() => NestedEnumTypeFilterSchema).optional()
+export const NestedEnumTypeNullableWithAggregatesFilterSchema: z.ZodType<Prisma.NestedEnumTypeNullableWithAggregatesFilter> = z.object({
+  equals: z.lazy(() => TypeSchema).optional().nullable(),
+  in: z.lazy(() => TypeSchema).array().optional().nullable(),
+  notIn: z.lazy(() => TypeSchema).array().optional().nullable(),
+  not: z.union([ z.lazy(() => TypeSchema),z.lazy(() => NestedEnumTypeNullableWithAggregatesFilterSchema) ]).optional().nullable(),
+  _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
+  _min: z.lazy(() => NestedEnumTypeNullableFilterSchema).optional(),
+  _max: z.lazy(() => NestedEnumTypeNullableFilterSchema).optional(),
+  isSet: z.boolean().optional()
 }).strict();
 
-export const NestedEnumAlignmentWithAggregatesFilterSchema: z.ZodType<Prisma.NestedEnumAlignmentWithAggregatesFilter> = z.object({
-  equals: z.lazy(() => AlignmentSchema).optional(),
-  in: z.lazy(() => AlignmentSchema).array().optional(),
-  notIn: z.lazy(() => AlignmentSchema).array().optional(),
-  not: z.union([ z.lazy(() => AlignmentSchema),z.lazy(() => NestedEnumAlignmentWithAggregatesFilterSchema) ]).optional(),
-  _count: z.lazy(() => NestedIntFilterSchema).optional(),
-  _min: z.lazy(() => NestedEnumAlignmentFilterSchema).optional(),
-  _max: z.lazy(() => NestedEnumAlignmentFilterSchema).optional()
+export const NestedEnumAlignmentNullableWithAggregatesFilterSchema: z.ZodType<Prisma.NestedEnumAlignmentNullableWithAggregatesFilter> = z.object({
+  equals: z.lazy(() => AlignmentSchema).optional().nullable(),
+  in: z.lazy(() => AlignmentSchema).array().optional().nullable(),
+  notIn: z.lazy(() => AlignmentSchema).array().optional().nullable(),
+  not: z.union([ z.lazy(() => AlignmentSchema),z.lazy(() => NestedEnumAlignmentNullableWithAggregatesFilterSchema) ]).optional().nullable(),
+  _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
+  _min: z.lazy(() => NestedEnumAlignmentNullableFilterSchema).optional(),
+  _max: z.lazy(() => NestedEnumAlignmentNullableFilterSchema).optional(),
+  isSet: z.boolean().optional()
 }).strict();
 
-export const NestedEnumCreatureSizeWithAggregatesFilterSchema: z.ZodType<Prisma.NestedEnumCreatureSizeWithAggregatesFilter> = z.object({
-  equals: z.lazy(() => CreatureSizeSchema).optional(),
-  in: z.lazy(() => CreatureSizeSchema).array().optional(),
-  notIn: z.lazy(() => CreatureSizeSchema).array().optional(),
-  not: z.union([ z.lazy(() => CreatureSizeSchema),z.lazy(() => NestedEnumCreatureSizeWithAggregatesFilterSchema) ]).optional(),
-  _count: z.lazy(() => NestedIntFilterSchema).optional(),
-  _min: z.lazy(() => NestedEnumCreatureSizeFilterSchema).optional(),
-  _max: z.lazy(() => NestedEnumCreatureSizeFilterSchema).optional()
+export const NestedEnumCreatureSizeNullableWithAggregatesFilterSchema: z.ZodType<Prisma.NestedEnumCreatureSizeNullableWithAggregatesFilter> = z.object({
+  equals: z.lazy(() => CreatureSizeSchema).optional().nullable(),
+  in: z.lazy(() => CreatureSizeSchema).array().optional().nullable(),
+  notIn: z.lazy(() => CreatureSizeSchema).array().optional().nullable(),
+  not: z.union([ z.lazy(() => CreatureSizeSchema),z.lazy(() => NestedEnumCreatureSizeNullableWithAggregatesFilterSchema) ]).optional().nullable(),
+  _count: z.lazy(() => NestedIntNullableFilterSchema).optional(),
+  _min: z.lazy(() => NestedEnumCreatureSizeNullableFilterSchema).optional(),
+  _max: z.lazy(() => NestedEnumCreatureSizeNullableFilterSchema).optional(),
+  isSet: z.boolean().optional()
 }).strict();
 
 export const NestedDateTimeNullableWithAggregatesFilterSchema: z.ZodType<Prisma.NestedDateTimeNullableWithAggregatesFilter> = z.object({
@@ -4011,6 +4086,20 @@ export const CreatureActionDeleteManyInputSchema: z.ZodType<Prisma.CreatureActio
   where: z.lazy(() => CreatureActionWhereInputSchema)
 }).strict();
 
+export const EnumSpellActionFilterSchema: z.ZodType<Prisma.EnumSpellActionFilter> = z.object({
+  equals: z.lazy(() => SpellActionSchema).optional(),
+  in: z.lazy(() => SpellActionSchema).array().optional(),
+  notIn: z.lazy(() => SpellActionSchema).array().optional(),
+  not: z.union([ z.lazy(() => SpellActionSchema),z.lazy(() => NestedEnumSpellActionFilterSchema) ]).optional(),
+}).strict();
+
+export const EnumActionTargetFilterSchema: z.ZodType<Prisma.EnumActionTargetFilter> = z.object({
+  equals: z.lazy(() => ActionTargetSchema).optional(),
+  in: z.lazy(() => ActionTargetSchema).array().optional(),
+  notIn: z.lazy(() => ActionTargetSchema).array().optional(),
+  not: z.union([ z.lazy(() => ActionTargetSchema),z.lazy(() => NestedEnumActionTargetFilterSchema) ]).optional(),
+}).strict();
+
 export const CreatureItemUpdateInputSchema: z.ZodType<Prisma.CreatureItemUpdateInput> = z.object({
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   quantity: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -4044,16 +4133,39 @@ export const CreatureAttributeUpdateInputSchema: z.ZodType<Prisma.CreatureAttrib
 }).strict();
 
 export const CreatureActionUpdateInputSchema: z.ZodType<Prisma.CreatureActionUpdateInput> = z.object({
+  searchName: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   action: z.union([ z.lazy(() => ActionTypeSchema),z.lazy(() => EnumActionTypeFieldUpdateOperationsInputSchema) ]).optional(),
-  type: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  type: z.union([ z.lazy(() => SpellActionSchema),z.lazy(() => EnumSpellActionFieldUpdateOperationsInputSchema) ]).optional(),
   flavor: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   damages: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   effects: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   heal: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  target: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  target: z.union([ z.lazy(() => ActionTargetSchema),z.lazy(() => EnumActionTargetFieldUpdateOperationsInputSchema) ]).optional(),
   range: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+}).strict();
+
+export const NestedEnumSpellActionFilterSchema: z.ZodType<Prisma.NestedEnumSpellActionFilter> = z.object({
+  equals: z.lazy(() => SpellActionSchema).optional(),
+  in: z.lazy(() => SpellActionSchema).array().optional(),
+  notIn: z.lazy(() => SpellActionSchema).array().optional(),
+  not: z.union([ z.lazy(() => SpellActionSchema),z.lazy(() => NestedEnumSpellActionFilterSchema) ]).optional(),
+}).strict();
+
+export const NestedEnumActionTargetFilterSchema: z.ZodType<Prisma.NestedEnumActionTargetFilter> = z.object({
+  equals: z.lazy(() => ActionTargetSchema).optional(),
+  in: z.lazy(() => ActionTargetSchema).array().optional(),
+  notIn: z.lazy(() => ActionTargetSchema).array().optional(),
+  not: z.union([ z.lazy(() => ActionTargetSchema),z.lazy(() => NestedEnumActionTargetFilterSchema) ]).optional(),
+}).strict();
+
+export const EnumSpellActionFieldUpdateOperationsInputSchema: z.ZodType<Prisma.EnumSpellActionFieldUpdateOperationsInput> = z.object({
+  set: z.lazy(() => SpellActionSchema).optional()
+}).strict();
+
+export const EnumActionTargetFieldUpdateOperationsInputSchema: z.ZodType<Prisma.EnumActionTargetFieldUpdateOperationsInput> = z.object({
+  set: z.lazy(() => ActionTargetSchema).optional()
 }).strict();
 
 /////////////////////////////////////////

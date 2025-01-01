@@ -1,45 +1,97 @@
+import { TRPCError } from '@trpc/server';
 import 'dotenv/config';
 import jwt from 'jsonwebtoken';
 
 const secretAccess = process.env.JWT_ACCESS_SECRET!;
 const secretRefresh = process.env.JWT_REFRESH_SECRET!;
 
-export const createAccessToken = async (id:string) => {
+export const createAccessToken = async (id: string) => {
 	try {
-		const token = await jwt.sign({id},secretAccess,{expiresIn:'15m'})
-		return token
+		const token = await jwt.sign({ id }, secretAccess, { expiresIn: '15m' });
+		return token;
 	} catch (error) {
-		throw new Error('Malformed payload')
-	}
-}
+		if (error instanceof Error) {
+			throw new TRPCError({
+				code: 'BAD_REQUEST',
+				message: error.message,
+			});
+		} else {
+			// Handle internal server errors
+			console.error('Internal Server Error:', error);
 
-export const createRefreshToken = async (id:string) => {
+			throw new TRPCError({
+				code: 'INTERNAL_SERVER_ERROR',
+				message: 'Malformed payload',
+			});
+		}
+	}
+};
+
+export const createRefreshToken = async (id: string) => {
 	try {
-		const token = await jwt.sign({id},secretRefresh,{expiresIn:'1d'})
-		return token
+		const token = await jwt.sign({ id }, secretRefresh, { expiresIn: '1d' });
+		return token;
 	} catch (error) {
-		throw new Error('Malformed payload')
-	}
-}
+		if (error instanceof Error) {
+			throw new TRPCError({
+				code: 'BAD_REQUEST',
+				message: error.message,
+			});
+		} else {
+			// Handle internal server errors
+			console.error('Internal Server Error:', error);
 
-export const verifyAccessToken = async(token:string) => {
+			throw new TRPCError({
+				code: 'INTERNAL_SERVER_ERROR',
+				message: 'Malformed payload',
+			});
+		}
+	}
+};
+
+export const verifyAccessToken = async (token: string) => {
 	try {
-		console.log(token)
+		console.log(token);
 		const verified = await jwt.verify(token, secretAccess);
-		console.log(verified)
+		console.log(verified);
 		return verified;
 	} catch (error) {
-		throw new Error('Token has expired')
-	}
-}
-export const verifyRefreshToken = async(token:string) => {
-	try {
-		console.log(token)
-		const verified = await jwt.verify(token, secretRefresh);
-		console.log(verified)
-		return verified;
-	} catch (error) {
-		throw new Error('Token has expired')
-	}
-}
+		if (error instanceof Error) {
+			throw new TRPCError({
+				code: 'BAD_REQUEST',
+				message: error.message,
+			});
+		} else {
+			// Handle internal server errors
+			console.error('Internal Server Error:', error);
 
+			throw new TRPCError({
+				code: 'INTERNAL_SERVER_ERROR',
+				message: 'Token has expired',
+			});
+		}
+	}
+};
+export const verifyRefreshToken = async (token: string) => {
+	try {
+		console.log(token);
+		const verified = await jwt.verify(token, secretRefresh);
+		console.log(verified);
+		return verified;
+	} catch (error) {
+		if (error instanceof Error) {
+			throw new TRPCError({
+				code: 'BAD_REQUEST',
+				message: error.message,
+			});
+		} else {
+			// Handle internal server errors
+			console.error('Internal Server Error:', error);
+
+			throw new TRPCError({
+				code: 'INTERNAL_SERVER_ERROR',
+				message: 'Token has expired',
+			});
+		}
+	}
+};

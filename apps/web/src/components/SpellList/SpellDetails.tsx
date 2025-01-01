@@ -3,12 +3,7 @@ import { spellOptions } from '@/types/spellOptions';
 import { cn } from '@/utils/classNames';
 import { trpc } from '@/utils/trpc';
 import { SpellSchema } from '@api/lib/zod-prisma/index';
-import {
-	Link,
-	useNavigate,
-	useParams,
-	useRouter,
-} from '@tanstack/react-router';
+import { useNavigate, useParams } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 import {
 	GiBackup,
@@ -27,6 +22,7 @@ import {
 	GiVibratingBall,
 } from 'rocketicons/gi';
 import { z } from 'zod';
+import { ActionButton } from '../Buttons';
 
 type Spell = z.infer<typeof SpellSchema>;
 
@@ -58,16 +54,18 @@ const SpellDetails = () => {
 
 	return (
 		<div className='flex flex-col justify-center'>
-			<button
-				className='font-grenze mt-1 align-middle text-2xl text-stone-500 hover:text-stone-200'
-				onClick={() =>
-					navigate({
-						to: '/spells',
-					})
-				}
-			>
-				<span className='text-2xl'>&#8249;</span> Back
-			</button>
+			<div className='align-center flex flex-col items-center justify-center gap-2'>
+				<button
+					className='font-cabin mt-1 max-h-fit max-w-fit px-8 py-2 align-middle text-base uppercase text-stone-500 hover:text-stone-200'
+					onClick={() =>
+						navigate({
+							to: '/spells',
+						})
+					}
+				>
+					<span className='text-2xl'>&#8249;</span> Back
+				</button>
+			</div>
 
 			<div className='top-20dvh sticky mt-4 flex flex-col items-center text-center'>
 				<div className='size-10 items-center overflow-clip rounded-full border-0 align-middle'>
@@ -95,8 +93,8 @@ const SpellDetails = () => {
 				<span className='font-grenze mr-1 align-baseline text-2xl font-semibold capitalize tracking-wider dark:text-stone-200'>
 					{spell?.type}
 				</span>
-				<span className='font-noto text-md align-baseline font-light italic dark:text-stone-400'>
-					// {spell?.casting} spell to {spell?.action}{' '}
+				<span className='font-cabin text-md align-baseline font-light italic dark:text-stone-400'>
+					{'//'} {spell?.casting} spell to {spell?.action}{' '}
 					{spell?.targetType !== 'none' && spell?.targetType}
 					{spell?.targetType === 'none'
 						? 'noone'
@@ -104,8 +102,8 @@ const SpellDetails = () => {
 							? ' creature'
 							: spell?.targetType === 'self'
 								? ''
-								: ' creatures'}{' '}
-					//
+								: ' creatures'}
+					{' //'}
 				</span>
 				<div className='font-noto my-4 flex w-full flex-row items-baseline justify-center align-baseline dark:text-stone-200'>
 					<span className='font-noto align-baseline text-sm font-semibold'>
@@ -214,21 +212,31 @@ const SpellDetails = () => {
 				</div>
 			</div>
 			{isEditor && (
-				<Link
-					to={`/spells/edit/$id`}
-					params={{ id: `${spell?.id}` }}
-					className='bg-accent font-grenze my-4 w-1/2 self-center rounded-lg px-4 py-2 text-center text-lg font-bold transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:bg-stone-500 md:w-1/4'
+				<ActionButton
+					onClick={() =>
+						navigate({
+							to: `/spells/edit/$id`,
+							params: { id: `${spell?.id}` },
+						})
+					}
+					color='accent'
+					textColor='stone-800'
 				>
 					Edit
-				</Link>
+				</ActionButton>
 			)}
 			{user?.role === 'ADMIN' && (
-				<Link
-					to={`/`}
-					className='font-grenze my-4 w-1/2 self-center rounded-lg bg-red-500 px-4 py-2 text-center text-lg font-bold transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:bg-stone-500 md:w-1/4'
+				<ActionButton
+					onClick={() =>
+						navigate({
+							to: `/`,
+						})
+					}
+					color='red-500'
+					textColor='stone-800'
 				>
 					Delete
-				</Link>
+				</ActionButton>
 			)}
 		</div>
 	);

@@ -1,5 +1,5 @@
 import { prisma } from '@api/index';
-import { ItemSchema, NewItemSchema } from '@api/lib/ZodItem';
+import { ItemSchema } from '@api/lib/ZodItem';
 import { procedure, router } from '@api/trpc';
 import { z } from 'zod';
 
@@ -37,7 +37,7 @@ export const itemsRouter = router({
 			})
 		}),
 	create: procedure
-		.input(NewItemSchema)
+		.input(ItemSchema)
 		.mutation(async({input}) => {
 			console.log('💌 creating item #', input.name)
 			return await prisma.item.create({
@@ -45,7 +45,7 @@ export const itemsRouter = router({
 			})
 		}),
 	createMany: procedure
-		.input(NewItemSchema)
+		.input(ItemSchema)
 		.mutation(async({input}) => {
 			console.log('💌 creating multiple items ...');
 			return await prisma.item.createMany({
@@ -55,9 +55,9 @@ export const itemsRouter = router({
 	update: procedure
 		.input(ItemSchema)
 		.mutation(async({input}) =>{
-			console.log('💌 updating item :', input.name)
+			console.log('💌 updating item :', input.searchName)
 			return await prisma.item.update({
-				where: {name: input.name},
+				where: {searchName: input.searchName},
 				data: input
 			})
 		}),

@@ -24,6 +24,10 @@ export const creatureTypeOptions = [
 		value: 'monster',
 	},
 	{
+		label: 'Oddity',
+		value: 'oddity',
+	},
+	{
 		label: 'Person',
 		value: 'person',
 	},
@@ -106,7 +110,7 @@ export const ActionOptions = [
 	},
 	{
 		label: 'Travel',
-		value: 'Travel',
+		value: 'travel',
 	},
 	{
 		label: 'Epic',

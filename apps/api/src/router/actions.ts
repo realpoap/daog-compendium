@@ -1,64 +1,77 @@
 import { prisma } from '@api/index';
-import { CreatureActionSchema } from '@api/lib/ZodCreature';
+import { ActionSchema, NewActionSchema } from '@api/lib/ZodAction';
 import { procedure, router } from '@api/trpc';
 import { z } from 'zod';
 
 export const actionsRouter = router({
-	getAll: procedure.query(async ()=> {
+	getAll: procedure.query(async () => {
 		try {
 			return await prisma.action.findMany({
 				orderBy: {
-					name: 'asc'
-				}
+					name: 'asc',
+				},
 			});
 		} catch (error) {
-			console.error("Error in actions.getAll:", error); // Log the error for debugging
-			throw new Error(`Internal server error`);
+			throw new Error(`Internal server error: ${error}`);
 		}
 	}),
 	getTotal: procedure.query(async () => {
 		try {
 			return await prisma.action.count({
 				select: {
-					_all:true,
-					name:true, // count all records with name non-null
-				}
+					_all: true,
+					name: true, // count all records with name non-null
+				},
 			});
 		} catch (error) {
-			console.error("Error in action.count:", error)
-			throw new Error(`Internal server error`);
+			throw new Error(`Internal server error: ${error}`);
 		}
 	}),
-		getById: procedure
-		.input(z.string())
-		.query(async({input}) => {
+	getById: procedure.input(z.string()).query(async ({ input }) => {
+		return await prisma.action.findFirstOrThrow({
+			where: { id: input },
+		});
+	}),
+	getBySearchName: procedure.input(z.string()).query(async ({ input }) => {
+		try {
 			return await prisma.action.findFirstOrThrow({
-				where:{id:input}
-			})
-		}),
-	create: procedure
-		.input(CreatureActionSchema)
-		.mutation(async({input}) => {
-			console.log('💌 creating action #', input.name)
+				where: { searchName: input },
+			});
+		} catch (error) {
+			throw new Error(`Internal server error: ${error}`);
+		}
+	}),
+	create: procedure.input(NewActionSchema).mutation(async ({ input }) => {
+		try {
 			return await prisma.action.create({
 				data: input,
-			})
-		}),
-	createMany: procedure
-		.input(CreatureActionSchema)
-		.mutation(async({input}) => {
-			console.log('💌 creating multiple actions ...');
-			return await prisma.action.createMany({
-				data: input
-			})
-		}),
-	update: procedure
-		.input(CreatureActionSchema)
-		.mutation(async({input}) =>{
-			console.log('💌 updating action :', input.name)
+			});
+		} catch (error) {
+			throw new Error(`Internal server error: ${error}`);
+		}
+	}),
+	createMany: procedure.input(NewActionSchema).mutation(async ({ input }) => {
+		return await prisma.action.createMany({
+			data: input,
+		});
+	}),
+	update: procedure.input(ActionSchema).mutation(async ({ input }) => {
+		try {
 			return await prisma.action.update({
-				where: {name: input.name},
-				data: input
-			})
-		}),
-})
+				where: { searchName: input.searchName },
+				data: input,
+			});
+		} catch (error) {
+			throw new Error(`Internal server error: ${error}`);
+		}
+	}),
+	delete: procedure.input(z.string()).mutation(async ({ input }) => {
+		try {
+			return await prisma.action.delete({
+				where: { searchName: input },
+			});
+		} catch (error) {
+			throw new Error(`Internal server error: ${error}`);
+		}
+	}),
+});

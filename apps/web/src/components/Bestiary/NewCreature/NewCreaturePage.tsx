@@ -134,8 +134,8 @@ const NewCreaturePage = () => {
 					step={step}
 					setStep={setStep}
 					trigger={methods.trigger}
+					creature={methods.getValues()}
 					handleSubmit={e => {
-						//e.stopPropagation();
 						e.preventDefault();
 						methods.handleSubmit(onSubmit)(e);
 					}}

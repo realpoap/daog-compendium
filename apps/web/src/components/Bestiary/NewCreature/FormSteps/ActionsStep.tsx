@@ -1,17 +1,22 @@
+import { ActionButton } from '@/components/Buttons';
 import { NewCreature } from '@api/lib/ZodCreature';
-import { useEffect, useState } from 'react';
+import { RiArrowDropLeftLine, RiArrowDropRightLine } from 'rocketicons/ri';
 import { Field, InputNumber } from '../../../RHFComponents';
 
-const ActionsStep = ({
-	handlePrevious,
-	handleNext,
-}: {
+type ActionStepProps = {
 	handlePrevious: (step: number) => void;
+	creature: NewCreature;
 	handleNext: (
 		inputs: (keyof NewCreature)[],
 		nextStep: number,
 	) => Promise<void>;
-}) => {
+};
+
+const ActionsStep = ({
+	handlePrevious,
+	handleNext,
+	creature,
+}: ActionStepProps) => {
 	return (
 		<div className='flex w-full flex-col items-center justify-center'>
 			<div className='flex flex-row flex-wrap items-center justify-center gap-4 px-[4vw] md:flex-row'>
@@ -22,27 +27,35 @@ const ActionsStep = ({
 				>
 					<InputNumber name='actionList.main' />
 				</Field>
-				<Field
-					name='actionList.epic'
-					width='small'
-					label='Epics'
-				>
-					<InputNumber name='actionList.epic' />
-				</Field>
+				{creature.isBoss && (
+					<Field
+						name='actionList.epic'
+						width='small'
+						label='Epics'
+					>
+						<InputNumber name='actionList.epic' />
+					</Field>
+				)}
 			</div>
 			<div className='flex w-full flex-row items-center justify-center gap-4'>
-				<button
-					className='font-grenze m-y-2 mt-8 flex w-1/3 flex-col items-center justify-center self-center rounded-lg bg-purple-500 px-4 py-2 text-xl font-bold transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:bg-stone-500'
+				<ActionButton
+					color='purple-500'
+					textColor='stone-800'
 					onClick={() => handlePrevious(2)}
 				>
-					&#10094; Prev
-				</button>
-				<button
-					className='font-grenze m-y-2 mt-8 flex w-1/3 flex-col items-center justify-center self-center rounded-lg bg-purple-500 px-4 py-2 text-xl font-bold transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:bg-stone-500'
+					<span className='pr-4 align-middle'>
+						<RiArrowDropLeftLine className='icon-stone-800-base' /> Prev
+					</span>
+				</ActionButton>
+				<ActionButton
+					color='purple-500'
+					textColor='stone-800'
 					onClick={() => handleNext([], 4)}
 				>
-					Next &#10095;
-				</button>
+					<span className='pl-4 align-middle'>
+						Next <RiArrowDropRightLine className='icon-stone-800-base' />
+					</span>
+				</ActionButton>
 			</div>
 		</div>
 	);

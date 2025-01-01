@@ -1,5 +1,6 @@
 import { prisma } from '@api/index';
 import { AttributeSchema } from '@api/lib/zod-prisma';
+import { NewAttributeSchema } from '@api/lib/ZodCreature';
 import { procedure, router } from '@api/trpc';
 import { z } from 'zod';
 
@@ -37,15 +38,20 @@ export const attributesRouter = router({
 			})
 		}),
 	create: procedure
-		.input(AttributeSchema)
+		.input(NewAttributeSchema)
 		.mutation(async({input}) => {
-			console.log('💌 creating attribute #', input.name)
-			return await prisma.attribute.create({
+			try {
+				console.log('💌 creating attribute #', input.name)
+				return await prisma.attribute.create({
 				data: input,
 			})
+			} catch (error) {
+				console.error("Error in attribute.create:", error)
+				throw new Error(`Internal server error`);
+			}
 		}),
 	createMany: procedure
-		.input(AttributeSchema)
+		.input(NewAttributeSchema)
 		.mutation(async({input}) => {
 			console.log('💌 creating multiple attributes ...');
 			return await prisma.attribute.createMany({

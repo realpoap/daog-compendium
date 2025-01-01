@@ -1,4 +1,5 @@
-import SubmitButton from '../../../SubmitButton';
+import { ActionButton, SubmitButton } from '@/components/Buttons';
+import { RiArrowDropLeftLine } from 'rocketicons/ri';
 
 const ResumeStep = ({
 	handlePrevious,
@@ -10,15 +11,20 @@ const ResumeStep = ({
 	return (
 		<div className='flex w-full flex-col items-center justify-center'>
 			<div className='flex w-full flex-row items-center justify-center gap-4'>
-				<button
-					className='font-grenze m-y-2 mt-8 flex w-1/3 flex-col items-center justify-center self-center rounded-lg bg-purple-500 px-4 py-2 text-xl font-bold transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:bg-stone-500'
+				<ActionButton
+					color='purple-500'
+					textColor='stone-800'
 					onClick={() => handlePrevious(4)}
 				>
-					&#10094; Prev
-				</button>
+					<span className='pr-4 align-middle'>
+						<RiArrowDropLeftLine className='icon-stone-800-base' /> Prev
+					</span>
+				</ActionButton>
 				<SubmitButton
 					text='Create'
 					isLoading={isLoading}
+					color='accent'
+					textColor='stone-800'
 				/>
 			</div>
 		</div>

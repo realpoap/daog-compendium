@@ -13,6 +13,7 @@ import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
+import { SubmitButton } from '../Buttons';
 import {
 	Field,
 	Input,
@@ -313,17 +314,12 @@ const SpellEdit = () => {
 					</div>
 
 					{/* SUBMIT ------------------------------------------------- */}
-					<button
-						type='submit'
-						disabled={methods.formState.isSubmitting}
-						className='bg-accent font-grenze w-1/2 self-center rounded-lg px-4 py-2 text-lg font-bold transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:bg-stone-500 md:w-1/4'
-					>
-						{!methods.formState.isSubmitting ? (
-							<span>Update</span>
-						) : (
-							<span className='loading loading-dots loading-md'></span>
-						)}
-					</button>
+					<SubmitButton
+						isLoading={methods.formState.isSubmitting}
+						color='accent'
+						textColor='stone-800'
+						text='Update'
+					/>
 				</form>
 			</FormProvider>
 		</div>

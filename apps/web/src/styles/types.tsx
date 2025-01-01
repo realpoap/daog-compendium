@@ -4,4 +4,4 @@ export type NavItem = {
 	icon?: JSX.Element;
 	submenu?: boolean;
 	subMenuItems?: NavItem[];
-}
+};

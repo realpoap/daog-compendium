@@ -21,13 +21,14 @@ const Ability = ({ name, description }: AbilityProps) => {
 		<div
 			className={`tooltip tooltip-bottom hover:tooltip-open ${open ? 'tooltip-open' : ''}`}
 			data-tip={description}
+			//tooltip-content in v5 daisyui
 		>
 			<button
 				onMouseDown={openTooltip}
 				onMouseUp={closeTooltip}
 				onTouchStart={openTooltip}
 				onTouchEnd={closeTooltip}
-				className='badge badge-md font-noto bg-grey-900 cursor-pointer border-none px-4 py-3 font-semibold shadow-sm hover:bg-purple-500 hover:text-purple-900'
+				className='badge badge-md font-cabin cursor-pointer border-none bg-purple-300 px-4 py-3 font-semibold shadow-sm hover:bg-purple-500 hover:font-bold hover:text-purple-300'
 			>
 				{name}
 			</button>

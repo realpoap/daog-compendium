@@ -1,4 +1,3 @@
-import { getMeHandler } from '@api/controllers/user-controller';
 import { procedure, router, secureProcedure } from '@api/trpc';
 import { z } from 'zod';
 

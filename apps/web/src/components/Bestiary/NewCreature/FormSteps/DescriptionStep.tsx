@@ -1,3 +1,4 @@
+import { ActionButton } from '@/components/Buttons';
 import {
 	creatureAlignmentOptions,
 	creatureSizeOptions,
@@ -5,9 +6,11 @@ import {
 } from '@/types/creatureOptions';
 import { cn } from '@/utils/classNames';
 import { trpc } from '@/utils/trpc';
+import { Attribute } from '@api/lib/zod-prisma';
 import { CreatureAttribute, NewCreature } from '@api/lib/ZodCreature';
 import { useEffect, useState } from 'react';
 import { UseFormSetValue } from 'react-hook-form';
+import { RiArrowDropRightLine } from 'rocketicons/ri';
 import {
 	Checkbox,
 	Field,
@@ -16,7 +19,6 @@ import {
 	Textarea,
 } from '../../../RHFComponents';
 import { AttributeTags } from '../../utils/AttributeTags';
-import { Attribute } from '@api/lib/zod-prisma';
 
 const DescriptionStep = ({
 	setValue,
@@ -34,7 +36,7 @@ const DescriptionStep = ({
 	useEffect(() => {
 		if (attributesList.data) {
 			const list: Attribute[] = attributesList.data;
-			let attObjects = [] as CreatureAttribute[];
+			const attObjects = [] as CreatureAttribute[];
 			attributes?.map(att => {
 				const attObject = list.find(el => el.name === att);
 				if (attObject) {
@@ -65,7 +67,7 @@ const DescriptionStep = ({
 			>
 				<Checkbox
 					name='isBoss'
-					label='is an unique (and powerful) monster'
+					label='legendary creature'
 				/>
 			</Field>
 			<div className='flex w-full justify-center gap-4 md:flex-row'>
@@ -111,8 +113,14 @@ const DescriptionStep = ({
 					type='checkbox'
 					className='peer min-h-2'
 				/>
-				<div className='collapse-title font-noto m-0 ml-4 mt-2 min-h-2 py-0 text-sm text-purple-400'>
-					+ sub-type
+				<div className='collapse-title min-h-fit px-10 py-0'>
+					<div
+						className={cn(
+							'font-cabin font-stone-200 m-0 border-0 text-sm font-bold text-purple-400',
+						)}
+					>
+						+ sub-type
+					</div>
 				</div>
 				<div
 					className={cn(
@@ -136,43 +144,21 @@ const DescriptionStep = ({
 				name='attributes'
 				label='Search attribute'
 			>
-				{attributesList.data ? (
+				{attributesList.data?.length !== 0 && attributesList?.data ? (
 					<AttributeTags
 						setTags={setAttributes}
 						tags={attributes}
 						attributesList={attributesList?.data}
 					/>
 				) : (
-					<div className='skeleton h-10 w-full dark:bg-stone-700'></div>
+					<div className='skeleton rounded-btn h-11 w-full dark:bg-stone-700'></div>
 				)}
 			</Field>
-			{/* TODO: MOVE THIS TO VIEW PAGE */}
-			{/* <button
-				className='bg-accent font-grenze m-y-2 mt-8 flex w-2/3 flex-col items-center justify-center self-center rounded-lg px-4 py-2 text-xl font-bold'
-				onClick={e => {
-					e.stopPropagation();
-					setIsModalVisible(true);
-					(
-						document.getElementById('attribute-form') as HTMLDialogElement
-					).showModal();
-				}}
-			>
-				New attribute
-			</button>
-			{isModalVisible &&
-				createPortal(
-					<AttributeForm
-						tags={attributes}
-						setTags={setAttributes}
-						setVisible={setIsModalVisible}
-					/>,
-					document.body,
-				)} */}
 			<Field
 				name='flavor'
 				label='Flavor'
 			>
-				<Textarea name='flavor' />
+				<Input name='flavor' />
 			</Field>
 			<Field
 				name='description'
@@ -180,8 +166,9 @@ const DescriptionStep = ({
 			>
 				<Textarea name='description' />
 			</Field>
-			<button
-				className='font-grenze m-y-2 mt-8 flex w-2/3 flex-col items-center justify-center self-center rounded-lg bg-purple-500 px-4 py-2 text-xl font-bold transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:bg-stone-500'
+			<ActionButton
+				color='purple-500'
+				textColor='stone-800'
 				onClick={() =>
 					handleNext(
 						[
@@ -200,8 +187,10 @@ const DescriptionStep = ({
 				}
 				type='button'
 			>
-				Next &#10095;
-			</button>
+				<span className='pl-4 align-middle'>
+					Next <RiArrowDropRightLine className='icon-stone-800-base' />
+				</span>
+			</ActionButton>
 		</div>
 	);
 };

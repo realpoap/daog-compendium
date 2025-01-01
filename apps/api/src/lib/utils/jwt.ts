@@ -11,7 +11,7 @@ const accessSecret = process.env.ACCESS_TOKEN_SECRET as string
 const refreshSecret = process.env.REFRESH_TOKEN_SECRET as string
 
 export const signJwt = (
-  payload: Object,
+  payload: object,
   key: 'accessTokenPrivateKey' | 'refreshTokenPrivateKey',
   options: SignOptions = {}
 ) => {

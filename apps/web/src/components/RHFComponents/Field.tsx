@@ -1,5 +1,4 @@
 import React from 'react';
-import { useFormContext } from 'react-hook-form';
 import { Label } from './Label';
 import { SingleErrorMessage } from './SingleErrorMessage';
 
@@ -12,9 +11,7 @@ export const Field = (props: {
 	children: React.ReactNode;
 }) => {
 	const { name, id, label, withoutError = false, children, width } = props;
-	const {
-		formState: { errors },
-	} = useFormContext();
+
 	const widthClass =
 		width === 'third'
 			? 'w-1/3'

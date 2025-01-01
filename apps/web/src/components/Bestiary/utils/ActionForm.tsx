@@ -1,33 +1,34 @@
+import { LockButton } from '@/components/Buttons';
 import { Field, Input, Select, Textarea } from '@/components/RHFComponents';
+import TitleCollapse from '@/components/TitleCollapse';
+import { actionTargetOptions } from '@/types/actionOptions';
 import { ActionOptions } from '@/types/creatureOptions';
+import { actionOptions } from '@/types/spellOptions';
+import { cn } from '@/utils/classNames';
 import { trpc } from '@/utils/trpc';
-import {
-	ActionWithCreatureId,
-	ActionWithCreatureIdSchema,
-	CreatureAction,
-	CreatureActionSchema,
-} from '@api/lib/ZodCreature';
+import { Action, ActionSchema, NewAction } from '@api/lib/ZodAction';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { SetStateAction } from 'react';
+import { SetStateAction, useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 type Props = {
 	id: string;
-	actions: CreatureAction[];
-	setActions: React.Dispatch<SetStateAction<CreatureAction[]>>;
+	name: string;
+	actions: NewAction[];
+	setActions: React.Dispatch<SetStateAction<NewAction[]>>;
 };
 
-const ActionForm = ({ id, actions, setActions }: Props) => {
-	const methods = useForm<ActionWithCreatureId>({
+const ActionForm = ({ id, name, actions, setActions }: Props) => {
+	const methods = useForm<Action>({
 		resolver: async (data, context, options) => {
 			// you can debug your validation schema here
 			console.log('formData', data);
 			console.log(
 				'validation result',
-				await zodResolver(ActionWithCreatureIdSchema)(data, context, options),
+				await zodResolver(ActionSchema)(data, context, options),
 			);
-			return zodResolver(ActionWithCreatureIdSchema)(data, context, options);
+			return zodResolver(ActionSchema)(data, context, options);
 		},
 		shouldFocusError: true,
 	});
@@ -53,10 +54,15 @@ const ActionForm = ({ id, actions, setActions }: Props) => {
 		},
 	});
 
-	const onActionSubmit = (data: ActionWithCreatureId) => {
+	useEffect(() => {
+		methods.setValue('id', id);
+		methods.setValue('searchName', `${methods.getValues('name')} (${name})`);
+	}, [methods.getValues('name')]);
+
+	const onActionSubmit = (data: Action) => {
 		const { id, ...action } = data;
 		setActions([...actions, action]);
-		createAction.mutate(action as CreatureAction);
+		createAction.mutate(action as NewAction);
 		addActionOnCreature.mutate(data);
 		(document.getElementById('action-form') as HTMLDialogElement).close();
 	};
@@ -76,7 +82,6 @@ const ActionForm = ({ id, actions, setActions }: Props) => {
 							onSubmit={e => {
 								e.stopPropagation();
 								e.preventDefault();
-								methods.setValue('id', id);
 								methods.handleSubmit(onActionSubmit)(e);
 							}}
 						>
@@ -103,7 +108,18 @@ const ActionForm = ({ id, actions, setActions }: Props) => {
 								/>
 							</Field>
 							<Field name='type'>
-								<Input name='type' />
+								<Select
+									name='type'
+									options={actionOptions}
+									defaultValue=''
+								/>
+							</Field>
+							<Field name='target'>
+								<Select
+									name='target'
+									options={actionTargetOptions}
+									defaultValue=''
+								/>
 							</Field>
 							<Field name='flavor'>
 								<Input name='flavor' />
@@ -111,36 +127,47 @@ const ActionForm = ({ id, actions, setActions }: Props) => {
 							<Field name='description'>
 								<Textarea name='description' />
 							</Field>
-							<Field name='effects'>
-								<Textarea name='effects' />
-							</Field>
-							<Field name='damages'>
-								<Input name='damages'></Input>
-							</Field>
-							<Field name='heal'>
-								<Input name='heal'></Input>
-							</Field>
-							<Field name='target'>
-								<Input name='target'></Input>
-							</Field>
-							<Field name='range'>
-								<Input name='range'></Input>
-							</Field>
-							<button
-								type='submit'
-								disabled={createAction.isPending}
-								className='bg-accent font-grenze m-y-2 mt-8 flex w-2/3 flex-col items-center justify-center self-center rounded-lg px-4 py-2 text-xl font-bold transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:bg-stone-500'
+							<div
+								className='collapse w-full'
+								tabIndex={0}
 							>
-								{!createAction.isPending ? (
-									<span className='text-center'>Add</span>
-								) : (
-									<span className='loading loading-dots loading-md align-baseline'></span>
-								)}
-							</button>
+								<input
+									type='checkbox'
+									className='peer min-h-2'
+								/>
+								<TitleCollapse title='add details' />
+								<div
+									className={cn(
+										'collapse-content peer-checked:collapse-open flex w-full flex-wrap items-center justify-center gap-4 pb-0 pr-0 md:flex-row',
+									)}
+								>
+									<Field name='effects'>
+										<Textarea name='effects' />
+									</Field>
+									<Field name='damages'>
+										<Input name='damages'></Input>
+									</Field>
+									<Field name='heal'>
+										<Input name='heal'></Input>
+									</Field>
+									<Field name='range'>
+										<Input name='range'></Input>
+									</Field>
+								</div>
+							</div>
+
+							<LockButton
+								isLoading={createAction.isPending}
+								isValid={methods.formState.isValid}
+								color='accent'
+								textColor='stone-800'
+								text='Add Action'
+							/>
 						</form>
 					</FormProvider>
 					<p className='py-4 text-center text-stone-500'>
-						Press ESC key or click on ✕ button to close
+						Press <kbd className='kbd kbd-sm'>ESC</kbd> key or click on ✕ button
+						to close
 					</p>
 				</div>
 			</dialog>
