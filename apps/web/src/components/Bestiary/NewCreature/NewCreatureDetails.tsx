@@ -1,4 +1,3 @@
-import { capitalizeFirstLetter } from '@/utils/capitalize';
 import { NewCreature } from '@api/lib/ZodCreature';
 import {
 	GiArmorVest,
@@ -12,7 +11,6 @@ import {
 	GiSwordWound,
 	GiTentacleHeart,
 } from 'rocketicons/gi';
-import Ability from '../Ability';
 
 const NewCreatureDetails = ({
 	creature,

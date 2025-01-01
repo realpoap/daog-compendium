@@ -1,6 +1,5 @@
 import { LockButton } from '@/components/Buttons';
-import { Field, Input, Select, Textarea } from '@/components/RHFComponents';
-import { cn } from '@/utils/classNames';
+import { Field, Input, Textarea } from '@/components/RHFComponents';
 import { trpc } from '@/utils/trpc';
 import {
 	Attribute,
@@ -12,7 +11,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { SetStateAction, useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { BiSolidLock } from 'rocketicons/bi';
 
 type Props = {
 	id: string;

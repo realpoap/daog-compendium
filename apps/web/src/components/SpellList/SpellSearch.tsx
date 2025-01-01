@@ -20,7 +20,7 @@ const SpellSearch = () => {
 	const query = trpc.spells.getAll.useQuery(undefined, {
 		enabled: items === undefined,
 	});
-	const [latestNumber, setLatestNumber] = useState(0);
+	const [_latestNumber, setLatestNumber] = useState(0);
 	const { user } = useAuth();
 
 	const isEditor = user?.role === 'ADMIN' || user?.role === 'EDITOR';
@@ -61,9 +61,9 @@ const SpellSearch = () => {
 		}
 	}, [debouncedSearch, items]);
 
-	var prevScrollpos = window.scrollY;
+	let prevScrollpos = window.scrollY;
 	window.onscroll = function () {
-		var currentScrollPos = window.scrollY;
+		const currentScrollPos = window.scrollY;
 		if (prevScrollpos > currentScrollPos) {
 			document.getElementById('add-button')?.classList.add('opacity-1');
 			document.getElementById('add-button')?.classList.remove('opacity-0');
@@ -148,7 +148,7 @@ const SpellSearch = () => {
 									</span>
 								</div>
 								<span className='font-noto mt-1 align-baseline text-xs font-light italic dark:text-stone-400'>
-									// {d?.casting} spell to {d?.action}{' '}
+									{'// '} {d?.casting} spell to {d?.action}{' '}
 									{d?.targetType !== 'none' && d?.targetType}
 									{d?.targetType === 'none'
 										? 'noone'
@@ -156,8 +156,8 @@ const SpellSearch = () => {
 											? ''
 											: d?.targetType === 'single'
 												? ' creature'
-												: ' creatures'}{' '}
-									//
+												: ' creatures'}
+									{' //'}
 								</span>
 								<div
 									className={cn(

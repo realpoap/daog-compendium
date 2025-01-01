@@ -1,6 +1,5 @@
 import { ActionButton } from '@/components/Buttons';
 import { NewCreature } from '@api/lib/ZodCreature';
-import { useEffect, useState } from 'react';
 import { RiArrowDropLeftLine, RiArrowDropRightLine } from 'rocketicons/ri';
 import { Field, InputNumber } from '../../../RHFComponents';
 

@@ -3,6 +3,7 @@ import * as trpcExpress from "@trpc/server/adapters/express";
 import superjson from 'superjson';
 
 import type { AppRouter } from '@api/router/_app';
+import { ZodError } from 'zod/lib/ZodError';
 import { deserializeUser } from './middleware/deserializeUser';
 
 // export type Context = {
@@ -21,6 +22,19 @@ export const createContext = ({req, res, info}: trpcExpress.CreateExpressContext
 
 const trpc = initTRPC.context<Context>().create({
   transformer: superjson,
+  errorFormatter(opts) {
+    const { shape, error } = opts;
+    return {
+      ...shape,
+      data: {
+        ...shape.data,
+        zodError:
+          error.code === 'BAD_REQUEST' && error.cause instanceof ZodError
+            ? error.cause.flatten()
+            : null,
+      },
+    };
+  },
 });
 
 export type Context = Awaited<ReturnType<typeof createContext>>;

@@ -1,23 +1,23 @@
 {
-  "extends": "@repo/typescript-config/node.json",
-  "compilerOptions": {
-    "outDir": "dist",
+	"extends": "@repo/typescript-config/node.json",
+	"compilerOptions": {
+		"outDir": "dist",
 
-    "baseUrl": ".",
-    "paths": {
-      "@api/*": ["./src/*"]
-    },
-    "rootDir": "./src"
-  },
-  "tsc-alias": {
-    "resolveFullPaths": true,
-    "verbose": false
-  },
-  "strict": true,
-"strictNullChecks": true,
-  "include": ["src", "src/index.ts"],
-  "exclude": ["node_modules"],
-  //get rid of this in prod:
-  "declaration": false,
-    "declarationMap": false,
+		"baseUrl": ".",
+		"paths": {
+			"@api/*": ["./src/*"]
+		},
+		"rootDir": "./src"
+	},
+	"tsc-alias": {
+		"resolveFullPaths": true,
+		"verbose": false
+	},
+	"strict": true,
+	"strictNullChecks": true,
+	"include": ["src", "src/index.ts"],
+	"exclude": ["node_modules"],
+	//get rid of this in prod:
+	"declaration": false,
+	"declarationMap": false
 }

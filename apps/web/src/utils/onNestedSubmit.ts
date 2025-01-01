@@ -1,26 +1,26 @@
-import { FieldValues, UseFormHandleSubmit } from "react-hook-form";
+import { FieldValues, UseFormHandleSubmit } from 'react-hook-form';
 
 type Props<T extends FieldValues> = {
-    handleSubmit: UseFormHandleSubmit<T>;
-    submitFunction: (values: T) => Promise<void> | void;
+	handleSubmit: UseFormHandleSubmit<T>;
+	submitFunction: (values: T) => Promise<void> | void;
 };
 
 export const onNestedSubmit = <T extends FieldValues>({
-    handleSubmit,
-    submitFunction,
+	handleSubmit,
+	submitFunction,
 }: Props<T>) => {
-    return async (event: React.FormEvent<HTMLFormElement>) => {
-        if (event) {
-            // sometimes not true, e.g. React Native
-            if (typeof event.preventDefault === "function") {
-                event.preventDefault();
-             }
+	return async (event: React.FormEvent<HTMLFormElement>) => {
+		if (event) {
+			// sometimes not true, e.g. React Native
+			if (typeof event.preventDefault === 'function') {
+				event.preventDefault();
+			}
 
-             if (typeof event.stopPropagation === "function") {
-                 event.stopPropagation();
-              }
-         }
+			if (typeof event.stopPropagation === 'function') {
+				event.stopPropagation();
+			}
+		}
 
-         return handleSubmit(submitFunction)(event);
-    };
+		return handleSubmit(submitFunction)(event);
+	};
 };

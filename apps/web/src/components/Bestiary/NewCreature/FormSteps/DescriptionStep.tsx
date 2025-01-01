@@ -36,11 +36,11 @@ const DescriptionStep = ({
 	useEffect(() => {
 		if (attributesList.data) {
 			const list: Attribute[] = attributesList.data;
-			let attObjects = [] as CreatureAttribute[];
+			const attObjects = [] as CreatureAttribute[];
 			attributes?.map(att => {
 				const attObject = list.find(el => el.name === att);
 				if (attObject) {
-					const { id, ...rest } = attObject;
+					const { _id, ...rest } = attObject;
 					attObjects.push(rest);
 				}
 			});

@@ -27,8 +27,8 @@ const MonsterDetails = () => {
 
 	useEffect(() => {
 		if (monsterById.data) {
-			monster?.actions && setActions(monster?.actions);
-			monster?.attributes && setAttributes(monster?.attributes);
+			if (monster?.actions) setActions(monster?.actions);
+			if (monster?.attributes) setAttributes(monster?.attributes);
 		}
 	}, [monsterById.data]);
 

@@ -30,7 +30,7 @@ const LootStep = ({
 	useEffect(() => {
 		if (componentsList.data) {
 			const list = componentsList.data;
-			let compObjects = [] as CreatureComponent[];
+			const compObjects = [] as CreatureComponent[];
 			components?.map(att => {
 				const compObject = list.find(el => el.name === att);
 				if (compObject) {
@@ -46,7 +46,7 @@ const LootStep = ({
 	useEffect(() => {
 		if (itemsList.data) {
 			const list = itemsList.data;
-			let itemObjects = [] as CreatureItem[];
+			const itemObjects = [] as CreatureItem[];
 			items?.map(att => {
 				const itemObject = list.find(el => el.name === att);
 				if (itemObject) {
@@ -72,7 +72,7 @@ const LootStep = ({
 					</p>
 					{items.length !== 0 ? (
 						<div className='mt-4 h-4 w-full p-2'>
-							{items?.map(i => <li>{i}</li>)}
+							{items?.map(i => <li key={i}>{i}</li>)}
 						</div>
 					) : (
 						<div className='skeleton mt-4 h-4 w-full p-2 dark:bg-stone-700'></div>
@@ -100,7 +100,7 @@ const LootStep = ({
 					<p>Components and parts scavenged after the creature is slain :</p>
 					{components.length !== 0 ? (
 						<div className='mt-4 h-4 w-full p-2'>
-							{components?.map(c => <li>{c}</li>)}
+							{components?.map(c => <li key={c}>{c}</li>)}
 						</div>
 					) : (
 						<div className='skeleton mt-4 h-4 w-full p-2 dark:bg-stone-700'></div>

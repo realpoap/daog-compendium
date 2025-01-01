@@ -12,8 +12,7 @@ export const spellsRouter = router({
 				}
 			});
 		} catch (error) {
-			console.error("Error in spells.getAll:", error); // Log the error for debugging
-      throw new Error(`Internal server error`);
+      throw new Error(`Internal server error: ${error}`);
 		}
 	}),
 	getLatest: procedure.query(async () => {
@@ -25,8 +24,8 @@ export const spellsRouter = router({
         take: 1,
 			})
 		} catch (error) {
-			console.error("Error in spells.getLatest:", error)
-			throw new Error(`Internal server error`);
+			throw new Error(`Internal server error: ${error}`);
+
 		}
 	}),
 	getTotal: procedure.query(async () => {
@@ -38,8 +37,8 @@ export const spellsRouter = router({
 				}
 			});
 		} catch (error) {
-			console.error("Error in spells.count:", error)
-			throw new Error(`Internal server error`);
+			throw new Error(`Internal server error: ${error}`);
+
 		}
 	}),
 	getHighestNumber: procedure.query(async () => {
@@ -50,8 +49,8 @@ export const spellsRouter = router({
 					}
 			})
 		} catch (error) {
-			console.error("Error in spells.count:", error)
-			throw new Error(`Internal server error`);
+      throw new Error(`Internal server error: ${error}`);
+
 		}
 	}),
 	getByNumber: procedure

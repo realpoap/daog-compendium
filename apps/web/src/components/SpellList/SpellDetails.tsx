@@ -3,12 +3,7 @@ import { spellOptions } from '@/types/spellOptions';
 import { cn } from '@/utils/classNames';
 import { trpc } from '@/utils/trpc';
 import { SpellSchema } from '@api/lib/zod-prisma/index';
-import {
-	Link,
-	useNavigate,
-	useParams,
-	useRouter,
-} from '@tanstack/react-router';
+import { useNavigate, useParams } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 import {
 	GiBackup,
@@ -99,7 +94,7 @@ const SpellDetails = () => {
 					{spell?.type}
 				</span>
 				<span className='font-cabin text-md align-baseline font-light italic dark:text-stone-400'>
-					// {spell?.casting} spell to {spell?.action}{' '}
+					{'//'} {spell?.casting} spell to {spell?.action}{' '}
 					{spell?.targetType !== 'none' && spell?.targetType}
 					{spell?.targetType === 'none'
 						? 'noone'
@@ -107,8 +102,8 @@ const SpellDetails = () => {
 							? ' creature'
 							: spell?.targetType === 'self'
 								? ''
-								: ' creatures'}{' '}
-					//
+								: ' creatures'}
+					{' //'}
 				</span>
 				<div className='font-noto my-4 flex w-full flex-row items-baseline justify-center align-baseline dark:text-stone-200'>
 					<span className='font-noto align-baseline text-sm font-semibold'>

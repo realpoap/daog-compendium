@@ -1,8 +1,6 @@
 import {
 	GiBlood,
-	GiBrainTentacle,
 	GiBurningSkull,
-	GiCardRandom,
 	GiCarrion,
 	GiEarthSpit,
 	GiFlatPawPrint,

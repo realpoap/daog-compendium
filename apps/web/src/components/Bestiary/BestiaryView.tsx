@@ -44,9 +44,9 @@ const BestiaryView = () => {
 		}
 	}, [debouncedSearch, items]);
 
-	var prevScrollpos = window.scrollY;
+	let prevScrollpos = window.scrollY;
 	window.onscroll = function () {
-		var currentScrollPos = window.scrollY;
+		const currentScrollPos = window.scrollY;
 		if (prevScrollpos > currentScrollPos) {
 			document.getElementById('add-button')?.classList.add('opacity-1');
 			document.getElementById('add-button')?.classList.remove('opacity-0');

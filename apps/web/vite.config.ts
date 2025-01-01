@@ -6,20 +6,19 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  optimizeDeps: {
-    esbuildOptions: {
-      target: 'esnext'
-    }
-  },
-  build: {
-    target: 'esnext'
-  },
-  plugins: [react(), TanStackRouterVite(), tsconfigPaths()],
-  css: {
-    postcss: {
-      plugins: [tailwindcss()],
-    },
-  },
-  base: "/daog-compendium/"
-
+	optimizeDeps: {
+		esbuildOptions: {
+			target: 'esnext',
+		},
+	},
+	build: {
+		target: 'esnext',
+	},
+	plugins: [react(), TanStackRouterVite(), tsconfigPaths()],
+	css: {
+		postcss: {
+			plugins: [tailwindcss()],
+		},
+	},
+	base: '/daog-compendium/',
 });
