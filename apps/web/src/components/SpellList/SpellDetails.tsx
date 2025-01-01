@@ -93,7 +93,7 @@ const SpellDetails = () => {
 				<span className='font-grenze mr-1 align-baseline text-2xl font-semibold capitalize tracking-wider dark:text-stone-200'>
 					{spell?.type}
 				</span>
-				<span className='font-cabin text-md align-baseline font-light italic dark:text-stone-400'>
+				<span className='font-cabin align-baseline text-sm font-light italic dark:text-stone-400'>
 					{'//'} {spell?.casting} spell to {spell?.action}{' '}
 					{spell?.targetType !== 'none' && spell?.targetType}
 					{spell?.targetType === 'none'
@@ -123,14 +123,14 @@ const SpellDetails = () => {
 				</div>
 				<div
 					className={cn(
-						'font-grenze my-1 max-w-72 text-lg italic leading-none tracking-wider text-stone-700 md:line-clamp-none md:max-w-xl dark:text-stone-400',
+						'font-grenze my-2 max-w-72 text-lg italic leading-none tracking-wider text-stone-700 md:line-clamp-none md:max-w-xl dark:text-stone-400',
 					)}
 				>
 					{spell?.flavor}
 				</div>
 				<div
 					className={cn(
-						'font-noto text-md my-1 max-w-72 text-stone-700 md:line-clamp-none md:max-w-xl dark:text-stone-400',
+						'font-noto text-md my-1 max-w-72 text-left text-justify text-stone-700 md:line-clamp-none md:max-w-xl md:text-center dark:text-stone-400',
 					)}
 				>
 					{spell?.description}
