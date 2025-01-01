@@ -1,5 +1,5 @@
 import { prisma } from '@api/index';
-import { serverErrorHandler } from '@api/lib/utils/errorHandler';
+import { TRPCError } from '@trpc/server';
 import * as trpcExpress from '@trpc/server/adapters/express';
 import 'dotenv/config';
 import jwt from 'jsonwebtoken';
@@ -29,7 +29,7 @@ export const deserializeUser = async ({
 		};
 
 		if (!access_token) {
-			//console.warn('Did not find access token');
+			console.warn('Did not find access token');
 			return notAuthenticated;
 		}
 
@@ -57,7 +57,10 @@ export const deserializeUser = async ({
 			res,
 			user: { ...user, id: user.id.toString() },
 		};
-	} catch (error) {
-		serverErrorHandler(error);
+	} catch (err: any) {
+		throw new TRPCError({
+			code: 'INTERNAL_SERVER_ERROR',
+			message: err.message,
+		});
 	}
 };

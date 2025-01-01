@@ -1,7 +1,7 @@
-import { Creature, CreatureAttribute, NewCreature } from '@api/lib/ZodCreature';
-import { CreatureAction } from '@api/lib/ZodAction';
-import { CreatureItem } from '@api/lib/ZodItem';
+import { NewAction } from '@api/lib/ZodAction';
 import { CreatureComponent } from '@api/lib/ZodComponent';
+import { Creature, CreatureAttribute, NewCreature } from '@api/lib/ZodCreature';
+import { CreatureItem } from '@api/lib/ZodItem';
 
 export const calculateStats = (creature: Creature | NewCreature) => {
 	creature.level = calcLevel(creature);
@@ -87,5 +87,5 @@ export const defaultCreature: NewCreature = {
 	loot: <CreatureItem[]>[],
 	scavenge: <CreatureComponent[]>[],
 	attributes: <CreatureAttribute[]>[],
-	actions: <CreatureAction[]>[],
+	actions: <NewAction[]>[],
 };

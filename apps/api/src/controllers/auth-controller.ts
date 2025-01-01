@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 import customConfig from '@api/config/default';
 import { prisma } from '@api/index';
 import { signJwt, signToken, verifyJwt } from '@api/lib/utils/jwt';
@@ -59,7 +60,6 @@ export const registerHandler = async ({
 		});
 
 		// exclude password in returned user
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		const { password, ...userWithoutPassword } = user;
 
 		return {
@@ -142,50 +142,54 @@ export const loginHandler = async ({
 };
 // Refresh Tokens handler
 export const refreshTokenHandler = async ({ ctx }: { ctx: Context }) => {
-	// Get the refresh token from cookie
-	const refresh_token = ctx.req.cookies.refresh_token as string;
+	try {
+		// Get the refresh token from cookie
+		const refresh_token = ctx.req.cookies.refresh_token as string;
 
-	const message = 'Could not refresh access token';
-	if (!refresh_token) {
-		throw new TRPCError({ code: 'FORBIDDEN', message });
+		const message = 'Could not refresh access token';
+		if (!refresh_token) {
+			throw new TRPCError({ code: 'FORBIDDEN', message });
+		}
+
+		// Validate the Refresh token
+		const decoded = verifyJwt<{ sub: string }>(
+			refresh_token,
+			'refreshTokenPublicKey',
+		);
+
+		if (!decoded) {
+			throw new TRPCError({ code: 'FORBIDDEN', message });
+		}
+
+		// Check if the user exist
+		const user = await prisma.user.findFirst({
+			where: { email: ctx.user?.email },
+		});
+
+		if (!user) {
+			throw new TRPCError({ code: 'FORBIDDEN', message });
+		}
+
+		// Sign new access token
+		const access_token = signJwt({ sub: user.id }, 'accessTokenPrivateKey', {
+			expiresIn: `${customConfig.accessTokenExpiresIn}m`,
+		});
+
+		// Send the access token as cookie
+		ctx.res.cookie('access_token', access_token, accessTokenCookieOptions);
+		ctx.res.cookie('logged_in', true, {
+			...accessTokenCookieOptions,
+			httpOnly: false,
+		});
+
+		// Send response
+		return {
+			status: 'success',
+			access_token,
+		};
+	} catch (err: any) {
+		throw err;
 	}
-
-	// Validate the Refresh token
-	const decoded = verifyJwt<{ sub: string }>(
-		refresh_token,
-		'refreshTokenPublicKey',
-	);
-
-	if (!decoded) {
-		throw new TRPCError({ code: 'FORBIDDEN', message });
-	}
-
-	// Check if the user exist
-	const user = await prisma.user.findFirst({
-		where: { email: ctx.user?.email },
-	});
-
-	if (!user) {
-		throw new TRPCError({ code: 'FORBIDDEN', message });
-	}
-
-	// Sign new access token
-	const access_token = signJwt({ sub: user.id }, 'accessTokenPrivateKey', {
-		expiresIn: `${customConfig.accessTokenExpiresIn}m`,
-	});
-
-	// Send the access token as cookie
-	ctx.res.cookie('access_token', access_token, accessTokenCookieOptions);
-	ctx.res.cookie('logged_in', true, {
-		...accessTokenCookieOptions,
-		httpOnly: false,
-	});
-
-	// Send response
-	return {
-		status: 'success',
-		access_token,
-	};
 };
 
 // Logout handler
@@ -198,6 +202,10 @@ const logout = ({ ctx }: { ctx: Context }) => {
 	});
 };
 export const logoutHandler = async ({ ctx }: { ctx: Context }) => {
-	logout({ ctx });
-	return { status: 'success' };
+	try {
+		logout({ ctx });
+		return { status: 'success' };
+	} catch (err: any) {
+		throw err;
+	}
 };

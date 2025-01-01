@@ -40,7 +40,7 @@ const DescriptionStep = ({
 			attributes?.map(att => {
 				const attObject = list.find(el => el.name === att);
 				if (attObject) {
-					const { _id, ...rest } = attObject;
+					const { id, ...rest } = attObject;
 					attObjects.push(rest);
 				}
 			});
