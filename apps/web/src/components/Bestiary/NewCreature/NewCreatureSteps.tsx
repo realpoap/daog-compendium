@@ -1,7 +1,7 @@
 const NewCreatureSteps = ({ step }: { step: number }) => {
 	return (
 		<>
-			<ul className='steps font-noto steps-vertical md:steps-horizontal dark:text-stone-200'>
+			<ul className='steps font-noto steps-horizontal md:steps-horizontal dark:text-stone-200'>
 				<li className={`step ${step > 0 ? 'step-accent' : ''} `}>
 					Description
 				</li>

@@ -34,9 +34,9 @@ function Index() {
 				<h1 className='font-grenze py-4 text-center text-4xl'>
 					Welcome {capitalizeFirstLetter(user?.name)} !
 				</h1>
-				<section className='flex flex-row justify-center gap-4 p-4 md:flex-row'>
+				<section className='flex flex-row justify-center gap-4 md:flex-row md:p-4'>
 					<div className='stats h-5/12 w-5/12 shadow md:h-1/4 md:w-1/4 dark:bg-stone-700'>
-						<div className='stat flex flex-col justify-center gap-1'>
+						<div className='stat flex flex-col justify-center gap-1 p-4'>
 							<div className='stat-title dark:text-purple-200'>Spell count</div>
 							<div className='stat-value font-grenze pb-2 text-6xl text-purple-500'>
 								{spellCount?.data?.number}
@@ -50,7 +50,7 @@ function Index() {
 						</div>
 					</div>
 					<div className='stats h-5/12 w-5/12 shadow md:h-1/4 md:w-1/4 dark:bg-stone-700'>
-						<div className='stat flex flex-col justify-center gap-1'>
+						<div className='stat flex flex-col justify-center gap-1 p-4'>
 							<div className='stat-title dark:text-purple-200'>
 								Creature count
 							</div>

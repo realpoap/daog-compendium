@@ -1,3 +1,4 @@
+import { useAuth } from '@/store/authContext';
 import { cn } from '@/utils/classNames';
 import { trpc } from '@/utils/trpc';
 import { NewAction } from '@api/lib/ZodAction';
@@ -24,6 +25,9 @@ const MonsterDetails = () => {
 	const [attributes, setAttributes] = useState<CreatureAttribute[]>([]);
 
 	const monsterById = trpc.creatures.getById.useQuery(id as string);
+
+	const { user } = useAuth();
+	const isEditor = user?.role === 'ADMIN' || user?.role === 'EDITOR';
 
 	useEffect(() => {
 		if (monsterById.data) {
@@ -106,24 +110,28 @@ const MonsterDetails = () => {
 						{monster?.defense || '~'}
 					</span>
 				</div>
-				<button
-					className='bg-accent font-cabin m-y-2 mt-8 flex max-h-fit max-w-fit flex-col items-center justify-center self-center rounded-full px-8 py-2 text-base font-extrabold uppercase text-stone-900 transition-all duration-100 hover:ring-2 hover:ring-stone-200'
-					onClick={e => {
-						e.stopPropagation();
-						(
-							document.getElementById('attribute-form') as HTMLDialogElement
-						).showModal();
-					}}
-				>
-					Add attribute
-				</button>
-				{createPortal(
-					<AttributeForm
-						id={monster?.id as string}
-						attributes={attributes}
-						setAttributes={setAttributes}
-					/>,
-					document.body,
+				{isEditor && (
+					<>
+						<button
+							className='bg-accent font-cabin m-y-2 mt-8 flex max-h-fit max-w-fit flex-col items-center justify-center self-center rounded-full px-8 py-2 text-base font-extrabold uppercase text-stone-900 transition-all duration-100 hover:ring-2 hover:ring-stone-200'
+							onClick={e => {
+								e.stopPropagation();
+								(
+									document.getElementById('attribute-form') as HTMLDialogElement
+								).showModal();
+							}}
+						>
+							Add attribute
+						</button>
+						{createPortal(
+							<AttributeForm
+								id={monster?.id as string}
+								attributes={attributes}
+								setAttributes={setAttributes}
+							/>,
+							document.body,
+						)}
+					</>
 				)}
 				{monster?.attributes && (
 					<div className='flex w-full flex-row flex-wrap items-center justify-center gap-2 overflow-visible px-2'>
@@ -136,27 +144,30 @@ const MonsterDetails = () => {
 						))}
 					</div>
 				)}
+				{isEditor && (
+					<>
+						<button
+							className='bg-accent font-cabin m-y-2 mt-8 flex max-h-fit max-w-fit flex-col items-center justify-center self-center rounded-full px-8 py-2 text-base font-extrabold uppercase text-stone-900 transition-all duration-100 hover:ring-2 hover:ring-stone-200'
+							onClick={e => {
+								e.stopPropagation();
 
-				<button
-					className='bg-accent font-cabin m-y-2 mt-8 flex max-h-fit max-w-fit flex-col items-center justify-center self-center rounded-full px-8 py-2 text-base font-extrabold uppercase text-stone-900 transition-all duration-100 hover:ring-2 hover:ring-stone-200'
-					onClick={e => {
-						e.stopPropagation();
-
-						(
-							document.getElementById('action-form') as HTMLDialogElement
-						).showModal();
-					}}
-				>
-					Add action
-				</button>
-				{createPortal(
-					<ActionForm
-						id={monster?.id as string}
-						name={monster?.name as string}
-						actions={actions}
-						setActions={setActions}
-					/>,
-					document.body,
+								(
+									document.getElementById('action-form') as HTMLDialogElement
+								).showModal();
+							}}
+						>
+							Add action
+						</button>
+						{createPortal(
+							<ActionForm
+								id={monster?.id as string}
+								name={monster?.name as string}
+								actions={actions}
+								setActions={setActions}
+							/>,
+							document.body,
+						)}
+					</>
 				)}
 				<ActionComponent
 					actions={actions}

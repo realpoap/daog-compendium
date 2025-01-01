@@ -25,17 +25,10 @@ import { Route as BestiaryEditIdImport } from './routes/bestiary/edit/$id'
 
 // Create Virtual Routes
 
-const RulesLazyImport = createFileRoute('/rules')()
 const IndexLazyImport = createFileRoute('/')()
 const SpellsIndexLazyImport = createFileRoute('/spells/')()
 
 // Create/Update Routes
-
-const RulesLazyRoute = RulesLazyImport.update({
-  id: '/rules',
-  path: '/rules',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/rules.lazy').then((d) => d.Route))
 
 const IndexLazyRoute = IndexLazyImport.update({
   id: '/',
@@ -112,13 +105,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/rules': {
-      id: '/rules'
-      path: '/rules'
-      fullPath: '/rules'
-      preLoaderRoute: typeof RulesLazyImport
       parentRoute: typeof rootRoute
     }
     '/bestiary/$id': {
@@ -198,7 +184,6 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
-  '/rules': typeof RulesLazyRoute
   '/bestiary/$id': typeof BestiaryIdRoute
   '/bestiary/add': typeof BestiaryAddRoute
   '/me/login': typeof MeLoginRoute
@@ -213,7 +198,6 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
-  '/rules': typeof RulesLazyRoute
   '/bestiary/$id': typeof BestiaryIdRoute
   '/bestiary/add': typeof BestiaryAddRoute
   '/me/login': typeof MeLoginRoute
@@ -229,7 +213,6 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
-  '/rules': typeof RulesLazyRoute
   '/bestiary/$id': typeof BestiaryIdRoute
   '/bestiary/add': typeof BestiaryAddRoute
   '/me/login': typeof MeLoginRoute
@@ -246,7 +229,6 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/rules'
     | '/bestiary/$id'
     | '/bestiary/add'
     | '/me/login'
@@ -260,7 +242,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/rules'
     | '/bestiary/$id'
     | '/bestiary/add'
     | '/me/login'
@@ -274,7 +255,6 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/rules'
     | '/bestiary/$id'
     | '/bestiary/add'
     | '/me/login'
@@ -290,7 +270,6 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
-  RulesLazyRoute: typeof RulesLazyRoute
   BestiaryIdRoute: typeof BestiaryIdRoute
   BestiaryAddRoute: typeof BestiaryAddRoute
   MeLoginRoute: typeof MeLoginRoute
@@ -305,7 +284,6 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
-  RulesLazyRoute: RulesLazyRoute,
   BestiaryIdRoute: BestiaryIdRoute,
   BestiaryAddRoute: BestiaryAddRoute,
   MeLoginRoute: MeLoginRoute,
@@ -329,7 +307,6 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/rules",
         "/bestiary/$id",
         "/bestiary/add",
         "/me/login",
@@ -344,9 +321,6 @@ export const routeTree = rootRoute
     },
     "/": {
       "filePath": "index.lazy.tsx"
-    },
-    "/rules": {
-      "filePath": "rules.lazy.tsx"
     },
     "/bestiary/$id": {
       "filePath": "bestiary/$id.tsx"

@@ -6,10 +6,10 @@ import {
 	GiCrownedSkull,
 	GiFairyWand,
 	GiGlassHeart,
+	GiPartyHat,
 	GiRoundStar,
 	GiSemiClosedEye,
 	GiSwordWound,
-	GiTentacleHeart,
 } from 'rocketicons/gi';
 
 const NewCreatureDetails = ({
@@ -20,7 +20,7 @@ const NewCreatureDetails = ({
 	step: number;
 }) => {
 	return (
-		<div className='indicator'>
+		<div className='indicator w-full p-4'>
 			<div className='skeleton my-8 flex min-w-full flex-col items-center justify-start gap-1 rounded-xl bg-stone-700 p-4 text-purple-400 shadow-xl'>
 				<div className='flex w-full flex-row items-start justify-end'>
 					<div className='indicator -right-6 -top-4'>
@@ -40,11 +40,11 @@ const NewCreatureDetails = ({
 				)}
 
 				{creature.level !== 0 && (
-					<p className='font-grenze text-3xl font-bold dark:text-stone-500'>
-						<GiRoundStar className='icon-lg icon-stone-500' /> {creature.level}
+					<p className='font-grenze text-3xl font-bold dark:text-stone-200'>
+						<GiRoundStar className='icon-lg icon-stone-200' /> {creature.level}
 					</p>
 				)}
-				<p className='font-cabin text-xl font-semibold capitalize italic dark:text-stone-500'>
+				<p className='font-cabin text-xl font-semibold capitalize italic dark:text-stone-200'>
 					{creature?.size as string} {creature?.alignment as string}{' '}
 					{creature?.type as string}
 				</p>
@@ -53,7 +53,7 @@ const NewCreatureDetails = ({
 						{creature.attributes.map(a => (
 							<div
 								key={a.name}
-								className='badge badge-md font-cabin cursor-pointer border-none bg-stone-500 px-4 py-3 font-semibold text-stone-700 shadow-sm'
+								className='badge badge-md font-cabin cursor-pointer border-none bg-stone-200 px-4 py-3 font-semibold text-stone-700 shadow-sm'
 							>
 								{a.name}
 							</div>
@@ -65,23 +65,23 @@ const NewCreatureDetails = ({
 					<>
 						<div className='my-2 flex w-full flex-row items-center justify-center gap-8'>
 							{creature.health != null && (
-								<div className='font-cabin my-2 flex flex-row items-center justify-center gap-1 text-xl font-bold text-stone-500'>
-									<GiGlassHeart className='icon-lg icon-stone-500' />
-									<p className='text-2xl'>{creature.health}</p>
+								<div className='font-cabin my-2 flex flex-row items-center justify-center gap-1 text-xl font-bold text-stone-200'>
+									<GiGlassHeart className='icon-lg icon-stone-200' />
+									<p className='pl-1 text-2xl'> {creature.health}</p>
 								</div>
 							)}
 							{creature.spirit != null && (
-								<div className='font-cabin my-2 flex flex-row items-center justify-center gap-1 text-xl font-bold text-stone-500'>
-									<GiTentacleHeart className='icon-lg icon-stone-500' />
+								<div className='font-cabin my-2 flex flex-row items-center justify-center gap-1 text-xl font-bold text-stone-200'>
+									<GiPartyHat className='icon-xl icon-stone-200' />
 									<p className='text-2xl'>{creature.spirit}</p>
 								</div>
 							)}
 						</div>
-						<div className='font-cabin -mt-3 flex w-full flex-row flex-wrap items-center justify-center gap-4 text-lg font-bold text-stone-500'>
+						<div className='font-cabin -mt-3 flex w-full flex-row flex-wrap items-center justify-center gap-4 text-lg font-bold text-stone-200'>
 							{creature.attack != null && (
 								<div className='flex flex-row items-center justify-center gap-1'>
-									<GiSwordWound className='icon-base icon-stone-500' />
-									<p>Attack :</p>
+									<GiSwordWound className='icon-base icon-stone-200' />
+									{/* <p>Attack :</p> */}
 									<p>
 										{creature.attack}{' '}
 										{/* <span className='text-lg'>
@@ -92,36 +92,36 @@ const NewCreatureDetails = ({
 							)}
 							{creature.defense != null && (
 								<div className='flex flex-row items-center justify-center gap-1'>
-									<GiCheckedShield className='icon-base icon-stone-500' />
-									<p>Defense :</p>
+									<GiCheckedShield className='icon-base icon-stone-200' />
+									{/* <p>Defense :</p> */}
 									<p>{creature.defense}</p>
 								</div>
 							)}
 							{creature.armor != null && (
 								<div className='flex flex-row items-center justify-center gap-1'>
-									<GiArmorVest className='icon-base icon-stone-500' />
-									<p>Armor :</p>
+									<GiArmorVest className='icon-base icon-stone-200' />
+									{/* <p>Armor :</p> */}
 									<p>{creature.armor}</p>
 								</div>
 							)}
 							{creature.ranged != null && (
 								<div className='flex flex-row items-center justify-center gap-1'>
-									<GiBullseye className='icon-base icon-stone-500' />
-									<p>Ranged :</p>
+									<GiBullseye className='icon-base icon-stone-200' />
+									{/* <p>Ranged :</p> */}
 									<p>{creature.ranged}</p>
 								</div>
 							)}
 							{creature.perception != null && (
 								<div className='flex flex-row items-center justify-center gap-1'>
-									<GiSemiClosedEye className='icon-base icon-stone-500' />
-									<p>Perception :</p>
+									<GiSemiClosedEye className='icon-base icon-stone-200' />
+									{/* <p>Perception :</p> */}
 									<p>{creature.perception}</p>
 								</div>
 							)}
 							{creature.magic != null && (
 								<div className='flex flex-row items-center justify-center gap-1'>
-									<GiFairyWand className='icon-base icon-stone-500' />
-									<p>Magic :</p>
+									<GiFairyWand className='icon-base icon-stone-200' />
+									{/* <p>Magic :</p> */}
 									<p>{creature?.magic}</p>
 								</div>
 							)}
