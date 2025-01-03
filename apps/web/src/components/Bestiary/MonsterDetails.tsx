@@ -101,7 +101,7 @@ const MonsterDetails = () => {
 						{monster?.size} {monster?.alignment} {monster?.type}
 					</p>
 				</div>
-				{monster?.level !== 0 && (
+				{monster?.level && (
 					<div
 						className={cn(
 							'relative flex flex-col items-center justify-center text-center',
