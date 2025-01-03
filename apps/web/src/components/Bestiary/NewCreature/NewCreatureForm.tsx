@@ -62,6 +62,7 @@ const NewCreatureForm = ({
 			{/* ACTIONS STEP ----------------------------------------- */}
 			{step === 3 && (
 				<ActionsStep
+					setValue={setValue}
 					handlePrevious={handlePrevious}
 					handleNext={handleNext}
 					creature={creature}

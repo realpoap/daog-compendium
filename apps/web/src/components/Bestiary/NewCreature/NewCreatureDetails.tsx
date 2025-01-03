@@ -7,6 +7,7 @@ import {
 	GiFairyWand,
 	GiGlassHeart,
 	GiPartyHat,
+	GiPotionBall,
 	GiRoundStar,
 	GiSemiClosedEye,
 	GiSwordWound,
@@ -72,7 +73,7 @@ const NewCreatureDetails = ({
 							)}
 							{creature.spirit != null && (
 								<div className='font-cabin my-2 flex flex-row items-center justify-center gap-1 text-xl font-bold text-stone-200'>
-									<GiPartyHat className='icon-xl icon-stone-200' />
+									<GiPotionBall className='icon-xl icon-stone-200' />
 									<p className='text-2xl'>{creature.spirit}</p>
 								</div>
 							)}
@@ -127,6 +128,31 @@ const NewCreatureDetails = ({
 							)}
 						</div>
 					</>
+				)}
+				{step > 2 && (
+					<div className='flex flex-col dark:text-stone-200'>
+						<h3>Actions :</h3>
+						<div className='flex flex-row items-center justify-center gap-1'>
+							<p>Main :</p>
+							<p>{creature?.actionList.main}</p>
+						</div>
+						{creature.actionList.epic !== 0 && (
+							<div className='flex flex-row items-center justify-center gap-1'>
+								<p>Epic :</p>
+								<p>{creature?.actionList.epic}</p>
+							</div>
+						)}
+						<ul className='flex list-none flex-row space-x-1'>
+							{creature?.actions.map(a => (
+								<li
+									className='after:content-[","] after:last:content-[""]'
+									key={a.searchName}
+								>
+									{a.name}
+								</li>
+							))}
+						</ul>
+					</div>
 				)}
 			</div>
 		</div>

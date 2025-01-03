@@ -1,14 +1,14 @@
 import { cn } from '@/utils/classNames';
-import { Attribute } from '@api/lib/ZodCreature';
+import { Action } from '@api/lib/ZodAction';
 import { SetStateAction, useState } from 'react';
 
 type Props = {
 	tags: string[];
 	setTags: React.Dispatch<SetStateAction<string[]>>;
-	attributesList: Attribute[];
+	actionsList: Action[];
 };
 
-export const AttributeTags = ({ setTags, tags, attributesList }: Props) => {
+export const ActionsTags = ({ setTags, tags, actionsList }: Props) => {
 	const [searchTerm, setSearchTerm] = useState('');
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,13 +26,11 @@ export const AttributeTags = ({ setTags, tags, attributesList }: Props) => {
 		if (e.key !== ',' || e.code !== 'Comma') return;
 		(e.target as HTMLInputElement).value = '';
 	};
-	const handleSelect = (attribute: Attribute) => {
-		const input = document.getElementById(
-			'attribute-input',
-		) as HTMLInputElement;
+	const handleSelect = (action: Action) => {
+		const input = document.getElementById('action-input') as HTMLInputElement;
 		input.value = '';
 		setSearchTerm('');
-		setTags([...tags, attribute.name]);
+		setTags([...tags, action.searchName]);
 	};
 
 	const removeTag = (index: number) => {
@@ -58,9 +56,9 @@ export const AttributeTags = ({ setTags, tags, attributesList }: Props) => {
 					className={cn(
 						'flex-1 bg-transparent px-2 placeholder:text-sm placeholder:italic placeholder:text-stone-500 focus:outline-none focus:ring-0',
 					)}
-					placeholder='Write attributes separated by a comma'
+					placeholder='Write actions separated by a comma'
 					type='text'
-					id='attribute-input'
+					id='action-input'
 					onChange={handleChange}
 					onKeyDown={handleKeyDown}
 					onKeyUp={handleKeyUp}
@@ -69,7 +67,7 @@ export const AttributeTags = ({ setTags, tags, attributesList }: Props) => {
 					<div className='align-center absolute z-10 ml-2 mt-10 flex max-h-svh flex-col justify-start rounded dark:bg-stone-700'>
 						<ResultList
 							tags={tags}
-							results={attributesList}
+							results={actionsList}
 							searchTerm={searchTerm}
 							handleSelect={handleSelect}
 						/>
@@ -82,12 +80,12 @@ export const AttributeTags = ({ setTags, tags, attributesList }: Props) => {
 
 type ResultListProps = {
 	tags: string[];
-	results: Attribute[];
+	results: Action[];
 	searchTerm: string;
-	handleSelect: (attribute: Attribute) => void;
+	handleSelect: (action: Action) => void;
 };
 
-export default function ResultList({
+function ResultList({
 	tags,
 	results,
 	searchTerm,
@@ -111,7 +109,7 @@ export default function ResultList({
 	if (results.length === 0) {
 		return (
 			<div className='px-2 py-1 align-baseline text-sm italic text-red-500'>
-				No attribute found
+				No action found
 			</div>
 		);
 	}
@@ -127,7 +125,7 @@ export default function ResultList({
 							onClick={() => handleSelect(result)}
 							className='hover:bg-accent group cursor-pointer list-none rounded-sm px-1 text-stone-200 hover:text-stone-800'
 						>
-							<>{matchedTerm(result.name, searchTerm)}</>
+							<>{matchedTerm(result.searchName, searchTerm)}</>
 						</li>
 					))}
 			</div>

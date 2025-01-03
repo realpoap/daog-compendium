@@ -53,6 +53,13 @@ export type Attribute = z.infer<typeof AttributeSchema>;
 export const NewAttributeSchema = AttributeSchema.omit({ id: true });
 export type NewAttribute = z.infer<typeof NewAttributeSchema>;
 
+export const AttributeArraySchema = z.object({
+	id: z.string(),
+	attributes: z.array(NewAttributeSchema),
+});
+
+export type AttributeArray = z.infer<typeof AttributeArraySchema>;
+
 export const ZodCreature = z.object({
 	size: z
 		.enum(['tiny', 'small', 'average', 'large', 'huge', 'gigantic'], {
@@ -64,6 +71,7 @@ export const ZodCreature = z.object({
 	fullname: z.string(),
 	name: z.string({ required_error: 'It shall be named !' }),
 	rank: z.string().nullable(),
+	isBoss: z.boolean().nullable(),
 	type: z
 		.enum(
 			[

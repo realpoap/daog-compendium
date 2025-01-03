@@ -2,7 +2,9 @@ const NewCreatureSteps = ({ step }: { step: number }) => {
 	return (
 		<>
 			<ul className='steps font-noto steps-horizontal md:steps-horizontal dark:text-stone-200'>
-				<li className={`step ${step > 0 ? 'step-accent' : ''} `}>
+				<li
+					className={`step ${step > 0 ? 'step-accent' : ''} ${step === 1 ? 'border-1 border-stone-200' : ''} `}
+				>
 					Description
 				</li>
 				<li className={`step ${step > 1 ? 'step-accent' : ''}`}>Profile</li>

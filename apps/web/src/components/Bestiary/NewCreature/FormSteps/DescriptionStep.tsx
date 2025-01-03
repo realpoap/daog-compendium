@@ -1,10 +1,10 @@
 import { ActionButton } from '@/components/Buttons';
+import Collapsible from '@/components/Collapsible';
 import {
 	creatureAlignmentOptions,
 	creatureSizeOptions,
 	creatureTypeOptions,
 } from '@/types/creatureOptions';
-import { cn } from '@/utils/classNames';
 import { trpc } from '@/utils/trpc';
 import { Attribute } from '@api/lib/zod-prisma';
 import { CreatureAttribute, NewCreature } from '@api/lib/ZodCreature';
@@ -105,41 +105,17 @@ const DescriptionStep = ({
 					/>
 				</Field>
 			</div>
-			<div
-				className='collapse'
-				tabIndex={0}
-			>
-				<input
-					type='checkbox'
-					className='peer min-h-2'
-				/>
-				<div className='collapse-title min-h-fit px-10 py-0'>
-					<div
-						className={cn(
-							'font-cabin font-stone-200 m-0 border-0 text-sm font-bold text-purple-400',
-						)}
-					>
-						+ sub-type
-					</div>
-				</div>
-				<div
-					className={cn(
-						'collapse-content peer-checked:collapse-open flex flex-col items-center pb-0 pr-0',
-					)}
+			<Collapsible title='add sub-type'>
+				<Field
+					name='subtype'
+					label='Sub-Type'
 				>
-					<Field
+					<Input
 						name='subtype'
-						label='Sub-Type'
-						width='half'
-					>
-						<Input
-							name='subtype'
-							type='text'
-						/>
-					</Field>
-				</div>
-			</div>
-
+						type='text'
+					/>
+				</Field>
+			</Collapsible>
 			<Field
 				name='attributes'
 				label='Search attribute'

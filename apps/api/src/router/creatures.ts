@@ -2,6 +2,7 @@ import { prisma } from '@api/index';
 import { serverErrorHandler } from '@api/lib/utils/errorHandler';
 import { ActionArraySchema, ActionSchema } from '@api/lib/ZodAction';
 import {
+	AttributeArraySchema,
 	AttributeSchema,
 	ZodCreature,
 	ZodNewCreature,
@@ -81,9 +82,10 @@ export const creaturesRouter = router({
 		});
 	}),
 	update: procedure.input(ZodCreature).mutation(async ({ input }) => {
+		const { id, ...creature } = input;
 		return await prisma.creature.update({
-			where: { id: input.id },
-			data: input,
+			where: { id: id },
+			data: creature,
 		});
 	}),
 	addAction: procedure.input(ActionSchema).mutation(async ({ input }) => {
@@ -97,7 +99,7 @@ export const creaturesRouter = router({
 			},
 		});
 	}),
-	removeAction: procedure
+	updateAction: procedure
 		.input(ActionArraySchema)
 		.mutation(async ({ input }) => {
 			try {
@@ -122,4 +124,18 @@ export const creaturesRouter = router({
 			},
 		});
 	}),
+	removeAttribute: procedure
+		.input(AttributeArraySchema)
+		.mutation(async ({ input }) => {
+			try {
+				return await prisma.creature.update({
+					where: { id: input.id },
+					data: {
+						attributes: input.attributes,
+					},
+				});
+			} catch (error) {
+				serverErrorHandler(error);
+			}
+		}),
 });
