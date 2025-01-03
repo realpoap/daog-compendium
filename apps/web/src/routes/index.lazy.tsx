@@ -34,33 +34,33 @@ function Index() {
 				<h1 className='font-grenze py-4 text-center text-4xl'>
 					Welcome {capitalizeFirstLetter(user?.name)} !
 				</h1>
-				<section className='flex flex-row justify-center gap-4 md:flex-row md:p-4'>
-					<div className='stats h-5/12 w-5/12 shadow md:h-1/4 md:w-1/4 dark:bg-stone-700'>
-						<div className='stat flex flex-col justify-center gap-1 p-4'>
+				<section className='flex flex-row justify-around gap-4 p-4 md:flex-row'>
+					<div className='stats h-5/12 w-full shadow md:h-1/4 md:w-1/4 dark:bg-stone-700'>
+						<div className='stat flex flex-col justify-start gap-1 p-4'>
 							<div className='stat-title dark:text-purple-200'>Spell count</div>
-							<div className='stat-value font-grenze pb-2 text-6xl text-purple-500'>
+							<div className='stat-value font-grenze text-primary pb-2 text-4xl md:text-6xl'>
 								{spellCount?.data?.number}
 							</div>
 							<div className='stat-desc flex flex-col dark:text-purple-200'>
 								<span>Recently added: </span>
-								<span className='font-grenze text-xl text-purple-500'>
+								<span className='font-grenze text-primary text-lg md:text-xl'>
 									{spellLatest?.data?.titleCommon}{' '}
 								</span>
 							</div>
 						</div>
 					</div>
-					<div className='stats h-5/12 w-5/12 shadow md:h-1/4 md:w-1/4 dark:bg-stone-700'>
-						<div className='stat flex flex-col justify-center gap-1 p-4'>
+					<div className='stats h-5/12 w-full shadow md:h-1/4 md:w-1/4 dark:bg-stone-700'>
+						<div className='stat flex flex-col justify-start gap-1 p-4'>
 							<div className='stat-title dark:text-purple-200'>
 								Creature count
 							</div>
-							<div className='stat-value font-grenze pb-2 text-6xl text-purple-500'>
+							<div className='stat-value font-grenze text-primary pb-2 text-4xl md:text-6xl'>
 								{creatureCount?.data?.name}
 							</div>
 							<div className='stat-desc flex flex-col dark:text-purple-200'>
 								<span>Recently added: </span>
-								<span className='font-grenze text-xl text-purple-500'>
-									{creatureLatest?.data?.fullname}{' '}
+								<span className='font-grenze text-primary text-lg md:text-xl'>
+									{creatureLatest?.data?.name}{' '}
 								</span>
 							</div>
 						</div>
