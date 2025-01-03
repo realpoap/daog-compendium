@@ -1,0 +1,439 @@
+import {
+	creatureAlignmentOptions,
+	creatureSizeOptions,
+	creatureTypeOptions,
+} from '@/types/creatureOptions';
+import { calculateStats } from '@/utils/calculateStats';
+import { capitalizeFirstLetter } from '@/utils/capitalize';
+import { trpc } from '@/utils/trpc';
+import { Creature, ZodCreature } from '@api/lib/ZodCreature';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useNavigate, useParams } from '@tanstack/react-router';
+import { useEffect } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+import { SubmitButton } from '../Buttons';
+import Collapsible from '../Collapsible';
+import {
+	Checkbox,
+	Field,
+	Input,
+	InputNumber,
+	Select,
+	Textarea,
+} from '../RHFComponents';
+import TitleBack from '../TitleBack';
+
+const MonsterEdit = () => {
+	const navigate = useNavigate();
+	const { id } = useParams({ strict: false });
+	const utils = trpc.useUtils();
+
+	const creatureById = trpc.creatures.getById.useQuery(id as string);
+
+	const methods = useForm<Creature>({
+		resolver: async (data, context, options) => {
+			// you can debug your validation schema here
+			console.log('formData', data);
+			console.log(
+				'validation result',
+				await zodResolver(ZodCreature)(data, context, options),
+			);
+			return zodResolver(ZodCreature)(data, context, options);
+		},
+		shouldFocusError: true,
+		mode: 'onTouched',
+	});
+
+	useEffect(() => {
+		if (!creatureById.isSuccess) return;
+		methods.reset(creatureById.data as Creature);
+	}, [creatureById.status]);
+
+	useEffect(() => {
+		setFormValues();
+		const calcCreature = calculateStats(methods.getValues());
+		methods.setValue('level', calcCreature.level);
+	}, [methods.formState.isValid, methods.formState.isSubmitting]);
+
+	const setFormValues = () => {
+		const creature = methods.getValues();
+
+		// Fullname
+		let fullnameString = '';
+		if (creature.name) fullnameString = capitalizeFirstLetter(creature.name);
+		if (creature.subtype)
+			fullnameString = fullnameString.concat(' ', creature.subtype);
+		if (creature.rank && creature.rank !== 'default')
+			fullnameString = fullnameString.concat(', ', creature.rank);
+		if (creature.type)
+			fullnameString = fullnameString.concat(
+				' (',
+				capitalizeFirstLetter(creature.type),
+				')',
+			);
+		methods.setValue('fullname', fullnameString);
+
+		// Stats
+		if (creature.stats?.AGI && creature.stats?.STR) {
+			const attB = creature.attackBonus ?? 0;
+			const attack = Math.max(creature.stats?.STR, creature.stats?.AGI) + attB;
+			methods.setValue('attack', attack);
+		}
+		if (creature.stats?.DEX) {
+			const ranB = creature.rangedBonus ?? 0;
+			const ranged = creature.stats?.DEX + ranB;
+			methods.setValue('ranged', ranged);
+		}
+		if (creature.stats?.AGI && creature.stats?.STR) {
+			const defB = creature.defenseBonus ?? 0;
+			const armor = creature.armor ?? 0;
+
+			const defense =
+				Math.max(creature.stats?.STR, creature.stats?.AGI) + defB + armor;
+			methods.setValue('defense', defense);
+		}
+		if (creature.stats?.ERU && creature.stats?.SEN && creature.stats?.INS) {
+			const perB = creature.perceptionBonus ?? 0;
+
+			const perception =
+				Math.max(
+					creature.stats?.STR,
+					creature.stats?.AGI,
+					creature.stats?.ERU,
+				) + perB;
+			methods.setValue('perception', perception);
+		}
+		if (creature.stats?.VIT) {
+			const glory = creature.glory ?? 0;
+
+			methods.setValue('health', creature.stats.VIT + glory);
+		}
+		if (creature.stats?.SEN) {
+			const magic = creature.magic ?? 0;
+
+			methods.setValue('spirit', creature.stats.SEN + magic);
+		}
+	};
+
+	const updateCreature = trpc.creatures.update.useMutation({
+		onSuccess: data => {
+			toast.success('Creature created !');
+			methods.reset();
+			utils.creatures.getById.invalidate();
+			navigate({
+				to: '/bestiary/$id',
+				params: { id: `${data.id}` },
+			});
+		},
+		onError: error => {
+			toast.error('Something bad happened...');
+			throw new Error(error.message);
+		},
+	});
+
+	const onSubmit = (data: Creature) => {
+		updateCreature.mutate(data);
+	};
+
+	//Loading -----------------------------------------------------------------
+	if (creatureById.isLoading && !creatureById.data) {
+		return (
+			<div className='font-grenze flex h-screen flex-row flex-col items-center justify-center'>
+				<p>Hunting creature</p>
+				<span className='loading loading-dots loading-md'></span>
+			</div>
+		);
+	}
+	// define spell object data after query success
+	const creature = creatureById?.data;
+
+	/////////////////////////////////////////
+	// RETURN
+	/////////////////////////////////////////
+
+	return (
+		<div className='mt-sm flex flex-col items-center justify-center p-2 px-2'>
+			<TitleBack title={`Edit ${creature?.name}`} />
+			<FormProvider {...methods}>
+				<form
+					onSubmit={methods.handleSubmit(onSubmit)}
+					className='flex w-full flex-col items-center md:w-2/3'
+				>
+					<Field
+						name='name'
+						label='Name'
+					>
+						<Input
+							name='name'
+							type='text'
+						/>
+					</Field>
+					<Field
+						name='isBoss'
+						label=''
+						width='full'
+					>
+						<Checkbox
+							name='isBoss'
+							label='legendary creature'
+						/>
+					</Field>
+					<div className='flex w-full justify-center gap-4 md:flex-row'>
+						<Field
+							name='type'
+							label='Type'
+							width='small'
+						>
+							<Select
+								name='type'
+								options={creatureTypeOptions}
+								defaultValue=''
+							/>
+						</Field>
+						<Field
+							name='size'
+							label='Size'
+							width='small'
+						>
+							<Select
+								name='size'
+								options={creatureSizeOptions}
+								defaultValue=''
+							/>
+						</Field>
+						<Field
+							name='alignment'
+							label='Alignment'
+							width='small'
+						>
+							<Select
+								name='alignment'
+								options={creatureAlignmentOptions}
+								defaultValue=''
+							/>
+						</Field>
+					</div>
+					<Collapsible title='add details'>
+						<Field
+							name='subtype'
+							label='Sub-Type'
+						>
+							<Input
+								name='subtype'
+								type='text'
+							/>
+						</Field>
+						<Field
+							name='flavor'
+							label='Flavor'
+						>
+							<Input name='flavor' />
+						</Field>
+					</Collapsible>
+					<Field
+						name='description'
+						label='Description'
+					>
+						<Textarea name='description' />
+					</Field>
+					<Collapsible title='change stats'>
+						<div className='flex flex-col flex-wrap items-center justify-between px-[2vw] md:w-full md:flex-row'>
+							<section className='container mb-6 flex flex-col items-center justify-center md:w-1/2'>
+								<h4 className='font-grenze text-xl font-semibold tracking-wider text-purple-300'>
+									Adroitness
+								</h4>
+								<div className='flex flex-row justify-center gap-2'>
+									<Field
+										name='stats.CEL'
+										width='small'
+										label='CEL'
+									>
+										<InputNumber name='stats.CEL' />
+									</Field>
+									<Field
+										name='stats.AGI'
+										width='small'
+										label='AGI'
+									>
+										<InputNumber name='stats.AGI' />
+									</Field>
+									<Field
+										name='stats.DEX'
+										width='small'
+										label='DEX'
+									>
+										<InputNumber name='stats.DEX' />
+									</Field>
+								</div>
+							</section>
+							<section className='container mb-6 flex flex-col items-center justify-center md:w-1/2'>
+								<h4 className='font-grenze text-xl font-semibold tracking-wider text-purple-300'>
+									Constitution
+								</h4>
+								<div className='flex flex-row justify-center gap-2'>
+									<Field
+										name='stats.STR'
+										width='small'
+										label='STR'
+									>
+										<InputNumber name='stats.STR' />
+									</Field>
+									<Field
+										name='stats.END'
+										width='small'
+										label='END'
+									>
+										<InputNumber name='stats.END' />
+									</Field>
+									<Field
+										name='stats.VIT'
+										width='small'
+										label='VIT'
+									>
+										<InputNumber name='stats.VIT' />
+									</Field>
+								</div>
+							</section>
+							<section className='container mb-6 flex flex-col items-center justify-center md:w-1/2'>
+								<h4 className='font-grenze text-xl font-semibold tracking-wider text-purple-300'>
+									Perception
+								</h4>
+								<div className='flex flex-row justify-center gap-2'>
+									<Field
+										name='stats.WIL'
+										width='small'
+										label='WIL'
+									>
+										<InputNumber name='stats.WIL' />
+									</Field>
+									<Field
+										name='stats.INS'
+										width='small'
+										label='INS'
+									>
+										<InputNumber name='stats.INS' />
+									</Field>
+									<Field
+										name='stats.SEN'
+										width='small'
+										label='SEN'
+									>
+										<InputNumber name='stats.SEN' />
+									</Field>
+								</div>
+							</section>
+							<section className='container mb-6 flex flex-col items-center justify-center md:w-1/2'>
+								<h4 className='font-grenze text-xl font-semibold tracking-wider text-purple-300'>
+									Shroudness
+								</h4>
+								<div className='flex flex-row justify-center gap-2'>
+									<Field
+										name='stats.CHA'
+										width='small'
+										label='CHA'
+									>
+										<InputNumber name='stats.CHA' />
+									</Field>
+									<Field
+										name='stats.SOC'
+										width='small'
+										label='SOC'
+									>
+										<InputNumber name='stats.SOC' />
+									</Field>
+									<Field
+										name='stats.ERU'
+										width='small'
+										label='ERU'
+									>
+										<InputNumber name='stats.ERU' />
+									</Field>
+								</div>
+							</section>
+						</div>
+					</Collapsible>
+					<Collapsible title='change modifiers'>
+						<div className='flex w-full flex-wrap items-center justify-center gap-4 pb-0 pr-0 md:flex-row'>
+							<Field
+								name='attackBonus'
+								label='&#xb1; Attack'
+								width='tiny'
+							>
+								<InputNumber name='attackBonus' />
+							</Field>
+							<Field
+								name='defenseBonus'
+								label='&#xb1; Defense'
+								width='tiny'
+							>
+								<InputNumber name='defenseBonus' />
+							</Field>
+							<Field
+								name='rangedBonus'
+								label='&#xb1; Ranged'
+								width='tiny'
+							>
+								<InputNumber name='rangedBonus' />
+							</Field>
+							<Field
+								name='perceptionBonus'
+								label='&#xb1; Perception'
+								width='tiny'
+							>
+								<InputNumber name='perceptionBonus' />
+							</Field>
+							<Field
+								name='armor'
+								label='&#xb1; Armor'
+								width='tiny'
+							>
+								<InputNumber name='armor' />
+							</Field>
+							<Field
+								name='magic'
+								label='&#xb1; Magic'
+								width='tiny'
+							>
+								<InputNumber name='magic' />
+							</Field>
+							<Field
+								name='glory'
+								label='&#xb1; Glory'
+								width='tiny'
+							>
+								<InputNumber name='glory' />
+							</Field>
+						</div>
+					</Collapsible>
+					<div className='flex flex-row flex-wrap items-center justify-center gap-4 px-[4vw] md:flex-row'>
+						<Field
+							name='actionList.main'
+							width='small'
+							label='Main'
+						>
+							<InputNumber name='actionList.main' />
+						</Field>
+						{creature?.isBoss && (
+							<Field
+								name='actionList.epic'
+								width='small'
+								label='Epics'
+							>
+								<InputNumber name='actionList.epic' />
+							</Field>
+						)}
+					</div>
+					<SubmitButton
+						text='Update'
+						isLoading={methods.formState.isLoading}
+						color='accent'
+						textColor='stone-800'
+					/>
+				</form>
+			</FormProvider>
+		</div>
+	);
+};
+
+export default MonsterEdit;

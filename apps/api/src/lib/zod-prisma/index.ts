@@ -143,16 +143,16 @@ export type Attribute = z.infer<typeof AttributeSchema>
 
 export const ActionSchema = z.object({
   action: ActionTypeSchema,
+  type: SpellActionSchema,
+  target: ActionTargetSchema,
   id: z.string(),
   searchName: z.string(),
   name: z.string(),
-  type: z.string(),
   flavor: z.string().nullable(),
   description: z.string().nullable(),
   damages: z.string().nullable(),
   effects: z.string().nullable(),
   heal: z.string().nullable(),
-  target: z.string().nullable(),
   range: z.string().nullable(),
 })
 
@@ -1042,13 +1042,13 @@ export const ActionWhereInputSchema: z.ZodType<Prisma.ActionWhereInput> = z.obje
   searchName: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   name: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   action: z.union([ z.lazy(() => EnumActionTypeFilterSchema),z.lazy(() => ActionTypeSchema) ]).optional(),
-  type: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  type: z.union([ z.lazy(() => EnumSpellActionFilterSchema),z.lazy(() => SpellActionSchema) ]).optional(),
   flavor: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   description: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   damages: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   effects: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   heal: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  target: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  target: z.union([ z.lazy(() => EnumActionTargetFilterSchema),z.lazy(() => ActionTargetSchema) ]).optional(),
   range: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
 }).strict();
 
@@ -1087,13 +1087,13 @@ export const ActionWhereUniqueInputSchema: z.ZodType<Prisma.ActionWhereUniqueInp
   NOT: z.union([ z.lazy(() => ActionWhereInputSchema),z.lazy(() => ActionWhereInputSchema).array() ]).optional(),
   name: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   action: z.union([ z.lazy(() => EnumActionTypeFilterSchema),z.lazy(() => ActionTypeSchema) ]).optional(),
-  type: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  type: z.union([ z.lazy(() => EnumSpellActionFilterSchema),z.lazy(() => SpellActionSchema) ]).optional(),
   flavor: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   description: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   damages: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   effects: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   heal: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  target: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
+  target: z.union([ z.lazy(() => EnumActionTargetFilterSchema),z.lazy(() => ActionTargetSchema) ]).optional(),
   range: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
 }).strict());
 
@@ -1123,13 +1123,13 @@ export const ActionScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.Action
   searchName: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   name: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   action: z.union([ z.lazy(() => EnumActionTypeWithAggregatesFilterSchema),z.lazy(() => ActionTypeSchema) ]).optional(),
-  type: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  type: z.union([ z.lazy(() => EnumSpellActionWithAggregatesFilterSchema),z.lazy(() => SpellActionSchema) ]).optional(),
   flavor: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   description: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   damages: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   effects: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   heal: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
-  target: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
+  target: z.union([ z.lazy(() => EnumActionTargetWithAggregatesFilterSchema),z.lazy(() => ActionTargetSchema) ]).optional(),
   range: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
 }).strict();
 
@@ -1850,13 +1850,13 @@ export const ActionCreateInputSchema: z.ZodType<Prisma.ActionCreateInput> = z.ob
   searchName: z.string(),
   name: z.string(),
   action: z.lazy(() => ActionTypeSchema),
-  type: z.string(),
+  type: z.lazy(() => SpellActionSchema),
   flavor: z.string().optional().nullable(),
   description: z.string().optional().nullable(),
   damages: z.string().optional().nullable(),
   effects: z.string().optional().nullable(),
   heal: z.string().optional().nullable(),
-  target: z.string().optional().nullable(),
+  target: z.lazy(() => ActionTargetSchema),
   range: z.string().optional().nullable()
 }).strict();
 
@@ -1865,13 +1865,13 @@ export const ActionUncheckedCreateInputSchema: z.ZodType<Prisma.ActionUncheckedC
   searchName: z.string(),
   name: z.string(),
   action: z.lazy(() => ActionTypeSchema),
-  type: z.string(),
+  type: z.lazy(() => SpellActionSchema),
   flavor: z.string().optional().nullable(),
   description: z.string().optional().nullable(),
   damages: z.string().optional().nullable(),
   effects: z.string().optional().nullable(),
   heal: z.string().optional().nullable(),
-  target: z.string().optional().nullable(),
+  target: z.lazy(() => ActionTargetSchema),
   range: z.string().optional().nullable()
 }).strict();
 
@@ -1879,13 +1879,13 @@ export const ActionUpdateInputSchema: z.ZodType<Prisma.ActionUpdateInput> = z.ob
   searchName: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   action: z.union([ z.lazy(() => ActionTypeSchema),z.lazy(() => EnumActionTypeFieldUpdateOperationsInputSchema) ]).optional(),
-  type: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  type: z.union([ z.lazy(() => SpellActionSchema),z.lazy(() => EnumSpellActionFieldUpdateOperationsInputSchema) ]).optional(),
   flavor: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   damages: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   effects: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   heal: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  target: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  target: z.union([ z.lazy(() => ActionTargetSchema),z.lazy(() => EnumActionTargetFieldUpdateOperationsInputSchema) ]).optional(),
   range: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
@@ -1893,13 +1893,13 @@ export const ActionUncheckedUpdateInputSchema: z.ZodType<Prisma.ActionUncheckedU
   searchName: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   action: z.union([ z.lazy(() => ActionTypeSchema),z.lazy(() => EnumActionTypeFieldUpdateOperationsInputSchema) ]).optional(),
-  type: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  type: z.union([ z.lazy(() => SpellActionSchema),z.lazy(() => EnumSpellActionFieldUpdateOperationsInputSchema) ]).optional(),
   flavor: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   damages: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   effects: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   heal: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  target: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  target: z.union([ z.lazy(() => ActionTargetSchema),z.lazy(() => EnumActionTargetFieldUpdateOperationsInputSchema) ]).optional(),
   range: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
@@ -1908,13 +1908,13 @@ export const ActionCreateManyInputSchema: z.ZodType<Prisma.ActionCreateManyInput
   searchName: z.string(),
   name: z.string(),
   action: z.lazy(() => ActionTypeSchema),
-  type: z.string(),
+  type: z.lazy(() => SpellActionSchema),
   flavor: z.string().optional().nullable(),
   description: z.string().optional().nullable(),
   damages: z.string().optional().nullable(),
   effects: z.string().optional().nullable(),
   heal: z.string().optional().nullable(),
-  target: z.string().optional().nullable(),
+  target: z.lazy(() => ActionTargetSchema),
   range: z.string().optional().nullable()
 }).strict();
 
@@ -1922,13 +1922,13 @@ export const ActionUpdateManyMutationInputSchema: z.ZodType<Prisma.ActionUpdateM
   searchName: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   action: z.union([ z.lazy(() => ActionTypeSchema),z.lazy(() => EnumActionTypeFieldUpdateOperationsInputSchema) ]).optional(),
-  type: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  type: z.union([ z.lazy(() => SpellActionSchema),z.lazy(() => EnumSpellActionFieldUpdateOperationsInputSchema) ]).optional(),
   flavor: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   damages: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   effects: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   heal: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  target: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  target: z.union([ z.lazy(() => ActionTargetSchema),z.lazy(() => EnumActionTargetFieldUpdateOperationsInputSchema) ]).optional(),
   range: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
@@ -1936,13 +1936,13 @@ export const ActionUncheckedUpdateManyInputSchema: z.ZodType<Prisma.ActionUnchec
   searchName: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   action: z.union([ z.lazy(() => ActionTypeSchema),z.lazy(() => EnumActionTypeFieldUpdateOperationsInputSchema) ]).optional(),
-  type: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  type: z.union([ z.lazy(() => SpellActionSchema),z.lazy(() => EnumSpellActionFieldUpdateOperationsInputSchema) ]).optional(),
   flavor: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   damages: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   effects: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   heal: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  target: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  target: z.union([ z.lazy(() => ActionTargetSchema),z.lazy(() => EnumActionTargetFieldUpdateOperationsInputSchema) ]).optional(),
   range: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
 }).strict();
 
@@ -2940,6 +2940,20 @@ export const EnumActionTypeFilterSchema: z.ZodType<Prisma.EnumActionTypeFilter> 
   not: z.union([ z.lazy(() => ActionTypeSchema),z.lazy(() => NestedEnumActionTypeFilterSchema) ]).optional(),
 }).strict();
 
+export const EnumSpellActionFilterSchema: z.ZodType<Prisma.EnumSpellActionFilter> = z.object({
+  equals: z.lazy(() => SpellActionSchema).optional(),
+  in: z.lazy(() => SpellActionSchema).array().optional(),
+  notIn: z.lazy(() => SpellActionSchema).array().optional(),
+  not: z.union([ z.lazy(() => SpellActionSchema),z.lazy(() => NestedEnumSpellActionFilterSchema) ]).optional(),
+}).strict();
+
+export const EnumActionTargetFilterSchema: z.ZodType<Prisma.EnumActionTargetFilter> = z.object({
+  equals: z.lazy(() => ActionTargetSchema).optional(),
+  in: z.lazy(() => ActionTargetSchema).array().optional(),
+  notIn: z.lazy(() => ActionTargetSchema).array().optional(),
+  not: z.union([ z.lazy(() => ActionTargetSchema),z.lazy(() => NestedEnumActionTargetFilterSchema) ]).optional(),
+}).strict();
+
 export const ActionCountOrderByAggregateInputSchema: z.ZodType<Prisma.ActionCountOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   searchName: z.lazy(() => SortOrderSchema).optional(),
@@ -2993,6 +3007,26 @@ export const EnumActionTypeWithAggregatesFilterSchema: z.ZodType<Prisma.EnumActi
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedEnumActionTypeFilterSchema).optional(),
   _max: z.lazy(() => NestedEnumActionTypeFilterSchema).optional()
+}).strict();
+
+export const EnumSpellActionWithAggregatesFilterSchema: z.ZodType<Prisma.EnumSpellActionWithAggregatesFilter> = z.object({
+  equals: z.lazy(() => SpellActionSchema).optional(),
+  in: z.lazy(() => SpellActionSchema).array().optional(),
+  notIn: z.lazy(() => SpellActionSchema).array().optional(),
+  not: z.union([ z.lazy(() => SpellActionSchema),z.lazy(() => NestedEnumSpellActionWithAggregatesFilterSchema) ]).optional(),
+  _count: z.lazy(() => NestedIntFilterSchema).optional(),
+  _min: z.lazy(() => NestedEnumSpellActionFilterSchema).optional(),
+  _max: z.lazy(() => NestedEnumSpellActionFilterSchema).optional()
+}).strict();
+
+export const EnumActionTargetWithAggregatesFilterSchema: z.ZodType<Prisma.EnumActionTargetWithAggregatesFilter> = z.object({
+  equals: z.lazy(() => ActionTargetSchema).optional(),
+  in: z.lazy(() => ActionTargetSchema).array().optional(),
+  notIn: z.lazy(() => ActionTargetSchema).array().optional(),
+  not: z.union([ z.lazy(() => ActionTargetSchema),z.lazy(() => NestedEnumActionTargetWithAggregatesFilterSchema) ]).optional(),
+  _count: z.lazy(() => NestedIntFilterSchema).optional(),
+  _min: z.lazy(() => NestedEnumActionTargetFilterSchema).optional(),
+  _max: z.lazy(() => NestedEnumActionTargetFilterSchema).optional()
 }).strict();
 
 export const EnumSpellTypeFilterSchema: z.ZodType<Prisma.EnumSpellTypeFilter> = z.object({
@@ -3507,6 +3541,14 @@ export const EnumActionTypeFieldUpdateOperationsInputSchema: z.ZodType<Prisma.En
   set: z.lazy(() => ActionTypeSchema).optional()
 }).strict();
 
+export const EnumSpellActionFieldUpdateOperationsInputSchema: z.ZodType<Prisma.EnumSpellActionFieldUpdateOperationsInput> = z.object({
+  set: z.lazy(() => SpellActionSchema).optional()
+}).strict();
+
+export const EnumActionTargetFieldUpdateOperationsInputSchema: z.ZodType<Prisma.EnumActionTargetFieldUpdateOperationsInput> = z.object({
+  set: z.lazy(() => ActionTargetSchema).optional()
+}).strict();
+
 export const EnumSpellTypeFieldUpdateOperationsInputSchema: z.ZodType<Prisma.EnumSpellTypeFieldUpdateOperationsInput> = z.object({
   set: z.lazy(() => SpellTypeSchema).optional()
 }).strict();
@@ -3926,6 +3968,20 @@ export const NestedEnumActionTypeFilterSchema: z.ZodType<Prisma.NestedEnumAction
   not: z.union([ z.lazy(() => ActionTypeSchema),z.lazy(() => NestedEnumActionTypeFilterSchema) ]).optional(),
 }).strict();
 
+export const NestedEnumSpellActionFilterSchema: z.ZodType<Prisma.NestedEnumSpellActionFilter> = z.object({
+  equals: z.lazy(() => SpellActionSchema).optional(),
+  in: z.lazy(() => SpellActionSchema).array().optional(),
+  notIn: z.lazy(() => SpellActionSchema).array().optional(),
+  not: z.union([ z.lazy(() => SpellActionSchema),z.lazy(() => NestedEnumSpellActionFilterSchema) ]).optional(),
+}).strict();
+
+export const NestedEnumActionTargetFilterSchema: z.ZodType<Prisma.NestedEnumActionTargetFilter> = z.object({
+  equals: z.lazy(() => ActionTargetSchema).optional(),
+  in: z.lazy(() => ActionTargetSchema).array().optional(),
+  notIn: z.lazy(() => ActionTargetSchema).array().optional(),
+  not: z.union([ z.lazy(() => ActionTargetSchema),z.lazy(() => NestedEnumActionTargetFilterSchema) ]).optional(),
+}).strict();
+
 export const NestedEnumActionTypeWithAggregatesFilterSchema: z.ZodType<Prisma.NestedEnumActionTypeWithAggregatesFilter> = z.object({
   equals: z.lazy(() => ActionTypeSchema).optional(),
   in: z.lazy(() => ActionTypeSchema).array().optional(),
@@ -3934,6 +3990,26 @@ export const NestedEnumActionTypeWithAggregatesFilterSchema: z.ZodType<Prisma.Ne
   _count: z.lazy(() => NestedIntFilterSchema).optional(),
   _min: z.lazy(() => NestedEnumActionTypeFilterSchema).optional(),
   _max: z.lazy(() => NestedEnumActionTypeFilterSchema).optional()
+}).strict();
+
+export const NestedEnumSpellActionWithAggregatesFilterSchema: z.ZodType<Prisma.NestedEnumSpellActionWithAggregatesFilter> = z.object({
+  equals: z.lazy(() => SpellActionSchema).optional(),
+  in: z.lazy(() => SpellActionSchema).array().optional(),
+  notIn: z.lazy(() => SpellActionSchema).array().optional(),
+  not: z.union([ z.lazy(() => SpellActionSchema),z.lazy(() => NestedEnumSpellActionWithAggregatesFilterSchema) ]).optional(),
+  _count: z.lazy(() => NestedIntFilterSchema).optional(),
+  _min: z.lazy(() => NestedEnumSpellActionFilterSchema).optional(),
+  _max: z.lazy(() => NestedEnumSpellActionFilterSchema).optional()
+}).strict();
+
+export const NestedEnumActionTargetWithAggregatesFilterSchema: z.ZodType<Prisma.NestedEnumActionTargetWithAggregatesFilter> = z.object({
+  equals: z.lazy(() => ActionTargetSchema).optional(),
+  in: z.lazy(() => ActionTargetSchema).array().optional(),
+  notIn: z.lazy(() => ActionTargetSchema).array().optional(),
+  not: z.union([ z.lazy(() => ActionTargetSchema),z.lazy(() => NestedEnumActionTargetWithAggregatesFilterSchema) ]).optional(),
+  _count: z.lazy(() => NestedIntFilterSchema).optional(),
+  _min: z.lazy(() => NestedEnumActionTargetFilterSchema).optional(),
+  _max: z.lazy(() => NestedEnumActionTargetFilterSchema).optional()
 }).strict();
 
 export const NestedEnumSpellTypeFilterSchema: z.ZodType<Prisma.NestedEnumSpellTypeFilter> = z.object({
@@ -4086,20 +4162,6 @@ export const CreatureActionDeleteManyInputSchema: z.ZodType<Prisma.CreatureActio
   where: z.lazy(() => CreatureActionWhereInputSchema)
 }).strict();
 
-export const EnumSpellActionFilterSchema: z.ZodType<Prisma.EnumSpellActionFilter> = z.object({
-  equals: z.lazy(() => SpellActionSchema).optional(),
-  in: z.lazy(() => SpellActionSchema).array().optional(),
-  notIn: z.lazy(() => SpellActionSchema).array().optional(),
-  not: z.union([ z.lazy(() => SpellActionSchema),z.lazy(() => NestedEnumSpellActionFilterSchema) ]).optional(),
-}).strict();
-
-export const EnumActionTargetFilterSchema: z.ZodType<Prisma.EnumActionTargetFilter> = z.object({
-  equals: z.lazy(() => ActionTargetSchema).optional(),
-  in: z.lazy(() => ActionTargetSchema).array().optional(),
-  notIn: z.lazy(() => ActionTargetSchema).array().optional(),
-  not: z.union([ z.lazy(() => ActionTargetSchema),z.lazy(() => NestedEnumActionTargetFilterSchema) ]).optional(),
-}).strict();
-
 export const CreatureItemUpdateInputSchema: z.ZodType<Prisma.CreatureItemUpdateInput> = z.object({
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   quantity: z.union([ z.number(),z.lazy(() => NullableFloatFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -4144,28 +4206,6 @@ export const CreatureActionUpdateInputSchema: z.ZodType<Prisma.CreatureActionUpd
   heal: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   target: z.union([ z.lazy(() => ActionTargetSchema),z.lazy(() => EnumActionTargetFieldUpdateOperationsInputSchema) ]).optional(),
   range: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-}).strict();
-
-export const NestedEnumSpellActionFilterSchema: z.ZodType<Prisma.NestedEnumSpellActionFilter> = z.object({
-  equals: z.lazy(() => SpellActionSchema).optional(),
-  in: z.lazy(() => SpellActionSchema).array().optional(),
-  notIn: z.lazy(() => SpellActionSchema).array().optional(),
-  not: z.union([ z.lazy(() => SpellActionSchema),z.lazy(() => NestedEnumSpellActionFilterSchema) ]).optional(),
-}).strict();
-
-export const NestedEnumActionTargetFilterSchema: z.ZodType<Prisma.NestedEnumActionTargetFilter> = z.object({
-  equals: z.lazy(() => ActionTargetSchema).optional(),
-  in: z.lazy(() => ActionTargetSchema).array().optional(),
-  notIn: z.lazy(() => ActionTargetSchema).array().optional(),
-  not: z.union([ z.lazy(() => ActionTargetSchema),z.lazy(() => NestedEnumActionTargetFilterSchema) ]).optional(),
-}).strict();
-
-export const EnumSpellActionFieldUpdateOperationsInputSchema: z.ZodType<Prisma.EnumSpellActionFieldUpdateOperationsInput> = z.object({
-  set: z.lazy(() => SpellActionSchema).optional()
-}).strict();
-
-export const EnumActionTargetFieldUpdateOperationsInputSchema: z.ZodType<Prisma.EnumActionTargetFieldUpdateOperationsInput> = z.object({
-  set: z.lazy(() => ActionTargetSchema).optional()
 }).strict();
 
 /////////////////////////////////////////

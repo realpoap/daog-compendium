@@ -88,10 +88,21 @@ const config: Pick<
 						transform: 'translate3d(1px, 0, 0)',
 					},
 				},
+				text: {
+					'0%, 100%': {
+						'background-size': '100% 100%',
+						'background-position': 'center center',
+					},
+					'50%': {
+						'background-size': '300% 300%',
+						'background-position': 'center center',
+					},
+				},
 			},
 			animation: {
 				wiggle: 'wiggle 1s ease-in-out infinite',
 				shake: 'shake 0.5s infinite',
+				text: 'text 5s ease-in-out infinite',
 			},
 		},
 	},

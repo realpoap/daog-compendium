@@ -145,13 +145,13 @@ model Action {
   searchName        String     @unique
   name  String
   action      ActionType
-  type        String
+  type        SpellAction
   flavor      String?
   description String?
   damages     String?
   effects     String?
   heal        String?
-  target      String?
+  target      ActionTarget
   range       String?
 }
 

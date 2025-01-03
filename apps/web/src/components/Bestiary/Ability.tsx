@@ -1,11 +1,26 @@
-import { useState } from 'react';
+import { cn } from '@/utils/classNames';
+import { trpc } from '@/utils/trpc';
+import { AttributeArray, CreatureAttribute } from '@api/lib/ZodCreature';
+import { SetStateAction, useState } from 'react';
+import toast from 'react-hot-toast';
 
 type AbilityProps = {
 	name: string;
 	description: string;
+	edit: boolean;
+	creatureId: string;
+	attributes: CreatureAttribute[];
+	setAttributes: React.Dispatch<SetStateAction<CreatureAttribute[]>>;
 };
 
-const Ability = ({ name, description }: AbilityProps) => {
+const Ability = ({
+	name,
+	edit,
+	creatureId,
+	description,
+	attributes,
+	setAttributes,
+}: AbilityProps) => {
 	const [open, setOpen] = useState(false);
 
 	const openTooltip = () => {
@@ -15,6 +30,25 @@ const Ability = ({ name, description }: AbilityProps) => {
 		setTimeout(() => {
 			setOpen(false);
 		}, 1000);
+	};
+
+	const deleteAttribute = trpc.creatures.removeAttribute.useMutation({
+		onSuccess: () => {
+			setAttributes(attributes.filter(a => a.name !== name));
+			toast.success('Attribute deleted 🗑️ !');
+		},
+		onError: error => {
+			toast.error('Could not remove attribute');
+			throw new Error(error.message);
+		},
+	});
+
+	const removeAttribute = (name: string) => {
+		const attributeArray: AttributeArray = {
+			id: creatureId,
+			attributes: attributes.filter(a => a.name !== name),
+		};
+		deleteAttribute.mutate(attributeArray);
 	};
 
 	return (
@@ -28,7 +62,21 @@ const Ability = ({ name, description }: AbilityProps) => {
 				onMouseUp={closeTooltip}
 				onTouchStart={openTooltip}
 				onTouchEnd={closeTooltip}
-				className='badge badge-md font-cabin cursor-pointer border-none bg-purple-300 px-4 py-3 font-semibold shadow-sm hover:bg-purple-500 hover:font-bold hover:text-purple-300'
+				className={cn(
+					'badge badge-md font-cabin cursor-pointer border-none bg-purple-300 px-4 py-3 font-semibold shadow-sm',
+					{
+						'hover:animate-shake': edit,
+						'transition-all': edit,
+						'duration-75': edit,
+						'hover:bg-stone-800': edit,
+						'hover:text-red-500': edit,
+						'hover:shadow-black': edit,
+						'hover:bg-purple-500': !edit,
+						'hover:font-bold': !edit,
+						'hover:text-purple-300': !edit,
+					},
+				)}
+				onClick={() => removeAttribute(name)}
 			>
 				{name}
 			</button>

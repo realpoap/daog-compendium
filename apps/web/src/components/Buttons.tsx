@@ -103,3 +103,27 @@ export const LockButton = ({
 		</ActionButton>
 	);
 };
+
+type SmallCircleButtonProps = {
+	onClick: React.MouseEventHandler<HTMLButtonElement>;
+	children?: React.ReactNode;
+	color?: string;
+};
+
+export const SmallCircleButton = ({
+	children,
+	onClick,
+	color,
+}: SmallCircleButtonProps) => {
+	return (
+		<button
+			className={cn(
+				`btn-xs btn-circle bg-accent font-cabin z-50 flex flex-col items-center justify-center self-center text-stone-900 shadow-sm shadow-stone-900 transition-all duration-100 hover:ring-2 hover:ring-stone-200`,
+				color,
+			)}
+			onClick={onClick}
+		>
+			{children}
+		</button>
+	);
+};
