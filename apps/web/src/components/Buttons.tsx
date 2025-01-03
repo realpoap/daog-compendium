@@ -118,7 +118,7 @@ export const SmallCircleButton = ({
 	return (
 		<button
 			className={cn(
-				`btn-xs btn-circle bg-accent font-cabin z-50 flex flex-col items-center justify-center self-center text-stone-900 shadow-sm shadow-stone-900 transition-all duration-100 hover:ring-2 hover:ring-stone-200`,
+				`btn-xs btn-circle bg-accent font-cabin z-20 flex flex-col items-center justify-center self-center text-stone-900 shadow-sm shadow-stone-900 transition-all duration-100 hover:ring-2 hover:ring-stone-200`,
 				color,
 			)}
 			onClick={onClick}

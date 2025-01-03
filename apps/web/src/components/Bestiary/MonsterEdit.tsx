@@ -51,70 +51,19 @@ const MonsterEdit = () => {
 	}, [creatureById.status]);
 
 	useEffect(() => {
-		setFormValues();
 		const calcCreature = calculateStats(methods.getValues());
 		methods.setValue('level', calcCreature.level);
+		methods.setValue('fullname', calcCreature.fullname);
+		methods.setValue('attack', calcCreature.attack);
+		methods.setValue('ranged', calcCreature.ranged);
+		methods.setValue('defense', calcCreature.defense);
+		methods.setValue('armor', calcCreature.armor);
+		methods.setValue('perception', calcCreature.perception);
+		methods.setValue('discretion', calcCreature.discretion);
+		methods.setValue('health', calcCreature.health);
+		methods.setValue('spirit', calcCreature.spirit);
+		methods.setValue('initiative', calcCreature.initiative);
 	}, [methods.formState.isValid, methods.formState.isSubmitting]);
-
-	const setFormValues = () => {
-		const creature = methods.getValues();
-
-		// Fullname
-		let fullnameString = '';
-		if (creature.name) fullnameString = capitalizeFirstLetter(creature.name);
-		if (creature.subtype)
-			fullnameString = fullnameString.concat(' ', creature.subtype);
-		if (creature.rank && creature.rank !== 'default')
-			fullnameString = fullnameString.concat(', ', creature.rank);
-		if (creature.type)
-			fullnameString = fullnameString.concat(
-				' (',
-				capitalizeFirstLetter(creature.type),
-				')',
-			);
-		methods.setValue('fullname', fullnameString);
-
-		// Stats
-		if (creature.stats?.AGI && creature.stats?.STR) {
-			const attB = creature.attackBonus ?? 0;
-			const attack = Math.max(creature.stats?.STR, creature.stats?.AGI) + attB;
-			methods.setValue('attack', attack);
-		}
-		if (creature.stats?.DEX) {
-			const ranB = creature.rangedBonus ?? 0;
-			const ranged = creature.stats?.DEX + ranB;
-			methods.setValue('ranged', ranged);
-		}
-		if (creature.stats?.AGI && creature.stats?.STR) {
-			const defB = creature.defenseBonus ?? 0;
-			const armor = creature.armor ?? 0;
-
-			const defense =
-				Math.max(creature.stats?.STR, creature.stats?.AGI) + defB + armor;
-			methods.setValue('defense', defense);
-		}
-		if (creature.stats?.ERU && creature.stats?.SEN && creature.stats?.INS) {
-			const perB = creature.perceptionBonus ?? 0;
-
-			const perception =
-				Math.max(
-					creature.stats?.STR,
-					creature.stats?.AGI,
-					creature.stats?.ERU,
-				) + perB;
-			methods.setValue('perception', perception);
-		}
-		if (creature.stats?.VIT) {
-			const glory = creature.glory ?? 0;
-
-			methods.setValue('health', creature.stats.VIT + glory);
-		}
-		if (creature.stats?.SEN) {
-			const magic = creature.magic ?? 0;
-
-			methods.setValue('spirit', creature.stats.SEN + magic);
-		}
-	};
 
 	const updateCreature = trpc.creatures.update.useMutation({
 		onSuccess: data => {
@@ -167,6 +116,7 @@ const MonsterEdit = () => {
 						<Input
 							name='name'
 							type='text'
+							disabled={true}
 						/>
 					</Field>
 					<Field

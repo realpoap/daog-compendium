@@ -69,12 +69,20 @@ const ActionFormEdit = ({
 
 	useEffect(() => {
 		if (getAction.data)
-			methods.reset(getAction.data, { keepDefaultValues: false });
+			methods.reset(getAction.data as Action, { keepDefaultValues: false });
+	}, [getAction.data]);
+
+	useEffect(() => {
+		if (methods.getValues('name') === defaultAction.name) return; // do not change searchName (and create new action) if name of action is unchanged (limit duplicates)
 		methods.setValue(
 			'searchName',
 			`${methods.getValues('name')} (${creatureName})`,
 		);
-	}, [methods.getValues('name'), getAction.data]);
+	}, [
+		methods.getValues('name'),
+		methods.formState.isValidating,
+		methods.formState.isSubmitting,
+	]);
 
 	const onActionSubmit = (data: Action) => {
 		const { id, ...action } = data;

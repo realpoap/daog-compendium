@@ -30,30 +30,32 @@ const SpellDetails = () => {
 	const navigate = useNavigate();
 	const { id } = useParams({ strict: false });
 	const [spell, setSpell] = useState<Spell | undefined>();
+	const [Icon, setSpellIcon] = useState<JSX.Element | undefined>();
+
 	const query = trpc.spells.getByNumber.useQuery(Number(id));
 	const { user } = useAuth();
 	const isEditor = user?.role === 'ADMIN' || user?.role === 'EDITOR';
 
 	useEffect(() => {
-		if (query.isLoading) {
-			return console.log('loading single spell...');
-		}
 		if (query.data) {
 			setSpell(query.data);
 		}
-	}, [query.data]);
+		spellOptions.find(o => {
+			if (
+				o.label.toLowerCase() === spell?.type.toLowerCase() ||
+				o.value === spell?.type.toLowerCase()
+			) {
+				setSpellIcon(o.icon);
+			}
+		});
+	}, [query.data, spell]);
 
-	const spellIcon = spellOptions.find(o => {
-		if (
-			o.label.toLowerCase() === spell?.type.toLowerCase() ||
-			o.value === spell?.type.toLowerCase()
-		) {
-			return o.icon;
-		}
-	});
+	if (query.isLoading) {
+		return console.log('loading single spell...');
+	}
 
 	return (
-		<div className='flex flex-col justify-center'>
+		<div className='flex w-full flex-col justify-center'>
 			<div className='align-center flex flex-col items-center justify-center gap-2'>
 				<button
 					className='font-cabin mt-1 max-h-fit max-w-fit px-8 py-2 align-middle text-base uppercase text-stone-500 hover:text-stone-200'
@@ -68,8 +70,18 @@ const SpellDetails = () => {
 			</div>
 
 			<div className='top-20dvh sticky mt-4 flex flex-col items-center text-center'>
-				<div className='size-10 items-center overflow-clip rounded-full border-0 align-middle'>
-					<span className='relative mb-2 inline-block'>{spellIcon?.icon}</span>
+				<div className='flex items-center justify-center'>
+					<div
+						className={cn(
+							`*:icon-stone-200 *z:0 z-10 flex size-12 flex-col items-center justify-center overflow-clip rounded-full border-2 border-stone-200 *:shadow-stone-800 *:drop-shadow-lg`,
+							{
+								'*:icon-4xl *:mr-2': spell?.type == 'mouflette',
+								'*:icon-2xl': spell?.type !== 'mouflette',
+							},
+						)}
+					>
+						{Icon}
+					</div>
 				</div>
 				<span className='text-md font-noto text-stone-400'>
 					~ {spell?.number} ~
@@ -77,7 +89,7 @@ const SpellDetails = () => {
 				<div className='sticky top-10 w-full bg-stone-800 py-4'>
 					<h1
 						className={cn(
-							'font-grenze text-5xl font-extrabold tracking-wider text-purple-900 dark:text-purple-400',
+							'font-grenze text-primary text-wrap text-5xl font-extrabold tracking-wider',
 						)}
 					>
 						{spell?.titleCommon}

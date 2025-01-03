@@ -7,6 +7,7 @@ import {
 	GiGhost,
 	GiGoat,
 	GiHeartDrop,
+	GiPeaks,
 	GiSmallFire,
 	GiTreeBranch,
 	GiWaterfall,
@@ -17,78 +18,62 @@ export const spellOptions = [
 	{
 		label: 'Mouflette',
 		value: 'mouflette',
-		icon: <GiGoat className='icon-stone-900 dark:icon-stone-100 icon-4xl' />,
+		icon: <GiGoat />,
 	},
 	{
 		label: 'Eau',
 		value: 'water',
-		icon: (
-			<GiWaterfall className='icon-stone-900 dark:icon-stone-100 icon-2xl' />
-		),
+		icon: <GiWaterfall />,
 	},
 	{
 		label: 'Feu',
 		value: 'fire',
-		icon: (
-			<GiSmallFire className='icon-stone-900 dark:icon-stone-100 icon-4xl' />
-		),
+		icon: <GiSmallFire />,
 	},
 	{
 		label: 'Terre',
 		value: 'earth',
-		icon: (
-			<GiEarthSpit className='icon-stone-900 dark:icon-stone-100 icon-5xl' />
-		),
+		icon: <GiPeaks />,
 	},
 	{
 		label: 'Air',
 		value: 'air',
-		icon: (
-			<GiWhirlwind className='icon-stone-900 dark:icon-stone-100 icon-4xl' />
-		),
+		icon: <GiWhirlwind />,
 	},
 	{
 		label: 'Sang',
 		value: 'blood',
-		icon: <GiBlood className='icon-stone-900 dark:icon-stone-100 icon-4xl' />,
+		icon: <GiBlood />,
 	},
 	{
 		label: 'Bête',
 		value: 'beast',
-		icon: (
-			<GiFlatPawPrint className='icon-stone-900 dark:icon-stone-100 icon-4xl' />
-		),
+		icon: <GiFlatPawPrint />,
 	},
 	{
 		label: 'Nature',
 		value: 'nature',
-		icon: (
-			<GiTreeBranch className='icon-stone-900 dark:icon-stone-100 icon-3xl' />
-		),
+		icon: <GiTreeBranch />,
 	},
 	{
 		label: 'Vie',
 		value: 'life',
-		icon: (
-			<GiHeartDrop className='icon-stone-900 dark:icon-stone-100 icon-4xl' />
-		),
+		icon: <GiHeartDrop />,
 	},
 	{
 		label: 'Mort',
 		value: 'death',
-		icon: (
-			<GiBurningSkull className='icon-stone-900 dark:icon-stone-100 icon-4xl' />
-		),
+		icon: <GiBurningSkull />,
 	},
 	{
 		label: 'Fléau',
 		value: 'scourge',
-		icon: <GiCarrion className='icon-stone-900 dark:icon-stone-100 icon-4xl' />,
+		icon: <GiCarrion />,
 	},
 	{
 		label: 'Esprit',
 		value: 'spirit',
-		icon: <GiGhost className='icon-stone-900 dark:icon-stone-100 icon-4xl' />,
+		icon: <GiGhost />,
 	},
 ];
 

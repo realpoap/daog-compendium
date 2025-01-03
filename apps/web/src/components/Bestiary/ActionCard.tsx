@@ -128,7 +128,7 @@ const ActionCard = ({
 							<p className='my-2 text-justify italic'>{action.description}</p>
 						)}
 						<div
-							className={`pointer-events-auto absolute right-0 right-1 top-2 z-10 flex flex-col justify-end gap-1`}
+							className={`pointer-events-auto absolute right-1 top-2 z-10 flex flex-col justify-end gap-1`}
 						>
 							{isEditor && (
 								<SmallCircleButton onClick={handleEdit}>

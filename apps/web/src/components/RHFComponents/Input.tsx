@@ -6,7 +6,9 @@ export const Input = ({
 	id,
 	placeholder,
 	type,
+	disabled,
 }: {
+	disabled?: boolean;
 	name: string;
 	id?: string;
 	placeholder?: string;
@@ -30,6 +32,7 @@ export const Input = ({
 				)}
 				placeholder={placeholder}
 				id={id ?? name}
+				disabled={disabled}
 				type={type ?? 'text'}
 				{...register(name)}
 			/>

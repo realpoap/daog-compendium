@@ -56,7 +56,11 @@ const ActionForm = ({ id, name, actions, setActions }: Props) => {
 	useEffect(() => {
 		methods.setValue('id', id);
 		methods.setValue('searchName', `${methods.getValues('name')} (${name})`);
-	}, [methods.getValues('name')]);
+	}, [
+		methods.getValues('name'),
+		methods.formState.isValidating,
+		methods.formState.isSubmitting,
+	]);
 
 	const onActionSubmit = (data: Action) => {
 		const { id, ...action } = data;

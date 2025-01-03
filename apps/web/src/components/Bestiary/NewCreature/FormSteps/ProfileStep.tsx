@@ -1,4 +1,5 @@
 import { ActionButton } from '@/components/Buttons';
+import Collapsible from '@/components/Collapsible';
 import { cn } from '@/utils/classNames';
 import { NewCreature } from '@api/lib/ZodCreature';
 import { RiArrowDropLeftLine, RiArrowDropRightLine } from 'rocketicons/ri';
@@ -130,79 +131,64 @@ const ProfileStep = ({
 					</div>
 				</section>
 			</div>
-			<div
-				className='collapse'
-				tabIndex={0}
-			>
-				<input
-					type='checkbox'
-					className='peer min-h-2'
-				/>
-				<div className='collapse-title min-h-fit px-10 py-0'>
-					<div
-						className={cn(
-							'font-cabin font-stone-200 m-0 border-0 text-sm font-bold text-purple-400',
-						)}
-					>
-						+ modifiers
-					</div>
-				</div>
-				<div
-					className={cn(
-						'collapse-content peer-checked:collapse-open flex w-full flex-wrap items-center justify-center gap-4 pb-0 pr-0 md:flex-row',
-					)}
+			<Collapsible title='add modifiers'>
+				<Field
+					name='attackBonus'
+					label='&#xb1; Attack'
+					width='tiny'
 				>
-					<Field
-						name='attackBonus'
-						label='&#xb1; Attack'
-						width='tiny'
-					>
-						<InputNumber name='attackBonus' />
-					</Field>
-					<Field
-						name='defenseBonus'
-						label='&#xb1; Defense'
-						width='tiny'
-					>
-						<InputNumber name='defenseBonus' />
-					</Field>
-					<Field
-						name='rangedBonus'
-						label='&#xb1; Ranged'
-						width='tiny'
-					>
-						<InputNumber name='rangedBonus' />
-					</Field>
-					<Field
-						name='perceptionBonus'
-						label='&#xb1; Perception'
-						width='tiny'
-					>
-						<InputNumber name='perceptionBonus' />
-					</Field>
-					<Field
-						name='armor'
-						label='&#xb1; Armor'
-						width='tiny'
-					>
-						<InputNumber name='armor' />
-					</Field>
-					<Field
-						name='magic'
-						label='&#xb1; Magic'
-						width='tiny'
-					>
-						<InputNumber name='magic' />
-					</Field>
-					<Field
-						name='glory'
-						label='&#xb1; Glory'
-						width='tiny'
-					>
-						<InputNumber name='glory' />
-					</Field>
-				</div>
-			</div>
+					<InputNumber name='attackBonus' />
+				</Field>
+				<Field
+					name='defenseBonus'
+					label='&#xb1; Defense'
+					width='tiny'
+				>
+					<InputNumber name='defenseBonus' />
+				</Field>
+				<Field
+					name='rangedBonus'
+					label='&#xb1; Ranged'
+					width='tiny'
+				>
+					<InputNumber name='rangedBonus' />
+				</Field>
+				<Field
+					name='perceptionBonus'
+					label='&#xb1; Perception'
+					width='tiny'
+				>
+					<InputNumber name='perceptionBonus' />
+				</Field>
+				<Field
+					name='armor'
+					label='&#xb1; Armor'
+					width='tiny'
+				>
+					<InputNumber name='armor' />
+				</Field>
+				<Field
+					name='discretionBonus'
+					label='&#xb1; Discretion'
+					width='tiny'
+				>
+					<InputNumber name='discretionBonus' />
+				</Field>
+				<Field
+					name='magic'
+					label='&#xb1; Magic'
+					width='tiny'
+				>
+					<InputNumber name='magic' />
+				</Field>
+				<Field
+					name='glory'
+					label='&#xb1; Glory'
+					width='tiny'
+				>
+					<InputNumber name='glory' />
+				</Field>
+			</Collapsible>
 
 			<div className='flex w-full flex-row items-center justify-center gap-4'>
 				<ActionButton
