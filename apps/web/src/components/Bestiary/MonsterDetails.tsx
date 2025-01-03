@@ -237,37 +237,37 @@ const MonsterDetails = () => {
 				</div>
 
 				<ul className='font-cabin flex w-4/5 list-none flex-row flex-wrap items-center justify-center gap-2 pt-4 align-middle text-base font-semibold md:w-full'>
-					<span className='after:pl-2 after:text-stone-500 after:content-["|"]'>
+					<span className='flex-[0.25] after:pl-2 after:text-stone-500 after:content-["|"]'>
 						<GiThunderSkull className='icon-stone-900 dark:icon-stone-200 icon-sm mr-2' />
 						{monster?.initiative || '~'}
 					</span>
-					<span className='after:pl-2 after:text-stone-500 after:content-["|"]'>
+					<span className='flex-[0.25] after:pl-2 after:text-stone-500 after:content-["|"]'>
 						<GiSwordWound className='icon-stone-900 dark:icon-stone-200 icon-base mr-2' />
 						{monster?.attack || '~'}
 					</span>
-					<span className='after:pl-2 after:text-stone-500 after:content-["|"]'>
+					<span className='flex-[0.25] after:pl-2 after:text-stone-500 after:content-["|"]'>
 						<GiBullseye className='icon-stone-900 dark:icon-stone-200 icon-base mr-2' />
 						{monster?.ranged || '~'}
 					</span>
-					<span className='after:pl-2 after:text-stone-500 after:content-["|"]'>
+					<span className='flex-[0.25] after:pl-2 after:text-stone-500 after:content-["|"]'>
 						<GiCheckedShield className='icon-stone-900 dark:icon-stone-200 mr-2 size-[1.1rem]' />
 						{monster?.defense || '~'}
 					</span>
-					<span className='after:pl-2 after:text-stone-500 after:content-["|"]'>
+					<span className='flex-[0.25] after:pl-2 after:text-stone-500 after:content-["|"]'>
 						<GiArmorVest className='icon-stone-900 dark:icon-stone-200 mr-2 size-[1.1rem]' />
 						{monster?.armor || '~'}
 					</span>
 
-					<span className='after:pl-2 after:text-stone-500 after:content-["|"]'>
+					<span className='flex-[0.25] after:pl-2 after:text-stone-500 after:content-["|"]'>
 						<GiSemiClosedEye className='icon-stone-900 dark:icon-stone-200 icon-sm mr-2' />
 						{monster?.perception || '~'}
 					</span>
-					<span className='after:pl-2 after:text-stone-500 after:content-["|"]'>
+					<span className='flex-[0.25] after:pl-2 after:text-stone-500 after:content-["|"]'>
 						<GiHood className='icon-stone-900 dark:icon-stone-200 icon-sm mr-2' />
 						{monster?.discretion || '~'}
 					</span>
-					<span>
-						<GiFairyWand className='icon-stone-900 dark:icon-stone-200 icon-sm mr-2' />
+					<span className='flex-[0.25] after:pl-2 after:text-transparent after:content-["|"]'>
+						<GiFairyWand className='icon-stone-900 dark:icon-stone-200 icon-sm mr-2 flex-[0.25]' />
 						{monster?.magic || '~'}
 					</span>
 				</ul>

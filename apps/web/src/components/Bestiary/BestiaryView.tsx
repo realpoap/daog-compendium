@@ -109,7 +109,7 @@ const BestiaryView = () => {
 						>
 							{m.name}
 						</p>
-						<ul className='font-cabin font-regular flex w-1/2 list-none flex-row flex-wrap items-center justify-center gap-1 align-middle text-sm md:w-full'>
+						<ul className='font-cabin font-regular flex w-3/4 list-none flex-row flex-wrap items-center justify-center gap-1 align-middle text-sm md:w-full'>
 							<span className='after:pl-2 after:text-stone-500 after:content-["|"]'>
 								<GiThunderSkull className='icon-stone-900 dark:icon-stone-200 icon-sm mr-1' />
 								{m?.initiative || '~'}
