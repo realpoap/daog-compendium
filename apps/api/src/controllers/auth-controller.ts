@@ -1,6 +1,6 @@
-/* eslint-disable no-useless-catch */
 import customConfig from '@api/config/default';
 import { prisma } from '@api/index';
+import { serverErrorHandler } from '@api/lib/utils/errorHandler';
 import { signJwt, signToken, verifyJwt } from '@api/lib/utils/jwt';
 import { CreateUserInput, LoginUserInput } from '@api/lib/ZodUser';
 import { Context } from '@api/trpc';
@@ -187,8 +187,8 @@ export const refreshTokenHandler = async ({ ctx }: { ctx: Context }) => {
 			status: 'success',
 			access_token,
 		};
-	} catch (err: any) {
-		throw err;
+	} catch (error) {
+		serverErrorHandler(error);
 	}
 };
 
@@ -205,7 +205,7 @@ export const logoutHandler = async ({ ctx }: { ctx: Context }) => {
 	try {
 		logout({ ctx });
 		return { status: 'success' };
-	} catch (err: any) {
-		throw err;
+	} catch (error) {
+		serverErrorHandler(error);
 	}
 };

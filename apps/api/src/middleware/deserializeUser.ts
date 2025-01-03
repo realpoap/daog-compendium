@@ -1,5 +1,5 @@
 import { prisma } from '@api/index';
-import { TRPCError } from '@trpc/server';
+import { serverErrorHandler } from '@api/lib/utils/errorHandler';
 import * as trpcExpress from '@trpc/server/adapters/express';
 import 'dotenv/config';
 import jwt from 'jsonwebtoken';
@@ -57,10 +57,7 @@ export const deserializeUser = async ({
 			res,
 			user: { ...user, id: user.id.toString() },
 		};
-	} catch (err: any) {
-		throw new TRPCError({
-			code: 'INTERNAL_SERVER_ERROR',
-			message: err.message,
-		});
+	} catch (error) {
+		serverErrorHandler(error);
 	}
 };
