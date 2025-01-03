@@ -4,6 +4,7 @@ import { trpc } from '@/utils/trpc';
 import { Creature } from '@api/lib/ZodCreature';
 import { Link } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
+import { GiRoundStar } from 'rocketicons/gi';
 import { RiAddLine } from 'rocketicons/ri';
 import { useDebounce } from 'use-debounce';
 import SkeletonList from '../SkeletonList';
@@ -94,12 +95,16 @@ const BestiaryView = () => {
 					params={{ id: `${m.id}` }}
 				>
 					<div className='flex w-full translate-y-8 snap-center flex-col items-center rounded-md p-1 pb-2 text-center opacity-100 transition-all duration-1000 ease-out hover:bg-stone-700'>
+						<span className='font-grenze align-middle text-sm text-stone-500'>
+							<GiRoundStar className='icon-stone-500 size-3 pr-1' />
+							{m.level}
+						</span>
 						<p
 							className={cn(
 								'font-noto font-bold tracking-wider text-purple-900 dark:text-purple-400',
 							)}
 						>
-							{m.name}
+							{m.name}{' '}
 						</p>
 						<span className='font-noto mr-2 text-sm text-stone-500'>
 							~ {m.size} {m.alignment} {m.type} ~
