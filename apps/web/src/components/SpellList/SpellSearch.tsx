@@ -114,40 +114,36 @@ const SpellSearch = () => {
 							params={{ id: `${d.number}` }}
 						>
 							<div className='flex w-full translate-y-8 snap-center flex-col items-center rounded-md p-1 pb-2 text-center opacity-100 transition-all duration-1000 ease-out hover:bg-stone-700'>
-								<span className='font-noto mr-2 text-sm text-stone-500'>
-									~ {d.number} ~
+								<span className='font-cabin text-sm text-stone-500'>
+									#{d.number}
 								</span>
 								<p
 									className={cn(
-										'font-noto font-bold tracking-wider text-purple-900 dark:text-purple-400',
+										'font-cabin text-primary font-bold tracking-wider',
 									)}
 								>
 									{d.titleCommon}
 								</p>
-								<span className='font-noto mr-1 align-baseline text-sm font-semibold capitalize'>
+								<span className='font-cabinalign-baseline font-regular text-sm capitalize'>
 									{d.type}
 								</span>
-								<div className='font-noto flex w-48 flex-row items-baseline justify-center align-baseline dark:text-stone-200'>
-									<span className='font-noto align-baseline text-sm font-semibold'>
-										<GiPolarStar className='icon-stone-900 dark:icon-stone-100 icon-md mr-1' />
+								<ul className='font-cabin font-regular flex w-1/2 list-none flex-row flex-wrap items-center justify-center gap-1 align-middle text-sm md:w-full'>
+									<span className='after:pl-2 after:text-stone-500 after:content-["|"]'>
+										<GiPolarStar className='icon-stone-900 dark:icon-stone-200 icon-sm mr-1' />
 										{d?.level}
 									</span>
-									<span className='mx-2 align-baseline text-sm font-semibold'>
-										|
-									</span>
-									<span className='font-noto align-baseline text-sm font-semibold'>
-										<GiDrop className='icon-stone-900 dark:icon-stone-100 icon-sm' />
+
+									<span className='after:pl-2 after:text-stone-500 after:content-["|"]'>
+										<GiDrop className='icon-stone-900 dark:icon-stone-100 icon-sm mr-1' />
 										{d.level}
 									</span>
-									<span className='mx-2 align-baseline text-sm font-semibold'>
-										|
-									</span>
-									<span className='font-noto align-baseline text-sm font-semibold'>
-										<GiFairyWand className='icon-stone-900 dark:icon-stone-100 icon-sm mr-1' />
+
+									<span className='after:pl-2 after:text-stone-500'>
+										<GiFairyWand className='icon-stone-900 dark:icon-stone-200 icon-sm mr-1' />
 										{d.difficulty}
 									</span>
-								</div>
-								<span className='font-noto mt-1 align-baseline text-xs font-light italic dark:text-stone-400'>
+								</ul>
+								<span className='font-cabin text-sm text-stone-500'>
 									{'// '} {d?.casting} spell to {d?.action}{' '}
 									{d?.targetType !== 'none' && d?.targetType}
 									{d?.targetType === 'none'

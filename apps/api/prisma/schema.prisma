@@ -50,6 +50,7 @@ model Creature {
   createdAt       DateTime?    @default(now())
   updatedAt       DateTime?    @updatedAt
   level           Int
+  initiative      Int?
   attack          Int
   attackBonus     Int?
   defense         Int
@@ -60,6 +61,8 @@ model Creature {
   armor           Int?
   perception      Int
   perceptionBonus Int?
+  discretion      Int?
+  discretionBonus Int?
   magic           Int?
   spirit          Int?
   glory           Int?
@@ -87,18 +90,18 @@ model Attribute {
 }
 
 enum Type {
-  oddity
-  plant
+  beast
+  critter
   demon
   fae
+  golem
   insect
-  person
-  beast
   monster
+  oddity
+  person
+  plant
   undead
   wyrm
-  golem
-
 }
 
 enum Alignment {

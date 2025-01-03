@@ -1,10 +1,12 @@
 import { type NewAction } from '@api/lib/ZodAction';
+import { ActionList } from '@api/lib/ZodCreature';
 import { SetStateAction } from 'react';
 import { FiPlus } from 'rocketicons/fi';
 import { SmallCircleButton } from '../Buttons';
 import ActionCard from './ActionCard';
 
 type ActionComponentProps = {
+	actionList: ActionList;
 	actions: NewAction[];
 	setActions: React.Dispatch<SetStateAction<NewAction[]>>;
 	creatureId: string;
@@ -12,6 +14,7 @@ type ActionComponentProps = {
 };
 
 const ActionComponent = ({
+	actionList,
 	actions,
 	creatureId,
 	setActions,
@@ -22,6 +25,7 @@ const ActionComponent = ({
 			<h3 className='font-grenze line mb-1 border-b-2 text-4xl font-semibold tracking-wider'>
 				Actions
 			</h3>
+			<span className='badge badge-sm uppercase'>{actionList?.main} main</span>
 			<SmallCircleButton
 				onClick={e => {
 					e.stopPropagation();
@@ -50,6 +54,9 @@ const ActionComponent = ({
 					<h3 className='font-grenze line mb-1 border-b-2 text-4xl font-semibold tracking-wider'>
 						Epics
 					</h3>
+					<span className='badge badge-sm uppercase'>
+						{actionList?.main} epic
+					</span>
 					{actions
 						?.filter(a => a.action === 'epic')
 						.map(a => (

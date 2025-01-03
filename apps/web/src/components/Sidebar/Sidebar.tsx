@@ -1,5 +1,6 @@
 import { useAuth } from '@/store/authContext';
-import { useNavigate } from '@tanstack/react-router';
+import { capitalizeFirstLetter } from '@/utils/capitalize';
+import { Link, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import { BiLogIn, BiLogOut, BiMenu } from 'rocketicons/bi';
 import Nav from './Nav';
@@ -26,10 +27,15 @@ const Sidebar = () => {
 
 	return (
 		<header className='sticky top-0 z-50 h-1/4'>
-			<section className='font-grenze mx-auto flex w-full justify-between bg-stone-100 p-2 shadow-md shadow-stone-900 dark:bg-stone-800'>
+			<section className='font-grenze mx-auto flex w-full items-center justify-between bg-stone-100 p-2 shadow-md shadow-stone-900 dark:bg-stone-800'>
 				<h1 className='text-2xl font-bold tracking-wider dark:text-stone-100'>
-					DAOG Compendium
+					<Link to='/'>DAOG</Link>
 				</h1>
+				{user && (
+					<p className='font-cabin pt-1 align-baseline italic text-stone-500'>
+						logged in as {capitalizeFirstLetter(user.name)}
+					</p>
+				)}
 				<nav
 					aria-label='main'
 					className={`${open ? 'block' : 'hidden'} space-x-10 text-xl tracking-wide md:block`}
@@ -54,7 +60,7 @@ const Sidebar = () => {
 				</button>
 				<nav
 					aria-label='mobile'
-					className='font-grenze font-semi-bold flex h-screen flex-col items-center gap-8 py-8'
+					className='font-grenze font-semi-bold z-50 flex h-screen flex-col items-center justify-center gap-6 py-8'
 				>
 					<Nav />
 					{user && (

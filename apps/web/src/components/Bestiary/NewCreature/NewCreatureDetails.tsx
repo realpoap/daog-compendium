@@ -6,11 +6,13 @@ import {
 	GiCrownedSkull,
 	GiFairyWand,
 	GiGlassHeart,
+	GiHood,
 	GiPartyHat,
 	GiPotionBall,
 	GiRoundStar,
 	GiSemiClosedEye,
 	GiSwordWound,
+	GiThunderSkull,
 } from 'rocketicons/gi';
 
 const NewCreatureDetails = ({
@@ -79,6 +81,13 @@ const NewCreatureDetails = ({
 							)}
 						</div>
 						<div className='font-cabin -mt-3 flex w-full flex-row flex-wrap items-center justify-center gap-4 text-lg font-bold text-stone-200'>
+							{creature.initiative != null && (
+								<div className='flex flex-row items-center justify-center gap-1'>
+									<GiThunderSkull className='icon-base icon-stone-200' />
+									{/* <p>Initiative :</p> */}
+									<p>{creature.initiative}</p>
+								</div>
+							)}
 							{creature.attack != null && (
 								<div className='flex flex-row items-center justify-center gap-1'>
 									<GiSwordWound className='icon-base icon-stone-200' />
@@ -105,6 +114,7 @@ const NewCreatureDetails = ({
 									<p>{creature.armor}</p>
 								</div>
 							)}
+
 							{creature.ranged != null && (
 								<div className='flex flex-row items-center justify-center gap-1'>
 									<GiBullseye className='icon-base icon-stone-200' />
@@ -117,6 +127,13 @@ const NewCreatureDetails = ({
 									<GiSemiClosedEye className='icon-base icon-stone-200' />
 									{/* <p>Perception :</p> */}
 									<p>{creature.perception}</p>
+								</div>
+							)}
+							{creature.discretion != null && (
+								<div className='flex flex-row items-center justify-center gap-1'>
+									<GiHood className='icon-base icon-stone-200' />
+									{/* <p>Discretion :</p> */}
+									<p>{creature.discretion}</p>
 								</div>
 							)}
 							{creature.magic != null && (

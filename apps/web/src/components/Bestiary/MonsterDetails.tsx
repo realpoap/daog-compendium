@@ -1,10 +1,12 @@
 import { useAuth } from '@/store/authContext';
+import { creatureTypeOptions } from '@/types/creatureOptions';
 import { cn } from '@/utils/classNames';
 import { trpc } from '@/utils/trpc';
 import { NewAction } from '@api/lib/ZodAction';
-import { CreatureAttribute } from '@api/lib/ZodCreature';
+import { ActionList, CreatureAttribute } from '@api/lib/ZodCreature';
 import { useNavigate, useParams } from '@tanstack/react-router';
-import { useEffect, useState } from 'react';
+import { IconType } from 'node_modules/rocketicons/core/types';
+import { createElement, ElementType, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { FiEdit, FiPlus } from 'rocketicons/fi';
 import {
@@ -14,9 +16,12 @@ import {
 	GiCrownedSkull,
 	GiFairyWand,
 	GiGlassHeart,
+	GiHood,
+	GiPotionBall,
 	GiRoundStar,
 	GiSemiClosedEye,
 	GiSwordWound,
+	GiThunderSkull,
 } from 'rocketicons/gi';
 import { RiCloseFill } from 'rocketicons/ri';
 import { ActionButton, SmallCircleButton } from '../Buttons';
@@ -32,6 +37,7 @@ const MonsterDetails = () => {
 	const { id } = useParams({ strict: false });
 	const [actions, setActions] = useState<NewAction[]>([]);
 	const [attributes, setAttributes] = useState<CreatureAttribute[]>([]);
+	const [Icon, setMonsterIcon] = useState<JSX.Element | undefined>();
 
 	const monsterById = trpc.creatures.getById.useQuery(id as string);
 	const [edit, setEdit] = useState(false);
@@ -43,6 +49,16 @@ const MonsterDetails = () => {
 		if (monsterById.data) {
 			if (monster?.actions) setActions(monster?.actions);
 			if (monster?.attributes) setAttributes(monster?.attributes);
+			if (monster?.type) {
+				creatureTypeOptions.find(o => {
+					if (
+						o.label.toLowerCase() === monster?.type?.toLowerCase() ||
+						o.value === monster?.type?.toLowerCase()
+					) {
+						setMonsterIcon(o.icon);
+					}
+				});
+			}
 		}
 	}, [monsterById.data]);
 
@@ -68,15 +84,32 @@ const MonsterDetails = () => {
 
 				<div className='align-center relative mt-4 flex flex-col items-center justify-center text-wrap text-center'>
 					<div className='w-full'>
+						<div className='flex items-center justify-center'>
+							<div
+								className={cn(
+									'*:icon-stone-200 flex size-12 items-center justify-center overflow-clip rounded-full border-2 border-stone-200 *:shadow-stone-800 *:drop-shadow-lg',
+									{
+										'*:icon-5xl *:mt-1': monster?.type === 'wyrm',
+										'*:icon-6xl *:mr-1 *:mt-2': monster?.type === 'fae',
+										'*:icon-4xl *:-mt-2': monster?.type === 'insect',
+										'*:icon-5xl *:mt-2': monster?.type === 'monster',
+										'*:icon-6xl *:mt-2': monster?.type === 'plant',
+										'*:icon-3xl': monster?.type !== 'wyrm',
+									},
+								)}
+							>
+								{Icon}
+							</div>
+						</div>
 						<h3
 							className={cn(
-								'font-grenze text-wrap text-center text-4xl font-extrabold tracking-wider text-purple-900 dark:text-purple-400',
+								'font-grenze text-primary text-wrap text-5xl font-extrabold tracking-wider',
 							)}
 						>
 							{monster?.name}
 						</h3>
 						{monster?.isBoss && (
-							<div className='badge badge-lg bg-goldenrod-500 glass absolute -right-4 -top-1 size-6 animate-bounce content-center items-center rounded-full border-0 p-0 shadow-sm shadow-stone-900'>
+							<div className='badge badge-lg bg-goldenrod-500 glass absolute -right-4 top-12 size-6 animate-bounce content-center items-center rounded-full border-0 p-0 shadow-sm shadow-stone-900'>
 								<GiCrownedSkull className='dark:icon-stone-800-sm align-baseline' />
 							</div>
 						)}
@@ -85,9 +118,9 @@ const MonsterDetails = () => {
 						className={cn(
 							`text-md font-cabin animate-text bg-clip-text align-middle font-bold italic text-transparent`,
 							{
-								'bg-gradient-to-r from-stone-300 via-blue-300 to-stone-300':
+								'bg-gradient-to-r from-stone-300 via-indigo-300 to-stone-300':
 									monster?.alignment === 'saint',
-								'bg-gradient-to-r from-stone-500 via-teal-500 to-stone-500':
+								'bg-gradient-to-r from-stone-500 via-blue-500 to-stone-500':
 									monster?.alignment === 'good',
 								'via-accent bg-gradient-to-r from-stone-500 to-stone-500':
 									monster?.alignment === 'neutral',
@@ -109,7 +142,7 @@ const MonsterDetails = () => {
 						)}
 					>
 						<GiRoundStar className='icon-4xl icon-primary relative inline-block' />
-						<span className='font-grenze absolute top-2 z-50 inline-block text-base font-bold dark:text-stone-800'>
+						<span className='font-grenze absolute top-2 z-20 inline-block text-base font-bold dark:text-stone-800'>
 							{monster?.level}
 						</span>
 					</div>
@@ -174,42 +207,67 @@ const MonsterDetails = () => {
 						</SmallCircleButton>
 					</div>
 				)}
-				<div className='align-center mt-4 flex flex-col items-center justify-center text-center'>
-					<div className='relative flex'>
-						<GiGlassHeart className='icon-red-500 icon-2xl absolute animate-ping opacity-30' />
-						<GiGlassHeart className='icon-red-500 icon-2xl relative drop-shadow-md' />
+				<div className='flex flex-row items-end justify-center gap-8 align-baseline'>
+					<div className='align-center mt-4 flex flex-col items-center justify-center text-center'>
+						<div className='relative flex'>
+							<GiGlassHeart className='icon-red-500 icon-2xl absolute animate-ping opacity-30' />
+							<GiGlassHeart className='icon-red-500 icon-2xl relative drop-shadow-md' />
+						</div>
+						<p className='font-noto align-baseline text-lg font-semibold text-red-500'>
+							{monster?.health}
+						</p>
+						<p className='font-noto align-baseline text-sm font-light text-stone-500'>
+							(1d3 +
+							{monster?.stats?.VIT && Math.floor(monster?.stats?.VIT / 10)})
+						</p>
 					</div>
-					<p className='font-noto align-baseline text-lg font-semibold text-red-500'>
-						{monster?.health}
-					</p>
-					<p className='font-noto align-baseline text-sm font-light text-stone-500'>
-						(1d3 +{monster?.stats?.VIT && Math.floor(monster?.stats?.VIT / 10)})
-					</p>
+					<div className='align-center mt-4 flex flex-col items-center justify-center text-center'>
+						<div className='relative flex'>
+							<GiPotionBall className='icon-indigo-500 icon-3xl absolute animate-ping opacity-30' />
+							<GiPotionBall className='icon-indigo-500 icon-3xl relative drop-shadow-md' />
+						</div>
+						<p className='font-noto align-baseline text-lg font-semibold text-indigo-500'>
+							{monster?.spirit}
+						</p>
+						<p className='font-noto align-baseline text-sm font-light text-stone-500'>
+							(1d3 +
+							{monster?.stats?.SEN && Math.floor(monster?.stats?.SEN / 10)})
+						</p>
+					</div>
 				</div>
 
-				<ul className='font-cabin flex w-1/2 list-none flex-row flex-wrap items-center justify-center gap-2 pt-4 align-middle text-base font-semibold md:w-full'>
+				<ul className='font-cabin flex w-4/5 list-none flex-row flex-wrap items-center justify-center gap-2 pt-4 align-middle text-base font-semibold md:w-full'>
 					<span className='after:pl-2 after:text-stone-500 after:content-["|"]'>
-						<GiSwordWound className='icon-stone-900 dark:icon-stone-100 icon-base mr-2' />
+						<GiThunderSkull className='icon-stone-900 dark:icon-stone-200 icon-sm mr-2' />
+						{monster?.initiative || '~'}
+					</span>
+					<span className='after:pl-2 after:text-stone-500 after:content-["|"]'>
+						<GiSwordWound className='icon-stone-900 dark:icon-stone-200 icon-base mr-2' />
 						{monster?.attack || '~'}
 					</span>
 					<span className='after:pl-2 after:text-stone-500 after:content-["|"]'>
-						<GiBullseye className='icon-stone-900 dark:icon-stone-100 icon-base mr-2' />
+						<GiBullseye className='icon-stone-900 dark:icon-stone-200 icon-base mr-2' />
 						{monster?.ranged || '~'}
 					</span>
 					<span className='after:pl-2 after:text-stone-500 after:content-["|"]'>
-						<GiCheckedShield className='icon-stone-900 dark:icon-stone-100 icon-base mr-2' />
+						<GiCheckedShield className='icon-stone-900 dark:icon-stone-200 mr-2 size-[1.1rem]' />
 						{monster?.defense || '~'}
 					</span>
 					<span className='after:pl-2 after:text-stone-500 after:content-["|"]'>
-						<GiArmorVest className='icon-stone-900 dark:icon-stone-100 mr-2 size-5' />
+						<GiArmorVest className='icon-stone-900 dark:icon-stone-200 mr-2 size-[1.1rem]' />
 						{monster?.armor || '~'}
 					</span>
+
 					<span className='after:pl-2 after:text-stone-500 after:content-["|"]'>
-						<GiSemiClosedEye className='icon-stone-900 dark:icon-stone-100 icon-sm mr-2' />
+						<GiSemiClosedEye className='icon-stone-900 dark:icon-stone-200 icon-sm mr-2' />
 						{monster?.perception || '~'}
 					</span>
+					<span className='after:pl-2 after:text-stone-500 after:content-["|"]'>
+						<GiHood className='icon-stone-900 dark:icon-stone-200 icon-sm mr-2' />
+						{monster?.discretion || '~'}
+					</span>
 					<span>
-						<GiFairyWand className='icon-stone-900 dark:icon-stone-100 icon-sm mr-2' />
+						<GiFairyWand className='icon-stone-900 dark:icon-stone-200 icon-sm mr-2' />
 						{monster?.magic || '~'}
 					</span>
 				</ul>
@@ -236,6 +294,7 @@ const MonsterDetails = () => {
 				)}
 
 				<ActionComponent
+					actionList={monster?.actionList as ActionList}
 					actions={actions}
 					setActions={setActions}
 					creatureId={monster?.id as string}

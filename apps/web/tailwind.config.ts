@@ -94,7 +94,11 @@ const config: Pick<
 						'background-position': 'center center',
 					},
 					'50%': {
-						'background-size': '300% 300%',
+						'background-size': '200% 200%',
+						'background-position': 'center center',
+					},
+					'80%': {
+						'background-size': '80% 100%',
 						'background-position': 'center center',
 					},
 				},
