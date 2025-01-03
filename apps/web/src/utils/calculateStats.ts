@@ -20,20 +20,20 @@ const calcLevel = (creature: Creature | NewCreature) => {
 	const will = creature.stats.WIL ? creature.stats.WIL - 15 : 0;
 	const disc = creature.discretion ? creature.discretion - 15 : 0;
 	const glory = creature?.glory != null ? 1 + Number(creature.glory) * 0.1 : 0;
-	const main = creature?.actionList?.main ? creature.actionList?.main * 5 : 1;
+	const main = creature?.actionList?.main ? creature.actionList?.main * 10 : 1;
 	const epic = creature?.actionList?.main ? creature.actionList?.main * 10 : 1;
 	const attributes = creature?.attributes ? creature.attributes.length : 0;
 
 	const level = Math.round(
 		(att * 4 +
 			def * 4 +
-			vit * 0.75 +
+			vit * 1 +
 			sen * 3 +
 			per * 2 +
 			will * 2 +
 			disc * 2 +
 			main * 2 +
-			attributes +
+			attributes * 2 +
 			epic * 2) /
 			11,
 	);
@@ -68,11 +68,11 @@ const calcModifiersBonus = (creature: Creature | NewCreature) => {
 		const celB = Math.floor(creature.stats?.CEL / 10);
 		const sizeMod =
 			creature.size === 'large'
-				? -2
+				? -5
 				: creature.size === 'huge'
-					? -5
+					? -10
 					: creature.size === 'gigantic'
-						? -10
+						? -20
 						: 0;
 		calCreature.initiative =
 			creature.stats?.WIL + creature.stats?.CEL + perB + discB + celB + sizeMod;
@@ -82,11 +82,11 @@ const calcModifiersBonus = (creature: Creature | NewCreature) => {
 		const attB = creature.attackBonus === null ? 0 : creature.attackBonus;
 		const sizeMod =
 			creature.size === 'large'
-				? -1
+				? -3
 				: creature.size === 'huge'
-					? -3
+					? -5
 					: creature.size === 'gigantic'
-						? -5
+						? -10
 						: 0;
 		calCreature.attack =
 			Math.max(creature.stats?.STR, creature.stats?.AGI) + attB + sizeMod;
