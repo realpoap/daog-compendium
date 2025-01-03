@@ -3,6 +3,8 @@ import { capitalizeFirstLetter } from '@/utils/capitalize';
 import { Link, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import { BiLogIn, BiLogOut, BiMenu } from 'rocketicons/bi';
+import daogLogo from '../../data/daog-app.png';
+
 import Nav from './Nav';
 
 const Sidebar = () => {
@@ -29,16 +31,26 @@ const Sidebar = () => {
 		<header className='sticky top-0 z-50 h-1/4'>
 			<section className='font-grenze mx-auto flex w-full items-center justify-between gap-4 bg-stone-100 p-2 shadow-md shadow-stone-900 dark:bg-stone-800'>
 				<h1 className='text-2xl font-bold tracking-wider dark:text-stone-100'>
-					<Link to='/'>DAOG</Link>
+					<Link
+						to='/'
+						className='flex flex-row gap-2'
+					>
+						<img
+							src={daogLogo}
+							alt='daog-logo'
+							className='size-8'
+						/>
+						{<span className='hidden md:flex'>DAOG</span>}
+					</Link>
 				</h1>
 				{user && (
-					<p className='font-cabin pt-1 align-baseline italic text-stone-500'>
+					<p className='font-cabin w-1/2 pt-1 text-center align-baseline italic text-stone-500 md:w-[20dvw]'>
 						logged in as {capitalizeFirstLetter(user.name)}
 					</p>
 				)}
 				<nav
 					aria-label='main'
-					className={`${open ? 'block' : 'hidden'} max-w-1/2 mx-auto space-x-10 text-xl tracking-wide md:block`}
+					className={`${open ? 'block' : 'hidden'} relative -left-[10dvw] mx-auto space-x-10 text-xl tracking-wide md:block`}
 				>
 					<Nav />
 				</nav>

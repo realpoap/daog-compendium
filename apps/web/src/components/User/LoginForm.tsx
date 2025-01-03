@@ -38,12 +38,14 @@ const LoginForm = () => {
 				>
 					<Field name='email'>
 						<Input
+							id='email-login'
 							name='email'
 							type='email'
 						/>
 					</Field>
 					<Field name='password'>
 						<Input
+							id='password-login'
 							name='password'
 							type='password'
 						/>

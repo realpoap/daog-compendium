@@ -5,8 +5,6 @@ import { trpc } from '@/utils/trpc';
 import { NewAction } from '@api/lib/ZodAction';
 import { ActionList, CreatureAttribute } from '@api/lib/ZodCreature';
 import { useNavigate, useParams } from '@tanstack/react-router';
-import { IconType } from 'node_modules/rocketicons/core/types';
-import { createElement, ElementType, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { FiEdit, FiPlus } from 'rocketicons/fi';
 import {
@@ -31,6 +29,7 @@ import ActionComponent from './ActionComponent';
 import StatsTable from './StatsTable';
 import ActionForm from './utils/ActionForm';
 import AttributeForm from './utils/AttributeForm';
+import { useEffect, useState } from 'react';
 
 const MonsterDetails = () => {
 	const navigate = useNavigate();
@@ -69,7 +68,7 @@ const MonsterDetails = () => {
 	const monster = monsterById.data;
 
 	return (
-		<div className='item-center flex flex-col'>
+		<div className='item-center flex h-[100dvh] flex-col'>
 			<div className='align-center flex flex-col items-center justify-center gap-2'>
 				<button
 					className='font-cabin mt-1 max-h-fit max-w-fit px-8 py-2 align-middle text-base uppercase text-stone-500 hover:text-stone-200'
@@ -147,13 +146,7 @@ const MonsterDetails = () => {
 						</span>
 					</div>
 				)}
-				<div
-					className={cn(
-						'font-noto max-w-72 text-center text-sm italic text-stone-700 md:line-clamp-none md:max-w-xl dark:text-stone-400',
-					)}
-				>
-					{monster?.description}
-				</div>
+
 				{monster?.attributes && (
 					<div className='flex w-full flex-row flex-wrap items-center justify-center gap-2 overflow-visible px-2 align-middle'>
 						{attributes.map(a => (
@@ -192,21 +185,33 @@ const MonsterDetails = () => {
 								)}
 							</>
 						)}
-						<SmallCircleButton
-							onClick={e => {
-								e.stopPropagation();
-								setEdit(!edit);
-							}}
-							color={edit ? 'bg-red-500' : undefined}
-						>
-							{!edit ? (
-								<FiEdit className='icon-stone-900-sm' />
-							) : (
-								<RiCloseFill className='icon-stone-900' />
-							)}
-						</SmallCircleButton>
+						{isEditor && (
+							<SmallCircleButton
+								onClick={e => {
+									e.stopPropagation();
+									setEdit(!edit);
+								}}
+								color={edit ? 'bg-red-500' : undefined}
+							>
+								{!edit ? (
+									<FiEdit className='icon-stone-900-sm' />
+								) : (
+									<RiCloseFill className='icon-stone-900' />
+								)}
+							</SmallCircleButton>
+						)}
 					</div>
 				)}
+				{monster?.description && (
+					<div
+						className={cn(
+							'font-noto max-w-72 text-center text-sm italic text-stone-700 md:line-clamp-none md:max-w-xl dark:text-stone-400',
+						)}
+					>
+						{monster?.description}
+					</div>
+				)}
+
 				<div className='flex flex-row items-end justify-center gap-8 align-baseline'>
 					<div className='align-center mt-4 flex flex-col items-center justify-center text-center'>
 						<div className='relative flex'>
@@ -236,43 +241,47 @@ const MonsterDetails = () => {
 					</div>
 				</div>
 
-				<ul className='font-cabin flex w-4/5 list-none flex-row flex-wrap items-center justify-center gap-2 pt-4 align-middle text-base font-semibold md:w-full'>
-					<span className='max-w-1/6 after:pl-2 after:text-stone-500 after:content-["|"]'>
-						<GiThunderSkull className='icon-stone-900 dark:icon-stone-200 icon-sm mr-2' />
-						{monster?.initiative || '~'}
-					</span>
-					<span className='max-w-1/6 after:pl-2 after:text-stone-500 after:content-["|"]'>
-						<GiSwordWound className='icon-stone-900 dark:icon-stone-200 icon-base mr-2' />
-						{monster?.attack || '~'}
-					</span>
-					<span className='max-w-1/6 after:pl-2 after:text-stone-500 after:content-["|"]'>
-						<GiBullseye className='icon-stone-900 dark:icon-stone-200 icon-base mr-2' />
-						{monster?.ranged || '~'}
-					</span>
-					<span className='max-w-1/6 after:pl-2 after:text-stone-500 after:content-["|"]'>
-						<GiCheckedShield className='icon-stone-900 dark:icon-stone-200 mr-2 size-[1.1rem]' />
-						{monster?.defense || '~'}
-					</span>
-					<span className='max-w-1/6 after:pl-2 after:text-stone-500 after:content-["|"]'>
-						<GiArmorVest className='icon-stone-900 dark:icon-stone-200 mr-2 size-[1.1rem]' />
-						{monster?.armor || '~'}
-					</span>
+				<ul className='font-cabin flex w-full list-none flex-col flex-wrap items-center justify-center gap-2 pt-4 align-middle text-base font-semibold md:flex-row'>
+					<div className='flex flex-row gap-2'>
+						<span className='max-w-1/6 after:pl-2 after:text-stone-500 after:content-["|"]'>
+							<GiThunderSkull className='icon-stone-900 dark:icon-stone-200 icon-sm mr-2' />
+							{monster?.initiative || '~'}
+						</span>
+						<span className='max-w-1/6 after:pl-2 after:text-stone-500 after:content-["|"]'>
+							<GiSwordWound className='icon-stone-900 dark:icon-stone-200 icon-base mr-2' />
+							{monster?.attack || '~'}
+						</span>
 
-					<span className='max-w-1/6 after:pl-2 after:text-stone-500 after:content-["|"]'>
-						<GiSemiClosedEye className='icon-stone-900 dark:icon-stone-200 icon-sm mr-2' />
-						{monster?.perception || '~'}
-					</span>
-					<span className='max-w-1/6 after:pl-2 after:text-stone-500 after:content-["|"]'>
-						<GiHood className='icon-stone-900 dark:icon-stone-200 icon-sm mr-2' />
-						{monster?.discretion || '~'}
-					</span>
-					<span className='max-w-1/6 after:pl-2 after:text-transparent after:content-["|"]'>
-						<GiFairyWand className='icon-stone-900 dark:icon-stone-200 icon-sm max-w-1/6 mr-2' />
-						{monster?.magic || '~'}
-					</span>
+						<span className='max-w-1/6 after:pl-2 after:text-stone-500 after:content-["|"]'>
+							<GiCheckedShield className='icon-stone-900 dark:icon-stone-200 mr-2 size-[1.1rem]' />
+							{monster?.defense || '~'}
+						</span>
+						<span className='max-w-1/6 after:pl-2 after:text-stone-500 after:content-["|"]'>
+							<GiArmorVest className='icon-stone-900 dark:icon-stone-200 mr-2 size-[1.1rem]' />
+							{monster?.armor || '~'}
+						</span>
+					</div>
+					<div className='flex flex-row gap-2'>
+						<span className='max-w-1/6 after:pl-2 after:text-stone-500 after:content-["|"]'>
+							<GiBullseye className='icon-stone-900 dark:icon-stone-200 icon-base mr-2' />
+							{monster?.ranged || '~'}
+						</span>
+						<span className='max-w-1/6 after:pl-2 after:text-stone-500 after:content-["|"]'>
+							<GiSemiClosedEye className='icon-stone-900 dark:icon-stone-200 icon-sm mr-2' />
+							{monster?.perception || '~'}
+						</span>
+						<span className='max-w-1/6 after:pl-2 after:text-stone-500 after:content-["|"]'>
+							<GiHood className='icon-stone-900 dark:icon-stone-200 icon-sm mr-2' />
+							{monster?.discretion || '~'}
+						</span>
+						<span className='max-w-1/6 after:pl-2 after:text-transparent after:content-["|"]'>
+							<GiFairyWand className='icon-stone-900 dark:icon-stone-200 icon-sm max-w-1/6 mr-2' />
+							{monster?.magic || '~'}
+						</span>
+					</div>
 				</ul>
 				{monster && (
-					<div className='md:w-[54dvw]'>
+					<div className='md:w-[54dvw] lg:w-2/5'>
 						<Collapsible title='show stats'>
 							<StatsTable creature={monster} />
 						</Collapsible>
@@ -300,6 +309,19 @@ const MonsterDetails = () => {
 					creatureId={monster?.id as string}
 					creatureName={monster?.name as string}
 				/>
+				{isEditor && (
+					<SmallCircleButton
+						onClick={e => {
+							e.stopPropagation();
+
+							(
+								document.getElementById('action-form') as HTMLDialogElement
+							).showModal();
+						}}
+					>
+						<FiPlus className='icon-stone-900' />
+					</SmallCircleButton>
+				)}
 			</div>
 			{isEditor && (
 				<ActionButton

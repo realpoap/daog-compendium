@@ -7,7 +7,7 @@ type Props = {
 
 const StatsTable = ({ creature }: Props) => {
 	return (
-		<div className='flex flex-row flex-wrap items-center justify-center p-0 md:w-[52dvw] md:flex-row md:gap-0'>
+		<div className='flex flex-row flex-wrap items-center justify-center p-0 md:flex-row md:gap-0'>
 			<StatsGroup
 				text='Adroitness'
 				inputs={Object.fromEntries(Object.entries(creature.stats).slice(0, 3))}

@@ -42,18 +42,21 @@ const RegisterForm = () => {
 				>
 					<Field name='email'>
 						<Input
+							id='email-register'
 							name='email'
 							type='email'
 						/>
 					</Field>
 					<Field name='name'>
 						<Input
+							id='name-register'
 							name='name'
 							type='text'
 						/>
 					</Field>
 					<Field name='password'>
 						<Input
+							id='password-register'
 							name='password'
 							type='password'
 						/>
@@ -63,6 +66,7 @@ const RegisterForm = () => {
 						label='Confirm Password'
 					>
 						<Input
+							id='confirm-password-register'
 							name='confirmPassword'
 							type='password'
 						/>

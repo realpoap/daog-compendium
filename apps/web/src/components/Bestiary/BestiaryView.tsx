@@ -68,7 +68,7 @@ const BestiaryView = () => {
 	}
 
 	return (
-		<div className='mt-sm flex flex-col items-center p-2'>
+		<div className='mt-sm flex h-[100dvh] flex-col items-center p-2'>
 			<div className='container sticky top-8 z-10 flex flex-col items-center bg-gradient-to-b from-stone-100 from-80% pb-8 dark:from-stone-800'>
 				<h1 className='font-grenze sticky z-10 mx-auto my-4 text-center text-6xl font-bold tracking-wide text-purple-900 md:mt-8 dark:text-purple-400'>
 					Bestiary
