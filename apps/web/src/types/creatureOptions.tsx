@@ -1,12 +1,15 @@
 import {
 	GiCarnivorousPlant,
 	GiCowled,
+	GiDragonHead,
 	GiGolemHead,
 	GiHaunting,
 	GiInfestedMass,
+	GiJawlessCyclop,
 	GiMummyHead,
 	GiRaccoonHead,
 	GiRaiseZombie,
+	GiSeaDragon,
 	GiSparkSpirit,
 	GiSpiderFace,
 	GiSpikedDragonHead,
@@ -49,7 +52,7 @@ export const creatureTypeOptions = [
 	{
 		label: 'Monster',
 		value: 'monster',
-		icon: <GiTroglodyte />,
+		icon: <GiJawlessCyclop />,
 	},
 	{
 		label: 'Oddity',

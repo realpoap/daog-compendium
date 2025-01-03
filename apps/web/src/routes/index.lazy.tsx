@@ -72,7 +72,7 @@ function Index() {
 
 	if (!accessToken) {
 		return (
-			<div className='width-full font-noto flex max-h-fit flex-col items-center justify-center gap-8 md:flex-row'>
+			<div className='width-full font-cabin flex h-fit flex-col items-center justify-center gap-8 md:flex-row'>
 				{/* Register ------------------------------------ */}
 				<div className='flex w-full flex-col items-center justify-center'>
 					<div
@@ -84,7 +84,7 @@ function Index() {
 							className='peer min-h-2'
 							name='login-register'
 						/>
-						<div className='collapse-title font-grenze sticky mx-auto my-4 text-center text-6xl font-bold tracking-wide text-purple-900 md:mt-8 dark:text-purple-400'>
+						<div className='collapse-title font-grenze align-center text-primary sticky mx-auto my-4 justify-center p-0 text-center text-6xl font-bold tracking-wide'>
 							<h3>Sign In</h3>
 						</div>
 						<div className='collapse-content peer-checked:collapse-open'>
@@ -111,7 +111,7 @@ function Index() {
 							className='peer min-h-2'
 							name='login-register'
 						/>
-						<div className='collapse-title font-grenze sticky mx-auto my-4 text-center text-6xl font-bold tracking-wide text-purple-900 md:mt-8 dark:text-purple-400'>
+						<div className='collapse-title font-grenze align-center text-primary sticky mx-auto my-4 justify-center p-0 text-center text-6xl font-bold tracking-wide'>
 							<h3>Login</h3>
 						</div>
 						<div className='collapse-content peer-checked:collapse-open'>

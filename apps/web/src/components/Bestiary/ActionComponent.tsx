@@ -26,17 +26,7 @@ const ActionComponent = ({
 				Actions
 			</h3>
 			<span className='badge badge-sm uppercase'>{actionList?.main} main</span>
-			<SmallCircleButton
-				onClick={e => {
-					e.stopPropagation();
 
-					(
-						document.getElementById('action-form') as HTMLDialogElement
-					).showModal();
-				}}
-			>
-				<FiPlus className='icon-stone-900' />
-			</SmallCircleButton>
 			{actions
 				?.filter(a => a.action !== 'epic')
 				.map(a => (
