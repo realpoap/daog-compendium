@@ -14,6 +14,7 @@ import {
 	GiCrownedSkull,
 	GiFairyWand,
 	GiGlassHeart,
+	GiRoundStar,
 	GiSemiClosedEye,
 	GiSwordWound,
 } from 'rocketicons/gi';
@@ -100,6 +101,19 @@ const MonsterDetails = () => {
 						{monster?.size} {monster?.alignment} {monster?.type}
 					</p>
 				</div>
+				{monster?.level && (
+					<div
+						className={cn(
+							'relative flex flex-col items-center justify-center text-center',
+							{ 'animate-shake': monster?.level > 30 },
+						)}
+					>
+						<GiRoundStar className='icon-4xl icon-primary relative inline-block' />
+						<span className='font-grenze absolute top-2 z-50 inline-block text-base font-bold dark:text-stone-800'>
+							{monster?.level}
+						</span>
+					</div>
+				)}
 				<div
 					className={cn(
 						'font-noto max-w-72 text-center text-sm italic text-stone-700 md:line-clamp-none md:max-w-xl dark:text-stone-400',
@@ -173,7 +187,7 @@ const MonsterDetails = () => {
 					</p>
 				</div>
 
-				<ul className='font-cabin flex w-full list-none flex-row flex-wrap items-center justify-center gap-2 pt-4 align-middle text-base font-semibold'>
+				<ul className='font-cabin flex w-1/2 list-none flex-row flex-wrap items-center justify-center gap-2 pt-4 align-middle text-base font-semibold md:w-full'>
 					<span className='after:pl-2 after:text-stone-500 after:content-["|"]'>
 						<GiSwordWound className='icon-stone-900 dark:icon-stone-100 icon-base mr-2' />
 						{monster?.attack || '~'}

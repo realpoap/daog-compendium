@@ -65,12 +65,12 @@ const ActionCard = ({
 					id={`${action.searchName}-collapse`}
 					tabIndex={0}
 					className={cn(
-						'font-cabin group pointer-events-auto collapse items-center justify-center overflow-visible rounded-lg p-0 text-center text-sm focus:bg-stone-700 focus:shadow-lg md:w-1/2',
+						'font-cabin group pointer-events-auto collapse items-center justify-center overflow-visible rounded-lg p-0 text-center text-sm opacity-100 transition-colors duration-1000 ease-out hover:bg-stone-700 focus:bg-stone-700 focus:shadow-lg md:w-1/2',
 					)}
 				>
 					<div
 						className={cn(
-							'collapse-title text-md pointer-events-none min-h-fit rounded-lg bg-stone-700 bg-opacity-0 py-0 pe-0 ps-0 font-medium transition-opacity hover:bg-opacity-100 group-hover:bg-opacity-100 dark:text-stone-200 group-focus:dark:text-stone-200 group-focus:dark:opacity-100',
+							'collapse-title text-md pointer-events-none min-h-fit rounded-lg py-0 pe-0 ps-0 font-medium transition-opacity dark:text-stone-200 group-focus:dark:text-stone-200',
 						)}
 					>
 						<h4 className='w-full px-8 pt-1 text-base font-bold uppercase tracking-wide'>

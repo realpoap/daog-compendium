@@ -1,9 +1,6 @@
 name: Verify HealthCheck
 
 on:
-  push:
-    branches:
-      - dev
   schedule:
   - cron: '30 2 * * *'
 
