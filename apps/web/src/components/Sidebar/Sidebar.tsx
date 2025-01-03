@@ -27,7 +27,7 @@ const Sidebar = () => {
 
 	return (
 		<header className='sticky top-0 z-50 h-1/4'>
-			<section className='font-grenze mx-auto flex w-full items-center justify-between bg-stone-100 p-2 shadow-md shadow-stone-900 dark:bg-stone-800'>
+			<section className='font-grenze mx-auto flex w-full items-center justify-between gap-4 bg-stone-100 p-2 shadow-md shadow-stone-900 dark:bg-stone-800'>
 				<h1 className='text-2xl font-bold tracking-wider dark:text-stone-100'>
 					<Link to='/'>DAOG</Link>
 				</h1>
@@ -38,7 +38,7 @@ const Sidebar = () => {
 				)}
 				<nav
 					aria-label='main'
-					className={`${open ? 'block' : 'hidden'} space-x-10 text-xl tracking-wide md:block`}
+					className={`${open ? 'block' : 'hidden'} max-w-1/2 mx-auto space-x-10 text-xl tracking-wide md:block`}
 				>
 					<Nav />
 				</nav>
@@ -60,7 +60,7 @@ const Sidebar = () => {
 				</button>
 				<nav
 					aria-label='mobile'
-					className='font-grenze font-semi-bold z-50 flex h-screen flex-col items-center justify-center gap-6 py-8'
+					className='font-grenze font-semi-bold z-50 flex h-screen flex-1 flex-col items-center justify-center gap-6 py-8'
 				>
 					<Nav />
 					{user && (
