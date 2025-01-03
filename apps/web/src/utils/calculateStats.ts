@@ -26,8 +26,8 @@ const calcLevel = (creature: Creature | NewCreature) => {
 
 	const level = Math.round(
 		(att * 4 +
-			def * 3 +
-			vit * 0.5 +
+			def * 4 +
+			vit * 0.75 +
 			sen * 3 +
 			per * 2 +
 			will * 2 +
