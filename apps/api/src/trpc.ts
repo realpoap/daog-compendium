@@ -1,3 +1,4 @@
+import type { AppRouter } from '@api/router/_app';
 import {
 	initTRPC,
 	TRPCError,
@@ -6,19 +7,17 @@ import {
 } from '@trpc/server';
 import * as trpcExpress from '@trpc/server/adapters/express';
 import superjson from 'superjson';
-
-import type { AppRouter } from '@api/router/_app';
 import { deserializeUser } from './middleware/deserializeUser';
 
 // export type Context = {
-//   req: Request;
-//   res: Response;
-//   user?: {
-//     id: string;
-//     name: string;
-//     isEditor: boolean;
-//     isOwner: boolean;
-//   };
+// 	req: Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>;
+// 	res: Response<any, Record<string, any>>;
+// 	user?: {
+// 		id: string;
+// 		name: string;
+// 		isEditor: boolean;
+// 		isOwner: boolean;
+// 	};
 // };
 
 export const createContext = ({
@@ -28,11 +27,11 @@ export const createContext = ({
 }: trpcExpress.CreateExpressContextOptions) =>
 	deserializeUser({ req, res, info });
 
-const trpc = initTRPC.context<Context>().create({
+const trpc = initTRPC.context<trpcContext>().create({
 	transformer: superjson,
 });
 
-export type Context = Awaited<ReturnType<typeof createContext>>;
+export type trpcContext = Awaited<ReturnType<typeof createContext>>;
 
 // AUTHENTIFICATION MIDDLEWARE //
 const isAuthorized = trpc.middleware(({ ctx, next }) => {
