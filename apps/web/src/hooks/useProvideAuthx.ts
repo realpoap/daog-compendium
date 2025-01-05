@@ -5,6 +5,7 @@ import { CreateUserInput, LoginUserInput } from '@api/lib/ZodUser';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
+import useNetworkStatus from './useNetworkStatus';
 
 type User = z.infer<typeof UserSchema>;
 type UserWithoutPass = Omit<User, 'password'>;
@@ -15,8 +16,10 @@ export const useProvideAuth = () => {
 	const [isAuthLoading, setAuthLoading] = useState(false);
 	const [logged, setLogged] = useState(false);
 	const [authErrors, setAuthErrors] = useState('');
+	const { isOnline } = useNetworkStatus();
+
 	const me = trpc.auth.getMe.useQuery(undefined, {
-		enabled: user === null,
+		enabled: user === null && isOnline === true,
 	});
 	const utils = trpc.useUtils();
 
