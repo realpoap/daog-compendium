@@ -34,7 +34,10 @@ const ActionForm = ({ creatureId, name, actions, setActions }: Props) => {
 
 	const searchAction = trpc.actions.getBySearchName.useQuery(
 		methods.getValues('searchName'),
-		{ enabled: methods.getValues('searchName') && methods.formState.isValid },
+		{
+			enabled:
+				methods.getValues('searchName') !== null && methods.formState.isValid,
+		},
 	);
 	const createAction = trpc.actions.create.useMutation({
 		onSuccess: () => {},

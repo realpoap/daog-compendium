@@ -27,11 +27,11 @@ export const createContext = ({
 }: trpcExpress.CreateExpressContextOptions) =>
 	deserializeUser({ req, res, info });
 
-const trpc = initTRPC.context<trpcContext>().create({
+const trpc = initTRPC.context<Context>().create({
 	transformer: superjson,
 });
 
-export type trpcContext = Awaited<ReturnType<typeof createContext>>;
+export type Context = Awaited<ReturnType<typeof createContext>>;
 
 // AUTHENTIFICATION MIDDLEWARE //
 const isAuthorized = trpc.middleware(({ ctx, next }) => {

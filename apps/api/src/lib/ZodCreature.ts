@@ -1,8 +1,8 @@
-import { HabitatType, SpellType } from '@prisma/client';
 import { z } from 'zod';
 import { NewActionSchema } from './ZodAction';
 import { CreatureComponentSchema } from './ZodComponent';
 import { CreatureItemSchema } from './ZodItem';
+import { SpellTypeSchema } from './ZodSpell';
 
 export const StatProfilSchema = z.object({
 	CEL: z.number().int(),
@@ -61,6 +61,31 @@ export const AttributeArraySchema = z.object({
 
 export type AttributeArray = z.infer<typeof AttributeArraySchema>;
 
+export const HabitatTypeSchema = z.enum([
+	'any',
+	'abyss',
+	'coast',
+	'canyon',
+	'cave',
+	'desert',
+	'dungeon',
+	'farm',
+	'forest',
+	'jungle',
+	'lagoon',
+	'mountain',
+	'sea',
+	'river',
+	'ruin',
+	'shrubland',
+	'swamp',
+	'toundra',
+	'town',
+	'volcano',
+]);
+
+export type HabitatType = `${z.infer<typeof HabitatTypeSchema>}`;
+
 export const ZodCreature = z.object({
 	size: z
 		.enum(['tiny', 'small', 'average', 'large', 'huge', 'gigantic'], {
@@ -74,9 +99,7 @@ export const ZodCreature = z.object({
 	rank: z.string().nullable(),
 	isBoss: z.boolean().nullable(),
 	isCaster: z.boolean().nullable(),
-	magicDomain: z
-		.array(z.nativeEnum(SpellType, { message: 'A spell shall have a type' }))
-		.nullable(),
+	magicDomain: z.array(SpellTypeSchema),
 	type: z
 		.enum(
 			[
@@ -99,9 +122,7 @@ export const ZodCreature = z.object({
 		)
 		.nullable(),
 	subtype: z.string().nullable(),
-	habitat: z
-		.array(z.nativeEnum(HabitatType, { message: 'Habitat is not valid' }))
-		.nullable(),
+	habitat: z.array(HabitatTypeSchema),
 	alignment: z
 		.enum(['saint', 'good', 'neutral', 'bad', 'evil'], {
 			errorMap: () => ({ message: 'Choose an alignment' }),
@@ -151,9 +172,7 @@ export const ZodNewCreature = z.object({
 	rank: z.string().nullable(),
 	isBoss: z.boolean().nullable(),
 	isCaster: z.boolean().nullable(),
-	magicDomain: z
-		.array(z.nativeEnum(SpellType, { message: 'A spell shall have a type' }))
-		.nullable(),
+	magicDomain: z.array(SpellTypeSchema),
 	type: z
 		.enum(
 			[
@@ -176,9 +195,7 @@ export const ZodNewCreature = z.object({
 		)
 		.nullable(),
 	subtype: z.string().nullable(),
-	habitat: z
-		.array(z.nativeEnum(HabitatType, { message: 'Habitat is not valid' }))
-		.nullable(),
+	habitat: z.array(HabitatTypeSchema),
 	alignment: z
 		.enum(['saint', 'good', 'neutral', 'bad', 'evil'], {
 			errorMap: () => ({ message: 'Choose an alignment' }),
