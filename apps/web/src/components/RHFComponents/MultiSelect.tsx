@@ -33,13 +33,13 @@ const MultiSelect = ({ name, list, values, setValues, placeholder }: Props) => {
 	return (
 		<>
 			<div
-				className='dropdown form-control dropdown-hover flex h-fit w-full flex-col items-center justify-start'
+				className='dropdown form-control flex h-fit w-full flex-col items-center justify-start'
 				{...register(name)}
 			>
 				<div
 					tabIndex={0}
 					className={cn(
-						'font-cabin flex h-11 w-full cursor-pointer items-center rounded-md border-none p-2 pl-4 text-sm italic text-stone-500 hover:bg-stone-700 dark:bg-stone-700',
+						'font-cabin flex h-11 w-full cursor-pointer items-center rounded-lg border-none p-2 pl-4 text-sm italic text-stone-500 hover:bg-stone-700 dark:bg-stone-700',
 						{
 							'select-error': errors[name],
 							'ring-error': errors[name],
@@ -47,25 +47,26 @@ const MultiSelect = ({ name, list, values, setValues, placeholder }: Props) => {
 						},
 					)}
 				>
-					<div className='justify-left group flex h-fit w-full flex-row items-center hover:justify-center'>
-						<span className='self-left flex w-full text-left group-hover:hidden'>
-							{placeholder}
-						</span>
+					<div className='group flex h-fit w-full flex-row items-center justify-between'>
+						<span className='self-left flex text-left'>{placeholder}</span>
 						<span
 							onClick={handleClearAll}
-							className='hidden w-full cursor-pointer self-center text-red-500 group-hover:flex'
+							className='hover:animate-shake hidden cursor-pointer rounded-lg bg-stone-800 p-2 text-red-500 group-hover:flex'
 						>
 							Clear All
 						</span>
 					</div>
 				</div>
-				<ul className='menu dropdown-content bg-base-100 font-cabin autofill:font-cabin text-primary caret-secondary focus:border-secondary focus:ring-secondary dark:text-primary dark:caret-primary dark:focus:border-primary dark:focus:ring-primary z-10 mt-10 h-48 w-full overflow-x-scroll rounded-md text-lg shadow-sm focus:outline-none focus:ring-1 dark:bg-stone-700 dark:placeholder:text-stone-400 autofill:dark:bg-stone-700 dark:active:bg-stone-700'>
+				<ul
+					tabIndex={0}
+					className='menu dropdown-content font-cabin autofill:font-cabin z-10 mt-10 h-48 w-full overflow-x-scroll rounded-md text-lg text-stone-500 shadow-sm dark:bg-stone-700 autofill:dark:bg-stone-700 dark:active:bg-stone-700'
+				>
 					{list.map(o => (
 						<li
 							key={o.value}
 							onClick={() => handleSelect(o.value)}
 							className={`w-fit cursor-pointer ${
-								values.includes(o.value) ? 'bg-gray-500' : ''
+								values.includes(o.value) ? 'text-primary' : ''
 							}`}
 						>
 							<span>{o.label}</span>

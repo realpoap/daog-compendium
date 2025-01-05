@@ -1,3 +1,4 @@
+import TagBadge from '@/components/TagBadge';
 import { cn } from '@/utils/classNames';
 import { Action } from '@api/lib/ZodAction';
 import { SetStateAction, useState } from 'react';
@@ -10,9 +11,15 @@ type Props = {
 
 export const ActionsTags = ({ setTags, tags, actionsList }: Props) => {
 	const [searchTerm, setSearchTerm] = useState('');
+	const [resultList, setResults] = useState<Action[]>(actionsList);
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setSearchTerm(event.target.value);
+		setResults(
+			actionsList.filter(r =>
+				r.name.toLowerCase().includes(searchTerm.toLowerCase()),
+			),
+		);
 	};
 
 	const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -37,44 +44,54 @@ export const ActionsTags = ({ setTags, tags, actionsList }: Props) => {
 		setTags(tags.filter((_el, i) => i !== Number(index)));
 	};
 	return (
-		<div
-			className={cn(
-				'font-cabin flex w-full flex-row flex-wrap items-center gap-2 rounded-lg p-2 text-lg text-purple-900 caret-purple-900 shadow-sm focus:border-purple-900 focus:outline-none focus:ring-1 focus:ring-purple-900 dark:bg-stone-700 dark:text-purple-400 dark:caret-purple-400 dark:placeholder:text-stone-400 dark:focus:border-purple-400 dark:focus:ring-purple-400',
-			)}
-		>
-			{tags.map((tag, index) => (
-				<span
-					key={index}
-					className='badge font-cabin hover:animate-shake inline-flex cursor-pointer border-0 bg-purple-500 text-center align-middle text-base font-semibold text-stone-800 shadow-sm transition-all duration-75 hover:bg-stone-800 hover:text-red-500 hover:shadow-black'
-					onClick={() => removeTag(index)}
-				>
-					{tag}
-				</span>
-			))}
-			<div className='items-left flex flex-1 flex-row justify-between gap-2 text-left'>
-				<input
-					className={cn(
-						'flex-1 bg-transparent px-2 placeholder:text-sm placeholder:italic placeholder:text-stone-500 focus:outline-none focus:ring-0',
-					)}
-					placeholder='Write actions separated by a comma'
-					type='text'
-					id='action-input'
-					onChange={handleChange}
-					onKeyDown={handleKeyDown}
-					onKeyUp={handleKeyUp}
-				/>
-				{searchTerm && (
-					<div className='align-center absolute z-10 ml-2 mt-10 flex max-h-svh flex-col justify-start rounded dark:bg-stone-700'>
-						<ResultList
-							tags={tags}
-							results={actionsList}
-							searchTerm={searchTerm}
-							handleSelect={handleSelect}
-						/>
-					</div>
+		<>
+			<div
+				className={cn(
+					'font-cabin text-secondary caret-secondary focus:border-secondary focus:ring-secondary dark:text-primary dark:caret-primary dark:focus:border-primary dark:focus:ring-primary mb-2 flex w-full flex-row flex-wrap items-center gap-2 rounded-lg p-2 text-lg shadow-sm focus:outline-none focus:ring-1 dark:bg-stone-700 dark:placeholder:text-stone-400',
 				)}
+			>
+				<div className='items-left flex flex-1 flex-row justify-between gap-2 text-left'>
+					<input
+						className={cn(
+							'flex-1 bg-transparent px-2 placeholder:text-sm placeholder:italic placeholder:text-stone-500 focus:outline-none focus:ring-0',
+						)}
+						placeholder='Search for existing actions or add new ones'
+						type='text'
+						id='action-input'
+						onChange={handleChange}
+						onKeyDown={handleKeyDown}
+						onKeyUp={handleKeyUp}
+					/>
+				</div>
 			</div>
-		</div>
+			{searchTerm && (
+				<div
+					className={cn(
+						`items-left '*:-mt-2' z-10 flex max-h-[20dvh] w-fit flex-col justify-start`,
+						{
+							'*:dark:bg-stone-700': resultList.length !== 0,
+							'*:-mt-2': resultList.length === 0,
+						},
+					)}
+				>
+					<ResultList
+						tags={tags}
+						results={resultList}
+						searchTerm={searchTerm}
+						handleSelect={handleSelect}
+					/>
+				</div>
+			)}
+			<div className='flex flex-row gap-2'>
+				{tags.map((tag, index) => (
+					<TagBadge
+						key={index}
+						text={tag}
+						onClick={() => removeTag(index)}
+					/>
+				))}
+			</div>
+		</>
 	);
 };
 
@@ -108,14 +125,25 @@ function ResultList({
 	};
 	if (results.length === 0) {
 		return (
-			<div className='px-2 py-1 align-baseline text-sm italic text-red-500'>
-				No action found
+			<div className='font-cabin flex w-full flex-col items-start justify-start px-2 py-1 align-baseline text-sm italic text-red-500'>
+				No action found{' '}
+				<span className='text-stone-500'>
+					( add a comma{' '}
+					<kbd className='kbd-xs rounded bg-stone-300 align-baseline text-stone-800 dark:bg-stone-500 dark:text-stone-200'>
+						,
+					</kbd>{' '}
+					or press{' '}
+					<kbd className='kbd-xs rounded bg-stone-300 align-baseline text-stone-800 dark:bg-stone-500 dark:text-stone-200'>
+						Enter
+					</kbd>{' '}
+					to create your entry)
+				</span>
 			</div>
 		);
 	}
 	return (
 		<>
-			<div className='shadow-md shadow-stone-800'>
+			<div className='ml-2 rounded-sm shadow-md shadow-stone-800'>
 				{results
 					.filter(r => !tags.includes(r.name))
 					.filter(r => r.name.toLowerCase().includes(searchTerm.toLowerCase()))

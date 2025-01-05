@@ -20,23 +20,27 @@ const calcLevel = (creature: Creature | NewCreature) => {
 	const sen = creature.spirit ? creature.spirit - 15 : 0;
 	const will = creature.stats.WIL ? creature.stats.WIL - 15 : 0;
 	const disc = creature.discretion ? creature.discretion - 15 : 0;
-	//const glory = creature?.glory != null ? 1 + Number(creature.glory) * 0.1 : 0;
+	const caster = creature?.isCaster === true ? 2 : 1;
 	const main = creature?.actionList?.main ? creature.actionList?.main * 5 : 1;
 	const epic = creature?.actionList?.main ? creature.actionList?.main * 10 : 1;
 	const attributes = creature?.attributes ? creature.attributes.length * 2 : 0;
+	const magic = creature?.magic ? creature.magic : 0;
+	const glory = creature.glory === null ? 1 : 1 + Number(creature.glory) * 0.1;
 
 	const level = Math.round(
 		(att * 5 +
 			def * 4 +
 			vit * 1.5 +
-			sen * 4 +
+			sen * 3 * caster +
+			magic +
 			per * 2 +
+			glory +
 			will * 1 +
 			disc * 2 +
 			main * 3 +
 			attributes * 2 +
 			epic * 2) /
-			11,
+			12,
 	);
 
 	console.log('level:', level);

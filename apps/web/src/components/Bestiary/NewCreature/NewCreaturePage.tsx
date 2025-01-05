@@ -70,7 +70,7 @@ const NewCreaturePage = () => {
 	};
 
 	return (
-		<div className='mt-sm flex h-full w-full flex-col items-center justify-center p-2 px-2'>
+		<div className='mt-sm flex h-full w-full flex-col items-center justify-center'>
 			<TitleBack title='New creature' />
 			<NewCreatureSteps step={step} />
 			<NewCreatureDetails

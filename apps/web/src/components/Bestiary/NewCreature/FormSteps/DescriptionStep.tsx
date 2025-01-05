@@ -67,21 +67,33 @@ const DescriptionStep = ({
 					type='text'
 				/>
 			</Field>
-			<Field
-				name='isBoss'
-				label=''
-				width='full'
-			>
-				<Checkbox
+
+			<div className='flex w-full flex-row gap-2 px-4 md:w-1/2 md:gap-8'>
+				<Field
 					name='isBoss'
-					label='legendary creature'
-				/>
-			</Field>
-			<div className='flex w-full justify-center gap-4 md:flex-row'>
+					label=''
+					width='full'
+				>
+					<Checkbox
+						name='isBoss'
+						label='legendary creature'
+					/>
+				</Field>
+				<Field
+					name='isCaster'
+					label=''
+				>
+					<Checkbox
+						id='magicdomain'
+						name='isCaster'
+						label='magic user'
+					/>
+				</Field>
+			</div>
+			<div className='flex w-full justify-center gap-2 px-4 md:flex-row'>
 				<Field
 					name='type'
 					label='Type'
-					width='small'
 				>
 					<Select
 						name='type'
@@ -92,7 +104,6 @@ const DescriptionStep = ({
 				<Field
 					name='size'
 					label='Size'
-					width='small'
 				>
 					<Select
 						name='size'
@@ -103,7 +114,6 @@ const DescriptionStep = ({
 				<Field
 					name='alignment'
 					label='Alignment'
-					width='small'
 				>
 					<Select
 						name='alignment'

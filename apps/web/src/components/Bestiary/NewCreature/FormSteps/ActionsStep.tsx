@@ -8,7 +8,7 @@ import { NewCreature } from '@api/lib/ZodCreature';
 import { useEffect, useState } from 'react';
 import { UseFormSetValue } from 'react-hook-form';
 import { RiArrowDropLeftLine, RiArrowDropRightLine } from 'rocketicons/ri';
-import { Checkbox, Field, InputNumber } from '../../../RHFComponents';
+import { Field, InputNumber } from '../../../RHFComponents';
 import { ActionsTags } from '../../utils/ActionsTag';
 
 type ActionStepProps = {
@@ -58,6 +58,9 @@ const ActionsStep = ({
 
 	return (
 		<div className='flex h-full w-full flex-col items-center justify-center'>
+			<h3 className='font-grenze text-left text-4xl text-purple-400'>
+				Actions
+			</h3>
 			<div className='flex flex-row flex-wrap items-center justify-center gap-4 px-[4vw] md:flex-row'>
 				<Field
 					name='actionList.main'
@@ -91,34 +94,28 @@ const ActionsStep = ({
 					<div className='skeleton rounded-btn h-11 w-full dark:bg-stone-700'></div>
 				)}
 			</Field>
-			<section className='flex w-full flex-col items-center justify-end md:flex-row md:pl-6 md:pr-2'>
-				<div className='w-1/2 md:w-2/5 md:pt-4'>
-					<Field
-						name='isCaster'
-						label=''
-					>
-						<Checkbox
-							id='magicdomain'
-							name='isCaster'
-							label='can use magic'
-						/>
-					</Field>
-				</div>
-				<div className='flex w-full flex-col items-center justify-center'>
-					<Field
-						name='magicDomain'
-						label='Magic domain'
-					>
-						<MultiSelect
+			{creature.isCaster && (
+				<section className='flex w-full flex-col items-center justify-end md:flex-row md:pl-6 md:pr-2'>
+					<h3 className='font-grenze text-left text-4xl text-purple-400'>
+						Spells
+					</h3>
+
+					<div className='flex w-full flex-col items-center justify-center'>
+						<Field
 							name='magicDomain'
-							list={spellOptions}
-							values={domains}
-							setValues={setDomains}
-							placeholder='Select one or several magic domains'
-						/>
-					</Field>
-				</div>
-			</section>
+							label='Magic domain'
+						>
+							<MultiSelect
+								name='magicDomain'
+								list={spellOptions}
+								values={domains}
+								setValues={setDomains}
+								placeholder='Select one or several magic domains'
+							/>
+						</Field>
+					</div>
+				</section>
+			)}
 			<div className='flex w-full flex-row items-center justify-center gap-4'>
 				<ActionButton
 					color='primary'
