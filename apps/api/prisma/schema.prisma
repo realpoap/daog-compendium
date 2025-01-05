@@ -78,10 +78,10 @@ model Creature {
   description     String?
   actions         CreatureAction[]
 
-  @@unique([attributes.name, fullname])
-  @@unique([actions.name, fullname])
-  @@unique([scavenge.name, fullname])
-  @@unique([loot.name, fullname])
+  @@unique([attributes.name])
+  @@unique([actions.name])
+  @@unique([scavenge.name])
+  @@unique([loot.name])
 }
 
 type CreatureAttribute {
