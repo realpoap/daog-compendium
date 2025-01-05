@@ -12,6 +12,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
 import { SubmitButton } from '../Buttons';
+import Collapsible from '../Collapsible';
 import {
 	Field,
 	Input,
@@ -92,31 +93,19 @@ const SpellForm = () => {
 							type='text'
 						/>
 					</Field>
-					<div
-						className='collapse'
-						tabIndex={0}
-					>
-						<input
-							type='checkbox'
-							className='peer min-h-2'
-						/>
-						<TitleCollapse title='add glaise name' />
-						<div
-							className={cn(
-								'collapse-content peer-checked:collapse-open flex flex-col items-center pb-0 pr-0',
-							)}
+					<Collapsible title='add glaise name'>
+						{' '}
+						<Field
+							name='titleGlaise'
+							label='Name (glaise)'
 						>
-							<Field
+							<Input
 								name='titleGlaise'
-								label='Name (glaise)'
-							>
-								<Input
-									name='titleGlaise'
-									type='text'
-								/>
-							</Field>
-						</div>
-					</div>
+								type='text'
+							/>
+						</Field>
+					</Collapsible>
+
 					{/* NUMBERS ------------------------------------------------ */}
 					<div className='flex w-full flex-row flex-wrap justify-center gap-x-4'>
 						<Field

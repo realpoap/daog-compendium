@@ -10,12 +10,14 @@ const config: Pick<
 > = {
 	content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
 	presets: [sharedConfig],
-	darkMode: 'media',
-	plugins: [icons, daisyui],
+	darkMode: ['media', 'class'],
+	plugins: [icons, daisyui, require('tailwindcss-animate')],
 	theme: {
 		extend: {
 			screen: {
-				'hover-hover': { raw: '(hover: hover) and (pointer: fine)' },
+				'hover-hover': {
+					raw: '(hover: hover) and (pointer: fine)',
+				},
 			},
 			fontFamily: {
 				grenze: ['Grenze', 'serif'],
@@ -36,7 +38,6 @@ const config: Pick<
 					'900': '#531c87',
 					'950': '#370764',
 				},
-
 				goldenrod: {
 					'50': '#fefaec',
 					'100': '#fbf1ca',
@@ -83,7 +84,6 @@ const config: Pick<
 					'30%, 50%, 70%': {
 						transform: 'translate3d(0px, 0, 0)',
 					},
-
 					'40%, 60%': {
 						transform: 'translate3d(1px, 0, 0)',
 					},
@@ -107,6 +107,11 @@ const config: Pick<
 				wiggle: 'wiggle 1s ease-in-out infinite',
 				shake: 'shake 0.5s infinite',
 				text: 'text 5s ease-in-out infinite',
+			},
+			borderRadius: {
+				lg: 'var(--radius)',
+				md: 'calc(var(--radius) - 2px)',
+				sm: 'calc(var(--radius) - 4px)',
 			},
 		},
 	},

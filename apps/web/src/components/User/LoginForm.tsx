@@ -36,16 +36,20 @@ const LoginForm = () => {
 					onSubmit={methods.handleSubmit(onSubmit)}
 					className='flex w-full flex-col md:max-w-[50vw]'
 				>
-					<Field name='email'>
+					<Field
+						name='email'
+						id='email-login'
+					>
 						<Input
-							id='email-login'
 							name='email'
 							type='email'
 						/>
 					</Field>
-					<Field name='password'>
+					<Field
+						name='password'
+						id='password-login'
+					>
 						<Input
-							id='password-login'
 							name='password'
 							type='password'
 						/>

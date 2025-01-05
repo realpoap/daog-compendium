@@ -13,12 +13,12 @@ import { FormProvider, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 type Props = {
-	id: string;
+	creatureId: string;
 	attributes: CreatureAttribute[];
 	setAttributes: React.Dispatch<SetStateAction<CreatureAttribute[]>>;
 };
 
-const AttributeForm = ({ id, attributes, setAttributes }: Props) => {
+const AttributeForm = ({ creatureId, attributes, setAttributes }: Props) => {
 	const methods = useForm<Attribute>({
 		resolver: async (data, context, options) => {
 			// you can debug your validation schema here
@@ -32,38 +32,67 @@ const AttributeForm = ({ id, attributes, setAttributes }: Props) => {
 		shouldFocusError: true,
 	});
 
-	const createAttribute = trpc.attributes.create.useMutation({
-		onSuccess: () => {
-			toast.success('Attribute added !');
-			methods.reset();
+	const searchAttribute = trpc.attributes.getByName.useQuery(
+		methods?.getValues('name'),
+		{
+			enabled: methods.getValues('name') !== null && methods.formState.isValid,
 		},
+	);
+	const createAttribute = trpc.attributes.create.useMutation({
+		onSuccess: () => {},
 		onError: error => {
 			toast.error('Something bad happened...');
 			throw new Error(error.message);
 		},
 	});
-
 	const addAttributeOnCreature = trpc.creatures.addAttribute.useMutation({
 		onSuccess: () => {
-			toast.success('Attribute linked !');
+			toast.success('Attribute added !');
+			(document.getElementById('attribute-form') as HTMLDialogElement).close();
+			methods.reset();
 		},
 		onError: error => {
-			toast.error('Something bad happened...');
+			if (error.shape) toast.error('Something bad happened...');
 			throw new Error(error.message);
 		},
 	});
 
 	useEffect(() => {
-		methods.setValue('id', id);
-	}, []);
+		methods.setValue('id', creatureId);
+	}, [methods.getValues('name'), methods.formState.isValidating]);
 
 	const onActionSubmit = (data: Attribute) => {
 		const { id, ...attribute } = data;
-		setAttributes([...attributes, attribute]);
+		const exists = attributes.find(a => a.name === data.name);
+		// if exists on creature, cancel (should be present in DB)
+		if (exists) {
+			toast.error('Already exists on creature !');
+			methods.setError('name', {
+				type: 'custom',
+				message: `Already present on the creature`,
+			});
+			return;
+		}
+		// if exists on DB, add that document to creature
+		if (searchAttribute?.data) {
+			toast('👌 Exists elsewhere, fetching...');
+			const object = {
+				id: creatureId,
+				name: searchAttribute?.data.name,
+				flavor: searchAttribute?.data.flavor,
+				description: searchAttribute?.data.description,
+			};
+			addAttributeOnCreature.mutate(object as Attribute);
+			const { id, ...attribute } = object;
+			setAttributes([...attributes, attribute]);
+			return;
+		}
+		// if does not exists on creature or DB, create new doc and associate to creature
 		createAttribute.mutate(attribute as NewAttribute);
 		addAttributeOnCreature.mutate(data as Attribute);
-		(document.getElementById('attribute-form') as HTMLDialogElement).close();
+		setAttributes([...attributes, attribute]);
 	};
+
 	return (
 		<>
 			<dialog

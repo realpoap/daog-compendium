@@ -1,3 +1,4 @@
+import { HabitatTypeType, SpellTypeType } from '@api/lib/zod-prisma';
 import { NewAction } from '@api/lib/ZodAction';
 import { CreatureComponent } from '@api/lib/ZodComponent';
 import { Creature, CreatureAttribute, NewCreature } from '@api/lib/ZodCreature';
@@ -19,7 +20,7 @@ const calcLevel = (creature: Creature | NewCreature) => {
 	const sen = creature.spirit ? creature.spirit - 15 : 0;
 	const will = creature.stats.WIL ? creature.stats.WIL - 15 : 0;
 	const disc = creature.discretion ? creature.discretion - 15 : 0;
-	const glory = creature?.glory != null ? 1 + Number(creature.glory) * 0.1 : 0;
+	//const glory = creature?.glory != null ? 1 + Number(creature.glory) * 0.1 : 0;
 	const main = creature?.actionList?.main ? creature.actionList?.main * 5 : 1;
 	const epic = creature?.actionList?.main ? creature.actionList?.main * 10 : 1;
 	const attributes = creature?.attributes ? creature.attributes.length * 2 : 0;
@@ -44,7 +45,7 @@ const calcLevel = (creature: Creature | NewCreature) => {
 };
 
 const calcModifiersBonus = (creature: Creature | NewCreature) => {
-	let calCreature = creature;
+	const calCreature = creature;
 	// FULLNAME
 	let fullnameString = '';
 	if (creature.name) fullnameString = capitalizeFirstLetter(creature.name);
@@ -53,7 +54,7 @@ const calcModifiersBonus = (creature: Creature | NewCreature) => {
 	if (creature.rank && creature.rank !== 'default')
 		fullnameString = fullnameString.concat(', ', creature.rank);
 	if (creature.type)
-		fullnameString = fullnameString.concat(
+		calCreature.fullname = fullnameString.concat(
 			' (',
 			capitalizeFirstLetter(creature.type),
 			')',
@@ -184,27 +185,28 @@ export const defaultCreature: NewCreature = {
 	fullname: '',
 	name: '',
 	rank: null,
-	isBoss: false,
 	type: null,
+	isBoss: false,
+	isCaster: false,
 	subtype: null,
 	alignment: null,
 	level: 0,
 	initiative: null,
 	attack: 0,
-	attackBonus: null,
+	attackBonus: 0,
 	defense: 0,
-	defenseBonus: null,
+	defenseBonus: 0,
 	ranged: 0,
-	rangedBonus: null,
+	rangedBonus: 0,
 	health: 0,
-	armor: null,
+	armor: 0,
 	perception: 0,
-	perceptionBonus: null,
+	perceptionBonus: 0,
 	discretion: 0,
-	discretionBonus: null,
-	magic: null,
-	spirit: null,
-	glory: null,
+	discretionBonus: 0,
+	magic: 0,
+	spirit: 0,
+	glory: 0,
 	flavor: '',
 	description: '',
 	actionList: {
@@ -214,6 +216,8 @@ export const defaultCreature: NewCreature = {
 		free: null,
 		travel: null,
 	},
+	magicDomain: <SpellTypeType[]>[],
+	habitat: <HabitatTypeType[]>[],
 	loot: <CreatureItem[]>[],
 	scavenge: <CreatureComponent[]>[],
 	attributes: <CreatureAttribute[]>[],

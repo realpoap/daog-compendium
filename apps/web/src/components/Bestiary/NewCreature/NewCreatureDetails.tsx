@@ -7,7 +7,6 @@ import {
 	GiFairyWand,
 	GiGlassHeart,
 	GiHood,
-	GiPartyHat,
 	GiPotionBall,
 	GiRoundStar,
 	GiSemiClosedEye,
@@ -24,7 +23,7 @@ const NewCreatureDetails = ({
 }) => {
 	return (
 		<div className='indicator w-full p-4'>
-			<div className='skeleton my-8 flex min-w-full flex-col items-center justify-start gap-1 rounded-xl bg-stone-700 p-4 text-purple-400 shadow-xl'>
+			<div className='skeleton my-8 flex min-h-40 min-w-full flex-col items-center justify-start gap-1 rounded-xl bg-stone-700 p-4 text-purple-400 shadow-xl'>
 				<div className='flex w-full flex-row items-start justify-end'>
 					<div className='indicator -right-6 -top-4'>
 						{creature?.isBoss && (
@@ -34,12 +33,10 @@ const NewCreatureDetails = ({
 						)}
 					</div>
 				</div>
-				{creature.name !== '' ? (
+				{creature.name !== '' && (
 					<p className='font-grenze text-4xl font-bold'>
 						{creature.name} {creature.subtype}
 					</p>
-				) : (
-					<p className='skeleton h-12 w-[20vw] dark:bg-stone-700'></p>
 				)}
 
 				{creature.level !== 0 && (

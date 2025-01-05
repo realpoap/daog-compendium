@@ -1,20 +1,15 @@
 import {
 	GiCarnivorousPlant,
 	GiCowled,
-	GiDragonHead,
 	GiGolemHead,
 	GiHaunting,
 	GiInfestedMass,
 	GiJawlessCyclop,
-	GiMummyHead,
 	GiRaccoonHead,
-	GiRaiseZombie,
-	GiSeaDragon,
 	GiSparkSpirit,
 	GiSpiderFace,
 	GiSpikedDragonHead,
 	GiToadTeeth,
-	GiTroglodyte,
 	GiUnicorn,
 } from 'rocketicons/gi';
 
@@ -105,6 +100,89 @@ export const creatureSizeOptions = [
 	{
 		label: 'Gigantic',
 		value: 'gigantic',
+	},
+];
+
+export const creatureHabitatOptions = [
+	{
+		label: 'Any',
+		value: 'any',
+	},
+	{
+		label: 'Abyss',
+		value: 'abyss',
+	},
+	{
+		label: 'Canyon',
+		value: 'canyon',
+	},
+	{
+		label: 'Cave',
+		value: 'cave',
+	},
+	{
+		label: 'Coast',
+		value: 'coast',
+	},
+	{
+		label: 'Desert',
+		value: 'desert',
+	},
+	{
+		label: 'Dungeon',
+		value: 'dungeon',
+	},
+	{
+		label: 'Farm',
+		value: 'farm',
+	},
+	{
+		label: 'Forest',
+		value: 'forest',
+	},
+	{
+		label: 'Jungle',
+		value: 'jungle',
+	},
+	{
+		label: 'Lagoon',
+		value: 'lagoon',
+	},
+	{
+		label: 'Mountain',
+		value: 'mountain',
+	},
+	{
+		label: 'Sea',
+		value: 'sea',
+	},
+	{
+		label: 'River',
+		value: 'river',
+	},
+	{
+		label: 'Ruin',
+		value: 'ruin',
+	},
+	{
+		label: 'Shrubland',
+		value: 'shrubland',
+	},
+	{
+		label: 'Swamp',
+		value: 'swamp',
+	},
+	{
+		label: 'Toundra',
+		value: 'toundra',
+	},
+	{
+		label: 'Town',
+		value: 'town',
+	},
+	{
+		label: 'Volcano',
+		value: 'volcano',
 	},
 ];
 

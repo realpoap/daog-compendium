@@ -5,7 +5,6 @@ import { FormProvider, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 import { calculateStats, defaultCreature } from '@/utils/calculateStats';
-import { capitalizeFirstLetter } from '@/utils/capitalize';
 import { useNavigate } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 import TitleBack from '../../TitleBack';
@@ -48,7 +47,7 @@ const NewCreaturePage = () => {
 		methods.setValue('health', calcCreature.health);
 		methods.setValue('spirit', calcCreature.spirit);
 		methods.setValue('initiative', calcCreature.initiative);
-	}, [methods.formState.isValidating, methods.formState.touchedFields]);
+	}, [methods.formState.isValidating, methods.formState.isSubmitting]);
 
 	const createCreature = trpc.creatures.create.useMutation({
 		onSuccess: data => {
@@ -71,7 +70,7 @@ const NewCreaturePage = () => {
 	};
 
 	return (
-		<div className='mt-sm flex flex-col items-center justify-center p-2 px-2'>
+		<div className='mt-sm flex h-full w-full flex-col items-center justify-center p-2 px-2'>
 			<TitleBack title='New creature' />
 			<NewCreatureSteps step={step} />
 			<NewCreatureDetails

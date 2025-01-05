@@ -1,12 +1,14 @@
 import { ActionButton } from '@/components/Buttons';
 import Collapsible from '@/components/Collapsible';
+import MultiSelect from '@/components/RHFComponents/MultiSelect';
 import {
 	creatureAlignmentOptions,
+	creatureHabitatOptions,
 	creatureSizeOptions,
 	creatureTypeOptions,
 } from '@/types/creatureOptions';
 import { trpc } from '@/utils/trpc';
-import { Attribute } from '@api/lib/zod-prisma';
+import { Attribute, HabitatTypeType } from '@api/lib/zod-prisma';
 import { CreatureAttribute, NewCreature } from '@api/lib/ZodCreature';
 import { useEffect, useState } from 'react';
 import { UseFormSetValue } from 'react-hook-form';
@@ -31,6 +33,7 @@ const DescriptionStep = ({
 	) => Promise<void>;
 }) => {
 	const [attributes, setAttributes] = useState<string[]>([]);
+	const [habitats, setHabitats] = useState<string[]>([]);
 	const attributesList = trpc.attributes.getAll.useQuery();
 
 	useEffect(() => {
@@ -49,8 +52,12 @@ const DescriptionStep = ({
 		}
 	}, [attributes]);
 
+	useEffect(() => {
+		setValue('habitat', habitats as HabitatTypeType[]);
+	}, [habitats]);
+
 	return (
-		<div className='flex w-full flex-col items-center'>
+		<div className='flex h-full w-full flex-col items-center justify-start'>
 			<Field
 				name='name'
 				label='Name'
@@ -105,7 +112,19 @@ const DescriptionStep = ({
 					/>
 				</Field>
 			</div>
-			<Collapsible title='add sub-type'>
+			<Collapsible title='add details'>
+				<Field
+					name='habitat'
+					label='Habitat'
+				>
+					<MultiSelect
+						name='habitat'
+						list={creatureHabitatOptions}
+						values={habitats}
+						setValues={setHabitats}
+						placeholder='Select one or several habitat'
+					/>
+				</Field>
 				<Field
 					name='subtype'
 					label='Sub-Type'
@@ -114,6 +133,12 @@ const DescriptionStep = ({
 						name='subtype'
 						type='text'
 					/>
+				</Field>
+				<Field
+					name='flavor'
+					label='Flavor'
+				>
+					<Input name='flavor' />
 				</Field>
 			</Collapsible>
 			<Field
@@ -130,12 +155,7 @@ const DescriptionStep = ({
 					<div className='skeleton rounded-btn h-11 w-full dark:bg-stone-700'></div>
 				)}
 			</Field>
-			<Field
-				name='flavor'
-				label='Flavor'
-			>
-				<Input name='flavor' />
-			</Field>
+
 			<Field
 				name='description'
 				label='Description'
@@ -143,7 +163,7 @@ const DescriptionStep = ({
 				<Textarea name='description' />
 			</Field>
 			<ActionButton
-				color='purple-500'
+				color='primary'
 				textColor='stone-800'
 				onClick={() =>
 					handleNext(

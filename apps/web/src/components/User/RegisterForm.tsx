@@ -40,23 +40,29 @@ const RegisterForm = () => {
 					onSubmit={methods.handleSubmit(onSubmit, onError)}
 					className='flex w-full flex-col md:max-w-[50vw]'
 				>
-					<Field name='email'>
+					<Field
+						name='email'
+						id='email-register'
+					>
 						<Input
-							id='email-register'
 							name='email'
 							type='email'
 						/>
 					</Field>
-					<Field name='name'>
+					<Field
+						name='name'
+						id='name-register'
+					>
 						<Input
-							id='name-register'
 							name='name'
 							type='text'
 						/>
 					</Field>
-					<Field name='password'>
+					<Field
+						name='password'
+						id='password-register'
+					>
 						<Input
-							id='password-register'
 							name='password'
 							type='password'
 						/>
@@ -64,9 +70,9 @@ const RegisterForm = () => {
 					<Field
 						name='confirmPassword'
 						label='Confirm Password'
+						id='confirm-password-register'
 					>
 						<Input
-							id='confirm-password-register'
 							name='confirmPassword'
 							type='password'
 						/>

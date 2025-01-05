@@ -12,13 +12,13 @@ import { FormProvider, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 type Props = {
-	id: string;
+	creatureId: string;
 	name: string;
 	actions: NewAction[];
 	setActions: React.Dispatch<SetStateAction<NewAction[]>>;
 };
 
-const ActionForm = ({ id, name, actions, setActions }: Props) => {
+const ActionForm = ({ creatureId, name, actions, setActions }: Props) => {
 	const methods = useForm<Action>({
 		resolver: async (data, context, options) => {
 			// you can debug your validation schema here
@@ -32,9 +32,24 @@ const ActionForm = ({ id, name, actions, setActions }: Props) => {
 		shouldFocusError: true,
 	});
 
+	const searchAction = trpc.actions.getBySearchName.useQuery(
+		methods.getValues('searchName'),
+		{
+			enabled:
+				methods.getValues('searchName') !== null && methods.formState.isValid,
+		},
+	);
 	const createAction = trpc.actions.create.useMutation({
+		onSuccess: () => {},
+		onError: error => {
+			toast.error('Something bad happened...');
+			throw new Error(error.message);
+		},
+	});
+	const addActionOnCreature = trpc.creatures.addAction.useMutation({
 		onSuccess: () => {
 			toast.success('Action added !');
+			(document.getElementById('action-form') as HTMLDialogElement).close();
 			methods.reset();
 		},
 		onError: error => {
@@ -43,18 +58,8 @@ const ActionForm = ({ id, name, actions, setActions }: Props) => {
 		},
 	});
 
-	const addActionOnCreature = trpc.creatures.addAction.useMutation({
-		onSuccess: () => {
-			toast.success('Action linked !');
-		},
-		onError: error => {
-			toast.error('Something bad happened...');
-			throw new Error(error.message);
-		},
-	});
-
 	useEffect(() => {
-		methods.setValue('id', id);
+		methods.setValue('id', creatureId);
 		methods.setValue('searchName', `${methods.getValues('name')} (${name})`);
 	}, [
 		methods.getValues('name'),
@@ -64,10 +69,30 @@ const ActionForm = ({ id, name, actions, setActions }: Props) => {
 
 	const onActionSubmit = (data: Action) => {
 		const { id, ...action } = data;
-		setActions([...actions, action]);
+		const exists = actions.find(a => a.searchName === data.searchName);
+		// if exists on creature, cancel (should be present in DB)
+		if (exists) {
+			toast.error('The creature can already do this !');
+			methods.setError('name', {
+				type: 'custom',
+				message: `Already present on the creature`,
+			});
+			return;
+		}
+		// if exists on DB, add that document to creature
+		if (searchAction?.data) {
+			toast('👌 Exists elsewhere, fetching...');
+			const object = searchAction.data;
+			object.id = creatureId;
+			addActionOnCreature.mutate(object as Action);
+			const { id, ...action } = object;
+			setActions([...actions, action]);
+			return;
+		}
+		// if does not exists on creature or DB, create new doc and associate to creature
 		createAction.mutate(action as NewAction);
 		addActionOnCreature.mutate(data);
-		(document.getElementById('action-form') as HTMLDialogElement).close();
+		setActions([...actions, action]);
 	};
 	return (
 		<>

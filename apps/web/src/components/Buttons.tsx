@@ -1,5 +1,6 @@
 import { cn } from '@/utils/classNames';
 import { BiSolidLock } from 'rocketicons/bi';
+import { FiChevronLeft } from 'rocketicons/fi';
 
 type ActionButtonProps = {
 	color: string;
@@ -118,12 +119,27 @@ export const SmallCircleButton = ({
 	return (
 		<button
 			className={cn(
-				`btn-xs btn-circle bg-accent font-cabin z-20 flex flex-col items-center justify-center self-center text-stone-900 shadow-sm shadow-stone-900 transition-all duration-100 hover:ring-2 hover:ring-stone-200`,
+				`btn-sm btn-circle bg-accent font-cabin z-20 flex flex-col items-center justify-center self-center text-stone-900 shadow-sm shadow-stone-900 transition-all duration-100 hover:ring-2 hover:ring-stone-200`,
 				color,
 			)}
 			onClick={onClick}
 		>
 			{children}
+		</button>
+	);
+};
+
+export const BackButton = ({
+	onClick,
+}: {
+	onClick: React.MouseEventHandler<HTMLButtonElement>;
+}) => {
+	return (
+		<button
+			className='badge font-cabin mt-1 mt-4 flex items-center justify-center border-none bg-stone-500 pl-0 align-middle text-base uppercase text-stone-800 hover:bg-stone-200'
+			onClick={onClick}
+		>
+			<FiChevronLeft className='icon-stone-800-sm' /> Back
 		</button>
 	);
 };
