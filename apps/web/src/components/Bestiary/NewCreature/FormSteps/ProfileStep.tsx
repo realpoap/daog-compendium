@@ -1,6 +1,5 @@
 import { ActionButton } from '@/components/Buttons';
 import Collapsible from '@/components/Collapsible';
-import { cn } from '@/utils/classNames';
 import { NewCreature } from '@api/lib/ZodCreature';
 import { RiArrowDropLeftLine, RiArrowDropRightLine } from 'rocketicons/ri';
 import { Field, InputNumber } from '../../../RHFComponents/index';
@@ -16,7 +15,7 @@ const ProfileStep = ({
 	) => Promise<void>;
 }) => {
 	return (
-		<div className='flex w-full flex-col items-center justify-center'>
+		<div className='flex h-full w-full flex-col items-center justify-center'>
 			<div className='flex flex-col flex-wrap items-center justify-between px-[2vw] md:w-full md:flex-row'>
 				<section className='container mb-6 flex flex-col items-center justify-center md:w-1/2'>
 					<h4 className='font-grenze text-xl font-semibold tracking-wider text-purple-300'>
@@ -132,67 +131,69 @@ const ProfileStep = ({
 				</section>
 			</div>
 			<Collapsible title='add modifiers'>
-				<Field
-					name='attackBonus'
-					label='&#xb1; Attack'
-					width='tiny'
-				>
-					<InputNumber name='attackBonus' />
-				</Field>
-				<Field
-					name='defenseBonus'
-					label='&#xb1; Defense'
-					width='tiny'
-				>
-					<InputNumber name='defenseBonus' />
-				</Field>
-				<Field
-					name='rangedBonus'
-					label='&#xb1; Ranged'
-					width='tiny'
-				>
-					<InputNumber name='rangedBonus' />
-				</Field>
-				<Field
-					name='perceptionBonus'
-					label='&#xb1; Perception'
-					width='tiny'
-				>
-					<InputNumber name='perceptionBonus' />
-				</Field>
-				<Field
-					name='armor'
-					label='&#xb1; Armor'
-					width='tiny'
-				>
-					<InputNumber name='armor' />
-				</Field>
-				<Field
-					name='discretionBonus'
-					label='&#xb1; Discretion'
-					width='tiny'
-				>
-					<InputNumber name='discretionBonus' />
-				</Field>
-				<Field
-					name='magic'
-					label='&#xb1; Magic'
-					width='tiny'
-				>
-					<InputNumber name='magic' />
-				</Field>
-				<Field
-					name='glory'
-					label='&#xb1; Glory'
-					width='tiny'
-				>
-					<InputNumber name='glory' />
-				</Field>
+				<div className='flex w-full flex-wrap items-center justify-center gap-4 pb-0 pr-0 md:flex-row'>
+					<Field
+						name='attackBonus'
+						label='&#xb1; Attack'
+						width='tiny'
+					>
+						<InputNumber name='attackBonus' />
+					</Field>
+					<Field
+						name='defenseBonus'
+						label='&#xb1; Defense'
+						width='tiny'
+					>
+						<InputNumber name='defenseBonus' />
+					</Field>
+					<Field
+						name='rangedBonus'
+						label='&#xb1; Ranged'
+						width='tiny'
+					>
+						<InputNumber name='rangedBonus' />
+					</Field>
+					<Field
+						name='perceptionBonus'
+						label='&#xb1; Perception'
+						width='tiny'
+					>
+						<InputNumber name='perceptionBonus' />
+					</Field>
+					<Field
+						name='armor'
+						label='&#xb1; Armor'
+						width='tiny'
+					>
+						<InputNumber name='armor' />
+					</Field>
+					<Field
+						name='discretionBonus'
+						label='&#xb1; Discretion'
+						width='tiny'
+					>
+						<InputNumber name='discretionBonus' />
+					</Field>
+					<Field
+						name='magic'
+						label='&#xb1; Magic'
+						width='tiny'
+					>
+						<InputNumber name='magic' />
+					</Field>
+					<Field
+						name='glory'
+						label='&#xb1; Glory'
+						width='tiny'
+					>
+						<InputNumber name='glory' />
+					</Field>
+				</div>
 			</Collapsible>
 
 			<div className='flex w-full flex-row items-center justify-center gap-4'>
 				<ActionButton
-					color='purple-500'
+					color='primary'
 					textColor='stone-800'
 					onClick={() => handlePrevious(1)}
 				>
@@ -201,7 +202,7 @@ const ProfileStep = ({
 					</span>
 				</ActionButton>
 				<ActionButton
-					color='purple-500'
+					color='primary'
 					textColor='stone-800'
 					onClick={() => handleNext(['stats'], 3)}
 				>

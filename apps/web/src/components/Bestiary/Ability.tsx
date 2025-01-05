@@ -35,7 +35,7 @@ const Ability = ({
 	const deleteAttribute = trpc.creatures.removeAttribute.useMutation({
 		onSuccess: () => {
 			setAttributes(attributes.filter(a => a.name !== name));
-			toast.success('Attribute deleted 🗑️ !');
+			toast.success('Attribute deleted !');
 		},
 		onError: error => {
 			toast.error('Could not remove attribute');
@@ -44,6 +44,7 @@ const Ability = ({
 	});
 
 	const removeAttribute = (name: string) => {
+		if (!edit) return;
 		const attributeArray: AttributeArray = {
 			id: creatureId,
 			attributes: attributes.filter(a => a.name !== name),

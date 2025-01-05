@@ -1,15 +1,17 @@
 import {
 	creatureAlignmentOptions,
+	creatureHabitatOptions,
 	creatureSizeOptions,
 	creatureTypeOptions,
 } from '@/types/creatureOptions';
+import { spellOptions } from '@/types/spellOptions';
 import { calculateStats } from '@/utils/calculateStats';
-import { capitalizeFirstLetter } from '@/utils/capitalize';
 import { trpc } from '@/utils/trpc';
+import { HabitatTypeType, SpellTypeType } from '@api/lib/zod-prisma';
 import { Creature, ZodCreature } from '@api/lib/ZodCreature';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate, useParams } from '@tanstack/react-router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { SubmitButton } from '../Buttons';
@@ -22,12 +24,15 @@ import {
 	Select,
 	Textarea,
 } from '../RHFComponents';
+import MultiSelect from '../RHFComponents/MultiSelect';
 import TitleBack from '../TitleBack';
 
 const MonsterEdit = () => {
 	const navigate = useNavigate();
 	const { id } = useParams({ strict: false });
 	const utils = trpc.useUtils();
+	const [habitats, setHabitats] = useState<string[]>([]);
+	const [domains, setDomains] = useState<string[]>([]);
 
 	const creatureById = trpc.creatures.getById.useQuery(id as string);
 
@@ -63,7 +68,9 @@ const MonsterEdit = () => {
 		methods.setValue('health', calcCreature.health);
 		methods.setValue('spirit', calcCreature.spirit);
 		methods.setValue('initiative', calcCreature.initiative);
-	}, [methods.formState.isValid, methods.formState.isSubmitting]);
+		methods.setValue('magicDomain', domains as SpellTypeType[]);
+		methods.setValue('habitat', habitats as HabitatTypeType[]);
+	}, [methods.formState.isValidating, methods.formState.isSubmitting]);
 
 	const updateCreature = trpc.creatures.update.useMutation({
 		onSuccess: data => {
@@ -165,6 +172,18 @@ const MonsterEdit = () => {
 						</Field>
 					</div>
 					<Collapsible title='add details'>
+						<Field
+							name='habitat'
+							label='Habitat'
+						>
+							<MultiSelect
+								name='habitat'
+								list={creatureHabitatOptions}
+								values={habitats}
+								setValues={setHabitats}
+								placeholder='Select one or several habitat'
+							/>
+						</Field>
 						<Field
 							name='subtype'
 							label='Sub-Type'
@@ -374,6 +393,34 @@ const MonsterEdit = () => {
 							</Field>
 						)}
 					</div>
+					<section className='flex w-full flex-col items-center justify-end md:flex-row md:pl-6 md:pr-2'>
+						<div className='w-1/2 md:w-2/5 md:pt-4'>
+							<Field
+								name='isCaster'
+								label=''
+							>
+								<Checkbox
+									id='magicdomain'
+									name='isCaster'
+									label='can use magic'
+								/>
+							</Field>
+						</div>
+						<div className='flex w-full flex-col items-center justify-center'>
+							<Field
+								name='magicDomain'
+								label='Magic domain'
+							>
+								<MultiSelect
+									name='magicDomain'
+									list={spellOptions}
+									values={domains}
+									setValues={setDomains}
+									placeholder='Select one or several magic domains'
+								/>
+							</Field>
+						</div>
+					</section>
 					<SubmitButton
 						text='Update'
 						isLoading={methods.formState.isLoading}

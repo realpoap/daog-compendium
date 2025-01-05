@@ -26,7 +26,7 @@ export const Checkbox = ({
 				type='checkbox'
 				defaultChecked={false}
 				{...register(name)}
-				id={id}
+				id={`${id}-checkbox`}
 			/>
 			<span className='label-text font-cabin text-primary text-base font-bold'>
 				{label ?? name}

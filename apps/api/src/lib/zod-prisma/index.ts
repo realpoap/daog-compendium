@@ -12,7 +12,7 @@ import type { Prisma } from '@prisma/client';
 
 export const UserScalarFieldEnumSchema = z.enum(['id','email','name','password','isOwner','role','createdAt']);
 
-export const CreatureScalarFieldEnumSchema = z.enum(['id','fullname','name','rank','isBoss','type','subtype','alignment','size','createdAt','updatedAt','level','initiative','attack','attackBonus','defense','defenseBonus','ranged','rangedBonus','health','armor','perception','perceptionBonus','discretion','discretionBonus','magic','spirit','glory','flavor','description']);
+export const CreatureScalarFieldEnumSchema = z.enum(['id','fullname','name','rank','isBoss','isCaster','magicDomain','type','habitat','subtype','alignment','size','createdAt','updatedAt','level','initiative','attack','attackBonus','defense','defenseBonus','ranged','rangedBonus','health','armor','perception','perceptionBonus','discretion','discretionBonus','magic','spirit','glory','flavor','description']);
 
 export const AttributeScalarFieldEnumSchema = z.enum(['id','name','flavor','description']);
 
@@ -31,6 +31,10 @@ export const QueryModeSchema = z.enum(['default','insensitive']);
 export const RoleSchema = z.enum(['VIEWER','EDITOR','ADMIN']);
 
 export type RoleType = `${z.infer<typeof RoleSchema>}`
+
+export const HabitatTypeSchema = z.enum(['any','abyss','coast','canyon','cave','desert','dungeon','farm','forest','jungle','lagoon','mountain','sea','river','ruin','shrubland','swamp','toundra','town','volcano']);
+
+export type HabitatTypeType = `${z.infer<typeof HabitatTypeSchema>}`
 
 export const TypeSchema = z.enum(['beast','critter','demon','fae','golem','insect','monster','oddity','person','plant','undead','wyrm']);
 
@@ -93,7 +97,9 @@ export type User = z.infer<typeof UserSchema>
 /////////////////////////////////////////
 
 export const CreatureSchema = z.object({
+  magicDomain: SpellTypeSchema.array(),
   type: TypeSchema.nullable(),
+  habitat: HabitatTypeSchema.array(),
   alignment: AlignmentSchema.nullable(),
   size: CreatureSizeSchema.nullable(),
   id: z.string(),
@@ -101,6 +107,7 @@ export const CreatureSchema = z.object({
   name: z.string(),
   rank: z.string().nullable(),
   isBoss: z.boolean().nullable(),
+  isCaster: z.boolean().nullable(),
   subtype: z.string().nullable(),
   createdAt: z.coerce.date().nullable(),
   updatedAt: z.coerce.date().nullable(),
@@ -399,7 +406,10 @@ export const CreatureSelectSchema: z.ZodType<Prisma.CreatureSelect> = z.object({
   name: z.boolean().optional(),
   rank: z.boolean().optional(),
   isBoss: z.boolean().optional(),
+  isCaster: z.boolean().optional(),
+  magicDomain: z.boolean().optional(),
   type: z.boolean().optional(),
+  habitat: z.boolean().optional(),
   subtype: z.boolean().optional(),
   alignment: z.boolean().optional(),
   size: z.boolean().optional(),
@@ -688,7 +698,7 @@ export const UserWhereUniqueInputSchema: z.ZodType<Prisma.UserWhereUniqueInput> 
     id: z.string(),
     email: z.string(),
     password: z.string(),
-    name_password: z.lazy(() => UserNamePasswordCompoundUniqueInputSchema)
+    name_password_email: z.lazy(() => UserNamePasswordEmailCompoundUniqueInputSchema)
   }),
   z.object({
     id: z.string(),
@@ -698,7 +708,7 @@ export const UserWhereUniqueInputSchema: z.ZodType<Prisma.UserWhereUniqueInput> 
   z.object({
     id: z.string(),
     email: z.string(),
-    name_password: z.lazy(() => UserNamePasswordCompoundUniqueInputSchema),
+    name_password_email: z.lazy(() => UserNamePasswordEmailCompoundUniqueInputSchema),
   }),
   z.object({
     id: z.string(),
@@ -707,7 +717,7 @@ export const UserWhereUniqueInputSchema: z.ZodType<Prisma.UserWhereUniqueInput> 
   z.object({
     id: z.string(),
     password: z.string(),
-    name_password: z.lazy(() => UserNamePasswordCompoundUniqueInputSchema),
+    name_password_email: z.lazy(() => UserNamePasswordEmailCompoundUniqueInputSchema),
   }),
   z.object({
     id: z.string(),
@@ -715,7 +725,7 @@ export const UserWhereUniqueInputSchema: z.ZodType<Prisma.UserWhereUniqueInput> 
   }),
   z.object({
     id: z.string(),
-    name_password: z.lazy(() => UserNamePasswordCompoundUniqueInputSchema),
+    name_password_email: z.lazy(() => UserNamePasswordEmailCompoundUniqueInputSchema),
   }),
   z.object({
     id: z.string(),
@@ -723,7 +733,7 @@ export const UserWhereUniqueInputSchema: z.ZodType<Prisma.UserWhereUniqueInput> 
   z.object({
     email: z.string(),
     password: z.string(),
-    name_password: z.lazy(() => UserNamePasswordCompoundUniqueInputSchema),
+    name_password_email: z.lazy(() => UserNamePasswordEmailCompoundUniqueInputSchema),
   }),
   z.object({
     email: z.string(),
@@ -731,27 +741,27 @@ export const UserWhereUniqueInputSchema: z.ZodType<Prisma.UserWhereUniqueInput> 
   }),
   z.object({
     email: z.string(),
-    name_password: z.lazy(() => UserNamePasswordCompoundUniqueInputSchema),
+    name_password_email: z.lazy(() => UserNamePasswordEmailCompoundUniqueInputSchema),
   }),
   z.object({
     email: z.string(),
   }),
   z.object({
     password: z.string(),
-    name_password: z.lazy(() => UserNamePasswordCompoundUniqueInputSchema),
+    name_password_email: z.lazy(() => UserNamePasswordEmailCompoundUniqueInputSchema),
   }),
   z.object({
     password: z.string(),
   }),
   z.object({
-    name_password: z.lazy(() => UserNamePasswordCompoundUniqueInputSchema),
+    name_password_email: z.lazy(() => UserNamePasswordEmailCompoundUniqueInputSchema),
   }),
 ])
 .and(z.object({
   id: z.string().optional(),
   email: z.string().optional(),
   password: z.string().optional(),
-  name_password: z.lazy(() => UserNamePasswordCompoundUniqueInputSchema).optional(),
+  name_password_email: z.lazy(() => UserNamePasswordEmailCompoundUniqueInputSchema).optional(),
   AND: z.union([ z.lazy(() => UserWhereInputSchema),z.lazy(() => UserWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => UserWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => UserWhereInputSchema),z.lazy(() => UserWhereInputSchema).array() ]).optional(),
@@ -796,7 +806,10 @@ export const CreatureWhereInputSchema: z.ZodType<Prisma.CreatureWhereInput> = z.
   name: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   rank: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   isBoss: z.union([ z.lazy(() => BoolNullableFilterSchema),z.boolean() ]).optional().nullable(),
+  isCaster: z.union([ z.lazy(() => BoolNullableFilterSchema),z.boolean() ]).optional().nullable(),
+  magicDomain: z.lazy(() => EnumSpellTypeNullableListFilterSchema).optional(),
   type: z.union([ z.lazy(() => EnumTypeNullableFilterSchema),z.lazy(() => TypeSchema) ]).optional().nullable(),
+  habitat: z.lazy(() => EnumHabitatTypeNullableListFilterSchema).optional(),
   subtype: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   alignment: z.union([ z.lazy(() => EnumAlignmentNullableFilterSchema),z.lazy(() => AlignmentSchema) ]).optional().nullable(),
   size: z.union([ z.lazy(() => EnumCreatureSizeNullableFilterSchema),z.lazy(() => CreatureSizeSchema) ]).optional().nullable(),
@@ -835,7 +848,10 @@ export const CreatureOrderByWithRelationInputSchema: z.ZodType<Prisma.CreatureOr
   name: z.lazy(() => SortOrderSchema).optional(),
   rank: z.lazy(() => SortOrderSchema).optional(),
   isBoss: z.lazy(() => SortOrderSchema).optional(),
+  isCaster: z.lazy(() => SortOrderSchema).optional(),
+  magicDomain: z.lazy(() => SortOrderSchema).optional(),
   type: z.lazy(() => SortOrderSchema).optional(),
+  habitat: z.lazy(() => SortOrderSchema).optional(),
   subtype: z.lazy(() => SortOrderSchema).optional(),
   alignment: z.lazy(() => SortOrderSchema).optional(),
   size: z.lazy(() => SortOrderSchema).optional(),
@@ -871,25 +887,48 @@ export const CreatureOrderByWithRelationInputSchema: z.ZodType<Prisma.CreatureOr
 export const CreatureWhereUniqueInputSchema: z.ZodType<Prisma.CreatureWhereUniqueInput> = z.union([
   z.object({
     id: z.string(),
-    fullname: z.string()
+    fullname: z.string(),
+    name_fullname: z.lazy(() => CreatureNameFullnameCompoundUniqueInputSchema)
+  }),
+  z.object({
+    id: z.string(),
+    fullname: z.string(),
+  }),
+  z.object({
+    id: z.string(),
+    name_fullname: z.lazy(() => CreatureNameFullnameCompoundUniqueInputSchema),
   }),
   z.object({
     id: z.string(),
   }),
   z.object({
     fullname: z.string(),
+    name_fullname: z.lazy(() => CreatureNameFullnameCompoundUniqueInputSchema),
+  }),
+  z.object({
+    fullname: z.string(),
+  }),
+  z.object({
+    name_fullname: z.lazy(() => CreatureNameFullnameCompoundUniqueInputSchema),
   }),
 ])
 .and(z.object({
   id: z.string().optional(),
   fullname: z.string().optional(),
+  name_fullname: z.lazy(() => CreatureNameFullnameCompoundUniqueInputSchema).optional(),
+  name_fullname: z.lazy(() => CreatureNameFullnameCompoundUniqueInputSchema).optional(),
+  name_fullname: z.lazy(() => CreatureNameFullnameCompoundUniqueInputSchema).optional(),
+  name_fullname: z.lazy(() => CreatureNameFullnameCompoundUniqueInputSchema).optional(),
   AND: z.union([ z.lazy(() => CreatureWhereInputSchema),z.lazy(() => CreatureWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => CreatureWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => CreatureWhereInputSchema),z.lazy(() => CreatureWhereInputSchema).array() ]).optional(),
   name: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   rank: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   isBoss: z.union([ z.lazy(() => BoolNullableFilterSchema),z.boolean() ]).optional().nullable(),
+  isCaster: z.union([ z.lazy(() => BoolNullableFilterSchema),z.boolean() ]).optional().nullable(),
+  magicDomain: z.lazy(() => EnumSpellTypeNullableListFilterSchema).optional(),
   type: z.union([ z.lazy(() => EnumTypeNullableFilterSchema),z.lazy(() => TypeSchema) ]).optional().nullable(),
+  habitat: z.lazy(() => EnumHabitatTypeNullableListFilterSchema).optional(),
   subtype: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   alignment: z.union([ z.lazy(() => EnumAlignmentNullableFilterSchema),z.lazy(() => AlignmentSchema) ]).optional().nullable(),
   size: z.union([ z.lazy(() => EnumCreatureSizeNullableFilterSchema),z.lazy(() => CreatureSizeSchema) ]).optional().nullable(),
@@ -928,7 +967,10 @@ export const CreatureOrderByWithAggregationInputSchema: z.ZodType<Prisma.Creatur
   name: z.lazy(() => SortOrderSchema).optional(),
   rank: z.lazy(() => SortOrderSchema).optional(),
   isBoss: z.lazy(() => SortOrderSchema).optional(),
+  isCaster: z.lazy(() => SortOrderSchema).optional(),
+  magicDomain: z.lazy(() => SortOrderSchema).optional(),
   type: z.lazy(() => SortOrderSchema).optional(),
+  habitat: z.lazy(() => SortOrderSchema).optional(),
   subtype: z.lazy(() => SortOrderSchema).optional(),
   alignment: z.lazy(() => SortOrderSchema).optional(),
   size: z.lazy(() => SortOrderSchema).optional(),
@@ -969,7 +1011,10 @@ export const CreatureScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.Crea
   name: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   rank: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   isBoss: z.union([ z.lazy(() => BoolNullableWithAggregatesFilterSchema),z.boolean() ]).optional().nullable(),
+  isCaster: z.union([ z.lazy(() => BoolNullableWithAggregatesFilterSchema),z.boolean() ]).optional().nullable(),
+  magicDomain: z.lazy(() => EnumSpellTypeNullableListFilterSchema).optional(),
   type: z.union([ z.lazy(() => EnumTypeNullableWithAggregatesFilterSchema),z.lazy(() => TypeSchema) ]).optional().nullable(),
+  habitat: z.lazy(() => EnumHabitatTypeNullableListFilterSchema).optional(),
   subtype: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   alignment: z.union([ z.lazy(() => EnumAlignmentNullableWithAggregatesFilterSchema),z.lazy(() => AlignmentSchema) ]).optional().nullable(),
   size: z.union([ z.lazy(() => EnumCreatureSizeNullableWithAggregatesFilterSchema),z.lazy(() => CreatureSizeSchema) ]).optional().nullable(),
@@ -1210,23 +1255,75 @@ export const SpellOrderByWithRelationInputSchema: z.ZodType<Prisma.SpellOrderByW
 export const SpellWhereUniqueInputSchema: z.ZodType<Prisma.SpellWhereUniqueInput> = z.union([
   z.object({
     id: z.string(),
-    number: z.number().int()
+    number: z.number().int(),
+    titleGlaise: z.string(),
+    titleCommon: z.string()
+  }),
+  z.object({
+    id: z.string(),
+    number: z.number().int(),
+    titleGlaise: z.string(),
+  }),
+  z.object({
+    id: z.string(),
+    number: z.number().int(),
+    titleCommon: z.string(),
+  }),
+  z.object({
+    id: z.string(),
+    number: z.number().int(),
+  }),
+  z.object({
+    id: z.string(),
+    titleGlaise: z.string(),
+    titleCommon: z.string(),
+  }),
+  z.object({
+    id: z.string(),
+    titleGlaise: z.string(),
+  }),
+  z.object({
+    id: z.string(),
+    titleCommon: z.string(),
   }),
   z.object({
     id: z.string(),
   }),
   z.object({
     number: z.number().int(),
+    titleGlaise: z.string(),
+    titleCommon: z.string(),
+  }),
+  z.object({
+    number: z.number().int(),
+    titleGlaise: z.string(),
+  }),
+  z.object({
+    number: z.number().int(),
+    titleCommon: z.string(),
+  }),
+  z.object({
+    number: z.number().int(),
+  }),
+  z.object({
+    titleGlaise: z.string(),
+    titleCommon: z.string(),
+  }),
+  z.object({
+    titleGlaise: z.string(),
+  }),
+  z.object({
+    titleCommon: z.string(),
   }),
 ])
 .and(z.object({
   id: z.string().optional(),
   number: z.number().int().optional(),
+  titleGlaise: z.string().optional(),
+  titleCommon: z.string().optional(),
   AND: z.union([ z.lazy(() => SpellWhereInputSchema),z.lazy(() => SpellWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => SpellWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => SpellWhereInputSchema),z.lazy(() => SpellWhereInputSchema).array() ]).optional(),
-  titleGlaise: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  titleCommon: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
   updatedAt: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
   level: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
@@ -1579,7 +1676,10 @@ export const CreatureCreateInputSchema: z.ZodType<Prisma.CreatureCreateInput> = 
   name: z.string(),
   rank: z.string().optional().nullable(),
   isBoss: z.boolean().optional().nullable(),
+  isCaster: z.boolean().optional().nullable(),
+  magicDomain: z.union([ z.lazy(() => CreatureCreatemagicDomainInputSchema),z.lazy(() => SpellTypeSchema).array() ]).optional(),
   type: z.lazy(() => TypeSchema).optional().nullable(),
+  habitat: z.union([ z.lazy(() => CreatureCreatehabitatInputSchema),z.lazy(() => HabitatTypeSchema).array() ]).optional(),
   subtype: z.string().optional().nullable(),
   alignment: z.lazy(() => AlignmentSchema).optional().nullable(),
   size: z.lazy(() => CreatureSizeSchema).optional().nullable(),
@@ -1618,7 +1718,10 @@ export const CreatureUncheckedCreateInputSchema: z.ZodType<Prisma.CreatureUnchec
   name: z.string(),
   rank: z.string().optional().nullable(),
   isBoss: z.boolean().optional().nullable(),
+  isCaster: z.boolean().optional().nullable(),
+  magicDomain: z.union([ z.lazy(() => CreatureCreatemagicDomainInputSchema),z.lazy(() => SpellTypeSchema).array() ]).optional(),
   type: z.lazy(() => TypeSchema).optional().nullable(),
+  habitat: z.union([ z.lazy(() => CreatureCreatehabitatInputSchema),z.lazy(() => HabitatTypeSchema).array() ]).optional(),
   subtype: z.string().optional().nullable(),
   alignment: z.lazy(() => AlignmentSchema).optional().nullable(),
   size: z.lazy(() => CreatureSizeSchema).optional().nullable(),
@@ -1656,7 +1759,10 @@ export const CreatureUpdateInputSchema: z.ZodType<Prisma.CreatureUpdateInput> = 
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   rank: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   isBoss: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  isCaster: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  magicDomain: z.union([ z.lazy(() => CreatureUpdatemagicDomainInputSchema),z.lazy(() => SpellTypeSchema).array() ]).optional(),
   type: z.union([ z.lazy(() => TypeSchema),z.lazy(() => NullableEnumTypeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  habitat: z.union([ z.lazy(() => CreatureUpdatehabitatInputSchema),z.lazy(() => HabitatTypeSchema).array() ]).optional(),
   subtype: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   alignment: z.union([ z.lazy(() => AlignmentSchema),z.lazy(() => NullableEnumAlignmentFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   size: z.union([ z.lazy(() => CreatureSizeSchema),z.lazy(() => NullableEnumCreatureSizeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -1694,7 +1800,10 @@ export const CreatureUncheckedUpdateInputSchema: z.ZodType<Prisma.CreatureUnchec
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   rank: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   isBoss: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  isCaster: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  magicDomain: z.union([ z.lazy(() => CreatureUpdatemagicDomainInputSchema),z.lazy(() => SpellTypeSchema).array() ]).optional(),
   type: z.union([ z.lazy(() => TypeSchema),z.lazy(() => NullableEnumTypeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  habitat: z.union([ z.lazy(() => CreatureUpdatehabitatInputSchema),z.lazy(() => HabitatTypeSchema).array() ]).optional(),
   subtype: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   alignment: z.union([ z.lazy(() => AlignmentSchema),z.lazy(() => NullableEnumAlignmentFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   size: z.union([ z.lazy(() => CreatureSizeSchema),z.lazy(() => NullableEnumCreatureSizeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -1733,7 +1842,10 @@ export const CreatureCreateManyInputSchema: z.ZodType<Prisma.CreatureCreateManyI
   name: z.string(),
   rank: z.string().optional().nullable(),
   isBoss: z.boolean().optional().nullable(),
+  isCaster: z.boolean().optional().nullable(),
+  magicDomain: z.union([ z.lazy(() => CreatureCreatemagicDomainInputSchema),z.lazy(() => SpellTypeSchema).array() ]).optional(),
   type: z.lazy(() => TypeSchema).optional().nullable(),
+  habitat: z.union([ z.lazy(() => CreatureCreatehabitatInputSchema),z.lazy(() => HabitatTypeSchema).array() ]).optional(),
   subtype: z.string().optional().nullable(),
   alignment: z.lazy(() => AlignmentSchema).optional().nullable(),
   size: z.lazy(() => CreatureSizeSchema).optional().nullable(),
@@ -1771,7 +1883,10 @@ export const CreatureUpdateManyMutationInputSchema: z.ZodType<Prisma.CreatureUpd
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   rank: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   isBoss: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  isCaster: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  magicDomain: z.union([ z.lazy(() => CreatureUpdatemagicDomainInputSchema),z.lazy(() => SpellTypeSchema).array() ]).optional(),
   type: z.union([ z.lazy(() => TypeSchema),z.lazy(() => NullableEnumTypeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  habitat: z.union([ z.lazy(() => CreatureUpdatehabitatInputSchema),z.lazy(() => HabitatTypeSchema).array() ]).optional(),
   subtype: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   alignment: z.union([ z.lazy(() => AlignmentSchema),z.lazy(() => NullableEnumAlignmentFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   size: z.union([ z.lazy(() => CreatureSizeSchema),z.lazy(() => NullableEnumCreatureSizeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -1809,7 +1924,10 @@ export const CreatureUncheckedUpdateManyInputSchema: z.ZodType<Prisma.CreatureUn
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   rank: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   isBoss: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  isCaster: z.union([ z.boolean(),z.lazy(() => NullableBoolFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  magicDomain: z.union([ z.lazy(() => CreatureUpdatemagicDomainInputSchema),z.lazy(() => SpellTypeSchema).array() ]).optional(),
   type: z.union([ z.lazy(() => TypeSchema),z.lazy(() => NullableEnumTypeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
+  habitat: z.union([ z.lazy(() => CreatureUpdatehabitatInputSchema),z.lazy(() => HabitatTypeSchema).array() ]).optional(),
   subtype: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   alignment: z.union([ z.lazy(() => AlignmentSchema),z.lazy(() => NullableEnumAlignmentFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   size: z.union([ z.lazy(() => CreatureSizeSchema),z.lazy(() => NullableEnumCreatureSizeFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -2399,9 +2517,10 @@ export const DateTimeFilterSchema: z.ZodType<Prisma.DateTimeFilter> = z.object({
   not: z.union([ z.coerce.date(),z.lazy(() => NestedDateTimeFilterSchema) ]).optional(),
 }).strict();
 
-export const UserNamePasswordCompoundUniqueInputSchema: z.ZodType<Prisma.UserNamePasswordCompoundUniqueInput> = z.object({
+export const UserNamePasswordEmailCompoundUniqueInputSchema: z.ZodType<Prisma.UserNamePasswordEmailCompoundUniqueInput> = z.object({
   name: z.string(),
-  password: z.string()
+  password: z.string(),
+  email: z.string()
 }).strict();
 
 export const UserCountOrderByAggregateInputSchema: z.ZodType<Prisma.UserCountOrderByAggregateInput> = z.object({
@@ -2506,12 +2625,28 @@ export const BoolNullableFilterSchema: z.ZodType<Prisma.BoolNullableFilter> = z.
   isSet: z.boolean().optional()
 }).strict();
 
+export const EnumSpellTypeNullableListFilterSchema: z.ZodType<Prisma.EnumSpellTypeNullableListFilter> = z.object({
+  equals: z.lazy(() => SpellTypeSchema).array().optional().nullable(),
+  has: z.lazy(() => SpellTypeSchema).optional().nullable(),
+  hasEvery: z.lazy(() => SpellTypeSchema).array().optional(),
+  hasSome: z.lazy(() => SpellTypeSchema).array().optional(),
+  isEmpty: z.boolean().optional()
+}).strict();
+
 export const EnumTypeNullableFilterSchema: z.ZodType<Prisma.EnumTypeNullableFilter> = z.object({
   equals: z.lazy(() => TypeSchema).optional().nullable(),
   in: z.lazy(() => TypeSchema).array().optional().nullable(),
   notIn: z.lazy(() => TypeSchema).array().optional().nullable(),
   not: z.union([ z.lazy(() => TypeSchema),z.lazy(() => NestedEnumTypeNullableFilterSchema) ]).optional().nullable(),
   isSet: z.boolean().optional()
+}).strict();
+
+export const EnumHabitatTypeNullableListFilterSchema: z.ZodType<Prisma.EnumHabitatTypeNullableListFilter> = z.object({
+  equals: z.lazy(() => HabitatTypeSchema).array().optional().nullable(),
+  has: z.lazy(() => HabitatTypeSchema).optional().nullable(),
+  hasEvery: z.lazy(() => HabitatTypeSchema).array().optional(),
+  hasSome: z.lazy(() => HabitatTypeSchema).array().optional(),
+  isEmpty: z.boolean().optional()
 }).strict();
 
 export const EnumAlignmentNullableFilterSchema: z.ZodType<Prisma.EnumAlignmentNullableFilter> = z.object({
@@ -2721,13 +2856,21 @@ export const CreatureActionOrderByCompositeAggregateInputSchema: z.ZodType<Prism
   _count: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
+export const CreatureNameFullnameCompoundUniqueInputSchema: z.ZodType<Prisma.CreatureNameFullnameCompoundUniqueInput> = z.object({
+  name: z.string(),
+  fullname: z.string()
+}).strict();
+
 export const CreatureCountOrderByAggregateInputSchema: z.ZodType<Prisma.CreatureCountOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
   fullname: z.lazy(() => SortOrderSchema).optional(),
   name: z.lazy(() => SortOrderSchema).optional(),
   rank: z.lazy(() => SortOrderSchema).optional(),
   isBoss: z.lazy(() => SortOrderSchema).optional(),
+  isCaster: z.lazy(() => SortOrderSchema).optional(),
+  magicDomain: z.lazy(() => SortOrderSchema).optional(),
   type: z.lazy(() => SortOrderSchema).optional(),
+  habitat: z.lazy(() => SortOrderSchema).optional(),
   subtype: z.lazy(() => SortOrderSchema).optional(),
   alignment: z.lazy(() => SortOrderSchema).optional(),
   size: z.lazy(() => SortOrderSchema).optional(),
@@ -2780,6 +2923,7 @@ export const CreatureMaxOrderByAggregateInputSchema: z.ZodType<Prisma.CreatureMa
   name: z.lazy(() => SortOrderSchema).optional(),
   rank: z.lazy(() => SortOrderSchema).optional(),
   isBoss: z.lazy(() => SortOrderSchema).optional(),
+  isCaster: z.lazy(() => SortOrderSchema).optional(),
   type: z.lazy(() => SortOrderSchema).optional(),
   subtype: z.lazy(() => SortOrderSchema).optional(),
   alignment: z.lazy(() => SortOrderSchema).optional(),
@@ -2813,6 +2957,7 @@ export const CreatureMinOrderByAggregateInputSchema: z.ZodType<Prisma.CreatureMi
   name: z.lazy(() => SortOrderSchema).optional(),
   rank: z.lazy(() => SortOrderSchema).optional(),
   isBoss: z.lazy(() => SortOrderSchema).optional(),
+  isCaster: z.lazy(() => SortOrderSchema).optional(),
   type: z.lazy(() => SortOrderSchema).optional(),
   subtype: z.lazy(() => SortOrderSchema).optional(),
   alignment: z.lazy(() => SortOrderSchema).optional(),
@@ -3416,6 +3561,14 @@ export const DateTimeFieldUpdateOperationsInputSchema: z.ZodType<Prisma.DateTime
   set: z.coerce.date().optional()
 }).strict();
 
+export const CreatureCreatemagicDomainInputSchema: z.ZodType<Prisma.CreatureCreatemagicDomainInput> = z.object({
+  set: z.lazy(() => SpellTypeSchema).array()
+}).strict();
+
+export const CreatureCreatehabitatInputSchema: z.ZodType<Prisma.CreatureCreatehabitatInput> = z.object({
+  set: z.lazy(() => HabitatTypeSchema).array()
+}).strict();
+
 export const StatProfilCreateEnvelopeInputSchema: z.ZodType<Prisma.StatProfilCreateEnvelopeInput> = z.object({
   set: z.lazy(() => StatProfilCreateInputSchema).optional()
 }).strict();
@@ -3519,9 +3672,19 @@ export const NullableBoolFieldUpdateOperationsInputSchema: z.ZodType<Prisma.Null
   unset: z.boolean().optional()
 }).strict();
 
+export const CreatureUpdatemagicDomainInputSchema: z.ZodType<Prisma.CreatureUpdatemagicDomainInput> = z.object({
+  set: z.lazy(() => SpellTypeSchema).array().optional(),
+  push: z.union([ z.lazy(() => SpellTypeSchema),z.lazy(() => SpellTypeSchema).array() ]).optional(),
+}).strict();
+
 export const NullableEnumTypeFieldUpdateOperationsInputSchema: z.ZodType<Prisma.NullableEnumTypeFieldUpdateOperationsInput> = z.object({
   set: z.lazy(() => TypeSchema).optional().nullable(),
   unset: z.boolean().optional()
+}).strict();
+
+export const CreatureUpdatehabitatInputSchema: z.ZodType<Prisma.CreatureUpdatehabitatInput> = z.object({
+  set: z.lazy(() => HabitatTypeSchema).array().optional(),
+  push: z.union([ z.lazy(() => HabitatTypeSchema),z.lazy(() => HabitatTypeSchema).array() ]).optional(),
 }).strict();
 
 export const NullableEnumAlignmentFieldUpdateOperationsInputSchema: z.ZodType<Prisma.NullableEnumAlignmentFieldUpdateOperationsInput> = z.object({

@@ -96,7 +96,11 @@ const ActionFormEdit = ({
 			actions: [...prunedActionArray, action],
 		};
 		updateActionOnCreature.mutate(actionArray);
-		(document.getElementById('action-form-edit') as HTMLDialogElement).close();
+		(
+			document.getElementById(
+				`${defaultAction.searchName}-action-form-edit`,
+			) as HTMLDialogElement
+		).close();
 	};
 
 	return (

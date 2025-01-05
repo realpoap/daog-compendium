@@ -2,7 +2,6 @@ import {
 	GiBlood,
 	GiBurningSkull,
 	GiCarrion,
-	GiEarthSpit,
 	GiFlatPawPrint,
 	GiGhost,
 	GiGoat,

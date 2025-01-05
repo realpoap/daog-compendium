@@ -1,11 +1,14 @@
 import { ActionButton } from '@/components/Buttons';
+import MultiSelect from '@/components/RHFComponents/MultiSelect';
+import { spellOptions } from '@/types/spellOptions';
 import { trpc } from '@/utils/trpc';
+import { SpellTypeType } from '@api/lib/zod-prisma';
 import { NewAction } from '@api/lib/ZodAction';
 import { NewCreature } from '@api/lib/ZodCreature';
 import { useEffect, useState } from 'react';
 import { UseFormSetValue } from 'react-hook-form';
 import { RiArrowDropLeftLine, RiArrowDropRightLine } from 'rocketicons/ri';
-import { Field, InputNumber } from '../../../RHFComponents';
+import { Checkbox, Field, InputNumber } from '../../../RHFComponents';
 import { ActionsTags } from '../../utils/ActionsTag';
 
 type ActionStepProps = {
@@ -25,6 +28,7 @@ const ActionsStep = ({
 	setValue,
 }: ActionStepProps) => {
 	const [tags, setTags] = useState<string[]>([]);
+	const [domains, setDomains] = useState<string[]>([]);
 	const actionsList = trpc.actions.getAll.useQuery();
 
 	useEffect(() => {
@@ -48,8 +52,12 @@ const ActionsStep = ({
 		}
 	}, [tags]);
 
+	useEffect(() => {
+		setValue('magicDomain', domains as SpellTypeType[]);
+	}, [domains]);
+
 	return (
-		<div className='flex w-full flex-col items-center justify-center'>
+		<div className='flex h-full w-full flex-col items-center justify-center'>
 			<div className='flex flex-row flex-wrap items-center justify-center gap-4 px-[4vw] md:flex-row'>
 				<Field
 					name='actionList.main'
@@ -68,6 +76,7 @@ const ActionsStep = ({
 					</Field>
 				)}
 			</div>
+
 			<Field
 				name='actions'
 				label='Search actions'
@@ -82,9 +91,37 @@ const ActionsStep = ({
 					<div className='skeleton rounded-btn h-11 w-full dark:bg-stone-700'></div>
 				)}
 			</Field>
+			<section className='flex w-full flex-col items-center justify-end md:flex-row md:pl-6 md:pr-2'>
+				<div className='w-1/2 md:w-2/5 md:pt-4'>
+					<Field
+						name='isCaster'
+						label=''
+					>
+						<Checkbox
+							id='magicdomain'
+							name='isCaster'
+							label='can use magic'
+						/>
+					</Field>
+				</div>
+				<div className='flex w-full flex-col items-center justify-center'>
+					<Field
+						name='magicDomain'
+						label='Magic domain'
+					>
+						<MultiSelect
+							name='magicDomain'
+							list={spellOptions}
+							values={domains}
+							setValues={setDomains}
+							placeholder='Select one or several magic domains'
+						/>
+					</Field>
+				</div>
+			</section>
 			<div className='flex w-full flex-row items-center justify-center gap-4'>
 				<ActionButton
-					color='purple-500'
+					color='primary'
 					textColor='stone-800'
 					onClick={() => handlePrevious(2)}
 				>
@@ -93,7 +130,7 @@ const ActionsStep = ({
 					</span>
 				</ActionButton>
 				<ActionButton
-					color='purple-500'
+					color='primary'
 					textColor='stone-800'
 					onClick={() => handleNext([], 4)}
 				>

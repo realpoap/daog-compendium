@@ -28,7 +28,7 @@ model User {
   role      Role     @default(VIEWER)
   createdAt DateTime @default(now())
 
-  @@unique([name, password])
+  @@unique([name, password, email])
 }
 
 enum Role {
@@ -43,7 +43,10 @@ model Creature {
   name            String
   rank            String?
   isBoss          Boolean?     @default(false)
+  isCaster        Boolean?     @default(false)
+  magicDomain     SpellType[]
   type            Type?
+  habitat   HabitatType[]
   subtype         String?
   alignment       Alignment?
   size            CreatureSize?
@@ -74,6 +77,11 @@ model Creature {
   flavor          String?
   description     String?
   actions         CreatureAction[]
+
+  @@unique([attributes.name, fullname])
+  @@unique([actions.name, fullname])
+  @@unique([scavenge.name, fullname])
+  @@unique([loot.name, fullname])
 }
 
 type CreatureAttribute {
@@ -87,6 +95,29 @@ model Attribute {
   name        String    @unique
   flavor      String?
   description String?
+}
+
+enum HabitatType {
+  any
+  abyss
+  coast
+  canyon
+  cave
+  desert
+  dungeon
+  farm
+  forest
+  jungle
+  lagoon
+  mountain
+  sea
+  river
+  ruin
+  shrubland
+  swamp
+  toundra
+  town
+  volcano
 }
 
 enum Type {
@@ -193,8 +224,8 @@ type StatProfil {
 model Spell {
   id          String        @id @default(auto()) @map("_id") @db.ObjectId
   number      Int           @unique
-  titleGlaise String?
-  titleCommon String
+  titleGlaise String?       @unique
+  titleCommon String        @unique
   createdAt   DateTime?     @default(now())
   updatedAt   DateTime?     @updatedAt
   level       Int

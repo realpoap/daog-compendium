@@ -120,9 +120,11 @@ const ActionCard = ({
 									''
 								)}
 							</span>
-							<span className='font-semibold capitalize'>
-								Range : {action.range}
-							</span>
+							{action?.range && (
+								<span className='font-semibold capitalize'>
+									Range : {action.range}
+								</span>
+							)}
 						</p>
 						{action?.description && (
 							<p className='my-2 text-justify italic'>{action.description}</p>

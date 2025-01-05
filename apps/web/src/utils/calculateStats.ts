@@ -19,7 +19,7 @@ const calcLevel = (creature: Creature | NewCreature) => {
 	const sen = creature.spirit ? creature.spirit - 15 : 0;
 	const will = creature.stats.WIL ? creature.stats.WIL - 15 : 0;
 	const disc = creature.discretion ? creature.discretion - 15 : 0;
-	const glory = creature?.glory != null ? 1 + Number(creature.glory) * 0.1 : 0;
+	//const glory = creature?.glory != null ? 1 + Number(creature.glory) * 0.1 : 0;
 	const main = creature?.actionList?.main ? creature.actionList?.main * 5 : 1;
 	const epic = creature?.actionList?.main ? creature.actionList?.main * 10 : 1;
 	const attributes = creature?.attributes ? creature.attributes.length * 2 : 0;
@@ -44,7 +44,7 @@ const calcLevel = (creature: Creature | NewCreature) => {
 };
 
 const calcModifiersBonus = (creature: Creature | NewCreature) => {
-	let calCreature = creature;
+	const calCreature = creature;
 	// FULLNAME
 	let fullnameString = '';
 	if (creature.name) fullnameString = capitalizeFirstLetter(creature.name);
@@ -53,7 +53,7 @@ const calcModifiersBonus = (creature: Creature | NewCreature) => {
 	if (creature.rank && creature.rank !== 'default')
 		fullnameString = fullnameString.concat(', ', creature.rank);
 	if (creature.type)
-		fullnameString = fullnameString.concat(
+		calCreature.fullname = fullnameString.concat(
 			' (',
 			capitalizeFirstLetter(creature.type),
 			')',
