@@ -66,6 +66,7 @@ export const ZodNewSpell = z.object({
 			'transform',
 			'move',
 			'remove',
+			'restrain',
 			'puzzle',
 		],
 		{
@@ -146,6 +147,7 @@ export const ZodSpell = z.object({
 			'transform',
 			'move',
 			'remove',
+			'restrain',
 			'puzzle',
 		],
 		{

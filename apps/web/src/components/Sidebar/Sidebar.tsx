@@ -1,15 +1,18 @@
 import { useAuth } from '@/store/authContext';
-import { capitalizeFirstLetter } from '@/utils/capitalize';
 import { Link, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import { BiLogIn, BiLogOut, BiMenu } from 'rocketicons/bi';
 import daogLogo from '../../data/daog-app.png';
 
+import useNetworkStatus from '@/hooks/useNetworkStatus';
+import { capitalizeFirstLetter } from '@/utils/capitalize';
+import { cn } from '@/utils/classNames';
 import Nav from './Nav';
 
 const Sidebar = () => {
 	const [open, setOpen] = useState(false);
 	const { user, logout } = useAuth();
+	const { isOnline } = useNetworkStatus();
 	const navigate = useNavigate();
 
 	const toggleMenu = () => {
@@ -43,11 +46,23 @@ const Sidebar = () => {
 						{<span className='hidden md:flex'>DAOG</span>}
 					</Link>
 				</h1>
-				{user && (
-					<p className='font-cabin w-1/2 pt-1 text-center align-baseline italic text-stone-500 md:w-[20dvw]'>
-						logged in as {capitalizeFirstLetter(user.name)}
-					</p>
-				)}
+				<p className='flex w-1/2 flex-row items-center justify-center gap-2 md:w-[20dvw]'>
+					<span
+						className={cn(`badge badge-full badge-xs animate-pulse`, {
+							'bg-orange-500': !isOnline,
+							'bg-accent': isOnline,
+							'bg-primary': user !== null,
+						})}
+					></span>
+					<span className='font-cabin text-center align-middle italic text-stone-500'>
+						{user !== null
+							? `logged in as ${capitalizeFirstLetter(user.name)}`
+							: isOnline
+								? 'server is live'
+								: 'checking server status'}
+					</span>
+				</p>
+
 				<nav
 					aria-label='main'
 					className={`${open ? 'block' : 'hidden'} relative -left-[10dvw] mx-auto space-x-10 text-xl tracking-wide md:block`}

@@ -127,7 +127,9 @@ const ActionCard = ({
 							)}
 						</p>
 						{action?.description && (
-							<p className='my-2 text-justify italic'>{action.description}</p>
+							<p className='my-2 px-1 text-justify italic'>
+								{action.description}
+							</p>
 						)}
 						<div
 							className={`pointer-events-auto absolute right-1 top-2 z-10 flex flex-col justify-end gap-1`}

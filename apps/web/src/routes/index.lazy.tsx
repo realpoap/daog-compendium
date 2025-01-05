@@ -1,10 +1,10 @@
 import LoginForm from '@/components/User/LoginForm';
 import RegisterForm from '@/components/User/RegisterForm';
+import useNetworkStatus from '@/hooks/useNetworkStatus';
 import { useAuth } from '@/store/authContext';
 import { capitalizeFirstLetter } from '@/utils/capitalize';
 import { trpc } from '@/utils/trpc';
 import { createLazyFileRoute } from '@tanstack/react-router';
-import { useEffect, useState } from 'react';
 
 export const Route = createLazyFileRoute('/')({
 	component: Index,
@@ -12,52 +12,22 @@ export const Route = createLazyFileRoute('/')({
 
 function Index() {
 	const { user, isAuthLoading, accessToken } = useAuth();
-	const [isOnline, setIsOnline] = useState<boolean>(navigator.onLine);
+	const { isOnline } = useNetworkStatus();
+
+	console.log('check isOnline in index: ', isOnline);
 
 	const spellCount = trpc.spells.getTotal.useQuery(undefined, {
-		enabled: isOnline,
+		enabled: isOnline === true,
 	});
 	const spellLatest = trpc.spells.getLatest.useQuery(undefined, {
-		enabled: isOnline,
+		enabled: isOnline === true,
 	});
 	const creatureCount = trpc.creatures.getTotal.useQuery(undefined, {
-		enabled: isOnline,
+		enabled: isOnline === true,
 	});
 	const creatureLatest = trpc.creatures.getLatest.useQuery(undefined, {
-		enabled: isOnline,
+		enabled: isOnline === true,
 	});
-
-	const checkApiStatus = async () => {
-		try {
-			const response = await fetch('https://daog-compendium.onrender.com');
-			setIsOnline(response.ok);
-		} catch (error) {
-			if (error instanceof Error) {
-				throw new Error(error.message);
-			} else {
-				// Handle internal server errors
-				console.error('Internal Server Error:', error);
-			}
-		}
-	};
-	const checkInternetConnection = () => {
-		if (navigator.onLine) {
-			checkApiStatus();
-		} else {
-			setIsOnline(false);
-		}
-	};
-
-	useEffect(() => {
-		window.addEventListener('online', checkInternetConnection);
-		window.addEventListener('offline', checkInternetConnection);
-		console.log(isOnline);
-
-		return () => {
-			window.removeEventListener('online', checkInternetConnection);
-			window.removeEventListener('offline', checkInternetConnection);
-		};
-	}, []);
 
 	if (!isOnline)
 		return (

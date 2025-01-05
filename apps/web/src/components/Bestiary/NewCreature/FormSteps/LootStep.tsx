@@ -123,7 +123,7 @@ const LootStep = ({
 			</div>
 			<div className='flex w-full flex-row items-center justify-center gap-4'>
 				<ActionButton
-					color='purple-500'
+					color='primary'
 					textColor='stone-800'
 					onClick={() => handlePrevious(3)}
 				>
@@ -132,7 +132,7 @@ const LootStep = ({
 					</span>
 				</ActionButton>
 				<ActionButton
-					color='purple-500'
+					color='primary'
 					textColor='stone-800'
 					onClick={() => handleNext([], 5)}
 				>
