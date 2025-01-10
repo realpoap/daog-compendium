@@ -82,7 +82,7 @@ const ActionFormEdit = ({
 		methods.getValues('name'),
 		methods.formState.isValidating,
 		methods.formState.isSubmitting,
-	]);
+	]); // name field is now DISABLED, could remove this
 
 	const onActionSubmit = (data: Action) => {
 		const { id, ...action } = data;
@@ -111,7 +111,7 @@ const ActionFormEdit = ({
 			>
 				<div className='modal-box bg-stone-100 dark:bg-stone-800 dark:text-stone-200'>
 					<h3 className='font-grenze w-full text-center text-4xl font-bold text-purple-400'>
-						New Action
+						Edit Action
 					</h3>
 					<FormProvider {...methods}>
 						<form

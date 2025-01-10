@@ -9,7 +9,7 @@ const StatsGroup = ({ text, inputs }: Props) => {
 	const values = Object.values(inputs);
 	const titles = Object.keys(inputs);
 	return (
-		<table className='table-xs font-cabin m-0 table w-1/2 border-separate p-0 md:w-1/4'>
+		<table className='table-xs font-cabin m-0 table w-1/2 border-separate p-0'>
 			<thead className='text-center font-bold dark:text-stone-200'>
 				{text ? (
 					<tr className='mb-0 border border-b-2 border-stone-500 text-center text-sm'>

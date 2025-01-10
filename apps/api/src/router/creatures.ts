@@ -124,7 +124,7 @@ export const creaturesRouter = router({
 			},
 		});
 	}),
-	removeAttribute: procedure
+	updateAttribute: procedure
 		.input(AttributeArraySchema)
 		.mutation(async ({ input }) => {
 			try {

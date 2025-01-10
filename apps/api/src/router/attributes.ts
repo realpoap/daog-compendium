@@ -1,4 +1,5 @@
 import { prisma } from '@api/index';
+import { serverErrorHandler } from '@api/lib/utils/errorHandler';
 import { AttributeSchema } from '@api/lib/zod-prisma';
 import { NewAttributeSchema } from '@api/lib/ZodCreature';
 import { procedure, router } from '@api/trpc';
@@ -60,10 +61,14 @@ export const attributesRouter = router({
 			});
 		}),
 	update: procedure.input(AttributeSchema).mutation(async ({ input }) => {
-		console.log('💌 updating attribute :', input.name);
-		return await prisma.attribute.update({
-			where: { name: input.name },
-			data: input,
-		});
+		try {
+			const { id, ...attribute } = input;
+			return await prisma.attribute.update({
+				where: { name: input.name },
+				data: attribute,
+			});
+		} catch (error) {
+			serverErrorHandler(error);
+		}
 	}),
 });
