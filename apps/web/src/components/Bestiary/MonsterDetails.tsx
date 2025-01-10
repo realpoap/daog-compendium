@@ -277,7 +277,7 @@ const MonsterDetails = () => {
 							<GiCheckedShield className='icon-stone-900 dark:icon-stone-200 mr-2 size-[1.1rem]' />
 							{monster?.defense || '~'}
 						</span>
-						<span className='grid-cols-1 after:pl-2 after:text-stone-500'>
+						<span className='grid-cols-1 after:pl-2 after:text-stone-500 md:after:text-stone-500 md:after:content-["|"]'>
 							<GiArmorVest className='icon-stone-900 dark:icon-stone-200 mr-2 size-[1.1rem]' />
 							{monster?.armor || '~'}
 						</span>
@@ -323,11 +323,11 @@ const MonsterDetails = () => {
 					</>
 				)}
 
-				<h3 className='font-grenze line mb-1 border-b-2 text-4xl font-semibold tracking-wider'>
-					Spells
-				</h3>
 				{monster?.magicDomain.length !== 0 && (
 					<div className='flex flex-col items-center justify-center'>
+						<h3 className='font-grenze line mb-1 border-b-2 text-4xl font-semibold tracking-wider'>
+							Spells
+						</h3>
 						<p className='italic text-stone-500'>
 							Can cast spells from the following domains :{' '}
 						</p>
