@@ -59,7 +59,7 @@ const Ability = ({
 
 	useEffect(() => {
 		if (searchAttribute.data) setDefaultAttribute(searchAttribute.data);
-	}, [searchAttribute.status]);
+	}, [searchAttribute.data]);
 
 	const removeAttribute = (name: string) => {
 		if (!edit) return;

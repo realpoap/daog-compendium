@@ -65,7 +65,7 @@ const AttributeFormEdit = ({
 			methods.reset(defaultAttribute as Attribute, {
 				keepDefaultValues: false,
 			});
-	}, []);
+	}, [defaultAttribute]);
 
 	const onActionSubmit = (data: Attribute) => {
 		const { id, ...attribute } = data;
