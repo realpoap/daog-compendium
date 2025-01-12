@@ -34,6 +34,7 @@ const SpellSearch = () => {
 	const [selectedDomain, setSelectedDomain] = useState<Option[]>([]);
 	const [selectedLevel, setSelectedLevel] = useState<Option[]>([]);
 	const [selectedTarget, setSelectedTarget] = useState<Option[]>([]);
+	const [selectedTarget, setSelectedTarget] = useState<Option[]>([]);
 
 	const keys = [
 		'titleCommon',
@@ -79,7 +80,7 @@ const SpellSearch = () => {
 				);
 			}
 
-			const filteredItems = filteredSpells.filter(item =>
+05:39 PM			const filteredItems = filteredSpells.filter(item =>
 				keys.some(key =>
 					item[key as keyof Spell]
 						?.toString()
