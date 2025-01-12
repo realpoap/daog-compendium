@@ -46,7 +46,7 @@ const Sidebar = () => {
 						{<span className='hidden md:flex'>DAOG</span>}
 					</Link>
 				</h1>
-				<p className='flex w-1/2 flex-row items-center justify-center gap-2 md:w-[20dvw]'>
+				<p className='flex w-full flex-row items-center justify-center gap-2 md:w-[20dvw]'>
 					<span
 						className={cn(`badge badge-full badge-xs animate-pulse`, {
 							'bg-orange-500': !isOnline,

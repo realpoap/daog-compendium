@@ -75,7 +75,7 @@ const SpellSearch = () => {
 			// and target selected
 			if (selectedTarget.length !== 0) {
 				filteredSpells = filteredSpells.filter(i =>
-					selectedTarget.some(a => a.value === i.target),
+					selectedTarget.some(a => a.value === i.targetType),
 				);
 			}
 

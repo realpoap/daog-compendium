@@ -73,7 +73,7 @@ const SpellDetails = () => {
 				<div className='flex items-center justify-center'>
 					<div
 						className={cn(
-							`*:icon-stone-200 *z:0 z-10 flex size-12 flex-col items-center justify-center overflow-clip rounded-full border-2 border-stone-200 *:shadow-stone-800 *:drop-shadow-lg`,
+							`*:icon-stone-500 *z:0 z-10 flex size-12 flex-col items-center justify-center overflow-clip rounded-full border-2 border-stone-200 *:shadow-stone-800 *:drop-shadow-lg`,
 							{
 								'*:icon-4xl *:mr-2': spell?.type === 'mouflette',
 								'*:icon-4xl *:-mt-2': spell?.type === 'blood',
