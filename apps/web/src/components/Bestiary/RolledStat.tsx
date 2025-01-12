@@ -22,8 +22,7 @@ const RolledStat = ({ rolledStat, initialValue, rolled }: Props) => {
 			<span
 				className={cn('text-stone-200', {
 					'text-red-500': rolledStat?.state === 'fumble',
-					'text-yellow-500': rolledStat?.state === 'crit',
-					'text-accent': rolledStat?.state === 'normal',
+					'text-accent': rolledStat?.state === 'crit',
 					'animate-pulse': rolled,
 				})}
 			>

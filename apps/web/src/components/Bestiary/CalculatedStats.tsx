@@ -82,7 +82,7 @@ const CalculatedStats = ({ monster }: Props) => {
 					}}
 				/>
 			</button>
-			<div className='font-cabin flex w-full list-none flex-col items-start justify-center gap-2 px-8 text-base font-semibold md:w-1/2 md:flex-row'>
+			<div className='font-cabin ml-4 flex w-full list-none flex-col items-start justify-center gap-2 px-8 text-base font-semibold md:w-1/2 md:flex-row'>
 				<div className='flex w-full justify-center gap-2 space-x-2 md:w-1/2 md:justify-start'>
 					<span className='flex w-1/4 items-center justify-between after:pl-2 after:text-stone-500 after:content-["|"]'>
 						<GiThunderSkull className='icon-stone-900 dark:icon-stone-200 icon-[1.1rem] mr-2' />

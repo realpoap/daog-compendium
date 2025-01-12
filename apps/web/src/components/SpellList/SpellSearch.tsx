@@ -1,4 +1,5 @@
 import { useAuth } from '@/store/authContext';
+import { spellOptions } from '@/types/spellOptions';
 import { cn } from '@/utils/classNames';
 import { trpc } from '@/utils/trpc';
 import { SpellSchema } from '@api/lib/zod-prisma/index';
@@ -9,6 +10,7 @@ import { RiAddLine } from 'rocketicons/ri';
 import { useDebounce } from 'use-debounce';
 import { z } from 'zod';
 import SkeletonList from '../SkeletonList';
+import SelectFilter, { Option } from './SelectFilter';
 
 type Spell = z.infer<typeof SpellSchema>;
 
@@ -24,6 +26,8 @@ const SpellSearch = () => {
 	const { user } = useAuth();
 
 	const isEditor = user?.role === 'ADMIN' || user?.role === 'EDITOR';
+
+	const [selectedDomain, setSelectedDomain] = useState<Option[]>([]);
 
 	const keys = [
 		'titleCommon',
@@ -105,66 +109,86 @@ const SpellSearch = () => {
 					)}
 				</div>
 
+				{/* FILTER FOR MAGIC DOMAINS */}
+				<SelectFilter
+					value={selectedDomain}
+					options={spellOptions}
+					onChange={o => setSelectedDomain(o)}
+					placeholder='Magic domains'
+					isMulti
+				/>
+				{/* FILTER FOR LVL */}
+				<SelectFilter
+					value={selectedDomain}
+					options={spellOptions}
+					onChange={o => setSelectedDomain(o)}
+					placeholder='Magic domains'
+					isMulti
+				/>
+
 				<div className='max-w-screen container z-0 flex snap-y snap-mandatory flex-col items-center justify-start overflow-hidden text-center'>
-					{prunedItems.map(d => (
-						<Link
-							className='w-full'
-							key={d.number}
-							to={`/spells/$id`}
-							params={{ id: `${d.number}` }}
-						>
-							<div className='flex w-full translate-y-8 snap-center flex-col items-center rounded-md p-1 pb-2 text-center opacity-100 transition-all duration-1000 ease-out hover:bg-stone-700'>
-								<span className='font-cabin text-sm text-stone-500'>
-									#{d.number}
-								</span>
-								<p
-									className={cn(
-										'font-cabin text-primary font-bold tracking-wider',
-									)}
-								>
-									{d.titleCommon}
-								</p>
-								<span className='font-cabinalign-baseline font-regular text-sm capitalize'>
-									{d.type}
-								</span>
-								<ul className='font-cabin font-regular flex w-3/4 list-none flex-row flex-wrap items-center justify-center gap-1 align-middle text-sm md:w-full'>
-									<span className='after:pl-2 after:text-stone-500 after:content-["|"]'>
-										<GiPolarStar className='icon-stone-900 dark:icon-stone-200 icon-sm mr-1' />
-										{d?.level}
+					{prunedItems
+						.filter(i => selectedDomain.some(a => a.value === i.type))
+						.filter(i => selectedDomain.some(a => a.value === i.type))
+						.map(d => (
+							<Link
+								className='w-full'
+								key={d.number}
+								to={`/spells/$id`}
+								params={{ id: `${d.number}` }}
+							>
+								<div className='flex w-full translate-y-8 snap-center flex-col items-center rounded-md p-1 pb-2 text-center opacity-100 transition-all duration-1000 ease-out hover:bg-stone-700'>
+									<span className='font-cabin text-sm text-stone-500'>
+										#{d.number}
 									</span>
+									<p
+										className={cn(
+											'font-cabin text-primary font-bold tracking-wider',
+										)}
+									>
+										{d.titleCommon}
+									</p>
+									<span className='font-cabinalign-baseline font-regular text-sm capitalize'>
+										{d.type}
+									</span>
+									<ul className='font-cabin font-regular flex w-3/4 list-none flex-row flex-wrap items-center justify-center gap-1 align-middle text-sm md:w-full'>
+										<span className='after:pl-2 after:text-stone-500 after:content-["|"]'>
+											<GiPolarStar className='icon-stone-900 dark:icon-stone-200 icon-sm mr-1' />
+											{d?.level}
+										</span>
 
-									<span className='after:pl-2 after:text-stone-500 after:content-["|"]'>
-										<GiDrop className='icon-stone-900 dark:icon-stone-100 icon-sm mr-1' />
-										{d.level}
-									</span>
+										<span className='after:pl-2 after:text-stone-500 after:content-["|"]'>
+											<GiDrop className='icon-stone-900 dark:icon-stone-100 icon-sm mr-1' />
+											{d.level}
+										</span>
 
-									<span className='after:pl-2 after:text-stone-500'>
-										<GiFairyWand className='icon-stone-900 dark:icon-stone-200 icon-sm mr-1' />
-										{d.difficulty}
+										<span className='after:pl-2 after:text-stone-500'>
+											<GiFairyWand className='icon-stone-900 dark:icon-stone-200 icon-sm mr-1' />
+											{d.difficulty}
+										</span>
+									</ul>
+									<span className='font-cabin text-sm text-stone-500'>
+										{'// '} {d?.casting} spell to {d?.action}{' '}
+										{d?.targetType !== 'none' && d?.targetType}
+										{d?.targetType === 'none'
+											? 'noone'
+											: d?.targetType === 'self'
+												? ''
+												: d?.targetType === 'single'
+													? ' creature'
+													: ' creatures'}
+										{' //'}
 									</span>
-								</ul>
-								<span className='font-cabin text-sm text-stone-500'>
-									{'// '} {d?.casting} spell to {d?.action}{' '}
-									{d?.targetType !== 'none' && d?.targetType}
-									{d?.targetType === 'none'
-										? 'noone'
-										: d?.targetType === 'self'
-											? ''
-											: d?.targetType === 'single'
-												? ' creature'
-												: ' creatures'}
-									{' //'}
-								</span>
-								<div
-									className={cn(
-										'font-noto mt-1 line-clamp-2 max-w-72 text-sm italic text-stone-700 md:line-clamp-none md:max-w-xl md:text-ellipsis dark:text-stone-400',
-									)}
-								>
-									{d.flavor}
+									<div
+										className={cn(
+											'font-noto mt-1 line-clamp-2 max-w-72 text-sm italic text-stone-700 md:line-clamp-none md:max-w-xl md:text-ellipsis dark:text-stone-400',
+										)}
+									>
+										{d.flavor}
+									</div>
 								</div>
-							</div>
-						</Link>
-					))}
+							</Link>
+						))}
 				</div>
 			</div>
 		);
