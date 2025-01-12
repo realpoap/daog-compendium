@@ -9,24 +9,17 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { FiEdit3, FiPlus } from 'rocketicons/fi';
 import {
-	GiArmorVest,
-	GiBullseye,
-	GiCheckedShield,
 	GiCrownedSkull,
-	GiFairyWand,
 	GiGlassHeart,
-	GiHood,
 	GiPotionBall,
 	GiRoundStar,
-	GiSemiClosedEye,
-	GiSwordWound,
-	GiThunderSkull,
 } from 'rocketicons/gi';
 import { RiCloseFill } from 'rocketicons/ri';
 import { ActionButton, BackButton, SmallCircleButton } from '../Buttons';
 import Collapsible from '../Collapsible';
 import Ability from './Ability';
 import ActionComponent from './ActionComponent';
+import CalculatedStats from './CalculatedStats';
 import StatsTable from './StatsTable';
 import ActionForm from './utils/ActionForm';
 import AttributeForm from './utils/AttributeForm';
@@ -261,46 +254,8 @@ const MonsterDetails = () => {
 						</div>
 					)}
 				</div>
+				{monster && <CalculatedStats monster={monster} />}
 
-				<div className='font-cabin flex w-full list-none flex-col items-center justify-center gap-2 pt-4 text-base font-semibold md:flex-row'>
-					<div className='grid-container justify-center gap-2 space-x-2'>
-						<span className='grid-cols-1 after:pl-2 after:text-stone-500 after:content-["|"]'>
-							<GiThunderSkull className='icon-stone-900 dark:icon-stone-200 icon-[1.1rem] mr-2' />
-							{monster?.initiative || '~'}
-						</span>
-						<span className='grid-cols-1 after:pl-2 after:text-stone-500 after:content-["|"]'>
-							<GiSwordWound className='icon-stone-900 dark:icon-stone-200 icon-base mr-2' />
-							{monster?.attack || '~'}
-						</span>
-
-						<span className='grid-cols-1 after:pl-2 after:text-stone-500 after:content-["|"]'>
-							<GiCheckedShield className='icon-stone-900 dark:icon-stone-200 mr-2 size-[1.1rem]' />
-							{monster?.defense || '~'}
-						</span>
-						<span className='grid-cols-1 after:pl-2 after:text-stone-500 md:after:text-stone-500 md:after:content-["|"]'>
-							<GiArmorVest className='icon-stone-900 dark:icon-stone-200 mr-2 size-[1.1rem]' />
-							{monster?.armor || '~'}
-						</span>
-					</div>
-					<div className='grid-container justify-center gap-2 space-x-2'>
-						<span className='grid-cols-1 after:pl-2 after:text-stone-500 after:content-["|"]'>
-							<GiBullseye className='icon-stone-900 dark:icon-stone-200 icon-base mr-2' />
-							{monster?.ranged || '~'}
-						</span>
-						<span className='grid-cols-1 after:pl-2 after:text-stone-500 after:content-["|"]'>
-							<GiSemiClosedEye className='icon-stone-900 dark:icon-stone-200 icon-sm mr-2' />
-							{monster?.perception || '~'}
-						</span>
-						<span className='grid-cols-1 after:pl-2 after:text-stone-500 after:content-["|"]'>
-							<GiHood className='icon-stone-900 dark:icon-stone-200 icon-[1.1rem] mr-2' />
-							{monster?.discretion || '~'}
-						</span>
-						<span className='grid-cols-1 after:pl-2 after:text-transparent after:content-["|"]'>
-							<GiFairyWand className='icon-stone-900 dark:icon-stone-200 icon-sm max-w-1/6 mr-2' />
-							{monster?.magic || '~'}
-						</span>
-					</div>
-				</div>
 				{monster && (
 					<div className='md:w-[54dvw] lg:w-2/5'>
 						<Collapsible title='show stats'>
