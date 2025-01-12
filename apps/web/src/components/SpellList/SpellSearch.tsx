@@ -1,4 +1,9 @@
 import { useAuth } from '@/store/authContext';
+import {
+	levelOptions,
+	spellOptions,
+	targetTypeOptions,
+} from '@/types/spellOptions';
 import { cn } from '@/utils/classNames';
 import { trpc } from '@/utils/trpc';
 import { SpellSchema } from '@api/lib/zod-prisma/index';
@@ -9,6 +14,7 @@ import { RiAddLine } from 'rocketicons/ri';
 import { useDebounce } from 'use-debounce';
 import { z } from 'zod';
 import SkeletonList from '../SkeletonList';
+import SelectFilter, { Option } from './SelectFilter';
 
 type Spell = z.infer<typeof SpellSchema>;
 
@@ -24,6 +30,10 @@ const SpellSearch = () => {
 	const { user } = useAuth();
 
 	const isEditor = user?.role === 'ADMIN' || user?.role === 'EDITOR';
+
+	const [selectedDomain, setSelectedDomain] = useState<Option[]>([]);
+	const [selectedLevel, setSelectedLevel] = useState<Option[]>([]);
+	const [selectedTarget, setSelectedTarget] = useState<Option[]>([]);
 
 	const keys = [
 		'titleCommon',
@@ -48,8 +58,28 @@ const SpellSearch = () => {
 
 		if (query.data && items !== undefined) {
 			setLatestNumber(Math.max(...items.map(i => i.number)));
+			let filteredSpells: Spell[] = items;
 
-			const filteredItems = items.filter(item =>
+			// if domain selected
+			if (selectedDomain.length !== 0) {
+				filteredSpells = items.filter(i =>
+					selectedDomain.some(a => a.value === i.type),
+				);
+			}
+			// and level selected
+			if (selectedLevel.length !== 0) {
+				filteredSpells = filteredSpells.filter(i =>
+					selectedLevel.some(a => Number(a.value) === Number(i.level)),
+				);
+			}
+			// and target selected
+			if (selectedTarget.length !== 0) {
+				filteredSpells = filteredSpells.filter(i =>
+					selectedTarget.some(a => a.value === i.target),
+				);
+			}
+
+			const filteredItems = filteredSpells.filter(item =>
 				keys.some(key =>
 					item[key as keyof Spell]
 						?.toString()
@@ -59,7 +89,7 @@ const SpellSearch = () => {
 			);
 			setPrunedItems(filteredItems);
 		}
-	}, [debouncedSearch, items]);
+	}, [debouncedSearch, items, selectedDomain, selectedLevel, selectedTarget]);
 
 	let prevScrollpos = window.scrollY;
 	window.onscroll = function () {
@@ -78,6 +108,7 @@ const SpellSearch = () => {
 		return <SkeletonList />;
 	}
 	//console.log(prunedItems);
+	console.log(selectedLevel);
 
 	if (query.data) {
 		return (
@@ -104,8 +135,43 @@ const SpellSearch = () => {
 						</Link>
 					)}
 				</div>
+				<div className='flex w-full flex-col items-center justify-start md:w-1/2 md:flex-row md:items-start md:justify-center'>
+					{/* FILTER FOR MAGIC DOMAINS */}
+					<SelectFilter
+						value={selectedDomain}
+						options={spellOptions}
+						onChange={o => setSelectedDomain(o)}
+						placeholder='Magic domains'
+						isMulti
+					/>
+					{/* FILTER FOR LVL */}
+					<SelectFilter
+						value={selectedLevel}
+						options={levelOptions}
+						onChange={o => setSelectedLevel(o)}
+						placeholder='Spell Level'
+						isMulti
+					/>
+					{/* FILTER FOR TARGET */}
+					<SelectFilter
+						value={selectedTarget}
+						options={targetTypeOptions}
+						onChange={o => setSelectedTarget(o)}
+						placeholder='Spell Target'
+						isMulti
+					/>
+				</div>
 
 				<div className='max-w-screen container z-0 flex snap-y snap-mandatory flex-col items-center justify-start overflow-hidden text-center'>
+					{prunedItems.length === 0 && (
+						<div className='font-grenze flex flex-col items-center justify-center'>
+							<h3 className='text-4xl'>No spell could be found</h3>
+							<span className='font-cabin italic'>
+								Those arcanes are too deep for your skills or the knowledge you
+								search does not exist ...
+							</span>
+						</div>
+					)}
 					{prunedItems.map(d => (
 						<Link
 							className='w-full'

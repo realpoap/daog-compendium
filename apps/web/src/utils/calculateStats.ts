@@ -5,6 +5,59 @@ import { Creature, CreatureAttribute, NewCreature } from '@api/lib/ZodCreature';
 import { CreatureItem } from '@api/lib/ZodItem';
 import { capitalizeFirstLetter } from './capitalize';
 
+export const calcSizeAvantage = (creature: Creature) => {
+	const av =
+		creature.size === 'tiny'
+			? 2
+			: creature.size === 'small'
+				? 1
+				: creature.size === 'gigantic'
+					? -3
+					: creature.size === 'huge'
+						? -2
+						: creature.size === 'large'
+							? -1
+							: 0;
+	return av;
+};
+
+export type Roll = {
+	score: number;
+	state: string | null;
+	roll: number | null;
+	stat: number;
+	avantages: number;
+	avRoll: number | null;
+};
+
+export const resetNonRoll = (stat: number, avantages: number) => {
+	return {
+		score: stat,
+		state: null,
+		roll: null,
+		stat: stat,
+		avantages: avantages,
+		avRoll: null,
+	};
+};
+
+export const rollStats = (stat: number, avantages: number) => {
+	const d12 = Math.ceil(Math.random() * 12);
+	const d4 = Math.ceil(Math.random() * 4);
+	const av = d4 * avantages;
+	const score = stat + d12 + av;
+	const diceState = d12 === 1 ? 'fumble' : d12 === 12 ? 'crit' : 'normal';
+	console.log(`🎲 result: ${score} (${stat} + ${d12} + ${av}) - ${diceState}`);
+	return {
+		score: score,
+		state: diceState,
+		roll: d12,
+		stat: stat,
+		avantages: avantages,
+		avRoll: av,
+	};
+};
+
 export const calculateStats = (creature: Creature | NewCreature) => {
 	const newCreature = calcModifiersBonus(creature);
 	creature.level = calcLevel(newCreature);
@@ -13,6 +66,7 @@ export const calculateStats = (creature: Creature | NewCreature) => {
 };
 
 const calcLevel = (creature: Creature | NewCreature) => {
+	const cel = creature.stats.CEL ? creature.stats.CEL - 15 : 0;
 	const att = creature.attack ? creature.attack - 15 : 0;
 	const def = creature.defense ? creature.defense - 15 : 0;
 	const vit = creature.health ? creature.health - 15 : 0;
@@ -23,13 +77,13 @@ const calcLevel = (creature: Creature | NewCreature) => {
 	const caster = creature?.isCaster === true ? 2 : 1;
 	const main = creature?.actionList?.main ? creature.actionList?.main * 5 : 1;
 	const epic = creature?.actionList?.main ? creature.actionList?.main * 10 : 1;
-	const attributes = creature?.attributes ? creature.attributes.length * 2 : 0;
+	const attributes = creature?.attributes ? creature.attributes.length : 0;
 	const magic = creature?.magic ? creature.magic : 0;
 	const glory = creature.glory === null ? 1 : 1 + Number(creature.glory) * 0.1;
 
 	const level = Math.round(
 		(att * 5 +
-			def * 4 +
+			def * 5 +
 			vit * 1.5 +
 			sen * 3 * caster +
 			magic +
@@ -38,9 +92,10 @@ const calcLevel = (creature: Creature | NewCreature) => {
 			will * 1 +
 			disc * 2 +
 			main * 3 +
-			attributes * 2 +
+			cel * 1 +
 			epic * 2) /
-			12,
+			12 +
+			attributes,
 	);
 
 	console.log('level:', level);
