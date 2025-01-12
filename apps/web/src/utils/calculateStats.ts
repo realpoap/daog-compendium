@@ -23,11 +23,22 @@ export const calcSizeAvantage = (creature: Creature) => {
 
 export type Roll = {
 	score: number;
-	state: string;
-	roll: number;
+	state: string | null;
+	roll: number | null;
 	stat: number;
 	avantages: number;
-	avRoll: number;
+	avRoll: number | null;
+};
+
+export const resetNonRoll = (stat: number, avantages: number) => {
+	return {
+		score: stat,
+		state: null,
+		roll: null,
+		stat: stat,
+		avantages: avantages,
+		avRoll: null,
+	};
 };
 
 export const rollStats = (stat: number, avantages: number) => {

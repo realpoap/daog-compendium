@@ -3,20 +3,28 @@ import { cn } from '@/utils/classNames';
 import SpinningNumber from 'react-spinning-number';
 
 type Props = {
-	rolledStat: Roll;
+	rolledStat: Roll | undefined;
+	rolled: boolean;
+	initialValue: number;
 };
 
-const RolledStat = ({ rolledStat }: Props) => {
-	const score = rolledStat?.score ? rolledStat?.score : 15;
+const RolledStat = ({ rolledStat, initialValue, rolled }: Props) => {
+	const score = rolled && rolledStat ? rolledStat?.score : initialValue;
 	return (
 		<div
 			className='tooltip'
-			data-tip={`${rolledStat.stat} + ${rolledStat.roll} + ${rolledStat.avRoll}`}
+			data-tip={
+				rolledStat
+					? `${rolledStat.stat} + ${rolledStat.roll} + ${rolledStat.avRoll}`
+					: ``
+			}
 		>
 			<span
-				className={cn('text-accent animate-pulse', {
+				className={cn('text-stone-200', {
 					'text-red-500': rolledStat?.state === 'fumble',
 					'text-yellow-500': rolledStat?.state === 'crit',
+					'text-accent': rolledStat?.state === 'normal',
+					'animate-pulse': rolled,
 				})}
 			>
 				<SpinningNumber fontSize={1}>{score}</SpinningNumber>

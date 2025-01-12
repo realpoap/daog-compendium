@@ -1,4 +1,9 @@
-import { calcSizeAvantage, Roll, rollStats } from '@/utils/calculateStats';
+import {
+	calcSizeAvantage,
+	resetNonRoll,
+	Roll,
+	rollStats,
+} from '@/utils/calculateStats';
 import { Creature } from '@api/lib/ZodCreature';
 import { useEffect, useRef, useState } from 'react';
 import {
@@ -39,6 +44,12 @@ const CalculatedStats = ({ monster }: Props) => {
 		if (timerId.current !== null) return;
 		timerId.current = window.setTimeout(() => {
 			console.log('reset');
+			setRolledInit(resetNonRoll(monster.initiative || 15, 0));
+			setRolledAttack(resetNonRoll(monster.attack, 0));
+			setRolledDefense(resetNonRoll(monster.defense, 0));
+			setRolledRanged(resetNonRoll(monster.ranged, 0));
+			setRolledDiscretion(resetNonRoll(monster.discretion || 15, 0));
+			setRolledPerception(resetNonRoll(monster.perception, 0));
 			setRolled(false);
 		}, 5000);
 	};
@@ -55,13 +66,13 @@ const CalculatedStats = ({ monster }: Props) => {
 		setRolledDefense(rollStats(monster.defense, avantage));
 		setRolledRanged(rollStats(monster.ranged, avantage));
 		setRolledDiscretion(rollStats(monster.discretion || 15, avantage));
-		setRolledPerception(rollStats(monster.perception, avantage));
+		setRolledPerception(rollStats(monster.perception, 0));
 	};
 	return (
 		<>
 			<button>
 				<GiRollingDiceCup
-					className='icon-2xl dark:icon-stone-200 hover:icon-primary hover:shadow-stone-900 hover:drop-shadow-lg'
+					className='icon-2xl dark:icon-stone-200 hover:icon-primary mt-4 hover:shadow-stone-900 hover:drop-shadow-lg'
 					onClick={() => {
 						stopTimer();
 						const avantage = calcSizeAvantage(monster);
@@ -71,71 +82,83 @@ const CalculatedStats = ({ monster }: Props) => {
 					}}
 				/>
 			</button>
-			<div className='font-cabin flex w-full list-none flex-col items-center justify-center gap-2 px-8 pt-4 text-base font-semibold md:w-1/2 md:flex-row'>
+			<div className='font-cabin flex w-full list-none flex-col items-start justify-center gap-2 px-8 text-base font-semibold md:w-1/2 md:flex-row'>
 				<div className='flex w-full justify-center gap-2 space-x-2 md:w-1/2 md:justify-start'>
-					<span className='flex w-1/4 justify-between after:pl-2 after:text-stone-500 after:content-["|"]'>
+					<span className='flex w-1/4 items-center justify-between after:pl-2 after:text-stone-500 after:content-["|"]'>
 						<GiThunderSkull className='icon-stone-900 dark:icon-stone-200 icon-[1.1rem] mr-2' />
-						{rolled && rolledInit ? (
-							<RolledStat rolledStat={rolledInit} />
-						) : monster?.initiative ? (
-							monster?.initiative
+						{monster?.initiative ? (
+							<RolledStat
+								rolledStat={rolledInit}
+								rolled={rolled}
+								initialValue={monster?.initiative}
+							/>
 						) : (
 							'~'
 						)}
 					</span>
-					<span className='flex w-1/4 justify-between after:pl-2 after:text-stone-500 after:content-["|"]'>
+					<span className='flex w-1/4 items-center justify-between after:pl-2 after:text-stone-500 after:content-["|"]'>
 						<GiSwordWound className='icon-stone-900 dark:icon-stone-200 icon-base mr-2' />
-						{rolled && rolledAttack ? (
-							<RolledStat rolledStat={rolledAttack} />
-						) : monster?.attack ? (
-							monster?.attack
+						{monster?.attack ? (
+							<RolledStat
+								rolledStat={rolledAttack}
+								rolled={rolled}
+								initialValue={monster?.attack}
+							/>
 						) : (
 							'~'
 						)}
 					</span>
 
-					<span className='flex w-1/4 justify-between after:pl-2 after:text-stone-500 after:content-["|"]'>
+					<span className='flex w-1/4 items-center justify-between after:pl-2 after:text-stone-500 after:content-["|"]'>
 						<GiCheckedShield className='icon-stone-900 dark:icon-stone-200 mr-2 size-[1.1rem]' />
-						{rolled && rolledDefense ? (
-							<RolledStat rolledStat={rolledDefense} />
-						) : monster?.defense ? (
-							monster?.defense
+						{monster?.defense ? (
+							<RolledStat
+								rolledStat={rolledDefense}
+								rolled={rolled}
+								initialValue={monster?.defense}
+							/>
 						) : (
 							'~'
 						)}
 					</span>
-					<span className='flex w-1/4 justify-between after:pl-2 after:text-stone-500 md:after:text-stone-500 md:after:content-["|"]'>
+					<span className='flex w-1/4 items-center justify-between after:pl-2 after:text-stone-500 md:after:text-stone-500 md:after:content-["|"]'>
 						<GiArmorVest className='icon-stone-900 dark:icon-stone-200 mr-2 size-[1.1rem]' />
 						{monster?.armor || '~'}
 					</span>
 				</div>
-				<div className='flex w-full justify-center gap-2 space-x-2 md:w-1/2 md:justify-start'>
-					<span className='flex w-1/4 justify-between after:pl-2 after:text-stone-500 after:content-["|"]'>
+				<div className='flex w-full items-center justify-center gap-2 space-x-2 md:w-1/2 md:justify-start'>
+					<span className='flex w-1/4 items-center justify-between after:pl-2 after:text-stone-500 after:content-["|"]'>
 						<GiBullseye className='icon-stone-900 dark:icon-stone-200 icon-base mr-2' />
-						{rolled && rolledRanged ? (
-							<RolledStat rolledStat={rolledRanged} />
-						) : monster?.ranged ? (
-							monster?.ranged
+						{monster?.ranged ? (
+							<RolledStat
+								rolledStat={rolledRanged}
+								rolled={rolled}
+								initialValue={monster?.ranged}
+							/>
 						) : (
 							'~'
 						)}
 					</span>
-					<span className='flex w-1/4 justify-between after:pl-2 after:text-stone-500 after:content-["|"]'>
+					<span className='flex w-1/4 items-center justify-between after:pl-2 after:text-stone-500 after:content-["|"]'>
 						<GiSemiClosedEye className='icon-stone-900 dark:icon-stone-200 icon-sm mr-2' />
-						{rolled && rolledPerception ? (
-							<RolledStat rolledStat={rolledPerception} />
-						) : monster?.perception ? (
-							monster?.perception
+						{monster?.perception ? (
+							<RolledStat
+								rolledStat={rolledPerception}
+								rolled={rolled}
+								initialValue={monster?.perception}
+							/>
 						) : (
 							'~'
 						)}
 					</span>
-					<span className='flex w-1/4 justify-between after:pl-2 after:text-stone-500 after:content-["|"]'>
+					<span className='flex w-1/4 items-center justify-between after:pl-2 after:text-stone-500 after:content-["|"]'>
 						<GiHood className='icon-stone-900 dark:icon-stone-200 icon-[1.1rem] mr-2' />
-						{rolled && rolledDiscretion ? (
-							<RolledStat rolledStat={rolledDiscretion} />
-						) : monster?.discretion ? (
-							monster?.discretion
+						{monster?.discretion ? (
+							<RolledStat
+								rolledStat={rolledDiscretion}
+								rolled={rolled}
+								initialValue={monster?.discretion}
+							/>
 						) : (
 							'~'
 						)}
