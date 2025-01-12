@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 export type Option = {
 	label: string;
-	value: string;
+	value: string | number;
 	icon?: JSX.Element;
 };
 
@@ -58,7 +58,7 @@ const SelectFilter = ({
 			onClick={() => setIsOpen(prev => !prev)}
 			onBlur={() => setIsOpen(false)}
 			tabIndex={0}
-			className='font-cabin focus:border-primary flex w-1/4 flex-col items-start justify-start gap-2 rounded-lg border-stone-200 bg-stone-700 px-2 shadow-lg outline-none'
+			className='font-cabin focus:border-primary m-1 flex w-fit flex-col items-start justify-start gap-2 rounded-lg border-stone-200 bg-stone-700 px-2 shadow-lg outline-none'
 		>
 			<div className='w-full'>
 				<div className='flex h-fit w-full flex-row items-center justify-stretch gap-2'>
