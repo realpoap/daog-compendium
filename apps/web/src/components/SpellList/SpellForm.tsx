@@ -8,6 +8,7 @@ import { cn } from '@/utils/classNames';
 import { trpc } from '@/utils/trpc';
 import { ZodNewSpell } from '@api/lib/ZodSpell'; // resolver for RHF
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useNavigate } from '@tanstack/react-router';
 import { FormProvider, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
@@ -26,6 +27,7 @@ import TitleCollapse from '../TitleCollapse';
 type NewSpell = z.infer<typeof ZodNewSpell>; // Types for New Spell to tRPC
 
 const SpellForm = () => {
+	const navigate = useNavigate();
 	const methods = useForm<NewSpell>({
 		resolver: async (data, context, options) => {
 			// you can debug your validation schema here
@@ -41,9 +43,13 @@ const SpellForm = () => {
 
 	const highestSpellNumber = trpc.spells.getHighestNumber.useQuery();
 	const createSpell = trpc.spells.create.useMutation({
-		onSuccess: () => {
+		onSuccess: data => {
 			toast.success('Spell created !');
 			methods.reset();
+			navigate({
+				to: '/spells/$id',
+				params: { id: `${data.id}` },
+			});
 		},
 		onError: error => {
 			toast.error('Something bad happened...');

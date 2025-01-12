@@ -1,5 +1,9 @@
 import { useAuth } from '@/store/authContext';
-import { levelOptions, spellOptions } from '@/types/spellOptions';
+import {
+	levelOptions,
+	spellOptions,
+	targetTypeOptions,
+} from '@/types/spellOptions';
 import { cn } from '@/utils/classNames';
 import { trpc } from '@/utils/trpc';
 import { SpellSchema } from '@api/lib/zod-prisma/index';
@@ -29,6 +33,7 @@ const SpellSearch = () => {
 
 	const [selectedDomain, setSelectedDomain] = useState<Option[]>([]);
 	const [selectedLevel, setSelectedLevel] = useState<Option[]>([]);
+	const [selectedTarget, setSelectedTarget] = useState<Option[]>([]);
 
 	const keys = [
 		'titleCommon',
@@ -60,19 +65,18 @@ const SpellSearch = () => {
 				filteredSpells = items.filter(i =>
 					selectedDomain.some(a => a.value === i.type),
 				);
-				// and level selected
-				if (selectedLevel.length !== 0) {
-					filteredSpells = filteredSpells.filter(i =>
-						selectedLevel.some(a => Number(a.value) === Number(i.level)),
-					);
-				}
-			} else {
-				//if only level selected
-				if (selectedLevel.length !== 0) {
-					filteredSpells = items.filter(i =>
-						selectedLevel.some(a => Number(a.value) === Number(i.level)),
-					);
-				}
+			}
+			// and level selected
+			if (selectedLevel.length !== 0) {
+				filteredSpells = filteredSpells.filter(i =>
+					selectedLevel.some(a => Number(a.value) === Number(i.level)),
+				);
+			}
+			// and target selected
+			if (selectedTarget.length !== 0) {
+				filteredSpells = filteredSpells.filter(i =>
+					selectedTarget.some(a => a.value === i.targetType),
+				);
 			}
 
 			const filteredItems = filteredSpells.filter(item =>
@@ -85,7 +89,7 @@ const SpellSearch = () => {
 			);
 			setPrunedItems(filteredItems);
 		}
-	}, [debouncedSearch, items, selectedDomain, selectedLevel]);
+	}, [debouncedSearch, items, selectedDomain, selectedLevel, selectedTarget]);
 
 	let prevScrollpos = window.scrollY;
 	window.onscroll = function () {
@@ -148,9 +152,26 @@ const SpellSearch = () => {
 						placeholder='Spell Level'
 						isMulti
 					/>
+					{/* FILTER FOR TARGET */}
+					<SelectFilter
+						value={selectedTarget}
+						options={targetTypeOptions}
+						onChange={o => setSelectedTarget(o)}
+						placeholder='Spell Target'
+						isMulti
+					/>
 				</div>
 
 				<div className='max-w-screen container z-0 flex snap-y snap-mandatory flex-col items-center justify-start overflow-hidden text-center'>
+					{prunedItems.length === 0 && (
+						<div className='font-grenze flex flex-col items-center justify-center'>
+							<h3 className='text-4xl'>No spell could be found</h3>
+							<span className='font-cabin italic'>
+								Those arcanes are too deep for your skills or the knowledge you
+								search does not exist ...
+							</span>
+						</div>
+					)}
 					{prunedItems.map(d => (
 						<Link
 							className='w-full'
