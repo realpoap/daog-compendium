@@ -131,7 +131,7 @@ const AttributeFormEdit = ({
 									isValid={methods.formState.isValid}
 									color='accent'
 									textColor='stone-800'
-									text='Add Attribute'
+									text='Edit Attribute'
 								/>
 							</form>
 						</FormProvider>

@@ -232,7 +232,14 @@ const BestiaryView = () => {
 					</Link>
 				)}
 			</div>
-
+			{prunedItems.length === 0 && (
+				<div className='font-grenze flex flex-col items-center justify-center'>
+					<h3 className='text-4xl'>No creature could be found</h3>
+					<span className='font-cabin italic'>
+						These lands are barren or your prey too sneaky ...
+					</span>
+				</div>
+			)}
 			{prunedItems.map(m => (
 				<Link
 					className='w-full'
