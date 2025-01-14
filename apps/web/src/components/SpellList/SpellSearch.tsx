@@ -125,6 +125,33 @@ const SpellSearch = () => {
 						)}
 						type='search'
 					/>
+					<div className='flex w-full flex-col items-center justify-start md:w-1/2 md:flex-row md:items-start md:justify-center'>
+						{/* FILTER FOR MAGIC DOMAINS */}
+						<SelectFilter
+							value={selectedDomain}
+							options={spellOptions}
+							onChange={o => setSelectedDomain(o)}
+							placeholder='Magic domains'
+							isMulti
+						/>
+						{/* FILTER FOR LVL */}
+						<SelectFilter
+							value={selectedLevel}
+							options={levelOptions}
+							onChange={o => setSelectedLevel(o)}
+							placeholder='Spell Level'
+							isMulti
+						/>
+						{/* FILTER FOR TARGET */}
+						<SelectFilter
+							value={selectedTarget}
+							options={targetTypeOptions}
+							onChange={o => setSelectedTarget(o)}
+							placeholder='Spell Target'
+							isMulti
+						/>
+					</div>
+
 					{isEditor && (
 						<Link
 							id='add-button'
@@ -134,32 +161,6 @@ const SpellSearch = () => {
 							<RiAddLine className='icon-white-2xl' />
 						</Link>
 					)}
-				</div>
-				<div className='flex w-full flex-col items-center justify-start md:w-1/2 md:flex-row md:items-start md:justify-center'>
-					{/* FILTER FOR MAGIC DOMAINS */}
-					<SelectFilter
-						value={selectedDomain}
-						options={spellOptions}
-						onChange={o => setSelectedDomain(o)}
-						placeholder='Magic domains'
-						isMulti
-					/>
-					{/* FILTER FOR LVL */}
-					<SelectFilter
-						value={selectedLevel}
-						options={levelOptions}
-						onChange={o => setSelectedLevel(o)}
-						placeholder='Spell Level'
-						isMulti
-					/>
-					{/* FILTER FOR TARGET */}
-					<SelectFilter
-						value={selectedTarget}
-						options={targetTypeOptions}
-						onChange={o => setSelectedTarget(o)}
-						placeholder='Spell Target'
-						isMulti
-					/>
 				</div>
 
 				<div className='max-w-screen container z-0 flex snap-y snap-mandatory flex-col items-center justify-start overflow-hidden text-center'>

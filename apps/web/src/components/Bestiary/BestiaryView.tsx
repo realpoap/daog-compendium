@@ -1,4 +1,5 @@
 import { useAuth } from '@/store/authContext';
+import { creatureHabitatOptions } from '@/types/creatureOptions';
 import { cn } from '@/utils/classNames';
 import { trpc } from '@/utils/trpc';
 import { Creature } from '@api/lib/ZodCreature';
@@ -13,12 +14,15 @@ import {
 import { RiAddLine } from 'rocketicons/ri';
 import { useDebounce } from 'use-debounce';
 import SkeletonList from '../SkeletonList';
+import SelectFilter, { Option } from '../SpellList/SelectFilter';
 
 const BestiaryView = () => {
 	const [items, setItems] = useState<Creature[] | undefined>();
 	const [search, setSearch] = useState('');
 	const [debouncedSearch] = useDebounce(search, 500);
 	const [prunedItems, setPrunedItems] = useState<Creature[]>([]);
+
+	const [selectedHabitat, setSelectedHabitat] = useState<Option[]>([]);
 
 	const getAllCreatures = trpc.creatures.getAll.useQuery(undefined, {
 		enabled: items === undefined,
@@ -45,7 +49,15 @@ const BestiaryView = () => {
 			return console.log('loading data...');
 		}
 		if (getAllCreatures.data && items !== undefined) {
-			const filteredItems = items.filter(item =>
+			let filteredCreatures: Creature[] = items;
+
+			// if domain selected
+			if (selectedHabitat.length !== 0) {
+				filteredCreatures = filteredCreatures.filter(i =>
+					selectedHabitat.some(a => i.habitat.includes(a.value)),
+				);
+			}
+			const filteredItems = filteredCreatures.filter(item =>
 				keys.some(key =>
 					item[key as keyof Creature]
 						?.toString()
@@ -55,7 +67,7 @@ const BestiaryView = () => {
 			);
 			setPrunedItems(filteredItems);
 		}
-	}, [debouncedSearch, items]);
+	}, [debouncedSearch, items, selectedHabitat]);
 
 	let prevScrollpos = window.scrollY;
 	window.onscroll = function () {
@@ -88,6 +100,23 @@ const BestiaryView = () => {
 					)}
 					type='search'
 				/>
+				<div className='flex w-full flex-col items-center justify-start md:w-1/2 md:flex-row md:items-start md:justify-center'>
+					{/* FILTER FOR MAGIC DOMAINS */}
+					<SelectFilter
+						value={selectedHabitat}
+						options={creatureHabitatOptions}
+						onChange={o => setSelectedHabitat(o)}
+						placeholder='Habitats'
+						isMulti
+					/>
+					<input
+						type='range'
+						min={0}
+						max='100'
+						value='100'
+						className='range'
+					/>
+				</div>
 				{isEditor && (
 					<Link
 						id='add-button'
