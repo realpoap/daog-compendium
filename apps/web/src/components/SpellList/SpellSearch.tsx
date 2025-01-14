@@ -15,6 +15,7 @@ import { useDebounce } from 'use-debounce';
 import { z } from 'zod';
 import Collapsible from '../Collapsible';
 import SkeletonList from '../SkeletonList';
+import TitleCount from '../TitleCount';
 import SelectFilter, { Option } from './SelectFilter';
 
 type Spell = z.infer<typeof SpellSchema>;
@@ -117,6 +118,7 @@ const SpellSearch = () => {
 				<div className='container sticky top-10 z-10 flex min-h-[20dvh] flex-col items-center bg-gradient-to-b from-stone-100 from-80% dark:from-stone-800'>
 					<h1 className='font-grenze sticky mx-auto my-4 text-center text-6xl font-bold tracking-wide text-purple-900 md:mt-8 dark:text-purple-400'>
 						Spells
+						{query.data && <TitleCount number={query.data.length} />}
 					</h1>
 					<input
 						onChange={e => setSearch(e.target.value)}

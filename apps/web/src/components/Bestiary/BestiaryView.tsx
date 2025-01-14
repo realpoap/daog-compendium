@@ -20,6 +20,7 @@ import { useDebounce } from 'use-debounce';
 import Collapsible from '../Collapsible';
 import SkeletonList from '../SkeletonList';
 import SelectFilter, { Option } from '../SpellList/SelectFilter';
+import TitleCount from '../TitleCount';
 
 const BestiaryView = () => {
 	const [items, setItems] = useState<Creature[] | undefined>();
@@ -143,14 +144,17 @@ const BestiaryView = () => {
 	return (
 		<div className='mt-sm flex h-[100dvh] flex-col items-center p-2'>
 			<div className='container sticky top-8 z-10 flex flex-col items-center bg-gradient-to-b from-stone-100 from-80% pb-8 dark:from-stone-800'>
-				<h1 className='font-grenze dark:text-primary sticky z-10 mx-auto my-4 text-center text-6xl font-bold tracking-wide text-purple-900 md:mt-8'>
+				<h1 className='font-grenze dark:text-primary text-secondary sticky z-10 mx-auto my-4 text-center text-6xl font-bold tracking-wide md:mt-8'>
 					Bestiary
+					{getAllCreatures.data && (
+						<TitleCount number={getAllCreatures.data.length} />
+					)}
 				</h1>
 				<input
 					onChange={e => setSearch(e.target.value)}
 					placeholder='a curious monster...'
 					className={cn(
-						'font-grenze dark:text-primary dark:caret-primary dark:focus:border-primary dark:focus:ring-primary mb-4 w-60 rounded-lg border border-none p-1 pl-2 text-center text-lg text-purple-900 caret-purple-900 shadow-sm placeholder:italic placeholder:text-stone-500 focus:border-purple-900 focus:outline-none focus:ring-1 focus:ring-purple-900 dark:bg-stone-700',
+						'font-grenze dark:text-primary dark:caret-primary dark:focus:border-primary dark:focus:ring-primary text-secondary caret-secondary focus:border-secondary focus:ring-secondary mb-4 w-60 rounded-lg border border-none p-1 pl-2 text-center text-lg shadow-sm placeholder:italic placeholder:text-stone-500 focus:outline-none focus:ring-1 dark:bg-stone-700',
 					)}
 					type='search'
 				/>
