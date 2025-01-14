@@ -1,3 +1,5 @@
+import AttributesList from '@/components/Attributes/AttributesList';
+import TitleCount from '@/components/TitleCount';
 import LoginForm from '@/components/User/LoginForm';
 import RegisterForm from '@/components/User/RegisterForm';
 import useNetworkStatus from '@/hooks/useNetworkStatus';
@@ -84,6 +86,9 @@ function Index() {
 							</div>
 						</div>
 					</div>
+				</section>
+				<section className='flex w-full flex-col items-start justify-start px-8'>
+					<AttributesList />
 				</section>
 			</div>
 		);
