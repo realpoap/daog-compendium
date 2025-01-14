@@ -13,6 +13,7 @@ import { GiDrop, GiFairyWand, GiPolarStar } from 'rocketicons/gi';
 import { RiAddLine } from 'rocketicons/ri';
 import { useDebounce } from 'use-debounce';
 import { z } from 'zod';
+import Collapsible from '../Collapsible';
 import SkeletonList from '../SkeletonList';
 import SelectFilter, { Option } from './SelectFilter';
 
@@ -121,10 +122,39 @@ const SpellSearch = () => {
 						onChange={e => setSearch(e.target.value)}
 						placeholder='some strange wizardry...'
 						className={cn(
-							'b-stone-500 font-grenze mb-4 w-60 rounded-lg border p-1 pl-2 text-center text-lg text-purple-900 caret-purple-900 shadow-sm placeholder:italic focus:border-purple-900 focus:outline-none focus:ring-1 focus:ring-purple-900 dark:bg-stone-700 dark:text-purple-400 dark:caret-purple-400 dark:focus:border-purple-400 dark:focus:ring-purple-400',
+							'font-grenze dark:text-primary dark:caret-primary dark:focus:border-primary dark:focus:ring-primary mb-4 w-60 rounded-lg border border-none p-1 pl-2 text-center text-lg text-purple-900 caret-purple-900 shadow-sm placeholder:italic placeholder:text-stone-500 focus:border-purple-900 focus:outline-none focus:ring-1 focus:ring-purple-900 dark:bg-stone-700',
 						)}
 						type='search'
 					/>
+					<Collapsible title='filter results'>
+						<div className='flex w-full flex-col items-center justify-start md:flex-row md:items-start md:justify-center'>
+							{/* FILTER FOR MAGIC DOMAINS */}
+							<SelectFilter
+								value={selectedDomain}
+								options={spellOptions}
+								onChange={o => setSelectedDomain(o)}
+								placeholder='Magic domains'
+								isMulti
+							/>
+							{/* FILTER FOR LVL */}
+							<SelectFilter
+								value={selectedLevel}
+								options={levelOptions}
+								onChange={o => setSelectedLevel(o)}
+								placeholder='Spell Level'
+								isMulti
+							/>
+							{/* FILTER FOR TARGET */}
+							<SelectFilter
+								value={selectedTarget}
+								options={targetTypeOptions}
+								onChange={o => setSelectedTarget(o)}
+								placeholder='Spell Target'
+								isMulti
+							/>
+						</div>
+					</Collapsible>
+
 					{isEditor && (
 						<Link
 							id='add-button'
@@ -134,32 +164,6 @@ const SpellSearch = () => {
 							<RiAddLine className='icon-white-2xl' />
 						</Link>
 					)}
-				</div>
-				<div className='flex w-full flex-col items-center justify-start md:w-1/2 md:flex-row md:items-start md:justify-center'>
-					{/* FILTER FOR MAGIC DOMAINS */}
-					<SelectFilter
-						value={selectedDomain}
-						options={spellOptions}
-						onChange={o => setSelectedDomain(o)}
-						placeholder='Magic domains'
-						isMulti
-					/>
-					{/* FILTER FOR LVL */}
-					<SelectFilter
-						value={selectedLevel}
-						options={levelOptions}
-						onChange={o => setSelectedLevel(o)}
-						placeholder='Spell Level'
-						isMulti
-					/>
-					{/* FILTER FOR TARGET */}
-					<SelectFilter
-						value={selectedTarget}
-						options={targetTypeOptions}
-						onChange={o => setSelectedTarget(o)}
-						placeholder='Spell Target'
-						isMulti
-					/>
 				</div>
 
 				<div className='max-w-screen container z-0 flex snap-y snap-mandatory flex-col items-center justify-start overflow-hidden text-center'>
