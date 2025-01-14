@@ -3,7 +3,7 @@ type Props = {
 };
 const TitleCount = ({ number }: Props) => {
 	return (
-		<span className='font-cabin absolute top-9 ml-2 text-base font-medium'>
+		<span className='font-cabin absolute top-10 ml-2 text-sm font-medium'>
 			{number}
 		</span>
 	);
