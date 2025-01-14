@@ -1,7 +1,11 @@
 import { useAuth } from '@/store/authContext';
-import { creatureHabitatOptions } from '@/types/creatureOptions';
+import {
+	creatureHabitatOptions,
+	creatureTypeOptions,
+} from '@/types/creatureOptions';
 import { cn } from '@/utils/classNames';
 import { trpc } from '@/utils/trpc';
+import { HabitatTypeType } from '@api/lib/zod-prisma';
 import { Creature } from '@api/lib/ZodCreature';
 import { Link } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
@@ -13,6 +17,7 @@ import {
 } from 'rocketicons/gi';
 import { RiAddLine } from 'rocketicons/ri';
 import { useDebounce } from 'use-debounce';
+import Collapsible from '../Collapsible';
 import SkeletonList from '../SkeletonList';
 import SelectFilter, { Option } from '../SpellList/SelectFilter';
 
@@ -22,7 +27,15 @@ const BestiaryView = () => {
 	const [debouncedSearch] = useDebounce(search, 500);
 	const [prunedItems, setPrunedItems] = useState<Creature[]>([]);
 
+	const [rangeLevel, setRangeLevel] = useState({
+		min: 0,
+		max: 100,
+	});
 	const [selectedHabitat, setSelectedHabitat] = useState<Option[]>([]);
+	const [selectedType, setSelectedType] = useState<Option[]>([]);
+	const [selectedMaxLevel, setSelectedMaxLevel] = useState<number>();
+	const [selectedLegendary, setSelectedLegendary] = useState<boolean>(true);
+	const [selectedMundane, setSelectedMundane] = useState<boolean>(true);
 
 	const getAllCreatures = trpc.creatures.getAll.useQuery(undefined, {
 		enabled: items === undefined,
@@ -41,7 +54,16 @@ const BestiaryView = () => {
 	];
 
 	useEffect(() => {
+		if (!getAllCreatures.data) return;
 		setItems(getAllCreatures.data);
+		const maxLevel = Number(
+			Math.max(...getAllCreatures.data.map(o => o.level)),
+		);
+		setRangeLevel({
+			min: 0,
+			max: Math.ceil(maxLevel / 5) * 5,
+		});
+		setSelectedMaxLevel(rangeLevel.max);
 	}, [getAllCreatures.data]);
 
 	useEffect(() => {
@@ -54,9 +76,33 @@ const BestiaryView = () => {
 			// if domain selected
 			if (selectedHabitat.length !== 0) {
 				filteredCreatures = filteredCreatures.filter(i =>
-					selectedHabitat.some(a => i.habitat.includes(a.value)),
+					selectedHabitat.some(a =>
+						i.habitat.includes(a.value as HabitatTypeType),
+					),
 				);
 			}
+
+			// if type selected
+			if (selectedType.length !== 0) {
+				filteredCreatures = filteredCreatures.filter(i =>
+					selectedType.some(a => i.type === a.value),
+				);
+			}
+
+			if (selectedMaxLevel !== undefined && selectedMaxLevel !== 0) {
+				filteredCreatures = filteredCreatures.filter(
+					i => i.level <= selectedMaxLevel,
+				);
+			}
+
+			if (!selectedLegendary) {
+				filteredCreatures = filteredCreatures.filter(i => i.isBoss === false);
+			}
+
+			if (!selectedMundane) {
+				filteredCreatures = filteredCreatures.filter(i => i.isBoss === true);
+			}
+
 			const filteredItems = filteredCreatures.filter(item =>
 				keys.some(key =>
 					item[key as keyof Creature]
@@ -67,7 +113,15 @@ const BestiaryView = () => {
 			);
 			setPrunedItems(filteredItems);
 		}
-	}, [debouncedSearch, items, selectedHabitat]);
+	}, [
+		debouncedSearch,
+		items,
+		selectedHabitat,
+		selectedMaxLevel,
+		selectedType,
+		selectedLegendary,
+		selectedMundane,
+	]);
 
 	let prevScrollpos = window.scrollY;
 	window.onscroll = function () {
@@ -89,39 +143,86 @@ const BestiaryView = () => {
 	return (
 		<div className='mt-sm flex h-[100dvh] flex-col items-center p-2'>
 			<div className='container sticky top-8 z-10 flex flex-col items-center bg-gradient-to-b from-stone-100 from-80% pb-8 dark:from-stone-800'>
-				<h1 className='font-grenze sticky z-10 mx-auto my-4 text-center text-6xl font-bold tracking-wide text-purple-900 md:mt-8 dark:text-purple-400'>
+				<h1 className='font-grenze dark:text-primary sticky z-10 mx-auto my-4 text-center text-6xl font-bold tracking-wide text-purple-900 md:mt-8'>
 					Bestiary
 				</h1>
 				<input
 					onChange={e => setSearch(e.target.value)}
 					placeholder='a curious monster...'
 					className={cn(
-						'b-stone-500 font-grenze mb-4 w-60 rounded-lg border p-1 pl-2 text-center text-lg text-purple-900 caret-purple-900 shadow-sm placeholder:italic focus:border-purple-900 focus:outline-none focus:ring-1 focus:ring-purple-900 dark:bg-stone-700 dark:text-purple-400 dark:caret-purple-400 dark:focus:border-purple-400 dark:focus:ring-purple-400',
+						'font-grenze dark:text-primary dark:caret-primary dark:focus:border-primary dark:focus:ring-primary mb-4 w-60 rounded-lg border border-none p-1 pl-2 text-center text-lg text-purple-900 caret-purple-900 shadow-sm placeholder:italic placeholder:text-stone-500 focus:border-purple-900 focus:outline-none focus:ring-1 focus:ring-purple-900 dark:bg-stone-700',
 					)}
 					type='search'
 				/>
-				<div className='flex w-full flex-col items-center justify-start md:w-1/2 md:flex-row md:items-start md:justify-center'>
-					{/* FILTER FOR MAGIC DOMAINS */}
-					<SelectFilter
-						value={selectedHabitat}
-						options={creatureHabitatOptions}
-						onChange={o => setSelectedHabitat(o)}
-						placeholder='Habitats'
-						isMulti
-					/>
-					<input
-						type='range'
-						min={0}
-						max='100'
-						value='100'
-						className='range'
-					/>
-				</div>
+
+				<Collapsible title='filter results'>
+					<div className='flex w-full flex-col items-center justify-start gap-1 md:flex-row md:items-start md:justify-center'>
+						{/* FILTER FOR HABITATS */}
+						<SelectFilter
+							value={selectedHabitat}
+							options={creatureHabitatOptions}
+							onChange={o => setSelectedHabitat(o)}
+							placeholder='Habitats'
+							isMulti
+						/>
+						{/* FILTER FOR TYPES */}
+						<SelectFilter
+							value={selectedType}
+							options={creatureTypeOptions}
+							onChange={o => setSelectedType(o)}
+							placeholder='Types'
+							isMulti
+						/>
+					</div>
+					<div className='flex flex-row gap-4'>
+						<label className='font-grenze mb-4 flex w-4/5 flex-row items-center justify-center gap-2 px-4 text-center text-stone-500 md:w-1/2'>
+							<input
+								type='checkbox'
+								defaultChecked
+								className='checkbox checkbox-xs checkbox-primary'
+								checked={selectedMundane}
+								onChange={() => setSelectedMundane(prev => !prev)}
+							/>
+							<span>Mundane</span>
+						</label>
+						<label className='font-grenze mb-4 flex w-4/5 flex-row items-center justify-center gap-2 px-4 text-center text-stone-500 md:w-1/2'>
+							<input
+								type='checkbox'
+								defaultChecked
+								className='checkbox checkbox-xs checkbox-primary'
+								checked={selectedLegendary}
+								onChange={() => setSelectedLegendary(prev => !prev)}
+							/>
+							<span>Legendary</span>
+						</label>
+					</div>
+					<div className='mb-4 flex w-3/5 flex-col items-center justify-start gap-1 md:justify-center'>
+						<label className='font-grenze text-cemter w-full px-4 text-stone-500'>
+							<div className='flex flex-row justify-between'>
+								<span>Max Level</span>
+								<span className='text-primary font-cabin text-sm'>
+									{selectedMaxLevel}
+								</span>
+							</div>
+							<input
+								type='range'
+								min={rangeLevel.min}
+								max={rangeLevel.max}
+								value={selectedMaxLevel}
+								defaultValue={rangeLevel.max}
+								step='5'
+								onChange={e => setSelectedMaxLevel(Number(e.target.value))}
+								className='range range-primary rounded-xs h-2'
+							/>
+						</label>
+					</div>
+				</Collapsible>
+
 				{isEditor && (
 					<Link
 						id='add-button'
 						to={'/bestiary/add'}
-						className='badge bg-accent z-20 mb-2 h-10 w-10 border-none shadow-md shadow-stone-900 transition-opacity duration-200'
+						className='badge bg-accent z-20 my-2 h-10 w-10 border-none shadow-md shadow-stone-900 transition-opacity duration-200'
 					>
 						<RiAddLine className='icon-white-2xl' />
 					</Link>
