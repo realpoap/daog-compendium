@@ -4,6 +4,7 @@ import {
 	spellOptions,
 	targetTypeOptions,
 } from '@/types/spellOptions';
+import { capitalizeFirstLetter } from '@/utils/capitalize';
 import { cn } from '@/utils/classNames';
 import { trpc } from '@/utils/trpc';
 import { SpellSchema } from '@api/lib/zod-prisma/index';
@@ -171,7 +172,7 @@ const SpellSearch = () => {
 				<div className='max-w-screen container z-0 flex snap-y snap-mandatory flex-col items-center justify-start overflow-hidden text-center'>
 					{prunedItems.length === 0 && (
 						<div className='font-grenze flex flex-col items-center justify-center'>
-							<h3 className='text-4xl'>No spell could be found</h3>
+							<h3 className='text-4xl'>No spell found</h3>
 							<span className='font-cabin italic'>
 								Those arcanes are too deep for your skills or the knowledge you
 								search does not exist ...
@@ -185,10 +186,15 @@ const SpellSearch = () => {
 							to={`/spells/$id`}
 							params={{ id: `${d.number}` }}
 						>
-							<div className='flex w-full translate-y-8 snap-center flex-col items-center rounded-md p-1 pb-2 text-center opacity-100 transition-all duration-1000 ease-out hover:bg-stone-700'>
-								<span className='font-cabin text-sm text-stone-500'>
-									#{d.number}
-								</span>
+							<div className='font-cabin group flex w-full translate-y-8 snap-center flex-col items-center rounded-md p-1 pb-2 text-center opacity-100 transition-all duration-1000 ease-out hover:bg-stone-700 hover:shadow-sm'>
+								<div>
+									<span className='font-cabin text-sm text-stone-500 transition-colors duration-500 after:px-2 after:content-["-"] group-hover:text-stone-200'>
+										#{d.number}
+									</span>
+									<span className='font-cabin font-regular align-baseline text-sm capitalize text-stone-500 transition-colors duration-500 group-hover:text-stone-200'>
+										{capitalizeFirstLetter(d.type)}
+									</span>
+								</div>
 								<p
 									className={cn(
 										'font-cabin text-primary font-bold tracking-wider',
@@ -196,9 +202,7 @@ const SpellSearch = () => {
 								>
 									{d.titleCommon}
 								</p>
-								<span className='font-cabinalign-baseline font-regular text-sm capitalize'>
-									{d.type}
-								</span>
+
 								<ul className='font-cabin font-regular flex w-3/4 list-none flex-row flex-wrap items-center justify-center gap-1 align-middle text-sm md:w-full'>
 									<span className='after:pl-2 after:text-stone-500 after:content-["|"]'>
 										<GiPolarStar className='icon-stone-900 dark:icon-stone-200 icon-sm mr-1' />
@@ -215,7 +219,7 @@ const SpellSearch = () => {
 										{d.difficulty}
 									</span>
 								</ul>
-								<span className='font-cabin text-sm text-stone-500'>
+								<span className='font-cabin text-sm text-stone-500 transition-colors duration-500 group-hover:text-stone-200'>
 									{'// '} {d?.casting} spell to {d?.action}{' '}
 									{d?.targetType !== 'none' && d?.targetType}
 									{d?.targetType === 'none'

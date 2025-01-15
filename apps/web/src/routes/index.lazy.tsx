@@ -86,7 +86,7 @@ function Index() {
 						</div>
 					</div>
 				</section>
-				<section className='flex w-full flex-col items-start justify-start px-8'>
+				<section className='flex w-full flex-col items-start justify-start px-4'>
 					<AttributesList />
 				</section>
 			</div>

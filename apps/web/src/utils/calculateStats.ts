@@ -65,7 +65,9 @@ export const calculateStats = (creature: Creature | NewCreature) => {
 	return creature;
 };
 
-const calcLevel = (creature: Creature | NewCreature) => {
+export const calcLevel = (creature: Creature | NewCreature) => {
+	console.log('old level:', creature.level);
+
 	const cel = creature.stats.CEL ? creature.stats.CEL - 15 : 0;
 	const att = creature.attack ? creature.attack - 15 : 0;
 	const def = creature.defense ? creature.defense - 15 : 0;
@@ -84,18 +86,18 @@ const calcLevel = (creature: Creature | NewCreature) => {
 	const level = Math.round(
 		(att * 5 +
 			def * 5 +
-			vit * 1.5 +
+			vit * 2 +
 			sen * 3 * caster +
 			magic +
 			per * 2 +
-			glory +
 			will * 1 +
 			disc * 2 +
 			main * 3 +
 			cel * 1 +
-			epic * 2) /
+			epic * 3 +
+			attributes * 2) /
 			12 +
-			attributes,
+			glory,
 	);
 
 	console.log('level:', level);
