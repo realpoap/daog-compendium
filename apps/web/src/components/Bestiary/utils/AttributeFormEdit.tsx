@@ -50,7 +50,9 @@ const AttributeFormEdit = ({
 		onSuccess: () => {
 			toast.success('Attribute updated !');
 			(
-				document.getElementById('attribute-form-edit') as HTMLDialogElement
+				document.getElementById(
+					`${defaultAttribute?.name}-attribute-form-edit`,
+				) as HTMLDialogElement
 			).close();
 			methods.reset();
 		},
@@ -131,7 +133,7 @@ const AttributeFormEdit = ({
 									isValid={methods.formState.isValid}
 									color='accent'
 									textColor='stone-800'
-									text='Add Attribute'
+									text='Edit Attribute'
 								/>
 							</form>
 						</FormProvider>

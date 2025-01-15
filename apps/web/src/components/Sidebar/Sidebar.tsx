@@ -5,7 +5,6 @@ import { BiLogIn, BiLogOut, BiMenu } from 'rocketicons/bi';
 import daogLogo from '../../data/daog-app.png';
 
 import useNetworkStatus from '@/hooks/useNetworkStatus';
-import { capitalizeFirstLetter } from '@/utils/capitalize';
 import { cn } from '@/utils/classNames';
 import Nav from './Nav';
 
@@ -46,20 +45,23 @@ const Sidebar = () => {
 						{<span className='hidden md:flex'>DAOG</span>}
 					</Link>
 				</h1>
-				<p className='flex w-full flex-row items-center justify-center gap-2 md:w-[20dvw]'>
+				<p className='flex-0.5 flex flex-row items-center justify-center gap-2'>
 					<span
-						className={cn(`badge badge-full badge-xs animate-pulse`, {
-							'bg-orange-500': !isOnline,
-							'bg-accent': isOnline,
-							'bg-primary': user !== null,
-						})}
+						className={cn(
+							`badge badge-full badge-xs animate-pulse border-none`,
+							{
+								'bg-orange-500': !isOnline,
+								'bg-accent': isOnline,
+								'bg-primary': user !== null,
+							},
+						)}
 					></span>
-					<span className='font-cabin text-center align-middle italic text-stone-500'>
+					<span className='font-cabin text-center align-middle text-sm italic text-stone-500'>
 						{user !== null
-							? `logged in as ${capitalizeFirstLetter(user.name)}`
+							? `logged in`
 							: isOnline
 								? 'server is live'
-								: 'checking server status'}
+								: 'server starting'}
 					</span>
 				</p>
 

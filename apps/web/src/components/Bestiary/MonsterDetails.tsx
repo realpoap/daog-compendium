@@ -1,5 +1,6 @@
 import { useAuth } from '@/store/authContext';
 import { creatureTypeOptions } from '@/types/creatureOptions';
+import { calcLevel } from '@/utils/calculateStats';
 import { cn } from '@/utils/classNames';
 import { trpc } from '@/utils/trpc';
 import { NewAction } from '@api/lib/ZodAction';
@@ -7,6 +8,7 @@ import { ActionList, CreatureAttribute } from '@api/lib/ZodCreature';
 import { useNavigate, useParams } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
+import toast from 'react-hot-toast';
 import { FiEdit3, FiPlus } from 'rocketicons/fi';
 import {
 	GiCrownedSkull,
@@ -30,8 +32,27 @@ const MonsterDetails = () => {
 	const [actions, setActions] = useState<NewAction[]>([]);
 	const [attributes, setAttributes] = useState<CreatureAttribute[]>([]);
 	const [Icon, setMonsterIcon] = useState<JSX.Element | undefined>();
+	//TODO: change update logic for attributes / actions so that front and back are always sync
 
 	const monsterById = trpc.creatures.getById.useQuery(id as string);
+	const updateCreature = trpc.creatures.update.useMutation({
+		onSuccess: () => {
+			toast.success('Level updated !');
+		},
+		onError: error => {
+			toast.error('Something bad happened...');
+			throw new Error(error.message);
+		},
+	});
+	const deleteMonster = trpc.creatures.delete.useMutation({
+		onSuccess: () => {
+			toast.success('Creature deleted !');
+			navigate({
+				to: `/bestiary`,
+			});
+		},
+	});
+
 	const [edit, setEdit] = useState(false);
 
 	const { user } = useAuth();
@@ -50,6 +71,12 @@ const MonsterDetails = () => {
 						setMonsterIcon(o.icon);
 					}
 				});
+			}
+			//calc new level
+			const newCreature = monsterById.data;
+			newCreature.level = calcLevel(monsterById.data);
+			if (newCreature.level !== monsterById.data.level) {
+				updateCreature.mutate(newCreature);
 			}
 		}
 	}, [monsterById.data]);
@@ -325,6 +352,15 @@ const MonsterDetails = () => {
 					textColor='stone-800'
 				>
 					Edit
+				</ActionButton>
+			)}
+			{user?.role === 'ADMIN' && (
+				<ActionButton
+					onClick={() => deleteMonster.mutate(monster?.id as string)}
+					color='red-500'
+					textColor='stone-800'
+				>
+					Delete
 				</ActionButton>
 			)}
 		</div>

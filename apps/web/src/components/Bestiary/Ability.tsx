@@ -56,10 +56,40 @@ const Ability = ({
 	});
 
 	const searchAttribute = trpc.attributes.getByName.useQuery(name);
+	const searchCreature = trpc.creatures.getById.useQuery(creatureId, {
+		enabled: searchAttribute.data !== undefined,
+	});
+
+	const updateAttributeOnCreature = trpc.creatures.updateAttribute.useMutation({
+		onError: error => {
+			if (error.shape)
+				toast.error('Something bad happened when updating attributes...');
+			throw new Error(error.message);
+		},
+	});
 
 	useEffect(() => {
-		if (searchAttribute.data) setDefaultAttribute(searchAttribute.data);
-	}, [searchAttribute.data]);
+		if (searchAttribute.data) {
+			setDefaultAttribute(searchAttribute.data);
+		}
+	}, [searchAttribute.data, updateAttributeOnCreature.isSuccess]);
+
+	useEffect(() => {
+		if (searchCreature.data && searchAttribute.data) {
+			searchCreature.data.attributes.map(a => {
+				if (a.name === name) {
+					const prunedArray = attributes.filter(a => a.name !== name);
+					const { id, ...attribute } = searchAttribute.data;
+					const attributeArray: AttributeArray = {
+						id: creatureId,
+						attributes: [...prunedArray, attribute],
+					};
+					updateAttributeOnCreature.mutate(attributeArray);
+					setAttributes([...prunedArray, attribute]);
+				}
+			});
+		}
+	}, [searchCreature.data]);
 
 	const removeAttribute = (name: string) => {
 		if (!edit) return;

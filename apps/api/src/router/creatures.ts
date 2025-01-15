@@ -138,4 +138,13 @@ export const creaturesRouter = router({
 				serverErrorHandler(error);
 			}
 		}),
+	delete: procedure.input(z.string()).mutation(async ({ input }) => {
+		try {
+			return await prisma.creature.delete({
+				where: { id: input },
+			});
+		} catch (error) {
+			serverErrorHandler(error);
+		}
+	}),
 });
