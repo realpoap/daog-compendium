@@ -240,7 +240,7 @@ const BestiaryView = () => {
 					</span>
 				</div>
 			)}
-			<div className='max-w-screen container z-0 flex snap-y snap-mandatory flex-col items-center justify-start overflow-hidden text-center'>
+			<div className='max-w-screen container z-0 flex snap-y snap-mandatory flex-col items-center justify-start text-center'>
 				{prunedItems.map(m => (
 					<Link
 						className='w-full'
