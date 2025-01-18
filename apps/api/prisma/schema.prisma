@@ -38,20 +38,20 @@ enum Role {
 }
 
 model Creature {
-  id              String       @id @default(auto()) @map("_id") @db.ObjectId
-  fullname        String       @unique
+  id              String              @id @default(auto()) @map("_id") @db.ObjectId
+  fullname        String              @unique
   name            String
   rank            String?
-  isBoss          Boolean?     @default(false)
-  isCaster        Boolean?     @default(false)
+  isBoss          Boolean?            @default(false)
+  isCaster        Boolean?            @default(false)
   magicDomain     SpellType[]
   type            Type?
-  habitat   HabitatType[]
+  habitat         HabitatType[]
   subtype         String?
   alignment       Alignment?
   size            CreatureSize?
-  createdAt       DateTime?    @default(now())
-  updatedAt       DateTime?    @updatedAt
+  createdAt       DateTime?           @default(now())
+  updatedAt       DateTime?           @updatedAt
   level           Int
   initiative      Int?
   attack          Int
@@ -81,7 +81,7 @@ model Creature {
   @@unique([attributes.name])
   @@unique([actions.name])
   @@unique([scavenge.name])
-  @@unique([loot.name])
+  @@unique([loot.id])
 }
 
 type CreatureAttribute {
@@ -91,8 +91,8 @@ type CreatureAttribute {
 }
 
 model Attribute {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  name        String    @unique
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  name        String  @unique
   flavor      String?
   description String?
 }
@@ -175,9 +175,9 @@ type CreatureAction {
 }
 
 model Action {
-  id          String     @id @default(auto()) @map("_id") @db.ObjectId
-  searchName        String     @unique
-  name  String
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  searchName  String       @unique
+  name        String
   action      ActionType
   type        SpellAction
   flavor      String?
@@ -247,9 +247,9 @@ model Spell {
 }
 
 model Component {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  searchName  String    @unique
-  name  String
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  searchName  String  @unique
+  name        String
   quantity    Float?
   description String?
   weight      Float?
@@ -260,7 +260,7 @@ model Component {
 }
 
 type CreatureComponent {
-  name        String    
+  name        String
   quantity    Float?
   description String?
   weight      Float?
@@ -270,36 +270,51 @@ type CreatureComponent {
   uses        String?
 }
 
-model Item {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  quantity    Float?
-  searchName        String   @unique
-  name  String
-  description String?
-  weight      Float?
-  value       Float?
-  valueWeight Float?
-  rarity      String?
-  damages     String?
-  armor       Int?
-  properties  String?
-  isRelic     Boolean?
-  magicWeight Int?
+type CreatureItem {
+  id  String
+  quantity   Int         @default(1)
 }
 
-type CreatureItem {
-  name        String
-  quantity    Float?
-  description String?
-  weight      Float?
-  value       Float?
-  valueWeight Float?
-  rarity      String?
-  damages     String?
-  armor       Int?
-  properties  String?
-  isRelic     Boolean?
-  magicWeight Int?
+model Item {
+  id         String      @id @default(auto()) @map("_id") @db.ObjectId
+  searchName      String @unique
+  name            String[]
+  itemType        ItemType
+  material        String
+  materialType    String
+  materialSubType String?
+  description     String?
+  properties      String?
+  //Merchant
+  quality         String     @default("common")
+  weight          Float?
+  value           Float?
+  valueWeight     Float?
+  constraints     StatProfil?
+  durability      Int? @default(1)
+  // Rarity
+  magicWeight     Int?
+  isRelic         Boolean? @default(false)
+  //Weapon
+  damages         String?
+  inflictType     String[]
+  //Armor
+  protection      Int?
+  resistType      String[]
+  magicProtection Int?
+}
+
+enum ItemType {
+  weapon
+  armor
+  shield
+  garnment
+  accessorie
+  trinket
+  jewell
+  potion
+  ammunition
+  food
 }
 
 enum SpellType {
