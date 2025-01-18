@@ -150,7 +150,6 @@ function Index() {
 }
 
 // function Index() {
-// const mutation = trpc.spells.create.useMutation();
 // const sendSpell = () => {
 // 	spellEntries.map(s => {
 // 		console.log(s);
