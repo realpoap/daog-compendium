@@ -71,7 +71,7 @@ const NewCreatureForm = ({
 			{/* EQUIPMENT STEP ----------------------------------------- */}
 			{step === 4 && (
 				<LootStep
-					setValue={setValue}
+					//setValue={setValue}
 					handlePrevious={handlePrevious}
 					handleNext={handleNext}
 				/>
