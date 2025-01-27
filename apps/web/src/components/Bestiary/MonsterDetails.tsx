@@ -22,6 +22,7 @@ import Collapsible from '../Collapsible';
 import Ability from './Ability';
 import ActionComponent from './ActionComponent';
 import CalculatedStats from './CalculatedStats';
+import ItemComponent from './ItemComponent';
 import StatsTable from './StatsTable';
 import ActionForm from './utils/ActionForm';
 import AttributeForm from './utils/AttributeForm';
@@ -325,6 +326,10 @@ const MonsterDetails = () => {
 					setActions={setActions}
 					creatureId={monster?.id as string}
 					creatureName={monster?.name as string}
+				/>
+				<ItemComponent
+					items={monster?.loot}
+					//components={monster?.scavenge}
 				/>
 				{isEditor && (
 					<SmallCircleButton

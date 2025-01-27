@@ -272,6 +272,7 @@ type CreatureComponent {
 
 type CreatureItem {
   id  String
+  name String
   quantity   Int         @default(1)
 }
 
@@ -286,7 +287,7 @@ model Item {
   description     String?
   properties      String?
   //Merchant
-  quality         String     @default("common")
+  quality         qualityType     @default(common)
   weight          Float?
   value           Float?
   valueWeight     Float?
@@ -298,8 +299,12 @@ model Item {
   //Weapon
   damages         String?
   inflictType     String[]
+  rangeType rangeType?
+  range String?
+
   //Armor
   protection      Int?
+  armorClass  Int? @default(0)
   resistType      String[]
   magicProtection Int?
 }
@@ -362,4 +367,19 @@ enum SpellTarget {
   self
   terrain
   none
+}
+
+enum rangeType {
+  self
+  close
+  near
+  far
+  visible
+}
+
+enum qualityType {
+  common
+  poor
+  great
+  masterpiece
 }

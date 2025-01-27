@@ -1,23 +1,29 @@
 import { ActionButton } from '@/components/Buttons';
+import { Field } from '@/components/RHFComponents';
+import { trpc } from '@/utils/trpc';
 import { NewCreature } from '@api/lib/ZodCreature';
+import { type CreatureItem } from '@api/lib/ZodItem';
+import { useEffect, useState } from 'react';
+import { UseFormSetValue } from 'react-hook-form';
 import { RiArrowDropLeftLine, RiArrowDropRightLine } from 'rocketicons/ri';
+import { ItemsTags } from '../../utils/ItemsTag';
 
 const LootStep = ({
 	handlePrevious,
 	handleNext,
-	//setValue,
+	setValue,
 }: {
 	handlePrevious: (step: number) => void;
 	handleNext: (
 		inputs: (keyof NewCreature)[],
 		nextStep: number,
 	) => Promise<void>;
-	//setValue: UseFormSetValue<NewCreature>;
+	setValue: UseFormSetValue<NewCreature>;
 }) => {
-	// const componentsList = trpc.components.getAll.useQuery();
-	// const itemsList = trpc.items.getAll.useQuery();
-	// const [components, setComponents] = useState<string[]>([]);
-	// const [items, setItems] = useState<CreatureItem[]>([]);
+	//const componentsList = trpc.components.getAll.useQuery();
+	const itemsList = trpc.items.getAll.useQuery();
+	//const [components, setComponents] = useState<string[]>([]);
+	const [items, setItems] = useState<CreatureItem[]>([]);
 
 	// useEffect(() => {
 	// 	if (componentsList.data) {
@@ -35,21 +41,27 @@ const LootStep = ({
 	// 	}
 	// }, [components]);
 
-	// useEffect(() => {
-	// 	if (itemsList.data) {
-	// 		const list = itemsList.data;
-	// 		const itemObjects = [] as CreatureItem[];
-	// 		items?.map(att => {
-	// 			const itemObject = list.find(el => el.name.some(att));
-	// 			if (itemObject) {
-	// 				const { id, ...rest } = itemObject;
-	// 				itemObjects.push(rest);
-	// 			}
-	// 		});
-	// 		console.log(itemObjects);
-	// 		setValue('loot', itemObjects as CreatureItem[]);
-	// 	}
-	// }, [items]);
+	useEffect(() => {
+		if (itemsList.data) {
+			const list = itemsList.data;
+			const itemObjects = [] as CreatureItem[];
+			items?.map(item => {
+				if (item) {
+					const foundObj = list.find(el => el.id === item.id);
+					if (foundObj) {
+						const addedObj = {
+							id: foundObj.id,
+							name: foundObj.searchName,
+							quantity: 1,
+						};
+						itemObjects.push(addedObj);
+					}
+				}
+			});
+			console.log(itemObjects);
+			setValue('loot', itemObjects as CreatureItem[]);
+		}
+	}, [items]);
 
 	return (
 		<div className='flex w-full flex-col items-center justify-center'>
@@ -57,14 +69,14 @@ const LootStep = ({
 				<h3 className='font-grenze text-left text-4xl text-purple-400'>
 					Equipment
 				</h3>
-				{/* <div className='font-noto italic text-stone-500'>
+				<div className='font-noto italic text-stone-500'>
 					<p>
 						Objects and trinkets worn by the creature, either they are used or
 						not :
 					</p>
 					{items.length !== 0 ? (
-						<div className='mt-4 h-4 w-full p-2'>
-							{items?.map(i => <li key={i.id}>{i.id}</li>)}
+						<div className='mt-4 w-full p-2'>
+							{items?.map(i => <li key={i.id}>{i.name}</li>)}
 						</div>
 					) : (
 						<div className='skeleton mt-4 h-4 w-full p-2 dark:bg-stone-700'></div>
@@ -88,7 +100,7 @@ const LootStep = ({
 				<h3 className='font-grenze text-left text-4xl text-purple-400'>
 					Scavenge
 				</h3>
-				<div className='font-noto italic text-stone-500'>
+				{/* <div className='font-noto italic text-stone-500'>
 					<p>Components and parts scavenged after the creature is slain :</p>
 					{components.length !== 0 ? (
 						<div className='mt-4 h-4 w-full p-2'>
@@ -97,12 +109,13 @@ const LootStep = ({
 					) : (
 						<div className='skeleton mt-4 h-4 w-full p-2 dark:bg-stone-700'></div>
 					)}
-				</div>
+				</div> */}
 				<Field
 					name='components'
 					label='Search Components'
 				>
-					{componentsList.data ? (
+					<></>
+					{/* {componentsList.data ? (
 						<ComponentsTags
 							setTags={setComponents}
 							tags={components}
@@ -110,8 +123,8 @@ const LootStep = ({
 						/>
 					) : (
 						<div className='skeleton h-10 w-full dark:bg-stone-700'></div>
-					)}
-				</Field> */}
+					)} */}
+				</Field>
 			</div>
 			<div className='flex w-full flex-row items-center justify-center gap-4'>
 				<ActionButton

@@ -43,6 +43,7 @@ export type Item = z.infer<typeof ItemSchema>;
 
 export const CreatureItemSchema = z.object({
 	id: z.string(),
+	name: z.string(),
 	quantity: z.number().int(),
 });
 
