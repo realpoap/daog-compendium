@@ -36,6 +36,7 @@ export const ItemSchema = z.object({
 	inflictType: z.string().array(),
 	protection: z.number().int().nullable(),
 	resistType: z.string().array(),
+	armorClass: z.string().nullable(),
 	magicProtection: z.number().int().nullable(),
 });
 

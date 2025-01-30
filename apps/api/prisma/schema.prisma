@@ -249,31 +249,44 @@ model Spell {
 model Component {
   id          String  @id @default(auto()) @map("_id") @db.ObjectId
   searchName  String  @unique
-  name        String
-  quantity    Float?
+  name        String[]
+  componentType String
+  scienceName String @unique
   description String?
   weight      Float?
   value       Float?
   valueWeight Float?
-  rarity      String?
-  uses        String?
+  rarity      rarity @default(common)
+  uses        componentUses?
+  toxic Boolean @default(false)
+  toxicity String?
+  habitat HabitatType[]
 }
 
 type CreatureComponent {
-  name        String
-  quantity    Float?
-  description String?
-  weight      Float?
-  value       Float?
-  valueWeight Float?
-  rarity      String?
-  uses        String?
+id String
+name String
+quantity Int  @default(1)
 }
 
 type CreatureItem {
   id  String
   name String
   quantity   Int         @default(1)
+}
+
+type componentUses {
+  ointment Boolean
+  potion  Boolean
+  extract Boolean
+  catalyst Boolean
+}
+
+enum rarity {
+  common
+  unusual
+  rare
+  fabled
 }
 
 model Item {
@@ -304,9 +317,16 @@ model Item {
 
   //Armor
   protection      Int?
-  armorClass  Int? @default(0)
+  armorClass  armorClass? @default(none)
   resistType      String[]
   magicProtection Int?
+}
+
+enum armorClass {
+  none
+  light
+  medium
+  heavy
 }
 
 enum ItemType {

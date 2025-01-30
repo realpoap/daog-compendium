@@ -57,7 +57,7 @@ export const ItemsTags = ({ setTags, tags, list }: Props) => {
 					onChange={handleChange}
 				/>
 				{searchTerm && (
-					<div className='align-center absolute z-10 ml-2 mt-10 flex max-h-svh flex-col justify-start rounded dark:bg-stone-700'>
+					<div className='align-center z-10 ml-2 flex max-h-svh flex-col justify-start rounded dark:bg-stone-700'>
 						<ResultList
 							tags={results}
 							results={list}
