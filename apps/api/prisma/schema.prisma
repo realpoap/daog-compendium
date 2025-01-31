@@ -258,6 +258,7 @@ model Component {
   valueWeight Float?
   rarity      rarity @default(common)
   uses        componentUses?
+  isfood  Boolean?
   toxic Boolean @default(false)
   toxicity String?
   habitat HabitatType[]
@@ -314,6 +315,7 @@ model Item {
   inflictType     String[]
   rangeType rangeType?
   range String?
+  weaponType  weaponType?
 
   //Armor
   protection      Int?
@@ -329,6 +331,12 @@ enum armorClass {
   heavy
 }
 
+enum weaponType {
+  finesse
+  heavy
+  versatile
+}
+
 enum ItemType {
   weapon
   armor
@@ -340,6 +348,8 @@ enum ItemType {
   potion
   ammunition
   food
+  junk
+  book
 }
 
 enum SpellType {

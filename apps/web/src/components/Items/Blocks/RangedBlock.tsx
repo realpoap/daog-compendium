@@ -1,13 +1,13 @@
 import { capitalizeFirstLetter } from '@/utils/capitalize';
 import { cn } from '@/utils/classNames';
 import { Item } from '@api/lib/ZodItem';
-import { GiArmorVest, GiTwoCoins } from 'rocketicons/gi';
+import { GiSwordWound, GiTwoCoins } from 'rocketicons/gi';
 
 type Props = {
 	item: Item;
 };
 
-const ArmorBlock = ({ item }: Props) => {
+const RangedBlock = ({ item }: Props) => {
 	return (
 		<div className='flex flex-col'>
 			<h3
@@ -23,7 +23,7 @@ const ArmorBlock = ({ item }: Props) => {
 			>
 				{item?.name && capitalizeFirstLetter(item?.name[0])}
 				<div>
-					<GiArmorVest
+					<GiSwordWound
 						className={cn('icon-stone-200-xl', {
 							'dark:icon-accent icon-accent': item.quality === 'great',
 							'icon-slate-500 dark:icon-slate-500': item.quality === 'poor',
@@ -57,14 +57,14 @@ const ArmorBlock = ({ item }: Props) => {
 			</div>
 			<div className='text-sm italic'>{item.description}</div>
 			<div className='my-2 flex flex-col'>
-				<span>Armor : {item.armorClass}</span>
-				<span>Durability : {item.durability}</span>
-				<span>Protection : {item.protection}</span>
-				<span>Magic resistance : {item.magicProtection}</span>
+				<span>
+					Range : {item.rangeType} {item.range && <span>({item.range})</span>}
+				</span>
+				<span>Damages : {item.damages}</span>
 				<div>Properties: {item.properties}</div>
 			</div>
 			<div className='flex flex-row gap-2'>
-				Resistant to :
+				Damages type :
 				{item.resistType.map(r => (
 					<span
 						className='badge font-cabin bg-primary badge-md inline-flex cursor-default border-0 text-center align-middle font-semibold'
@@ -89,4 +89,4 @@ const ArmorBlock = ({ item }: Props) => {
 	);
 };
 
-export default ArmorBlock;
+export default RangedBlock;

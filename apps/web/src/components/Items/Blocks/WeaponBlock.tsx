@@ -10,7 +10,17 @@ type Props = {
 const WeaponBlock = ({ item }: Props) => {
 	return (
 		<div className='flex flex-col'>
-			<h3 className='font-grenze flex flex-row justify-between text-4xl font-bold'>
+			<h3
+				className={cn(
+					'font-grenze flex flex-row justify-between text-4xl font-bold',
+					{
+						'dark:text-accent text-accent': item.quality === 'great',
+						'text-slate-500 dark:text-slate-500': item.quality === 'poor',
+						'text-orange-500 dark:text-orange-500':
+							item.quality === 'masterpiece',
+					},
+				)}
+			>
 				{item?.name && capitalizeFirstLetter(item?.name[0])}
 				<div>
 					<GiSwordWound
@@ -41,21 +51,19 @@ const WeaponBlock = ({ item }: Props) => {
 			</div>
 			<div>
 				<span className='font-semibold'>
-					{item?.quality} {item?.materialSubType} {item?.material}{' '}
-					{item?.itemType}
+					{item?.quality} {item?.itemType} made in {item?.materialSubType}{' '}
+					{item?.material}
 				</span>
 			</div>
 			<div className='text-sm italic'>{item.description}</div>
 			<div className='my-2 flex flex-col'>
-				<span>Armor : {item.armorClass}</span>
-				<span>Durability : {item.durability}</span>
-				<span>Protection : {item.protection}</span>
-				<span>Magic resistance : {item.magicProtection}</span>
+				<span>Type : {item.weaponType}</span>
+				<span>Damages : {item.damages}</span>
+				<div>Properties: {item.properties}</div>
 			</div>
-			<div>{item.properties}</div>
 			<div className='flex flex-row gap-2'>
-				Resistant to :
-				{item.resistType.map(r => (
+				Damage types :
+				{item.inflictType.map(r => (
 					<span
 						className='badge font-cabin bg-primary badge-md inline-flex cursor-default border-0 text-center align-middle font-semibold'
 						key={r}
@@ -66,7 +74,7 @@ const WeaponBlock = ({ item }: Props) => {
 			</div>
 			<div className='flex flex-row gap-2'>
 				<span>Weight : {item.weight}</span>
-				<span>Magic load : {item.magicWeight}</span>
+				<span>Magic load : {item.magicWeight ?? 0}</span>
 			</div>
 			<div>
 				<span>Value : </span>
