@@ -249,30 +249,45 @@ model Spell {
 model Component {
   id          String  @id @default(auto()) @map("_id") @db.ObjectId
   searchName  String  @unique
-  name        String
-  quantity    Float?
+  name        String[]
+  componentType String
+  scienceName String @unique
   description String?
   weight      Float?
   value       Float?
   valueWeight Float?
-  rarity      String?
-  uses        String?
+  rarity      rarity @default(common)
+  uses        componentUses?
+  isFood  Boolean?
+  toxic Boolean @default(false)
+  toxicity String?
+  habitat HabitatType[]
 }
 
 type CreatureComponent {
-  name        String
-  quantity    Float?
-  description String?
-  weight      Float?
-  value       Float?
-  valueWeight Float?
-  rarity      String?
-  uses        String?
+id String
+name String
+quantity Int  @default(1)
 }
 
 type CreatureItem {
   id  String
+  name String
   quantity   Int         @default(1)
+}
+
+type componentUses {
+  ointment Boolean
+  potion  Boolean
+  extract Boolean
+  catalyst Boolean
+}
+
+enum rarity {
+  common
+  unusual
+  rare
+  fabled
 }
 
 model Item {
@@ -285,8 +300,9 @@ model Item {
   materialSubType String?
   description     String?
   properties      String?
+  isFood  Boolean? @default(false)
   //Merchant
-  quality         String     @default("common")
+  quality         qualityType     @default(common)
   weight          Float?
   value           Float?
   valueWeight     Float?
@@ -298,10 +314,28 @@ model Item {
   //Weapon
   damages         String?
   inflictType     String[]
+  rangeType rangeType?
+  range String?
+  weaponType  weaponType?
+
   //Armor
   protection      Int?
+  armorClass  armorClass? @default(none)
   resistType      String[]
   magicProtection Int?
+}
+
+enum armorClass {
+  none
+  light
+  medium
+  heavy
+}
+
+enum weaponType {
+  finesse
+  heavy
+  versatile
 }
 
 enum ItemType {
@@ -311,10 +345,12 @@ enum ItemType {
   garnment
   accessorie
   trinket
-  jewell
+  jewel
   potion
   ammunition
   food
+  junk
+  book
 }
 
 enum SpellType {
@@ -362,4 +398,20 @@ enum SpellTarget {
   self
   terrain
   none
+}
+
+enum rangeType {
+  self
+  close
+  near
+  far
+  visible
+}
+
+enum qualityType {
+  common
+  poor
+  great
+  masterpiece
+  legendary
 }

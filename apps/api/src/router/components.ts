@@ -3,6 +3,32 @@ import { ComponentSchema } from '@api/lib/ZodComponent';
 import { procedure, router } from '@api/trpc';
 import { z } from 'zod';
 
+import { HabitatTypeSchema } from '@api/lib/ZodComponent';
+
+const raritySchema = z.enum(['common', 'unusual', 'rare', 'fabled']);
+
+const ComponentNewSchema = z.object({
+	rarity: raritySchema,
+	habitat: z.array(HabitatTypeSchema),
+	searchName: z.string(),
+	name: z.string().array(),
+	componentType: z.string(),
+	scienceName: z.string(),
+	description: z.string().nullable(),
+	weight: z.number().nullable(),
+	value: z.number().nullable(),
+	valueWeight: z.number().nullable(),
+	toxic: z.boolean(),
+	isFood: z.boolean().nullable(),
+	toxicity: z.string().nullable(),
+	uses: z.object({
+		ointment: z.boolean(),
+		potion: z.boolean(),
+		extract: z.boolean(),
+		catalyst: z.boolean(),
+	}),
+});
+
 export const componentsRouter = router({
 	getAll: procedure.query(async () => {
 		try {
@@ -34,18 +60,20 @@ export const componentsRouter = router({
 			where: { id: input },
 		});
 	}),
-	create: procedure.input(ComponentSchema).mutation(async ({ input }) => {
+	create: procedure.input(ComponentNewSchema).mutation(async ({ input }) => {
 		console.log('💌 creating component #', input.name);
 		return await prisma.component.create({
 			data: input,
 		});
 	}),
-	createMany: procedure.input(ComponentSchema).mutation(async ({ input }) => {
-		console.log('💌 creating multiple components ...');
-		return await prisma.component.createMany({
-			data: input,
-		});
-	}),
+	createMany: procedure
+		.input(ComponentNewSchema)
+		.mutation(async ({ input }) => {
+			console.log('💌 creating multiple components ...');
+			return await prisma.component.createMany({
+				data: input,
+			});
+		}),
 	update: procedure.input(ComponentSchema).mutation(async ({ input }) => {
 		console.log('💌 updating component :', input.searchName);
 		return await prisma.component.update({

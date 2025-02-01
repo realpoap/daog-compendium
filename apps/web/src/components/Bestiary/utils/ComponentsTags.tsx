@@ -1,40 +1,34 @@
 import { cn } from '@/utils/classNames';
-import { Component } from '@api/lib/ZodComponent';
+import { Component, CreatureComponent } from '@api/lib/ZodComponent';
+
 import { SetStateAction, useState } from 'react';
 
 type Props = {
-	tags: string[];
-	setTags: React.Dispatch<SetStateAction<string[]>>;
+	tags: CreatureComponent[];
+	setTags: React.Dispatch<SetStateAction<CreatureComponent[]>>;
 	list: Component[];
 };
 
 export const ComponentsTags = ({ setTags, tags, list }: Props) => {
 	const [searchTerm, setSearchTerm] = useState('');
+	const [results, setResults] = useState<string[]>([]);
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setSearchTerm(event.target.value);
 	};
 
-	const handleKeyDown = (e: React.KeyboardEvent) => {
-		if (e.key !== ',' || e.code !== 'Comma') return;
-		const value = (e.target as HTMLInputElement).value;
-		if (!value.trim()) return;
-		setTags([...tags, value]);
-		(e.target as HTMLInputElement).value = '';
-	};
-	const handleKeyUp = (e: React.KeyboardEvent) => {
-		if (e.key !== ',' || e.code !== 'Comma') return;
-		(e.target as HTMLInputElement).value = '';
-	};
-	const handleSelect = (component: Component) => {
-		const input = document.getElementById(
-			'component-input',
-		) as HTMLInputElement;
+	const handleSelect = (item: Component) => {
+		const input = document.getElementById('item-input') as HTMLInputElement;
 		input.value = '';
 		setSearchTerm('');
-		setTags([...tags, component.name]);
+		const addedItem = {
+			id: item.id,
+			name: item.searchName,
+			quantity: 1,
+		};
+		setTags([...tags, addedItem]);
+		setResults([...results, item.searchName]);
 	};
-
 	const removeTag = (index: number) => {
 		setTags(tags.filter((_el, i) => i !== Number(index)));
 	};
@@ -46,11 +40,11 @@ export const ComponentsTags = ({ setTags, tags, list }: Props) => {
 		>
 			{tags.map((tag, index) => (
 				<span
-					key={index}
+					key={tag.id}
 					className='badge font-cabin inline-flex cursor-pointer border-0 bg-purple-500 text-center align-middle text-lg font-semibold text-stone-800 hover:bg-stone-500 hover:text-red-500'
 					onClick={() => removeTag(index)}
 				>
-					{tag}
+					{tag.name}
 				</span>
 			))}
 			<div className='items-left flex flex-1 flex-col justify-between gap-2 text-left'>
@@ -58,17 +52,15 @@ export const ComponentsTags = ({ setTags, tags, list }: Props) => {
 					className={cn(
 						'flex-1 bg-transparent px-2 placeholder:italic placeholder:text-stone-500 focus:outline-none focus:ring-0',
 					)}
-					placeholder='Write components separated by a comma'
+					placeholder='Search items'
 					type='text'
-					id='component-input'
+					id='item-input'
 					onChange={handleChange}
-					onKeyDown={handleKeyDown}
-					onKeyUp={handleKeyUp}
 				/>
 				{searchTerm && (
-					<div className='align-center absolute z-10 ml-2 mt-10 flex max-h-svh flex-col justify-start rounded dark:bg-stone-700'>
+					<div className='align-center z-10 ml-2 flex max-h-svh flex-col justify-start rounded dark:bg-stone-700'>
 						<ResultList
-							tags={tags}
+							tags={results}
 							results={list}
 							searchTerm={searchTerm}
 							handleSelect={handleSelect}
@@ -79,14 +71,12 @@ export const ComponentsTags = ({ setTags, tags, list }: Props) => {
 		</div>
 	);
 };
-
 type ResultListProps = {
 	tags: string[];
 	results: Component[];
 	searchTerm: string;
-	handleSelect: (component: Component) => void;
+	handleSelect: (item: Component) => void;
 };
-
 function ResultList({
 	tags,
 	results,
@@ -111,7 +101,7 @@ function ResultList({
 	if (results.length === 0) {
 		return (
 			<div className='px-2 py-1 align-baseline text-sm italic text-red-500'>
-				No component found
+				No item found
 			</div>
 		);
 	}
@@ -119,15 +109,17 @@ function ResultList({
 		<>
 			<div>
 				{results
-					.filter(r => !tags.includes(r.name))
-					.filter(r => r.name.toLowerCase().includes(searchTerm.toLowerCase()))
+					.filter(r => !tags.includes(r.id))
+					.filter(r =>
+						r.searchName.toLowerCase().includes(searchTerm.toLowerCase()),
+					)
 					.map(result => (
 						<li
-							key={result.name}
+							key={result.id}
 							onClick={() => handleSelect(result)}
 							className='hover:bg-accent group cursor-pointer list-none rounded-sm px-1 text-stone-200 hover:text-stone-800'
 						>
-							<>{matchedTerm(result.name, searchTerm)}</>
+							<>{matchedTerm(result.searchName, searchTerm)}</>
 						</li>
 					))}
 			</div>
