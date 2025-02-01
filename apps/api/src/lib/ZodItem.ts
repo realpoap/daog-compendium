@@ -7,7 +7,7 @@ export const ItemTypeSchema = z.enum([
 	'garnment',
 	'accessorie',
 	'trinket',
-	'jewell',
+	'jewel',
 	'potion',
 	'ammunition',
 	'food',
@@ -34,6 +34,16 @@ export const weaponTypeSchema = z.enum(['finesse', 'heavy', 'versatile']);
 
 export type weaponTypeType = `${z.infer<typeof weaponTypeSchema>}`;
 
+export const qualityTypeSchema = z.enum([
+	'common',
+	'poor',
+	'great',
+	'masterpiece',
+	'legendary',
+]);
+
+export type qualityTypeType = `${z.infer<typeof qualityTypeSchema>}`;
+
 export const ItemSchema = z.object({
 	itemType: ItemTypeSchema,
 	id: z.string(),
@@ -44,7 +54,7 @@ export const ItemSchema = z.object({
 	materialSubType: z.string().nullable(),
 	description: z.string().nullable(),
 	properties: z.string().nullable(),
-	quality: z.string(),
+	quality: qualityTypeSchema,
 	weight: z.number().nullable(),
 	value: z.number().nullable(),
 	valueWeight: z.number().nullable(),
@@ -55,11 +65,12 @@ export const ItemSchema = z.object({
 	inflictType: z.string().array(),
 	protection: z.number().int().nullable(),
 	resistType: z.string().array(),
-	armorClass: z.string().nullable(),
+	armorClass: armorClassSchema.nullable(),
 	magicProtection: z.number().int().nullable(),
 	rangeType: rangeTypeSchema.nullable(),
 	weaponType: weaponTypeSchema.nullable(),
 	range: z.string().nullable(),
+	isFood: z.boolean().nullable(),
 });
 
 export type Item = z.infer<typeof ItemSchema>;

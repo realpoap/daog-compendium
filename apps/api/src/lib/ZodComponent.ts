@@ -32,6 +32,7 @@ export const ComponentSchema = z.object({
 	searchName: z.string(),
 	name: z.string().array(),
 	componentType: z.string(),
+	isFood: z.boolean().nullable(),
 	scienceName: z.string(),
 	description: z.string().nullable(),
 	weight: z.number().nullable(),

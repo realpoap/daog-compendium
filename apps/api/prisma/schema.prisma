@@ -258,7 +258,7 @@ model Component {
   valueWeight Float?
   rarity      rarity @default(common)
   uses        componentUses?
-  isfood  Boolean?
+  isFood  Boolean?
   toxic Boolean @default(false)
   toxicity String?
   habitat HabitatType[]
@@ -300,6 +300,7 @@ model Item {
   materialSubType String?
   description     String?
   properties      String?
+  isFood  Boolean? @default(false)
   //Merchant
   quality         qualityType     @default(common)
   weight          Float?
@@ -344,7 +345,7 @@ enum ItemType {
   garnment
   accessorie
   trinket
-  jewell
+  jewel
   potion
   ammunition
   food
@@ -412,4 +413,5 @@ enum qualityType {
   poor
   great
   masterpiece
+  legendary
 }

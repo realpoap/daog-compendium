@@ -19,6 +19,7 @@ const ComponentNewSchema = z.object({
 	value: z.number().nullable(),
 	valueWeight: z.number().nullable(),
 	toxic: z.boolean(),
+	isFood: z.boolean().nullable(),
 	toxicity: z.string().nullable(),
 	uses: z.object({
 		ointment: z.boolean(),

@@ -1,5 +1,9 @@
 import { prisma } from '@api/index';
-import { ItemSchema, ItemTypeSchema } from '@api/lib/ZodItem';
+import {
+	ItemSchema,
+	ItemTypeSchema,
+	qualityTypeSchema,
+} from '@api/lib/ZodItem';
 import { procedure, router } from '@api/trpc';
 import { z } from 'zod';
 
@@ -10,17 +14,13 @@ const ItemNewSchema = z.object({
 	material: z.string(),
 	materialType: z.string(),
 	materialSubType: z.string().nullable(),
-	description: z.string().nullable(),
-	properties: z.string().nullable(),
-	quality: z.string(),
+	quality: qualityTypeSchema,
 	weight: z.number().nullable(),
 	value: z.number().nullable(),
-	valueWeight: z.number().nullable(),
 	durability: z.number().int().nullable(),
-	magicWeight: z.number().int().nullable(),
-	isRelic: z.boolean().nullable(),
 	damages: z.string().nullable(),
 	protection: z.number().int().nullable(),
+	isFood: z.boolean().nullable(),
 });
 
 export const itemsRouter = router({
