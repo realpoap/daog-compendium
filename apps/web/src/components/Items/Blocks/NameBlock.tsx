@@ -7,7 +7,7 @@ import {
 	GiBrokenBottle,
 	GiBullseye,
 	GiCheckedShield,
-	GiCheeseWedge,
+	GiChickenLeg,
 	GiGemPendant,
 	GiJeweledChalice,
 	GiPolarStar,
@@ -180,7 +180,7 @@ const NameBlock = ({ item }: Props) => {
 						/>
 					)}
 					{item?.itemType === 'food' && (
-						<GiCheeseWedge
+						<GiChickenLeg
 							className={cn('icon-stone-200-xl', {
 								'icon-gray-500 dark:icon-gray-500': item.quality === 'poor',
 								'icon-teal-500 dark:icon-teal-500': item.quality === 'great',

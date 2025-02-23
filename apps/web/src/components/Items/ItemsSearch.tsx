@@ -1,9 +1,5 @@
 //import itemsEntries from '@/data/weapons';
-import {
-	itemMaterialOptions,
-	itemRarityOptions,
-	itemTypeOptions,
-} from '@/types/itemOptions';
+import { itemRarityOptions, itemTypeOptions } from '@/types/itemOptions';
 import { capitalizeFirstLetter } from '@/utils/capitalize';
 import { cn } from '@/utils/classNames';
 import { trpc } from '@/utils/trpc';
@@ -164,13 +160,13 @@ const ItemsSearch = () => {
 				<Collapsible title='filter results'>
 					<div className='flex w-full flex-col items-center justify-start md:flex-row md:items-start md:justify-center'>
 						{/* FILTER FOR MATERIAL */}
-						<SelectFilter
+						{/* <SelectFilter
 							value={selectedMaterial}
 							options={itemMaterialOptions}
 							onChange={o => setSelectedMaterial(o)}
 							placeholder='Material'
 							isMulti
-						/>
+						/> */}
 						{/* FILTER FOR RARITY */}
 						<SelectFilter
 							value={selectedRarity}

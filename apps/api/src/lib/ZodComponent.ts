@@ -25,6 +25,13 @@ export const HabitatTypeSchema = z.enum([
 
 export const raritySchema = z.enum(['common', 'unusual', 'rare', 'fabled']);
 
+export const componentUsesSchema = z.object({
+	ointment: z.boolean(),
+	potion: z.boolean(),
+	extract: z.boolean(),
+	catalyst: z.boolean(),
+});
+
 export const ComponentSchema = z.object({
 	rarity: raritySchema,
 	habitat: HabitatTypeSchema.array(),
@@ -39,6 +46,7 @@ export const ComponentSchema = z.object({
 	value: z.number().nullable(),
 	valueWeight: z.number().nullable(),
 	toxic: z.boolean(),
+	uses: componentUsesSchema,
 	toxicity: z.string().nullable(),
 });
 
