@@ -257,7 +257,7 @@ model Component {
   value       Float?
   valueWeight Float?
   rarity      rarity @default(common)
-  uses        componentUses?
+  uses        componentUses
   isFood  Boolean?
   toxic Boolean @default(false)
   toxicity String?
