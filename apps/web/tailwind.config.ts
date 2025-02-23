@@ -122,7 +122,7 @@ const config: Pick<
 					primary: '#c184fc',
 					secondary: '#5d2a65',
 					accent: '#9ACD32',
-					neutral: '#3d4451',
+					neutral: '#44403c',
 					'base-100': '#ffffff',
 				},
 			},

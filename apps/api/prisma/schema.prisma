@@ -307,10 +307,12 @@ model Item {
   value           Float?
   valueWeight     Float?
   constraints     StatProfil?
+  maxDurability      Int? @default(1)
   durability      Int? @default(1)
   // Rarity
   magicWeight     Int?
   isRelic         Boolean? @default(false)
+  rarity  rarity @default(common)
   //Weapon
   damages         String?
   inflictType     String[]
@@ -343,6 +345,7 @@ enum ItemType {
   armor
   shield
   garnment
+  accessory
   accessorie
   trinket
   jewel

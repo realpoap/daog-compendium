@@ -85,6 +85,13 @@ const ItemsSearch = () => {
 			filteredItems = filteredItems.filter(i => {
 				if (i.isFood === null || i.isFood === false) return true;
 			});
+			filteredItems = filteredItems.filter(i => {
+				if ('itemType' in i) {
+					return i.itemType !== 'food';
+				} else if ('componentType' in i) {
+					return i.componentType !== 'food';
+				}
+			});
 		}
 
 		const filtered = filteredItems.filter(item =>
@@ -100,6 +107,7 @@ const ItemsSearch = () => {
 		selectedMaterial,
 		selectedRarity,
 		selectedType,
+		selectedFood,
 	]);
 
 	// const sendItems = () => {
@@ -205,14 +213,16 @@ const ItemsSearch = () => {
 								>
 									<th
 										className={cn('dark:text-stone-200', {
-											'dark:text-accent text-accent':
+											'text-gray-500 dark:text-gray-500':
+												'quality' in i && i.quality === 'poor',
+											'text-teal-500 dark:text-teal-500':
 												('quality' in i && i.quality === 'great') ||
-												('rarity' in i && i.rarity === 'rare'),
-											'text-slate-500 dark:text-slate-500':
-												('quality' in i && i.quality === 'poor') ||
-												('rarity' in i && i.rarity === 'common'),
-											'text-orange-500 dark:text-orange-500':
+												('rarity' in i && i.rarity === 'unusual'),
+											'dark:text-accent text-accent':
 												('quality' in i && i.quality === 'masterpiece') ||
+												('rarity' in i && i.rarity === 'rare'),
+											'text-orange-500 dark:text-orange-500':
+												('quality' in i && i.quality === 'legendary') ||
 												('rarity' in i && i.rarity === 'fabled'),
 										})}
 									>
