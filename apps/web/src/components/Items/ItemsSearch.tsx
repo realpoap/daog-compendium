@@ -135,7 +135,7 @@ const ItemsSearch = () => {
 
 	return (
 		<div className='flex flex-col items-center'>
-			<div className='container sticky top-10 z-10 flex min-h-[20dvh] flex-col items-center bg-gradient-to-b from-stone-100 from-80% dark:from-stone-800'>
+			<div className='container sticky top-10 z-10 flex min-h-[30dvh] flex-col items-center bg-gradient-to-b from-stone-100 from-80% dark:from-stone-800'>
 				<h1 className='font-grenze sticky mx-auto my-4 text-center text-6xl font-bold tracking-wide text-purple-900 md:mt-8 dark:text-purple-400'>
 					Items
 					{prunedItems && <TitleCount number={prunedItems.length} />}
@@ -148,7 +148,7 @@ const ItemsSearch = () => {
 					)}
 					type='search'
 				/>
-				<label className='font-grenze mb-4 flex w-4/5 flex-row items-center justify-center gap-2 px-4 text-center text-stone-500 md:w-1/2'>
+				<label className='font-grenze flex w-4/5 flex-row items-center justify-center gap-2 px-4 text-center text-stone-500 md:w-1/2'>
 					<input
 						type='checkbox'
 						className='checkbox checkbox-xs checkbox-primary'
@@ -186,7 +186,7 @@ const ItemsSearch = () => {
 					</div>
 				</Collapsible>
 			</div>
-			<div className='overflow-x-auto'>
+			<div className='mx-2 overflow-x-auto md:mx-0'>
 				<table className='table-xs md:table-sm table whitespace-normal'>
 					<thead>
 						<tr className='font-grenze text-lg dark:text-stone-200'>
