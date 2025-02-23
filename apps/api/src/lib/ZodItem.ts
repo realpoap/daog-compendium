@@ -59,7 +59,7 @@ export const ItemSchema = z.object({
 	weight: z.number().nullable(),
 	value: z.number().nullable(),
 	valueWeight: z.number().nullable(),
-	maxDurability: z.number().int().nullable(),
+	//maxDurability: z.number().int().nullable(),
 	durability: z.number().int().nullable(),
 	magicWeight: z.number().int().nullable(),
 	isRelic: z.boolean().nullable(),

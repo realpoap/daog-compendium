@@ -29,7 +29,7 @@ const ItemsSearch = () => {
 	);
 	const [prunedItems, setPrunedItems] = useState<Array<Item | Component>>([]);
 
-	const [selectedMaterial, setSelectedMaterial] = useState<Option[]>([]);
+	//const [selectedMaterial, setSelectedMaterial] = useState<Option[]>([]);
 	const [selectedRarity, setSelectedRarity] = useState<Option[]>([]);
 	const [selectedType, setSelectedType] = useState<Option[]>([]);
 	const [selectedFood, setSelectedFood] = useState<boolean>(false);
@@ -43,15 +43,15 @@ const ItemsSearch = () => {
 		let filteredItems = combinedItems;
 
 		// if material selected
-		if (selectedMaterial.length !== 0) {
-			filteredItems = combinedItems.filter(i =>
-				selectedMaterial.some(a => {
-					if ('materialType' in i) {
-						return a.value === i.materialType;
-					}
-				}),
-			);
-		}
+		// if (selectedMaterial.length !== 0) {
+		// 	filteredItems = combinedItems.filter(i =>
+		// 		selectedMaterial.some(a => {
+		// 			if ('materialType' in i) {
+		// 				return a.value === i.materialType;
+		// 			}
+		// 		}),
+		// 	);
+		// }
 		// // and rarity selected
 		if (selectedRarity.length !== 0) {
 			filteredItems = filteredItems.filter(i =>
@@ -100,7 +100,7 @@ const ItemsSearch = () => {
 	}, [
 		debouncedSearch,
 		combinedItems,
-		selectedMaterial,
+		//selectedMaterial,
 		selectedRarity,
 		selectedType,
 		selectedFood,

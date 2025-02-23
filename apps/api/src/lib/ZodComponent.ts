@@ -46,7 +46,7 @@ export const ComponentSchema = z.object({
 	value: z.number().nullable(),
 	valueWeight: z.number().nullable(),
 	toxic: z.boolean(),
-	uses: componentUsesSchema,
+	uses: componentUsesSchema.nullable(),
 	toxicity: z.string().nullable(),
 });
 
