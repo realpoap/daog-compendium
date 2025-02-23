@@ -1,8 +1,9 @@
 import { Item } from '@api/lib/ZodItem';
 import { ActionButton } from '../Buttons';
-import ArmorBlock from './Blocks/ArmorBlock';
-import RangedBlock from './Blocks/RangedBlock';
-import WeaponBlock from './Blocks/WeaponBlock';
+import DescBlock from './Blocks/DescBlock';
+import NameBlock from './Blocks/NameBlock';
+import PropertiesBlock from './Blocks/PropertiesBlock';
+import ValueBlock from './Blocks/ValueBlock';
 
 type Props = { item: Item };
 
@@ -13,13 +14,12 @@ const ItemModal = ({ item }: Props) => {
 			className='modal'
 		>
 			<div className='modal-box dark:bg-stone-800'>
-				{item.itemType === 'armor' && <ArmorBlock item={item} />}
-				{item.itemType === 'weapon' && item.rangeType === 'close' && (
-					<WeaponBlock item={item} />
-				)}
-				{item.itemType === 'weapon' && item.rangeType !== 'close' && (
-					<RangedBlock item={item} />
-				)}
+				<NameBlock item={item} />
+				<DescBlock item={item} />
+				<div className='divider divider-neutral'></div>
+				<PropertiesBlock item={item} />
+				<ValueBlock item={item} />
+
 				<ActionButton
 					color='accent'
 					textColor='stone-800'

@@ -1,7 +1,7 @@
 import { capitalizeFirstLetter } from '@/utils/capitalize';
 import { cn } from '@/utils/classNames';
 import { Item } from '@api/lib/ZodItem';
-import { GiArmorVest, GiTwoCoins } from 'rocketicons/gi';
+import { GiArmorVest, GiCheckedShield, GiTwoCoins } from 'rocketicons/gi';
 
 type Props = {
 	item: Item;
@@ -14,33 +14,62 @@ const ArmorBlock = ({ item }: Props) => {
 				className={cn(
 					'font-grenze flex flex-row justify-between text-4xl font-bold',
 					{
-						'dark:text-accent text-accent': item.quality === 'great',
-						'text-slate-500 dark:text-slate-500': item.quality === 'poor',
+						'text-gray-500 dark:text-gray-500':
+							'quality' in item && item.quality === 'poor',
+						'text-teal-500 dark:text-teal-500':
+							'quality' in item && item.quality === 'great',
+						'dark:text-accent text-accent':
+							'quality' in item && item.quality === 'masterpiece',
 						'text-orange-500 dark:text-orange-500':
-							item.quality === 'masterpiece',
+							'quality' in item && item.quality === 'legendary',
 					},
 				)}
 			>
 				{item?.name && capitalizeFirstLetter(item?.name[0])}
 				<div>
-					<GiArmorVest
-						className={cn('icon-stone-200-xl', {
-							'dark:icon-accent icon-accent': item.quality === 'great',
-							'icon-slate-500 dark:icon-slate-500': item.quality === 'poor',
-							'icon-orange-500 dark:icon-orange-500':
-								item.quality === 'masterpiece',
-						})}
-					/>
+					{item?.itemType === 'armor' && (
+						<GiArmorVest
+							className={cn('icon-stone-200-xl', {
+								'icon-gray-500 dark:icon-gray-500': item.quality === 'poor',
+								'icon-teal-500 dark:icon-teal-500': item.quality === 'great',
+								'dark:icon-accent icon-accent': item.quality === 'masterpiece',
+								'icon-orange-500 dark:icon-orange-500':
+									item.quality === 'legendary',
+							})}
+						/>
+					)}
+					{item?.itemType === 'shield' && (
+						<GiCheckedShield
+							className={cn('icon-stone-200-xl', {
+								'icon-gray-500 dark:icon-gray-500': item.quality === 'poor',
+								'icon-teal-500 dark:icon-teal-500': item.quality === 'great',
+								'dark:icon-accent icon-accent': item.quality === 'masterpiece',
+								'icon-orange-500 dark:icon-orange-500':
+									item.quality === 'legendary',
+							})}
+						/>
+					)}
 				</div>
 			</h3>
-			<div className='font-grenze text-lg'>
+			<div
+				className={cn('font-grenze text-xl font-bold tracking-wide', {
+					'text-gray-500 dark:text-gray-500':
+						'quality' in item && item.quality === 'poor',
+					'text-teal-500 dark:text-teal-500':
+						'quality' in item && item.quality === 'great',
+					'dark:text-accent text-accent':
+						'quality' in item && item.quality === 'masterpiece',
+					'text-orange-500 dark:text-orange-500':
+						'quality' in item && item.quality === 'legendary',
+				})}
+			>
 				{item?.name.length !== undefined &&
 					item?.name.length > 1 &&
 					item.name.map((n, i) => {
 						if (i !== 0) {
 							return (
 								<span
-									className='text-lg after:mr-1 after:content-[","] last:after:content-[""]'
+									className='after:mr-1 after:content-[","] last:after:content-[""]'
 									key={n}
 								>
 									{capitalizeFirstLetter(n)}
@@ -50,12 +79,12 @@ const ArmorBlock = ({ item }: Props) => {
 					})}
 			</div>
 			<div>
-				<span className='font-semibold'>
-					{item?.quality} {item?.itemType} made in {item?.materialSubType}{' '}
-					{item?.material}
+				<span className='font-semibold italic'>
+					{capitalizeFirstLetter(item?.quality)} {item?.itemType} made in{' '}
+					{item?.materialSubType} {item?.material}
 				</span>
 			</div>
-			<div className='text-sm italic'>{item.description}</div>
+			<div className='mt-2 text-sm italic'>{item.description}</div>
 			<div className='my-2 flex flex-col'>
 				<span>Armor : {item.armorClass}</span>
 				<span>Durability : {item.durability}</span>

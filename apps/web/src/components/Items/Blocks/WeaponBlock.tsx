@@ -14,10 +14,14 @@ const WeaponBlock = ({ item }: Props) => {
 				className={cn(
 					'font-grenze flex flex-row justify-between text-4xl font-bold',
 					{
-						'dark:text-accent text-accent': item.quality === 'great',
-						'text-slate-500 dark:text-slate-500': item.quality === 'poor',
+						'text-gray-500 dark:text-gray-500':
+							'quality' in item && item.quality === 'poor',
+						'text-teal-500 dark:text-teal-500':
+							'quality' in item && item.quality === 'great',
+						'dark:text-accent text-accent':
+							'quality' in item && item.quality === 'masterpiece',
 						'text-orange-500 dark:text-orange-500':
-							item.quality === 'masterpiece',
+							'quality' in item && item.quality === 'legendary',
 					},
 				)}
 			>
@@ -25,10 +29,11 @@ const WeaponBlock = ({ item }: Props) => {
 				<div>
 					<GiSwordWound
 						className={cn('icon-stone-200-xl', {
-							'dark:icon-accent icon-accent': item.quality === 'great',
-							'icon-slate-500 dark:icon-slate-500': item.quality === 'poor',
+							'icon-gray-500 dark:icon-gray-500': item.quality === 'poor',
+							'icon-teal-500 dark:icon-teal-500': item.quality === 'great',
+							'dark:icon-accent icon-accent': item.quality === 'masterpiece',
 							'icon-orange-500 dark:icon-orange-500':
-								item.quality === 'masterpiece',
+								item.quality === 'legendary',
 						})}
 					/>
 				</div>
@@ -50,12 +55,12 @@ const WeaponBlock = ({ item }: Props) => {
 					})}
 			</div>
 			<div>
-				<span className='font-semibold'>
-					{item?.quality} {item?.itemType} made in {item?.materialSubType}{' '}
-					{item?.material}
+				<span className='font-semibold italic'>
+					{capitalizeFirstLetter(item?.quality)} {item?.itemType} made in{' '}
+					{item?.materialSubType} {item?.material}
 				</span>
 			</div>
-			<div className='text-sm italic'>{item.description}</div>
+
 			<div className='my-2 flex flex-col'>
 				<span>Type : {item.weaponType}</span>
 				<span>Damages : {item.damages}</span>

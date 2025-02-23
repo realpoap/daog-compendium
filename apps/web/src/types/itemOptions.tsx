@@ -27,10 +27,6 @@ export const itemMaterialOptions = [
 
 export const itemRarityOptions = [
 	{
-		label: 'Poor',
-		value: 'poor',
-	},
-	{
 		label: 'Common',
 		value: 'common',
 	},
@@ -43,20 +39,8 @@ export const itemRarityOptions = [
 		value: 'rare',
 	},
 	{
-		label: 'Great',
-		value: 'great',
-	},
-	{
-		label: 'Masterpiece',
-		value: 'masterpiece',
-	},
-	{
 		label: 'Fabled',
 		value: 'fabled',
-	},
-	{
-		label: 'Legendary',
-		value: 'legendary',
 	},
 ];
 
@@ -96,10 +80,6 @@ export const itemTypeOptions = [
 	{
 		label: 'Ammunition',
 		value: 'ammunition',
-	},
-	{
-		label: 'Food',
-		value: 'food',
 	},
 	{
 		label: 'Junk',

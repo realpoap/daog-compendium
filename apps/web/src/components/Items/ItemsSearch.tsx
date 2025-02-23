@@ -1,14 +1,10 @@
 //import itemsEntries from '@/data/weapons';
-import {
-	itemMaterialOptions,
-	itemRarityOptions,
-	itemTypeOptions,
-} from '@/types/itemOptions';
+import { itemRarityOptions, itemTypeOptions } from '@/types/itemOptions';
 import { capitalizeFirstLetter } from '@/utils/capitalize';
 import { cn } from '@/utils/classNames';
 import { trpc } from '@/utils/trpc';
 import { Component } from '@api/lib/ZodComponent';
-import { Item } from '@api/lib/ZodItem';
+import { Item, ItemTypeType } from '@api/lib/ZodItem';
 import { useEffect, useState } from 'react';
 import { GiTwoCoins } from 'rocketicons/gi';
 import { useDebounce } from 'use-debounce';
@@ -33,9 +29,10 @@ const ItemsSearch = () => {
 	);
 	const [prunedItems, setPrunedItems] = useState<Array<Item | Component>>([]);
 
-	const [selectedMaterial, setSelectedMaterial] = useState<Option[]>([]);
+	//const [selectedMaterial, setSelectedMaterial] = useState<Option[]>([]);
 	const [selectedRarity, setSelectedRarity] = useState<Option[]>([]);
 	const [selectedType, setSelectedType] = useState<Option[]>([]);
+	const [selectedFood, setSelectedFood] = useState<boolean>(false);
 
 	useEffect(() => {
 		if (getAllItems.data && getAllComponents.data)
@@ -45,28 +42,54 @@ const ItemsSearch = () => {
 	useEffect(() => {
 		let filteredItems = combinedItems;
 
-		// if domain selected
-		if (selectedMaterial.length !== 0) {
-			filteredItems = combinedItems.filter(i =>
-				selectedMaterial.some(a => {
-					if ('materialType' in i) {
-						return a.value === i.materialType;
+		// if material selected
+		// if (selectedMaterial.length !== 0) {
+		// 	filteredItems = combinedItems.filter(i =>
+		// 		selectedMaterial.some(a => {
+		// 			if ('materialType' in i) {
+		// 				return a.value === i.materialType;
+		// 			}
+		// 		}),
+		// 	);
+		// }
+		// // and rarity selected
+		if (selectedRarity.length !== 0) {
+			filteredItems = filteredItems.filter(i =>
+				selectedRarity.some(a => {
+					if ('rarity' in i) {
+						return i.rarity === a.value;
+					} else if ('quality' in i) {
+						return i.quality === a.value;
 					}
 				}),
 			);
 		}
-		// // and level selected
-		// if (selectedLevel.length !== 0) {
-		// 	filteredSpells = filteredSpells.filter(i =>
-		// 		selectedLevel.some(a => Number(a.value) === Number(i.level)),
-		// 	);
-		// }
-		// // and target selected
-		// if (selectedTarget.length !== 0) {
-		// 	filteredSpells = filteredSpells.filter(i =>
-		// 		selectedTarget.some(a => a.value === i.targetType),
-		// 	);
-		// }
+		// and type selected
+		if (selectedType.length !== 0) {
+			filteredItems = filteredItems.filter(i =>
+				selectedType.some(a => {
+					if ('itemType' in i) {
+						return i.itemType.includes(a.value as ItemTypeType);
+					} else if ('componentType' in i) {
+						return i.componentType.includes(a.value as string);
+					}
+				}),
+			);
+		}
+
+		if (!selectedFood) {
+			filteredItems = filteredItems.filter(i => {
+				if (i.isFood === null || i.isFood === false) return true;
+			});
+			filteredItems = filteredItems.filter(i => {
+				if ('itemType' in i) {
+					return i.itemType !== 'food';
+				} else if ('componentType' in i) {
+					return i.componentType !== 'food';
+				}
+			});
+		}
+
 		const filtered = filteredItems.filter(item =>
 			item.searchName
 				.toString()
@@ -77,9 +100,10 @@ const ItemsSearch = () => {
 	}, [
 		debouncedSearch,
 		combinedItems,
-		selectedMaterial,
+		//selectedMaterial,
 		selectedRarity,
 		selectedType,
+		selectedFood,
 	]);
 
 	// const sendItems = () => {
@@ -124,16 +148,25 @@ const ItemsSearch = () => {
 					)}
 					type='search'
 				/>
+				<label className='font-grenze mb-4 flex w-4/5 flex-row items-center justify-center gap-2 px-4 text-center text-stone-500 md:w-1/2'>
+					<input
+						type='checkbox'
+						className='checkbox checkbox-xs checkbox-primary'
+						checked={selectedFood}
+						onChange={() => setSelectedFood(prev => !prev)}
+					/>
+					<span>include food items</span>
+				</label>
 				<Collapsible title='filter results'>
 					<div className='flex w-full flex-col items-center justify-start md:flex-row md:items-start md:justify-center'>
 						{/* FILTER FOR MATERIAL */}
-						<SelectFilter
+						{/* <SelectFilter
 							value={selectedMaterial}
 							options={itemMaterialOptions}
 							onChange={o => setSelectedMaterial(o)}
 							placeholder='Material'
 							isMulti
-						/>
+						/> */}
 						{/* FILTER FOR RARITY */}
 						<SelectFilter
 							value={selectedRarity}
@@ -176,14 +209,16 @@ const ItemsSearch = () => {
 								>
 									<th
 										className={cn('dark:text-stone-200', {
-											'dark:text-accent text-accent':
+											'text-gray-500 dark:text-gray-500':
+												'quality' in i && i.quality === 'poor',
+											'text-teal-500 dark:text-teal-500':
 												('quality' in i && i.quality === 'great') ||
-												('rarity' in i && i.rarity === 'rare'),
-											'text-slate-500 dark:text-slate-500':
-												('quality' in i && i.quality === 'poor') ||
-												('rarity' in i && i.rarity === 'common'),
-											'text-orange-500 dark:text-orange-500':
+												('rarity' in i && i.rarity === 'unusual'),
+											'dark:text-accent text-accent':
 												('quality' in i && i.quality === 'masterpiece') ||
+												('rarity' in i && i.rarity === 'rare'),
+											'text-orange-500 dark:text-orange-500':
+												('quality' in i && i.quality === 'legendary') ||
 												('rarity' in i && i.rarity === 'fabled'),
 										})}
 									>
