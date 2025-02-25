@@ -5,3 +5,9 @@ export type NavItem = {
 	submenu?: boolean;
 	subMenuItems?: NavItem[];
 };
+
+export type selectOption = {
+	label: string;
+	value: string | number;
+	icon?: JSX.Element;
+};

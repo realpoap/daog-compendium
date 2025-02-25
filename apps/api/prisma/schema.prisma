@@ -314,6 +314,7 @@ model Item {
   isRelic         Boolean? @default(false)
   rarity  rarity @default(common)
   //Weapon
+  usage           String?
   damages         String?
   inflictType     String[]
   rangeType rangeType?

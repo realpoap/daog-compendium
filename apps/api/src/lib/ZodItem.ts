@@ -71,6 +71,7 @@ export const ItemSchema = z.object({
 	magicProtection: z.number().int().nullable(),
 	rangeType: rangeTypeSchema.nullable(),
 	weaponType: weaponTypeSchema.nullable(),
+	usage: z.string().nullable(),
 	range: z.string().nullable(),
 	isFood: z.boolean().nullable(),
 });

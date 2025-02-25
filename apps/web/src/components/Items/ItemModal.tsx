@@ -1,4 +1,5 @@
 import { Item } from '@api/lib/ZodItem';
+import { useNavigate } from '@tanstack/react-router';
 import { ActionButton } from '../Buttons';
 import DescBlock from './Blocks/DescBlock';
 import NameBlock from './Blocks/NameBlock';
@@ -8,6 +9,8 @@ import ValueBlock from './Blocks/ValueBlock';
 type Props = { item: Item };
 
 const ItemModal = ({ item }: Props) => {
+	const navigate = useNavigate();
+
 	return (
 		<dialog
 			id='item-modal'
@@ -23,6 +26,12 @@ const ItemModal = ({ item }: Props) => {
 				<ActionButton
 					color='accent'
 					textColor='stone-800'
+					onClick={() =>
+						navigate({
+							to: `/items/edit/$id`,
+							params: { id: `${item?.id}` },
+						})
+					}
 				>
 					Edit
 				</ActionButton>

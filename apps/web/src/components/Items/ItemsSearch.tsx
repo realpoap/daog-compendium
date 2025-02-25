@@ -58,8 +58,6 @@ const ItemsSearch = () => {
 				selectedRarity.some(a => {
 					if ('rarity' in i) {
 						return i.rarity === a.value;
-					} else if ('quality' in i) {
-						return i.quality === a.value;
 					}
 				}),
 			);
