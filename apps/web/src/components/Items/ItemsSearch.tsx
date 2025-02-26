@@ -184,10 +184,10 @@ const ItemsSearch = () => {
 					</div>
 				</Collapsible>
 			</div>
-			<div className='mx-2 overflow-x-auto md:mx-0'>
-				<table className='table-xs md:table-sm table whitespace-normal'>
+			<div className='mx-6 overflow-x-auto md:mx-0'>
+				<table className='table-xs md:table-sm hover table whitespace-normal border-stone-500'>
 					<thead>
-						<tr className='font-grenze text-lg dark:text-stone-200'>
+						<tr className='font-grenze w-full border-stone-500 text-lg dark:text-stone-200'>
 							<th>Name</th>
 							<th className='text-center'>Type</th>
 							<th className='text-center'>Weight</th>
@@ -199,7 +199,7 @@ const ItemsSearch = () => {
 							prunedItems.map(i => (
 								<tr
 									key={i.id}
-									className='cursor-pointer hover:dark:bg-stone-700'
+									className='w-full cursor-pointer dark:border-stone-700 hover:dark:bg-stone-700'
 									onClick={e => {
 										e.stopPropagation();
 										openItemModal(i);

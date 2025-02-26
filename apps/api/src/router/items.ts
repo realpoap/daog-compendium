@@ -67,10 +67,10 @@ export const itemsRouter = router({
 		});
 	}),
 	update: procedure.input(ItemSchema).mutation(async ({ input }) => {
-		console.log('💌 updating item :', input.searchName);
+		const { id, ...item } = input;
 		return await prisma.item.update({
-			where: { searchName: input.searchName },
-			data: input,
+			where: { id: id },
+			data: item,
 		});
 	}),
 });

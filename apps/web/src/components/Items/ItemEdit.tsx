@@ -37,6 +37,7 @@ const ItemEdit = () => {
 	const { id } = useParams({ strict: false });
 	const utils = trpc.useUtils();
 
+	const [nameArray, setNameArray] = useState<string[]>([]);
 	const [inflictTypes, setInflictTypes] = useState<string[]>([]);
 	const [resistTypes, setResistTypes] = useState<string[]>([]);
 
@@ -51,12 +52,6 @@ const ItemEdit = () => {
 			throw new Error(error.message);
 		},
 	});
-
-	useEffect(() => {
-		if (!itemById.isSuccess) return;
-		methods.reset(itemById.data as Item);
-	}, [itemById.status]);
-
 	const methods = useForm<Item>({
 		mode: 'onChange',
 		resolver: async (data, context, options) => {
@@ -71,6 +66,19 @@ const ItemEdit = () => {
 
 		shouldFocusError: true,
 	});
+
+	useEffect(() => {
+		if (!itemById.isSuccess) return;
+		setNameArray(itemById.data.name);
+		methods.reset(itemById.data as Item);
+		methods.setValue('name', ['']);
+	}, [itemById.status]);
+
+	useEffect(() => {
+		methods.setValue('name', nameArray);
+		const searchNameEdit = `${methods.getValues('name')[0]} - ${methods.getValues('materialType')} (${methods.getValues('quality')})}`;
+		methods.setValue('searchName', searchNameEdit);
+	}, [methods.formState]);
 
 	const watchItemType = methods.watch('itemType');
 	const watchMaterial = methods.watch('material');
@@ -278,7 +286,7 @@ const ItemEdit = () => {
 							<Select
 								name='material'
 								options={itemMaterialOptions}
-								defaultValue={(item?.material as string) ?? ''}
+								defaultValue={item?.material as string}
 							/>
 						</Field>
 						<Field
@@ -293,7 +301,7 @@ const ItemEdit = () => {
 										? ['', ...organicMaterialTypeOptions]
 										: ['', ...mineralMaterialTypeOptions]
 								}
-								defaultValue={(item?.materialType as string) ?? ''}
+								defaultValue={item?.materialType as string}
 							/>
 						</Field>
 						<Field

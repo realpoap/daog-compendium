@@ -320,7 +320,6 @@ model Item {
   rangeType rangeType?
   range String?
   weaponType  weaponType?
-
   //Armor
   protection      Int?
   armorClass  armorClass? @default(none)

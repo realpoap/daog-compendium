@@ -24,6 +24,7 @@ export const InputNumber = ({
 					required: true,
 				})}
 				type='number'
+				step='.1'
 				max={1000}
 				defaultValue={placeholder}
 				className={cn(
