@@ -39,7 +39,7 @@ const MultiSelect = ({ name, list, values, setValues, placeholder }: Props) => {
 				<div
 					tabIndex={0}
 					className={cn(
-						'font-cabin flex h-11 w-full cursor-pointer items-center rounded-lg border-none p-2 pl-4 text-sm italic text-stone-500 hover:bg-stone-700 dark:bg-stone-700',
+						'font-cabin flex h-8 min-h-6 w-full cursor-pointer items-center rounded-md border-none px-1 pl-2 text-sm italic text-stone-500 hover:bg-stone-700 dark:bg-stone-700',
 						{
 							'select-error': errors[name],
 							'ring-error': errors[name],
@@ -59,7 +59,7 @@ const MultiSelect = ({ name, list, values, setValues, placeholder }: Props) => {
 				</div>
 				<ul
 					tabIndex={0}
-					className='menu dropdown-content font-cabin autofill:font-cabin z-10 mt-10 h-48 w-full overflow-x-scroll rounded-md text-lg text-stone-500 shadow-sm dark:bg-stone-700 autofill:dark:bg-stone-700 dark:active:bg-stone-700'
+					className='menu dropdown-content font-cabin autofill:font-cabin text-md z-10 mt-10 h-36 w-full overflow-x-scroll rounded-md text-stone-500 shadow-sm dark:bg-stone-700 autofill:dark:bg-stone-700 dark:active:bg-stone-700'
 				>
 					{list.map(o => (
 						<li

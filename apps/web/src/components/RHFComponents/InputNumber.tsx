@@ -24,10 +24,11 @@ export const InputNumber = ({
 					required: true,
 				})}
 				type='number'
+				step='.1'
 				max={1000}
 				defaultValue={placeholder}
 				className={cn(
-					'font-cabin w-full rounded-lg px-4 py-2 text-lg text-purple-900 caret-purple-900 shadow-sm placeholder:italic focus:border-purple-900 focus:outline-none focus:ring-1 focus:ring-purple-900 dark:bg-stone-700 dark:text-purple-400 dark:caret-purple-400 dark:focus:border-purple-400 dark:focus:ring-purple-400',
+					'font-cabin text-md w-full rounded-md px-2 py-1 text-purple-900 caret-purple-900 shadow-sm placeholder:italic focus:border-purple-900 focus:outline-none focus:ring-1 focus:ring-purple-900 dark:bg-stone-700 dark:text-purple-400 dark:caret-purple-400 dark:focus:border-purple-400 dark:focus:ring-purple-400',
 					{
 						'select-error': errors[name],
 						'ring-error': errors[name],
