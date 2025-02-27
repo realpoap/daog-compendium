@@ -6,7 +6,6 @@ export const ItemTypeSchema = z.enum([
 	'shield',
 	'garnment',
 	'accessory',
-	'accessorie',
 	'trinket',
 	'jewel',
 	'potion',
