@@ -2,25 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "dist/server.js",
+      "src": "src/server.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
-      {
-        "src": "/api/(.*)",
-        "dest": "dist/server.js"
-      },
-      {
-        "src": "/health",
-        "dest": "dist/server.js"
-      },
-      {
-        "src": "/(.*)",
-        "status": 404
-      }
-    ],
-  "installCommand": "pnpm install",
-  "buildCommand": "pnpm build",
-  "devCommand": "pnpm dev"
+    {
+      "src": "/(.*)",
+      "dest": "src/server.js"
+    }
+  ]
 }
