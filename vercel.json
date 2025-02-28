@@ -1,9 +1,10 @@
 {
-  "version": 2,
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/api"
+  "projects": {
+    "api": {
+      "rootDirectory": "apps/api"
+    },
+    "web": {
+      "rootDirectory": "apps/web"
     }
-  ]
+  }
 }
