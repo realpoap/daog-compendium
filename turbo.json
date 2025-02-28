@@ -3,13 +3,12 @@
   "globalDependencies": ["**/.env.*local"],
   "pipeline": {
     "build": {
-      "env": ["VITE_API_URL", "DATABASE_URL", "ACCESS_TOKEN_SECRET", "FRONTEND_URL", "REFRESH_TOKEN_SECRET"],
       "dependsOn": ["^build"],
       "outputs": ["dist/**"]
     },
-   "api#build": {
+    "api#build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**"]
+      "outputs": []
     },
     "web#build": {
       "dependsOn": ["^build"],
