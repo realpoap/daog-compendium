@@ -8,16 +8,15 @@
   ],
   "routes": [
     {
+      "src": "/api/(.*)",
+      "dest": "dist/server.js"
+    },
+    {
       "src": "/(.*)",
       "dest": "dist/server.js"
     }
   ],
   "installCommand": "pnpm install",
   "buildCommand": "pnpm build",
-  "devCommand": "pnpm dev",
-  "functions": {
-    "dist/server.js": {
-      "runtime": "@vercel/node"
-    }
-  }
+  "devCommand": "pnpm dev"
 }
