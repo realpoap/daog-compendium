@@ -15,7 +15,7 @@
 	},
 	"strict": true,
 	"strictNullChecks": true,
-	"include": ["src", "src/index.ts"],
+	"include": ["src", "src/prismaClient.ts"],
 	"exclude": ["node_modules"],
 	//get rid of this in prod:
 	"declaration": false,

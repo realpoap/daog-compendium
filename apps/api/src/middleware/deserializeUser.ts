@@ -1,4 +1,4 @@
-import { prisma } from '@api/index';
+import { prisma } from '@api/prismaClient';
 import * as trpcExpress from '@trpc/server/adapters/express';
 import 'dotenv/config';
 import jwt from 'jsonwebtoken';

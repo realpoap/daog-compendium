@@ -1,8 +1,8 @@
 import customConfig from '@api/config/default';
-import { prisma } from '@api/index';
 import { serverErrorHandler } from '@api/lib/utils/errorHandler';
 import { signJwt, signToken, verifyJwt } from '@api/lib/utils/jwt';
 import { CreateUserInput, LoginUserInput } from '@api/lib/ZodUser';
+import { prisma } from '@api/prismaClient';
 import { Context } from '@api/trpc';
 import { TRPCError } from '@trpc/server';
 import bcrypt from 'bcryptjs';
