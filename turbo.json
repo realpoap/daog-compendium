@@ -3,7 +3,7 @@
   "globalDependencies": ["**/.env.*local"],
   "tasks": {
     "build": {
-      "env": ["VITE_API_URL", "DATABASE_URL"],
+      "env": ["VITE_API_URL", "DATABASE_URL", "ACCESS_TOKEN_SECRET", "FRONTEND_URL", "REFRESH_TOKEN_SECRET"],
       "dependsOn": ["^build"],
       "outputs": ["dist/**"]
     },
