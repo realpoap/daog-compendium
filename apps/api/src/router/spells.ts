@@ -1,4 +1,4 @@
-import { prisma } from '@api/index';
+import { prisma } from '@api/prismaClient';
 import { serverErrorHandler } from '@api/lib/utils/errorHandler';
 import { ZodNewSpell, ZodSpell } from '@api/lib/ZodSpell';
 import { procedure, router } from '@api/trpc';

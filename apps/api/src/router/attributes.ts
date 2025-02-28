@@ -1,7 +1,7 @@
-import { prisma } from '@api/index';
 import { serverErrorHandler } from '@api/lib/utils/errorHandler';
 import { AttributeSchema } from '@api/lib/zod-prisma';
 import { NewAttributeSchema } from '@api/lib/ZodCreature';
+import { prisma } from '@api/prismaClient';
 import { procedure, router } from '@api/trpc';
 import { z } from 'zod';
 

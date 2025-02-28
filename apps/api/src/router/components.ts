@@ -1,4 +1,4 @@
-import { prisma } from '@api/index';
+import { prisma } from '@api/prismaClient';
 import { ComponentSchema } from '@api/lib/ZodComponent';
 import { procedure, router } from '@api/trpc';
 import { z } from 'zod';

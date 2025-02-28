@@ -1,6 +1,6 @@
-import { prisma } from '@api/index';
 import { serverErrorHandler } from '@api/lib/utils/errorHandler';
 import { NewActionSchema } from '@api/lib/ZodAction';
+import { prisma } from '@api/prismaClient';
 import { procedure, router } from '@api/trpc';
 import { z } from 'zod';
 

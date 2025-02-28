@@ -1,4 +1,4 @@
-import { prisma } from '@api/index';
+import { prisma } from '@api/prismaClient';
 import { serverErrorHandler } from '@api/lib/utils/errorHandler';
 import { ActionArraySchema, ActionSchema } from '@api/lib/ZodAction';
 import {

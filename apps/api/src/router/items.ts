@@ -1,4 +1,4 @@
-import { prisma } from '@api/index';
+import { prisma } from '@api/prismaClient';
 import {
 	ItemSchema,
 	ItemTypeSchema,
