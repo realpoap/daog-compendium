@@ -119,9 +119,9 @@ function Index() {
 
 					{/* DIVIDER ------------------------------------ */}
 					<div className='flex w-full flex-row items-center justify-center gap-4 text-stone-500 md:mt-4 md:w-4 md:flex-col md:gap-4'>
-						<div className='h-1 w-1/3 rounded bg-stone-700 md:h-[40dvh] md:w-1'></div>
+						<div className='bg-neutral h-1 w-1/3 rounded md:h-[40dvh] md:w-1'></div>
 						<p>or</p>
-						<div className='h-1 w-1/3 rounded bg-stone-700 md:h-[40dvh] md:w-1'></div>
+						<div className='bg-neutral h-1 w-1/3 rounded md:h-[40dvh] md:w-1'></div>
 					</div>
 
 					{/* Login ------------------------------------ */}
