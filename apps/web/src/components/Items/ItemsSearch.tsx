@@ -185,7 +185,7 @@ const ItemsSearch = () => {
 				</Collapsible>
 			</div>
 			<div className='mx-6 overflow-x-auto md:mx-0'>
-				<table className='table-xs md:table-sm hover table whitespace-normal border-stone-500'>
+				<table className='table-xs md:table-sm hover mx-0 table whitespace-normal border-stone-500 px-0'>
 					<thead>
 						<tr className='font-grenze w-full border-stone-500 text-lg dark:text-stone-200'>
 							<th>Name</th>
@@ -194,19 +194,19 @@ const ItemsSearch = () => {
 							<th className='text-center'>Cost</th>
 						</tr>
 					</thead>
-					<tbody className='text-xs md:text-sm'>
+					<tbody className='w-full text-xs font-normal md:text-sm'>
 						{prunedItems &&
 							prunedItems.map(i => (
 								<tr
 									key={i.id}
-									className='w-full cursor-pointer dark:border-stone-700 hover:dark:bg-stone-700'
+									className='dark:border-neutral hover:dark:bg-neutral mx-0 w-full cursor-pointer px-0 font-normal'
 									onClick={e => {
 										e.stopPropagation();
 										openItemModal(i);
 									}}
 								>
 									<th
-										className={cn('dark:text-stone-200', {
+										className={cn('font-normal dark:text-stone-200', {
 											'text-gray-500 dark:text-gray-500':
 												'quality' in i && i.quality === 'poor',
 											'text-teal-500 dark:text-teal-500':
@@ -223,28 +223,30 @@ const ItemsSearch = () => {
 										{capitalizeFirstLetter(i.name.join(', '))}
 									</th>
 									{'itemType' in i && (
-										<th className='text-center'>{i.itemType}</th>
+										<th className='text-center font-normal'>{i.itemType}</th>
 									)}
 									{'componentType' in i && (
-										<th className='text-center'>{i.componentType}</th>
+										<th className='text-center font-normal'>
+											{i.componentType}
+										</th>
 									)}
 									{i.weight ? (
-										<th className='text-center'>{i.weight}</th>
+										<th className='text-center font-normal'>{i.weight}</th>
 									) : (
 										<th></th>
 									)}
 									{i.value !== 0 && i.value !== null && (
-										<th className='flex flex-row justify-center gap-1'>
+										<th className='text-left font-normal'>
 											{Math.floor(i?.value / 100) !== 0 && i.value !== 0 && (
 												<span>
 													{Math.floor(i?.value / 100)}
-													<GiTwoCoins className='icon-goldenrod-300 icon-sm' />
+													<GiTwoCoins className='icon-goldenrod-300 icon-xs md:icon-sm w-fit' />
 												</span>
 											)}
 											{i?.value % 100 !== 0 && i.value !== 0 && (
 												<span>
 													{i?.value % 100}
-													<GiTwoCoins className='icon-stone-300 icon-sm' />
+													<GiTwoCoins className='icon-stone-300 icon-xs md:icon-sm w-fit' />
 												</span>
 											)}
 										</th>
@@ -254,13 +256,13 @@ const ItemsSearch = () => {
 											{Math.floor(i?.valueWeight / 100) !== 0 && (
 												<span>
 													{Math.floor(i?.valueWeight / 100)}
-													<GiTwoCoins className='icon-goldenrod-300 icon-sm' />
+													<GiTwoCoins className='icon-goldenrod-300 icon-xs md:icon-sm w-fit' />
 												</span>
 											)}
 											{i?.valueWeight % 100 !== 0 && (
 												<span>
 													{i?.valueWeight % 100}
-													<GiTwoCoins className='icon-stone-300 icon-sm' />
+													<GiTwoCoins className='icon-stone-300 icon-xs md:icon-sm w-fit' />
 												</span>
 											)}
 										</th>

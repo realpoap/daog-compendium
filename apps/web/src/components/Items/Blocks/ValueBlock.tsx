@@ -36,21 +36,21 @@ const ValueBlock = ({ item }: Props) => {
 	}, []);
 
 	return (
-		<div className='flex flex-col'>
-			<div className='flex flex-row items-center justify-between'>
+		<div className='flex w-full flex-col'>
+			<div className='flex w-full flex-row items-center justify-between'>
 				<div>
 					<span>Market value : </span>
 					{item.value && Math.floor(item?.value / 100)}{' '}
-					<GiTwoCoins className='icon-goldenrod-300 icon-sm' />{' '}
+					<GiTwoCoins className='icon-goldenrod-300 icon-xs md:icon-sm w-fit' />{' '}
 					{item.value && item?.value % 100}{' '}
-					<GiTwoCoins className='icon-stone-300 icon-sm' />
+					<GiTwoCoins className='icon-stone-300 icon-xs md:icon-sm w-fit' />
 				</div>
 				<TbSwitchHorizontal className='icon-neutral' />
 				<div>
 					Reselling for : {sellPrice && Math.floor(sellPrice / 100)}{' '}
-					<GiTwoCoins className='icon-goldenrod-300 icon-sm' />{' '}
+					<GiTwoCoins className='icon-goldenrod-300 icon-xs md:icon-sm w-fit' />{' '}
 					{sellPrice && sellPrice % 100}{' '}
-					<GiTwoCoins className='icon-stone-300 icon-sm' />
+					<GiTwoCoins className='icon-stone-300 icon-xs md:icon-sm w-fit' />
 				</div>
 			</div>
 			<div className='flex flex-row items-center justify-between'>
