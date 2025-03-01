@@ -47,7 +47,7 @@ async function main() {
 		}),
 	);
 
-	app.get('/health', (_req, res) => {
+	app.get('/healthcheck', (_req, res) => {
 		console.log(`Monitoring health 🩺...`);
 		res.sendStatus(200);
 	});
