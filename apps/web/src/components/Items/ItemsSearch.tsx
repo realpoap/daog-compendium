@@ -191,7 +191,7 @@ const ItemsSearch = () => {
 							<th>Name</th>
 							<th className='text-center'>Type</th>
 							<th className='text-center'>Weight</th>
-							<th className='text-center'>Cost</th>
+							<th className='text-center'>Value</th>
 						</tr>
 					</thead>
 					<tbody className='w-full text-xs font-normal md:text-sm'>
@@ -235,39 +235,41 @@ const ItemsSearch = () => {
 									) : (
 										<th></th>
 									)}
-									{i.value !== 0 && i.value !== null && (
-										<th className='text-left font-normal'>
-											{Math.floor(i?.value / 100) !== 0 && i.value !== 0 && (
-												<span>
-													{Math.floor(i?.value / 100)}
-													<GiTwoCoins className='icon-goldenrod-300 icon-xs md:icon-sm w-fit' />
-												</span>
-											)}
-											{i?.value % 100 !== 0 && i.value !== 0 && (
-												<span>
-													{i?.value % 100}
-													<GiTwoCoins className='icon-stone-300 icon-xs md:icon-sm w-fit' />
-												</span>
-											)}
-										</th>
-									)}
-									{!i.value && i.valueWeight && i.valueWeight !== 0 && (
-										<th className='flex flex-row justify-center gap-1'>
-											{Math.floor(i?.valueWeight / 100) !== 0 && (
-												<span>
-													{Math.floor(i?.valueWeight / 100)}
-													<GiTwoCoins className='icon-goldenrod-300 icon-xs md:icon-sm w-fit' />
-												</span>
-											)}
-											{i?.valueWeight % 100 !== 0 && (
-												<span>
-													{i?.valueWeight % 100}
-													<GiTwoCoins className='icon-stone-300 icon-xs md:icon-sm w-fit' />
-												</span>
-											)}
-										</th>
-									)}
-									{!i.value && !i.valueWeight && <th></th>}
+									<th className='text-right font-normal'>
+										{i.value !== 0 && i.value !== null && (
+											<span className='flex flex-row items-baseline justify-center gap-1'>
+												{Math.floor(i?.value / 100) !== 0 && i.value !== 0 && (
+													<span>
+														{Math.floor(i?.value / 100)}
+														<GiTwoCoins className='icon-goldenrod-300 icon-xs md:icon-sm w-fit' />
+													</span>
+												)}
+												{i?.value % 100 !== 0 && i.value !== 0 && (
+													<span>
+														{i?.value % 100}
+														<GiTwoCoins className='icon-stone-300 icon-xs md:icon-sm w-fit' />
+													</span>
+												)}
+											</span>
+										)}
+										{!i.value && i.valueWeight && i.valueWeight !== 0 && (
+											<span className='flex flex-row items-baseline justify-center gap-1'>
+												{Math.floor(i?.valueWeight / 100) !== 0 && (
+													<span>
+														{Math.floor(i?.valueWeight / 100)}
+														<GiTwoCoins className='icon-goldenrod-300 icon-xs md:icon-sm w-fit' />
+													</span>
+												)}
+												{i?.valueWeight % 100 !== 0 && (
+													<span>
+														{i?.valueWeight % 100}
+														<GiTwoCoins className='icon-stone-300 icon-xs md:icon-sm w-fit' />
+													</span>
+												)}
+											</span>
+										)}
+										{!i.value && !i.valueWeight && <></>}
+									</th>
 								</tr>
 							))}
 					</tbody>
