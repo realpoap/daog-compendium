@@ -1,3 +1,4 @@
+import TagBadge from '@/components/TagBadge';
 import { Item } from '@api/lib/ZodItem';
 
 type Props = {
@@ -10,6 +11,19 @@ const PropertiesBlock = ({ item }: Props) => {
 			<div className='flex flex-col'>
 				{item.itemType === 'weapon' && (
 					<div className='flex flex-col'>
+						<span>
+							Constraints :{' '}
+							{Object.entries(item.constraints).map(([k, v]) =>
+								v !== 0 ? (
+									<TagBadge
+										text={`${k} ${v}`}
+										key={k}
+									/>
+								) : (
+									<></>
+								),
+							)}
+						</span>
 						{item.rangeType === 'close' && (
 							<span>Type : {item.weaponType}</span>
 						)}
@@ -22,7 +36,7 @@ const PropertiesBlock = ({ item }: Props) => {
 						<span>Damages : {item.damages}</span>
 						<div className='flex flex-row gap-2'>
 							Damage types :
-							{item.inflictType.map(r => (
+							{item?.inflictType.map(r => (
 								<span
 									className='badge font-cabin bg-primary badge-md inline-flex cursor-default border-0 text-center align-middle font-semibold'
 									key={r}

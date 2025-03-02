@@ -1,4 +1,20 @@
 import { z } from 'zod';
+import { raritySchema } from './ZodComponent';
+
+const StatProfilSchema = z.object({
+	CEL: z.number().int().nullable(),
+	AGI: z.number().int().nullable(),
+	DEX: z.number().int().nullable(),
+	STR: z.number().int().nullable(),
+	END: z.number().int().nullable(),
+	VIT: z.number().int().nullable(),
+	WIL: z.number().int().nullable(),
+	INS: z.number().int().nullable(),
+	SEN: z.number().int().nullable(),
+	CHA: z.number().int().nullable(),
+	SOC: z.number().int().nullable(),
+	ERU: z.number().int().nullable(),
+});
 
 export const ItemTypeSchema = z.enum([
 	'weapon',
@@ -48,25 +64,27 @@ export const ItemSchema = z.object({
 	itemType: ItemTypeSchema,
 	id: z.string(),
 	searchName: z.string(),
+	constraints: StatProfilSchema.nullable(),
 	name: z.string().array(),
 	material: z.string(),
 	materialType: z.string(),
-	materialSubType: z.string().nullable(),
+	materialSubType: z.string().nullable().optional(),
 	description: z.string().nullable(),
 	properties: z.string().nullable(),
 	quality: qualityTypeSchema,
+	rarity: raritySchema,
 	weight: z.number().nullable(),
 	value: z.number().nullable(),
-	valueWeight: z.number().nullable(),
-	maxDurability: z.number().int().nullable(),
-	durability: z.number().int().nullable(),
+	valueWeight: z.number().nullable().optional(),
+	maxDurability: z.number().int().nullable().optional(),
+	durability: z.number().int().nullable().optional(),
 	magicWeight: z.number().int().nullable(),
-	isRelic: z.boolean().nullable(),
-	damages: z.string().nullable(),
-	inflictType: z.string().array(),
-	protection: z.number().int().nullable(),
-	resistType: z.string().array(),
-	armorClass: armorClassSchema.nullable(),
+	isRelic: z.boolean().nullable().optional(),
+	damages: z.string().nullable().optional(),
+	inflictType: z.string().array().optional(),
+	protection: z.number().int().nullable().optional(),
+	resistType: z.string().array().optional(),
+	armorClass: armorClassSchema.nullable().optional(),
 	magicProtection: z.number().int().nullable(),
 	rangeType: rangeTypeSchema.nullable(),
 	weaponType: weaponTypeSchema.nullable(),
@@ -76,6 +94,9 @@ export const ItemSchema = z.object({
 });
 
 export type Item = z.infer<typeof ItemSchema>;
+
+export const NewItemSchema = ItemSchema.omit({ id: true });
+export type NewItem = z.infer<typeof NewItemSchema>;
 
 export const CreatureItemSchema = z.object({
 	id: z.string(),

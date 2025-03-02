@@ -1,9 +1,10 @@
-import { prisma } from '@api/prismaClient';
 import {
 	ItemSchema,
 	ItemTypeSchema,
+	NewItemSchema,
 	qualityTypeSchema,
 } from '@api/lib/ZodItem';
+import { prisma } from '@api/prismaClient';
 import { procedure, router } from '@api/trpc';
 import { z } from 'zod';
 
@@ -54,7 +55,7 @@ export const itemsRouter = router({
 			where: { id: input },
 		});
 	}),
-	create: procedure.input(ItemSchema).mutation(async ({ input }) => {
+	create: procedure.input(NewItemSchema).mutation(async ({ input }) => {
 		console.log('💌 creating item #', input.name);
 		return await prisma.item.create({
 			data: input,
