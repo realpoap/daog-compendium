@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - dev
-  
+
 jobs:
   build:
     name: Build and Test
@@ -21,18 +21,19 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-      
+
       - uses: pnpm/action-setup@v3
         with:
           version: 8
           run_install: false
           standalone: true
           dest: ~/setup-pnpm
-      
+
       - name: Install dependencies
         run: pnpm install
 
       - name: Build
         run: pnpm run build
-        env: 
+        env:
           VITE_API_URL: ${{ secrets.VITE_API_URL}}
+          VITE_FRONT_URL: ${{ secrets.VITE_FRONT_URL}}
