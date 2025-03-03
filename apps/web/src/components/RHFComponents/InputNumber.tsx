@@ -31,7 +31,7 @@ export const InputNumber = ({
 				step={step ? step : 1}
 				max={100000}
 				placeholder={placeholder}
-				defaultValue={defaultValue}
+				value={defaultValue}
 				className={cn(
 					'font-cabin text-md w-full rounded-md px-2 py-1 text-purple-900 caret-purple-900 shadow-sm placeholder:italic focus:border-purple-900 focus:outline-none focus:ring-1 focus:ring-purple-900 dark:bg-stone-700 dark:text-purple-400 dark:caret-purple-400 dark:focus:border-purple-400 dark:focus:ring-purple-400',
 					{
