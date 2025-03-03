@@ -119,8 +119,12 @@ export const mineralMaterialTypeOptions = [
 		value: 'crystal',
 	},
 	{
-		label: 'Gardonium',
-		value: 'gardonium',
+		label: 'Gold',
+		value: 'gold',
+	},
+	{
+		label: 'Glass',
+		value: 'glass',
 	},
 	{
 		label: 'Iron',
@@ -279,5 +283,13 @@ export const itemTypeOptions = [
 	{
 		label: 'Fungus',
 		value: 'fungus',
+	},
+	{
+		label: 'Ferment',
+		value: 'ferment',
+	},
+	{
+		label: 'Spice',
+		value: 'spice',
 	},
 ];

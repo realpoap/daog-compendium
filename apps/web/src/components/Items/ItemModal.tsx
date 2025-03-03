@@ -16,13 +16,12 @@ const ItemModal = ({ item }: Props) => {
 			id='item-modal'
 			className='modal'
 		>
-			<div className='modal-box dark:bg-stone-800'>
+			<div className='modal-box text-sm md:text-base dark:bg-stone-800'>
 				<NameBlock item={item} />
 				<DescBlock item={item} />
 				<div className='divider divider-neutral'></div>
 				<PropertiesBlock item={item} />
 				<ValueBlock item={item} />
-
 				<ActionButton
 					color='accent'
 					textColor='stone-800'

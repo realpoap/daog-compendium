@@ -31,7 +31,7 @@ export const Tag = ({ name, id, placeholder, type, setTags, tags }: Props) => {
 	return (
 		<div
 			className={cn(
-				'font-cabin flex w-full flex-row flex-wrap items-center gap-2 rounded-lg p-2 text-lg text-purple-900 caret-purple-900 shadow-sm placeholder:italic focus:border-purple-900 focus:outline-none focus:ring-1 focus:ring-purple-900 dark:bg-stone-700 dark:text-purple-400 dark:caret-purple-400 dark:placeholder:text-stone-400 dark:focus:border-purple-400 dark:focus:ring-purple-400',
+				'font-cabin text-secondary caret-secondary focus:border-secondary focus:ring-secondary dark:text-primary dark:caret-primary dark:focus:border-primary dark:focus:ring-primary flex w-full flex-row flex-wrap items-center gap-2 rounded-lg p-2 shadow-sm placeholder:italic focus:outline-none focus:ring-1 md:text-lg dark:bg-stone-700 dark:placeholder:text-stone-400',
 				{
 					'select-error': errors[name],
 					'ring-error': errors[name],
@@ -42,7 +42,7 @@ export const Tag = ({ name, id, placeholder, type, setTags, tags }: Props) => {
 			{tags.map((tag, index) => (
 				<span
 					key={index}
-					className='badge font-cabin inline-flex cursor-pointer border-0 bg-purple-500 text-center align-middle text-lg font-semibold text-stone-800 hover:bg-stone-500 hover:text-red-500'
+					className='badge font-cabin bg-primary inline-flex cursor-pointer border-0 text-center align-middle font-semibold text-stone-800 hover:bg-stone-500 hover:text-red-500 md:text-lg'
 					onClick={() => removeTag(index)}
 				>
 					{tag}

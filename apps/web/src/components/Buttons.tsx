@@ -25,7 +25,7 @@ export const ActionButton = ({
 			disabled={isLoading ? isLoading : false}
 			onClick={onClick}
 			className={cn(
-				`bg-${color} font-cabin m-y-2 disabled:bg-${color} disabled:hover:glass disabled:hover:bg-${color} mt-8 flex max-h-fit max-w-fit cursor-pointer flex-col items-center justify-center self-center rounded-full px-8 py-2 text-base font-bold uppercase text-${textColor} align-middle transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:opacity-100 disabled:hover:ring-0`,
+				`badge badge-lg bg-${color} font-cabin m-y-2 disabled:bg-${color} disabled:hover:glass disabled:hover:bg-${color} mt-8 flex cursor-pointer flex-col items-center justify-center self-center rounded-full px-4 py-2 text-sm font-bold uppercase md:text-base text-${textColor} align-middle transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:opacity-100 disabled:hover:ring-0`,
 			)}
 		>
 			{children}
@@ -136,7 +136,7 @@ export const BackButton = ({
 }) => {
 	return (
 		<button
-			className='badge font-cabin mt-1 mt-4 flex items-center justify-center border-none bg-stone-500 pl-0 align-middle text-base uppercase text-stone-800 hover:bg-stone-200'
+			className='badge font-cabin mt-4 flex items-center justify-center border-none bg-stone-500 pl-0 align-middle text-base uppercase text-stone-800 hover:bg-stone-200'
 			onClick={onClick}
 		>
 			<FiChevronLeft className='icon-stone-800-sm' /> Back

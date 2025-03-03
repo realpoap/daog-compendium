@@ -1,12 +1,15 @@
 //import itemsEntries from '@/data/weapons';
+import { useAuth } from '@/store/authContext';
 import { itemRarityOptions, itemTypeOptions } from '@/types/itemOptions';
 import { capitalizeFirstLetter } from '@/utils/capitalize';
 import { cn } from '@/utils/classNames';
 import { trpc } from '@/utils/trpc';
 import { Component } from '@api/lib/ZodComponent';
 import { Item, ItemTypeType } from '@api/lib/ZodItem';
+import { Link } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 import { GiTwoCoins } from 'rocketicons/gi';
+import { RiAddLine } from 'rocketicons/ri';
 import { useDebounce } from 'use-debounce';
 import Collapsible from '../Collapsible';
 import SelectFilter, { Option } from '../SpellList/SelectFilter';
@@ -22,6 +25,9 @@ const ItemsSearch = () => {
 
 	const [search, setSearch] = useState('');
 	const [debouncedSearch] = useDebounce(search, 500);
+
+	const { user } = useAuth();
+	const isEditor = user?.role === 'ADMIN' || user?.role === 'EDITOR';
 
 	const [selected, setSelected] = useState<Item | Component>();
 	const [combinedItems, setCombinedItems] = useState<Array<Item | Component>>(
@@ -62,6 +68,7 @@ const ItemsSearch = () => {
 				}),
 			);
 		}
+
 		// and type selected
 		if (selectedType.length !== 0) {
 			filteredItems = filteredItems.filter(i =>
@@ -183,6 +190,15 @@ const ItemsSearch = () => {
 						/>
 					</div>
 				</Collapsible>
+				{isEditor && (
+					<Link
+						id='add-button'
+						to={'/items/add'}
+						className='badge bg-accent fixed bottom-4 z-20 my-2 h-10 w-10 border-none shadow-md shadow-stone-900 transition-opacity duration-200'
+					>
+						<RiAddLine className='icon-white-2xl' />
+					</Link>
+				)}
 			</div>
 			<div className='mx-6 overflow-x-auto md:mx-0'>
 				<table className='table-xs md:table-sm hover mx-0 table whitespace-normal border-stone-500 px-0'>
@@ -210,14 +226,11 @@ const ItemsSearch = () => {
 											'text-gray-500 dark:text-gray-500':
 												'quality' in i && i.quality === 'poor',
 											'text-teal-500 dark:text-teal-500':
-												('quality' in i && i.quality === 'great') ||
-												('rarity' in i && i.rarity === 'unusual'),
+												'rarity' in i && i.rarity === 'unusual',
 											'dark:text-accent text-accent':
-												('quality' in i && i.quality === 'masterpiece') ||
-												('rarity' in i && i.rarity === 'rare'),
+												'rarity' in i && i.rarity === 'rare',
 											'text-orange-500 dark:text-orange-500':
-												('quality' in i && i.quality === 'legendary') ||
-												('rarity' in i && i.rarity === 'fabled'),
+												'rarity' in i && i.rarity === 'fabled',
 										})}
 									>
 										{capitalizeFirstLetter(i.name.join(', '))}

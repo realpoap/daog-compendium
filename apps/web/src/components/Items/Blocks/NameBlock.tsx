@@ -32,11 +32,11 @@ const NameBlock = ({ item }: Props) => {
 						'text-gray-500 dark:text-gray-500':
 							'quality' in item && item.quality === 'poor',
 						'text-teal-500 dark:text-teal-500':
-							'quality' in item && item.quality === 'great',
+							'rarity' in item && item.rarity === 'unusual',
 						'dark:text-accent text-accent':
-							'quality' in item && item.quality === 'masterpiece',
+							'rarity' in item && item.rarity === 'rare',
 						'text-orange-500 dark:text-orange-500':
-							'quality' in item && item.quality === 'legendary',
+							'rarity' in item && item.rarity === 'fabled',
 					},
 				)}
 			>
@@ -50,143 +50,182 @@ const NameBlock = ({ item }: Props) => {
 					{item?.itemType === 'weapon' && item.rangeType === 'close' && (
 						<GiSwordWound
 							className={cn('icon-stone-200-xl', {
-								'icon-gray-500 dark:icon-gray-500': item.quality === 'poor',
-								'icon-teal-500 dark:icon-teal-500': item.quality === 'great',
-								'dark:icon-accent icon-accent': item.quality === 'masterpiece',
+								'icon-gray-500 dark:icon-gray-500':
+									'quality' in item && item.quality === 'poor',
+								'icon-teal-500 dark:icon-teal-500':
+									'rarity' in item && item.rarity === 'unusual',
+								'dark:icon-accent icon-accent':
+									'rarity' in item && item.rarity === 'rare',
 								'icon-orange-500 dark:icon-orange-500':
-									item.quality === 'legendary',
+									'rarity' in item && item.rarity === 'fabled',
 							})}
 						/>
 					)}
 					{item?.itemType === 'weapon' && item.rangeType !== 'close' && (
 						<GiBullseye
 							className={cn('icon-stone-200-xl', {
-								'icon-gray-500 dark:icon-gray-500': item.quality === 'poor',
-								'icon-teal-500 dark:icon-teal-500': item.quality === 'great',
-								'dark:icon-accent icon-accent': item.quality === 'masterpiece',
+								'icon-gray-500 dark:icon-gray-500':
+									'quality' in item && item.quality === 'poor',
+								'icon-teal-500 dark:icon-teal-500':
+									'rarity' in item && item.rarity === 'unusual',
+								'dark:icon-accent icon-accent':
+									'rarity' in item && item.rarity === 'rare',
 								'icon-orange-500 dark:icon-orange-500':
-									item.quality === 'legendary',
+									'rarity' in item && item.rarity === 'fabled',
 							})}
 						/>
 					)}
 					{item?.itemType === 'armor' && (
 						<GiArmorVest
 							className={cn('icon-stone-200-xl', {
-								'icon-gray-500 dark:icon-gray-500': item.quality === 'poor',
-								'icon-teal-500 dark:icon-teal-500': item.quality === 'great',
-								'dark:icon-accent icon-accent': item.quality === 'masterpiece',
+								'icon-gray-500 dark:icon-gray-500':
+									'quality' in item && item.quality === 'poor',
+								'icon-teal-500 dark:icon-teal-500':
+									'rarity' in item && item.rarity === 'unusual',
+								'dark:icon-accent icon-accent':
+									'rarity' in item && item.rarity === 'rare',
 								'icon-orange-500 dark:icon-orange-500':
-									item.quality === 'legendary',
+									'rarity' in item && item.rarity === 'fabled',
 							})}
 						/>
 					)}
 					{item?.itemType === 'shield' && (
 						<GiCheckedShield
 							className={cn('icon-stone-200-xl', {
-								'icon-gray-500 dark:icon-gray-500': item.quality === 'poor',
-								'icon-teal-500 dark:icon-teal-500': item.quality === 'great',
-								'dark:icon-accent icon-accent': item.quality === 'masterpiece',
+								'icon-gray-500 dark:icon-gray-500':
+									'quality' in item && item.quality === 'poor',
+								'icon-teal-500 dark:icon-teal-500':
+									'rarity' in item && item.rarity === 'unusual',
+								'dark:icon-accent icon-accent':
+									'rarity' in item && item.rarity === 'rare',
 								'icon-orange-500 dark:icon-orange-500':
-									item.quality === 'legendary',
+									'rarity' in item && item.rarity === 'fabled',
 							})}
 						/>
 					)}
 					{item?.itemType === 'trinket' && (
 						<GiJeweledChalice
 							className={cn('icon-stone-200-xl', {
-								'icon-gray-500 dark:icon-gray-500': item.quality === 'poor',
-								'icon-teal-500 dark:icon-teal-500': item.quality === 'great',
-								'dark:icon-accent icon-accent': item.quality === 'masterpiece',
+								'icon-gray-500 dark:icon-gray-500':
+									'quality' in item && item.quality === 'poor',
+								'icon-teal-500 dark:icon-teal-500':
+									'rarity' in item && item.rarity === 'unusual',
+								'dark:icon-accent icon-accent':
+									'rarity' in item && item.rarity === 'rare',
 								'icon-orange-500 dark:icon-orange-500':
-									item.quality === 'legendary',
+									'rarity' in item && item.rarity === 'fabled',
 							})}
 						/>
 					)}
 					{item?.itemType === 'jewel' && (
 						<GiGemPendant
 							className={cn('icon-stone-200-xl', {
-								'icon-gray-500 dark:icon-gray-500': item.quality === 'poor',
-								'icon-teal-500 dark:icon-teal-500': item.quality === 'great',
-								'dark:icon-accent icon-accent': item.quality === 'masterpiece',
+								'icon-gray-500 dark:icon-gray-500':
+									'quality' in item && item.quality === 'poor',
+								'icon-teal-500 dark:icon-teal-500':
+									'rarity' in item && item.rarity === 'unusual',
+								'dark:icon-accent icon-accent':
+									'rarity' in item && item.rarity === 'rare',
 								'icon-orange-500 dark:icon-orange-500':
-									item.quality === 'legendary',
+									'rarity' in item && item.rarity === 'fabled',
 							})}
 						/>
 					)}
 					{item?.itemType === 'garnment' && (
 						<GiPoncho
 							className={cn('icon-stone-200-xl', {
-								'icon-gray-500 dark:icon-gray-500': item.quality === 'poor',
-								'icon-teal-500 dark:icon-teal-500': item.quality === 'great',
-								'dark:icon-accent icon-accent': item.quality === 'masterpiece',
+								'icon-gray-500 dark:icon-gray-500':
+									'quality' in item && item.quality === 'poor',
+								'icon-teal-500 dark:icon-teal-500':
+									'rarity' in item && item.rarity === 'unusual',
+								'dark:icon-accent icon-accent':
+									'rarity' in item && item.rarity === 'rare',
 								'icon-orange-500 dark:icon-orange-500':
-									item.quality === 'legendary',
+									'rarity' in item && item.rarity === 'fabled',
 							})}
 						/>
 					)}
 					{item?.itemType === 'junk' && (
 						<GiBrokenBottle
 							className={cn('icon-stone-200-xl', {
-								'icon-gray-500 dark:icon-gray-500': item.quality === 'poor',
-								'icon-teal-500 dark:icon-teal-500': item.quality === 'great',
-								'dark:icon-accent icon-accent': item.quality === 'masterpiece',
+								'icon-gray-500 dark:icon-gray-500':
+									'quality' in item && item.quality === 'poor',
+								'icon-teal-500 dark:icon-teal-500':
+									'rarity' in item && item.rarity === 'unusual',
+								'dark:icon-accent icon-accent':
+									'rarity' in item && item.rarity === 'rare',
 								'icon-orange-500 dark:icon-orange-500':
-									item.quality === 'legendary',
+									'rarity' in item && item.rarity === 'fabled',
 							})}
 						/>
 					)}
 					{item?.itemType === 'book' && (
 						<GiWhiteBook
 							className={cn('icon-stone-200-xl', {
-								'icon-gray-500 dark:icon-gray-500': item.quality === 'poor',
-								'icon-teal-500 dark:icon-teal-500': item.quality === 'great',
-								'dark:icon-accent icon-accent': item.quality === 'masterpiece',
+								'icon-gray-500 dark:icon-gray-500':
+									'quality' in item && item.quality === 'poor',
+								'icon-teal-500 dark:icon-teal-500':
+									'rarity' in item && item.rarity === 'unusual',
+								'dark:icon-accent icon-accent':
+									'rarity' in item && item.rarity === 'rare',
 								'icon-orange-500 dark:icon-orange-500':
-									item.quality === 'legendary',
+									'rarity' in item && item.rarity === 'fabled',
 							})}
 						/>
 					)}
 					{item?.itemType === 'accessory' && (
 						<GiRopeCoil
 							className={cn('icon-stone-200-xl', {
-								'icon-gray-500 dark:icon-gray-500': item.quality === 'poor',
-								'icon-teal-500 dark:icon-teal-500': item.quality === 'great',
-								'dark:icon-accent icon-accent': item.quality === 'masterpiece',
+								'icon-gray-500 dark:icon-gray-500':
+									'quality' in item && item.quality === 'poor',
+								'icon-teal-500 dark:icon-teal-500':
+									'rarity' in item && item.rarity === 'unusual',
+								'dark:icon-accent icon-accent':
+									'rarity' in item && item.rarity === 'rare',
 								'icon-orange-500 dark:icon-orange-500':
-									item.quality === 'legendary',
+									'rarity' in item && item.rarity === 'fabled',
 							})}
 						/>
 					)}
 					{item?.itemType === 'ammunition' && (
 						<GiArrowCluster
 							className={cn('icon-stone-200-xl', {
-								'icon-gray-500 dark:icon-gray-500': item.quality === 'poor',
-								'icon-teal-500 dark:icon-teal-500': item.quality === 'great',
-								'dark:icon-accent icon-accent': item.quality === 'masterpiece',
+								'icon-gray-500 dark:icon-gray-500':
+									'quality' in item && item.quality === 'poor',
+								'icon-teal-500 dark:icon-teal-500':
+									'rarity' in item && item.rarity === 'unusual',
+								'dark:icon-accent icon-accent':
+									'rarity' in item && item.rarity === 'rare',
 								'icon-orange-500 dark:icon-orange-500':
-									item.quality === 'legendary',
+									'rarity' in item && item.rarity === 'fabled',
 							})}
 						/>
 					)}
 					{item?.itemType === 'potion' && (
 						<GiPotionBall
 							className={cn('icon-stone-200-xl', {
-								'icon-gray-500 dark:icon-gray-500': item.quality === 'poor',
-								'icon-teal-500 dark:icon-teal-500': item.quality === 'great',
-								'dark:icon-accent icon-accent': item.quality === 'masterpiece',
+								'icon-gray-500 dark:icon-gray-500':
+									'quality' in item && item.quality === 'poor',
+								'icon-teal-500 dark:icon-teal-500':
+									'rarity' in item && item.rarity === 'unusual',
+								'dark:icon-accent icon-accent':
+									'rarity' in item && item.rarity === 'rare',
 								'icon-orange-500 dark:icon-orange-500':
-									item.quality === 'legendary',
+									'rarity' in item && item.rarity === 'fabled',
 							})}
 						/>
 					)}
 					{item?.itemType === 'food' && (
 						<GiChickenLeg
 							className={cn('icon-stone-200-xl', {
-								'icon-gray-500 dark:icon-gray-500': item.quality === 'poor',
-								'icon-teal-500 dark:icon-teal-500': item.quality === 'great',
-								'dark:icon-accent icon-accent': item.quality === 'masterpiece',
+								'icon-gray-500 dark:icon-gray-500':
+									'quality' in item && item.quality === 'poor',
+								'icon-teal-500 dark:icon-teal-500':
+									'rarity' in item && item.rarity === 'unusual',
+								'dark:icon-accent icon-accent':
+									'rarity' in item && item.rarity === 'rare',
 								'icon-orange-500 dark:icon-orange-500':
-									item.quality === 'legendary',
+									'rarity' in item && item.rarity === 'fabled',
 							})}
 						/>
 					)}
@@ -197,11 +236,11 @@ const NameBlock = ({ item }: Props) => {
 					'text-gray-500 dark:text-gray-500':
 						'quality' in item && item.quality === 'poor',
 					'text-teal-500 dark:text-teal-500':
-						'quality' in item && item.quality === 'great',
+						'rarity' in item && item.rarity === 'unusual',
 					'dark:text-accent text-accent':
-						'quality' in item && item.quality === 'masterpiece',
+						'rarity' in item && item.rarity === 'rare',
 					'text-orange-500 dark:text-orange-500':
-						'quality' in item && item.quality === 'legendary',
+						'rarity' in item && item.rarity === 'fabled',
 				})}
 			>
 				{item?.name.length !== undefined &&
