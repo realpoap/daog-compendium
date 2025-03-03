@@ -1,5 +1,6 @@
 import { Item } from '@api/lib/ZodItem';
 import { useNavigate } from '@tanstack/react-router';
+import toast from 'react-hot-toast';
 import { ActionButton } from '../Buttons';
 import DescBlock from './Blocks/DescBlock';
 import NameBlock from './Blocks/NameBlock';
@@ -10,6 +11,8 @@ type Props = { item: Item };
 
 const ItemModal = ({ item }: Props) => {
 	const navigate = useNavigate();
+
+	const shareUrl = `${import.meta.env.VITE_FRONT_URL}/daog-compendium/items/share/${item.id}`;
 
 	return (
 		<dialog
@@ -22,18 +25,32 @@ const ItemModal = ({ item }: Props) => {
 				<div className='divider divider-neutral'></div>
 				<PropertiesBlock item={item} />
 				<ValueBlock item={item} />
-				<ActionButton
-					color='accent'
-					textColor='stone-800'
-					onClick={() =>
-						navigate({
-							to: `/items/edit/$id`,
-							params: { id: `${item?.id}` },
-						})
-					}
-				>
-					Edit
-				</ActionButton>
+				<div className='flex flex-row gap-4'>
+					<ActionButton
+						color='accent'
+						textColor='stone-800'
+						onClick={() =>
+							navigate({
+								to: `/items/edit/$id`,
+								params: { id: `${item?.id}` },
+							})
+						}
+					>
+						Edit
+					</ActionButton>
+					<ActionButton
+						color='primary'
+						textColor='stone-800'
+						onClick={async () =>
+							await navigator.clipboard
+								.writeText(shareUrl)
+								.then(() => toast('copied to clipboard !'))
+						}
+					>
+						Share
+					</ActionButton>
+				</div>
+
 				<p className='py-4 text-stone-500'>
 					Press ESC key or click outside to close
 				</p>
