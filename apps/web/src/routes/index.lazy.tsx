@@ -32,9 +32,8 @@ function Index() {
 
 	if (!isOnline)
 		return (
-			<p>
-				Waiting for server to go live on {import.meta.env.BASE_URL} and{' '}
-				{import.meta.env.VITE_FRONT_URL}{' '}
+			<p className='text-center'>
+				Waiting for server to go live
 				<span className='loading-dots-xs'></span>
 			</p>
 		);
@@ -56,11 +55,7 @@ function Index() {
 				<h1 className='font-grenze py-4 text-center text-4xl'>
 					Welcome {capitalizeFirstLetter(user?.name)} !
 				</h1>
-				<p>
-					Waiting for server to go live on {import.meta.env.BASE_URL} and{' '}
-					{import.meta.env.VITE_FRONT_URL}{' '}
-					<span className='loading-dots-xs'></span>
-				</p>
+
 				<section className='flex w-full flex-row justify-around gap-4 p-4 md:flex-row md:justify-center'>
 					<div className='stats h-5/12 w-full shadow md:h-1/4 md:w-1/2 dark:bg-stone-700'>
 						<div className='stat flex flex-col justify-start gap-1 p-4'>
