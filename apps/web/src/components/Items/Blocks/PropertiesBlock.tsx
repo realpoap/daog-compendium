@@ -13,16 +13,17 @@ const PropertiesBlock = ({ item }: Props) => {
 					<div className='flex flex-col'>
 						<span>
 							Constraints :{' '}
-							{Object.entries(item.constraints).map(([k, v]) =>
-								v !== 0 ? (
-									<TagBadge
-										text={`${k} ${v}`}
-										key={k}
-									/>
-								) : (
-									<></>
-								),
-							)}
+							{item.constraints &&
+								Object.entries(item.constraints).map(([k, v]) =>
+									v !== 0 || v !== null ? (
+										<TagBadge
+											text={`${k} ${v}`}
+											key={k}
+										/>
+									) : (
+										<></>
+									),
+								)}
 						</span>
 						{item.rangeType === 'close' && (
 							<span>Type : {item.weaponType}</span>
@@ -36,14 +37,15 @@ const PropertiesBlock = ({ item }: Props) => {
 						<span>Damages : {item.damages}</span>
 						<div className='flex flex-row gap-2'>
 							Damage types :
-							{item?.inflictType.map(r => (
-								<span
-									className='badge font-cabin bg-primary badge-md inline-flex cursor-default border-0 text-center align-middle font-semibold'
-									key={r}
-								>
-									{r}
-								</span>
-							))}
+							{item.inflictType &&
+								item?.inflictType.map(r => (
+									<span
+										className='badge font-cabin bg-primary badge-md inline-flex cursor-default border-0 text-center align-middle font-semibold'
+										key={r}
+									>
+										{r}
+									</span>
+								))}
 						</div>
 					</div>
 				)}
@@ -63,14 +65,15 @@ const PropertiesBlock = ({ item }: Props) => {
 						</div>
 						<div className='flex flex-row gap-2'>
 							Resistant to :
-							{item.resistType.map(r => (
-								<span
-									className='badge font-cabin bg-primary badge-md inline-flex cursor-default border-0 text-center align-middle font-semibold'
-									key={r}
-								>
-									{r}
-								</span>
-							))}
+							{item.resistType &&
+								item.resistType.map(r => (
+									<span
+										className='badge font-cabin bg-primary badge-md inline-flex cursor-default border-0 text-center align-middle font-semibold'
+										key={r}
+									>
+										{r}
+									</span>
+								))}
 						</div>
 					</div>
 				)}

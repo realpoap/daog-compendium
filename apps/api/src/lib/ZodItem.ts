@@ -2,18 +2,18 @@ import { z } from 'zod';
 import { raritySchema } from './ZodComponent';
 
 const StatProfilSchema = z.object({
-	CEL: z.number().int().nullable(),
-	AGI: z.number().int().nullable(),
-	DEX: z.number().int().nullable(),
-	STR: z.number().int().nullable(),
-	END: z.number().int().nullable(),
-	VIT: z.number().int().nullable(),
-	WIL: z.number().int().nullable(),
-	INS: z.number().int().nullable(),
-	SEN: z.number().int().nullable(),
-	CHA: z.number().int().nullable(),
-	SOC: z.number().int().nullable(),
-	ERU: z.number().int().nullable(),
+	CEL: z.number().int(),
+	AGI: z.number().int(),
+	DEX: z.number().int(),
+	STR: z.number().int(),
+	END: z.number().int(),
+	VIT: z.number().int(),
+	WIL: z.number().int(),
+	INS: z.number().int(),
+	SEN: z.number().int(),
+	CHA: z.number().int(),
+	SOC: z.number().int(),
+	ERU: z.number().int(),
 });
 
 export const ItemTypeSchema = z.enum([
@@ -86,10 +86,10 @@ export const ItemSchema = z.object({
 	resistType: z.string().array().optional(),
 	armorClass: armorClassSchema.nullable().optional(),
 	magicProtection: z.number().int().nullable(),
-	rangeType: rangeTypeSchema.nullable(),
-	weaponType: weaponTypeSchema.nullable(),
-	usage: z.string().nullable(),
-	range: z.string().nullable(),
+	rangeType: rangeTypeSchema.nullable().optional(),
+	weaponType: weaponTypeSchema.nullable().optional(),
+	usage: z.string().nullable().optional(),
+	range: z.string().nullable().optional(),
 	isFood: z.boolean().nullable(),
 });
 
