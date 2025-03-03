@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "private": false,
-  "homepage": "https://realpoap.github.io/daog-compendium/",
+  "homepage": "https://realpoap.github.io/daog-compendium",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
