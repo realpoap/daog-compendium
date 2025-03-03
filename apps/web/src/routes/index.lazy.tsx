@@ -33,7 +33,9 @@ function Index() {
 	if (!isOnline)
 		return (
 			<p>
-				Waiting for server to go live <span className='loading-dots-xs'></span>
+				Waiting for server to go live on {import.meta.env.BASE_URL} and{' '}
+				{import.meta.env.VITE_FRONT_URL}{' '}
+				<span className='loading-dots-xs'></span>
 			</p>
 		);
 
