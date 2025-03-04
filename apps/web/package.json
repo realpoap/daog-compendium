@@ -6,7 +6,7 @@
   "homepage": "https://realpoap.github.io/daog-compendium",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build && vite start",
     "lint": "npx eslint src --fix",
     "preview": "vite preview",
     "predeploy": "npm run build",
@@ -41,6 +41,7 @@
     "tailwindcss-animate": "^1.0.7",
     "use-debounce": "^10.0.4",
     "use-long-press": "^3.2.0",
+    "vercel": "^41.3.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
