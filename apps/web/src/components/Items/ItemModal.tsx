@@ -13,7 +13,7 @@ type Props = { item: Item };
 const ItemModal = ({ item }: Props) => {
 	const navigate = useNavigate();
 
-	const shareUrl = `${import.meta.env.VITE_FRONT_URL}#/items/share/${item.id}`;
+	const shareUrl = `${import.meta.env.VITE_FRONT_URL}/daog-compendium/#/items/share/${item.id}`;
 
 	return (
 		<dialog
