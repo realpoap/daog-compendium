@@ -1,6 +1,6 @@
-import BestiaryView from '@/components/Bestiary/BestiaryView';
-import { createFileRoute } from '@tanstack/react-router';
+import BestiaryView from '@/components/Bestiary/BestiaryView'
+import { createLazyFileRoute } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/bestiary/')({
-	component: BestiaryView,
-});
+export const Route = createLazyFileRoute('/bestiary/')({
+  component: BestiaryView,
+})

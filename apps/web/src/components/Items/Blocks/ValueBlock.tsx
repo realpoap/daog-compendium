@@ -1,6 +1,6 @@
 import { Item } from '@api/lib/ZodItem';
 import { useEffect, useState } from 'react';
-import { GiTwoCoins, GiWeight } from 'rocketicons/gi';
+import { GiCursedStar, GiTwoCoins, GiWeight } from 'rocketicons/gi';
 import { TbSwitchHorizontal } from 'rocketicons/tb';
 
 type Props = {
@@ -36,7 +36,7 @@ const ValueBlock = ({ item }: Props) => {
 	}, []);
 
 	return (
-		<div className='flex w-full flex-col'>
+		<div className='mt-2 flex w-full flex-col'>
 			<div className='flex w-full flex-row items-center justify-between'>
 				<div>
 					<span>Market value : </span>
@@ -53,13 +53,16 @@ const ValueBlock = ({ item }: Props) => {
 					<GiTwoCoins className='icon-stone-300 icon-xs md:icon-sm w-fit' />
 				</div>
 			</div>
-			<div className='flex flex-row items-center justify-between'>
+			<div className='items-top flex flex-col justify-center'>
 				<span>
 					Weight : {item.weight}{' '}
 					<GiWeight className='dark:icon-stone-200 icon-sm' />
 				</span>
 				<span>{item.isRelic && `relic`}</span>
-				<span>Magic load : {item.magicWeight ?? 0}</span>
+				<span>
+					Magic load : {item.magicWeight ?? 0}
+					<GiCursedStar className='dark:icon-stone-200 icon-md' />
+				</span>
 			</div>
 		</div>
 	);

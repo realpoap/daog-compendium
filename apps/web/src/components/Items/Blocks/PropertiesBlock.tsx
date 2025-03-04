@@ -8,23 +8,9 @@ type Props = {
 const PropertiesBlock = ({ item }: Props) => {
 	return (
 		<div className='flex flex-col'>
-			<div className='flex flex-col'>
+			<div className='flex flex-col gap-2'>
 				{item.itemType === 'weapon' && (
 					<div className='flex flex-col'>
-						<span>
-							Constraints :{' '}
-							{item.constraints &&
-								Object.entries(item.constraints).map(([k, v]) =>
-									v !== 0 || v !== null ? (
-										<TagBadge
-											text={`${k} ${v}`}
-											key={k}
-										/>
-									) : (
-										<></>
-									),
-								)}
-						</span>
 						{item.rangeType === 'close' && (
 							<span>Type : {item.weaponType}</span>
 						)}
@@ -77,6 +63,21 @@ const PropertiesBlock = ({ item }: Props) => {
 						</div>
 					</div>
 				)}
+				<div className='flex flex-row items-baseline gap-1'>
+					Constraints :{' '}
+					{item.constraints &&
+						Object.entries(item.constraints).map(([k, v]) =>
+							v !== 0 ? (
+								<TagBadge
+									text={`${k} ${v}`}
+									key={k}
+									button={false}
+								/>
+							) : (
+								<></>
+							),
+						)}
+				</div>
 				{item.properties && (
 					<div>
 						<span>Properties : {item.properties}</span>
