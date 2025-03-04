@@ -30,7 +30,7 @@ export function App() {
 				<Toaster />
 				<RouterProvider
 					router={router}
-					basepath='/daog-compendium/'
+					basepath='/'
 				/>
 			</AuthContextProvider>
 		</TrpcWrapper>

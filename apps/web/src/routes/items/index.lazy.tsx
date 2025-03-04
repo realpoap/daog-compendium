@@ -1,6 +1,6 @@
-import ItemsSearch from '@/components/Items/ItemsSearch';
-import { createFileRoute } from '@tanstack/react-router';
+import ItemsSearch from '@/components/Items/ItemsSearch'
+import { createLazyFileRoute } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/items/')({
-	component: ItemsSearch,
-});
+export const Route = createLazyFileRoute('/items/')({
+  component: ItemsSearch,
+})
