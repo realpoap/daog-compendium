@@ -91,6 +91,7 @@ export const ItemSchema = z.object({
 	usage: z.string().nullable().optional(),
 	range: z.string().nullable().optional(),
 	isFood: z.boolean().nullable(),
+	isCritical: z.boolean().nullable(),
 });
 
 export type Item = z.infer<typeof ItemSchema>;

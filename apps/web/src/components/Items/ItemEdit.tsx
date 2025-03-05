@@ -11,8 +11,10 @@ import {
 	rangeType,
 	weaponType,
 } from '@/types/itemOptions';
+import { capitalizeFirstLetter } from '@/utils/capitalize';
 import { cn } from '@/utils/classNames';
 import { trpc } from '@/utils/trpc';
+import { StatProfil } from '@api/lib/ZodCreature';
 import { Item, ItemSchema } from '@api/lib/ZodItem';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useParams, useRouter } from '@tanstack/react-router';
@@ -31,10 +33,10 @@ import {
 	Textarea,
 } from '../RHFComponents';
 import MultiSelect from '../RHFComponents/MultiSelect';
+import TitleBack from '../TitleBack';
 
 const ItemEdit = () => {
 	const { history } = useRouter();
-	//const navigate = useNavigate();
 
 	const { id } = useParams({ strict: false });
 	const utils = trpc.useUtils();
@@ -48,8 +50,9 @@ const ItemEdit = () => {
 	const itemById = trpc.items.getById.useQuery(id as string);
 	const updateItem = trpc.items.update.useMutation({
 		onSuccess: () => {
-			toast.success('item edited !');
+			toast.success('Item edited !');
 			utils.items.getById.invalidate();
+			history.go(-1);
 		},
 		onError: error => {
 			toast.error('Something bad happened...');
@@ -67,7 +70,6 @@ const ItemEdit = () => {
 			);
 			return zodResolver(ItemSchema)(data, context, options);
 		},
-
 		shouldFocusError: true,
 	});
 
@@ -76,6 +78,12 @@ const ItemEdit = () => {
 		setNameArray(itemById.data.name);
 		methods.reset(itemById.data as Item);
 		methods.setValue('name', ['']);
+		//UPDATE INFLICT TYPES
+		setInflictTypes(itemById.data.inflictType);
+		methods.setValue('inflictType', itemById.data.inflictType);
+		//UPDATE RESIST TYPES
+		setResistTypes(itemById.data.resistType);
+		methods.setValue('resistType', itemById.data.resistType);
 	}, [itemById.status]);
 
 	useEffect(() => {
@@ -91,6 +99,16 @@ const ItemEdit = () => {
 		methods.setValue('resistType', resistTypes);
 		//DURABILITY
 		methods.setValue('durability', methods.getValues('maxDurability'));
+		//CONSTRAINTS
+		const constraints = methods.getValues('constraints');
+		if (constraints) {
+			Object.entries(constraints).map(([k, v]) => {
+				if (v === null) {
+					constraints[k as keyof StatProfil] = 0;
+				}
+			});
+			methods.setValue('constraints', constraints);
+		}
 	}, [methods.formState, inflictTypes, resistTypes]);
 
 	const watchItemType = methods.watch('itemType');
@@ -111,6 +129,7 @@ const ItemEdit = () => {
 		setNameArray([...nameArray, value]);
 		(e.target as HTMLInputElement).value = '';
 	};
+
 	const handleKeyUp = (e: React.KeyboardEvent) => {
 		if (e.key !== ',' || e.code !== 'Comma') return;
 		(e.target as HTMLInputElement).value = '';
@@ -122,7 +141,7 @@ const ItemEdit = () => {
 
 	const addName = (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
-		setNameArray([...nameArray, nameField]);
+		setNameArray([...nameArray, capitalizeFirstLetter(nameField)]);
 		setNameField('');
 	};
 
@@ -144,22 +163,11 @@ const ItemEdit = () => {
 
 	return (
 		<div className='mt-sm flex flex-col items-center justify-center p-2 px-2'>
-			{/* Back button ------------------------------------------------- */}
-			<button
-				className='font-grenze mt-1 align-middle text-2xl text-stone-500 hover:text-stone-200'
-				onClick={() => history.back()}
-			>
-				<span className='text-2xl'>&#8249;</span> Back
-			</button>
-			<div className='container sticky top-10 z-10 flex h-fit flex-col items-center bg-gradient-to-b from-stone-100 from-80% dark:from-stone-800'>
-				<h1 className='font-grenze sticky mx-auto my-4 text-center text-4xl font-bold tracking-wide text-purple-900 md:mt-8 md:text-6xl dark:text-purple-400'>
-					{item?.name[0]}
-				</h1>
-			</div>
+			<TitleBack title={item?.name !== undefined ? item?.name[0] : 'Edit'} />{' '}
 			<div className='my-2 flex gap-1'>
 				{nameArray.map((n, index) => (
 					<span
-						key={n}
+						key={`${item?.id}-${n}`}
 						className='badge font-cabin bg-primary inline-flex cursor-pointer border-0 text-center align-middle font-semibold text-stone-800 hover:bg-stone-500 hover:text-red-500 md:text-lg'
 						onClick={() => removeName(index)}
 					>
@@ -167,9 +175,7 @@ const ItemEdit = () => {
 					</span>
 				))}
 			</div>
-
 			{/* Modals ------------------------------------------------- */}
-
 			<FormProvider {...methods}>
 				<form
 					onSubmit={methods.handleSubmit(onSubmit)}
@@ -304,10 +310,7 @@ const ItemEdit = () => {
 									label='Protection'
 									width='digit'
 								>
-									<InputNumber
-										name='protection'
-										defaultValue={0}
-									/>
+									<InputNumber name='protection' />
 								</Field>
 								<Field
 									name='maxDurability'
@@ -316,7 +319,7 @@ const ItemEdit = () => {
 								>
 									<InputNumber
 										name='maxDurability'
-										defaultValue={1}
+										defaultValue={'1'}
 									/>
 								</Field>
 							</div>
@@ -377,22 +380,26 @@ const ItemEdit = () => {
 											: watchMaterial === 'scales'
 												? ['', 'fire']
 												: watchMaterial === 'crystal'
-													? ['', 'moon', 'onyx']
+													? ['', 'moon', 'onyx', 'jade']
 													: watchMaterial === 'iron'
 														? ['', 'blood', 'black']
 														: watchMaterial === 'steel'
 															? ['', 'damascus', 'anvil', 'gardonium']
-															: watchMaterial === 'bone'
-																? ['', 'magical', 'mycellyum']
-																: watchMaterial === 'wood'
-																	? ['', 'enchanted']
-																	: watchMaterial === 'stone'
-																		? ['', 'flint', 'granit']
-																		: watchMaterial === 'gold'
-																			? ['', 'cursed', 'pale']
-																			: watchMaterial === 'dragon'
-																				? ['', 'ancient']
-																				: ['']
+															: watchMaterial === 'silver'
+																? ['', 'witch', 'gardonium']
+																: watchMaterial === 'bone'
+																	? ['', 'magical', 'mycellyum']
+																	: watchMaterial === 'wood'
+																		? ['', 'enchanted']
+																		: watchMaterial === 'stone'
+																			? ['', 'flint', 'granit', 'volcanic']
+																			: watchMaterial === 'soil'
+																				? ['', 'argile', 'ceramic']
+																				: watchMaterial === 'gold'
+																					? ['', 'cursed', 'pale']
+																					: watchMaterial === 'dragon'
+																						? ['', 'ancient']
+																						: ['']
 								}
 								defaultValue={item?.materialType as string}
 							/>
@@ -473,20 +480,14 @@ const ItemEdit = () => {
 							label='Magic Protection'
 							width='digit'
 						>
-							<InputNumber
-								name='magicProtection'
-								defaultValue={0}
-							/>
+							<InputNumber name='magicProtection' />
 						</Field>
 						<Field
 							name='magicWeight'
 							label='Magic Burden'
 							width='digit'
 						>
-							<InputNumber
-								name='magicWeight'
-								defaultValue={0}
-							/>
+							<InputNumber name='magicWeight' />
 						</Field>
 					</div>
 					<div className='flex w-full flex-row justify-center gap-x-4 align-baseline'>
@@ -497,8 +498,7 @@ const ItemEdit = () => {
 						>
 							<InputNumber
 								name='weight'
-								defaultValue={0}
-								step={0.1}
+								step={'0.1'}
 							/>
 						</Field>
 						<Field
@@ -506,10 +506,7 @@ const ItemEdit = () => {
 							label='Value (MA)'
 							width='digit'
 						>
-							<InputNumber
-								name='value'
-								defaultValue={0}
-							/>
+							<InputNumber name='value' />
 						</Field>
 						<Field
 							name='valueWeight'
@@ -518,8 +515,7 @@ const ItemEdit = () => {
 						>
 							<InputNumber
 								name='valueWeight'
-								defaultValue={0}
-								step={0.1}
+								step={'0.1'}
 							/>
 						</Field>
 					</div>
@@ -536,30 +532,21 @@ const ItemEdit = () => {
 										label='CEL'
 										width='digit'
 									>
-										<InputNumber
-											name='constraints.CEL'
-											defaultValue={0}
-										/>
+										<InputNumber name='constraints.CEL' />
 									</Field>
 									<Field
 										name='constraints.AGI'
 										label='AGI'
 										width='digit'
 									>
-										<InputNumber
-											name='constraints.AGI'
-											defaultValue={0}
-										/>
+										<InputNumber name='constraints.AGI' />
 									</Field>
 									<Field
 										name='constraints.DEX'
 										label='DEX'
 										width='digit'
 									>
-										<InputNumber
-											name='constraints.DEX'
-											defaultValue={0}
-										/>
+										<InputNumber name='constraints.DEX' />
 									</Field>
 								</div>
 							</section>
@@ -573,30 +560,21 @@ const ItemEdit = () => {
 										label='STR'
 										width='digit'
 									>
-										<InputNumber
-											name='constraints.STR'
-											defaultValue={0}
-										/>
+										<InputNumber name='constraints.STR' />
 									</Field>
 									<Field
 										name='constraints.END'
 										label='END'
 										width='digit'
 									>
-										<InputNumber
-											name='constraints.END'
-											defaultValue={0}
-										/>
+										<InputNumber name='constraints.END' />
 									</Field>
 									<Field
 										name='constraints.VIT'
 										label='VIT'
 										width='digit'
 									>
-										<InputNumber
-											name='constraints.VIT'
-											defaultValue={0}
-										/>
+										<InputNumber name='constraints.VIT' />
 									</Field>
 								</div>
 							</section>
@@ -610,30 +588,21 @@ const ItemEdit = () => {
 										label='WIL'
 										width='digit'
 									>
-										<InputNumber
-											name='constraints.WIL'
-											defaultValue={0}
-										/>
+										<InputNumber name='constraints.WIL' />
 									</Field>
 									<Field
 										name='constraints.INS'
 										label='INS'
 										width='digit'
 									>
-										<InputNumber
-											name='constraints.INS'
-											defaultValue={0}
-										/>
+										<InputNumber name='constraints.INS' />
 									</Field>
 									<Field
 										name='constraints.SEN'
 										label='SEN'
 										width='digit'
 									>
-										<InputNumber
-											name='constraints.SEN'
-											defaultValue={0}
-										/>
+										<InputNumber name='constraints.SEN' />
 									</Field>
 								</div>
 							</section>
@@ -647,30 +616,21 @@ const ItemEdit = () => {
 										label='CHA'
 										width='digit'
 									>
-										<InputNumber
-											name='constraints.CHA'
-											defaultValue={0}
-										/>
+										<InputNumber name='constraints.CHA' />
 									</Field>
 									<Field
 										name='constraints.SOC'
 										label='SOC'
 										width='digit'
 									>
-										<InputNumber
-											name='constraints.SOC'
-											defaultValue={0}
-										/>
+										<InputNumber name='constraints.SOC' />
 									</Field>
 									<Field
 										name='constraints.ERU'
 										label='ERU'
 										width='digit'
 									>
-										<InputNumber
-											name='constraints.ERU'
-											defaultValue={0}
-										/>
+										<InputNumber name='constraints.ERU' />
 									</Field>
 								</div>
 							</section>

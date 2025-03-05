@@ -119,6 +119,10 @@ export const mineralMaterialTypeOptions = [
 		value: 'crystal',
 	},
 	{
+		label: 'Soil',
+		value: 'soil',
+	},
+	{
 		label: 'Gold',
 		value: 'gold',
 	},
@@ -133,6 +137,10 @@ export const mineralMaterialTypeOptions = [
 	{
 		label: 'Steel',
 		value: 'steel',
+	},
+	{
+		label: 'Silver',
+		value: 'silver',
 	},
 	{
 		label: 'Stone',

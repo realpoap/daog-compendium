@@ -25,12 +25,11 @@ const PropertiesBlock = ({ item }: Props) => {
 							Damage types :
 							{item.inflictType &&
 								item?.inflictType.map(r => (
-									<span
-										className='badge font-cabin bg-primary badge-md inline-flex cursor-default border-0 text-center align-middle font-semibold'
-										key={r}
-									>
-										{r}
-									</span>
+									<TagBadge
+										button={false}
+										key={`inflict-${r}`}
+										text={r}
+									/>
 								))}
 						</div>
 					</div>
@@ -53,12 +52,11 @@ const PropertiesBlock = ({ item }: Props) => {
 							Resistant to :
 							{item.resistType &&
 								item.resistType.map(r => (
-									<span
-										className='badge font-cabin bg-primary badge-md inline-flex cursor-default border-0 text-center align-middle font-semibold'
-										key={r}
-									>
-										{r}
-									</span>
+									<TagBadge
+										button={false}
+										key={`resist-${r}`}
+										text={r}
+									/>
 								))}
 						</div>
 					</div>
@@ -66,16 +64,15 @@ const PropertiesBlock = ({ item }: Props) => {
 				<div className='flex flex-row items-baseline gap-1'>
 					Constraints :{' '}
 					{item.constraints &&
-						Object.entries(item.constraints).map(([k, v]) =>
-							v !== 0 ? (
-								<TagBadge
-									text={`${k} ${v}`}
-									key={k}
-									button={false}
-								/>
-							) : (
-								<></>
-							),
+						Object.entries(item.constraints).map(
+							([k, v]) =>
+								v !== 0 && (
+									<TagBadge
+										text={`${k} ${v}`}
+										key={`${item.id}-${k}`}
+										button={false}
+									/>
+								),
 						)}
 				</div>
 				{item.properties && (
