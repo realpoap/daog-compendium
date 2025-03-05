@@ -61,7 +61,7 @@ const ValueBlock = ({ item }: Props) => {
 				<span>{item.isRelic && `relic`}</span>
 				<span>
 					Magic load : {item.magicWeight ?? 0}
-					<GiCursedStar className='dark:icon-stone-200 icon-md' />
+					<GiCursedStar className='dark:icon-stone-200 icon-md ml-1' />
 				</span>
 			</div>
 		</div>

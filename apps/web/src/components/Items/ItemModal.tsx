@@ -49,7 +49,7 @@ const ItemModal = ({ item }: Props) => {
 				</div>
 
 				<div className='flex flex-row justify-between'>
-					<p className='py-4 text-stone-500'>
+					<p className='text-neutral py-4'>
 						Press ESC key or click outside to close
 					</p>
 					<button

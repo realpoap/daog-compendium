@@ -1,6 +1,10 @@
 //import itemsEntries from '@/data/weapons';
 import { useAuth } from '@/store/authContext';
-import { itemRarityOptions, itemTypeOptions } from '@/types/itemOptions';
+import {
+	itemMaterialOptions,
+	itemRarityOptions,
+	itemTypeOptions,
+} from '@/types/itemOptions';
 import { capitalizeFirstLetter } from '@/utils/capitalize';
 import { cn } from '@/utils/classNames';
 import { trpc } from '@/utils/trpc';
@@ -35,7 +39,7 @@ const ItemsSearch = () => {
 	);
 	const [prunedItems, setPrunedItems] = useState<Array<Item | Component>>([]);
 
-	//const [selectedMaterial, setSelectedMaterial] = useState<Option[]>([]);
+	const [selectedMaterial, setSelectedMaterial] = useState<Option[]>([]);
 	const [selectedRarity, setSelectedRarity] = useState<Option[]>([]);
 	const [selectedType, setSelectedType] = useState<Option[]>([]);
 	const [selectedFood, setSelectedFood] = useState<boolean>(false);
@@ -48,16 +52,16 @@ const ItemsSearch = () => {
 	useEffect(() => {
 		let filteredItems = combinedItems;
 
-		// if material selected
-		// if (selectedMaterial.length !== 0) {
-		// 	filteredItems = combinedItems.filter(i =>
-		// 		selectedMaterial.some(a => {
-		// 			if ('materialType' in i) {
-		// 				return a.value === i.materialType;
-		// 			}
-		// 		}),
-		// 	);
-		// }
+		//if material selected
+		if (selectedMaterial.length !== 0) {
+			filteredItems = combinedItems.filter(i =>
+				selectedMaterial.some(a => {
+					if ('materialType' in i) {
+						return a.value === i.materialType;
+					}
+				}),
+			);
+		}
 		// // and rarity selected
 		if (selectedRarity.length !== 0) {
 			filteredItems = filteredItems.filter(i =>
@@ -105,7 +109,7 @@ const ItemsSearch = () => {
 	}, [
 		debouncedSearch,
 		combinedItems,
-		//selectedMaterial,
+		selectedMaterial,
 		selectedRarity,
 		selectedType,
 		selectedFood,
@@ -141,53 +145,57 @@ const ItemsSearch = () => {
 	return (
 		<div className='flex flex-col items-center'>
 			<div className='container sticky top-10 z-10 flex min-h-[30dvh] flex-col items-center bg-gradient-to-b from-stone-100 from-80% dark:from-stone-800'>
-				<h1 className='font-grenze sticky mx-auto my-4 text-center text-6xl font-bold tracking-wide text-purple-900 md:mt-8 dark:text-purple-400'>
+				<h1 className='font-grenze text-secondary sticky mx-auto my-4 text-center text-6xl font-bold tracking-wide md:mt-8 dark:text-purple-400'>
 					Items
 					{prunedItems && <TitleCount number={prunedItems.length} />}
 				</h1>
+
 				<input
 					onChange={e => setSearch(e.target.value)}
 					placeholder='a curious trinket...'
 					className={cn(
-						'font-grenze dark:text-primary dark:caret-primary dark:focus:border-primary dark:focus:ring-primary mb-4 w-60 rounded-lg border border-none p-1 pl-2 text-center text-lg text-purple-900 caret-purple-900 shadow-sm placeholder:italic placeholder:text-stone-500 focus:border-purple-900 focus:outline-none focus:ring-1 focus:ring-purple-900 dark:bg-stone-700',
+						'font-grenze dark:text-primary dark:caret-primary dark:focus:border-primary dark:focus:ring-primary text-secondary caret-secondary focus:border-secondary focus:ring-secondary w-60s rounded-lg border border-none p-1 pl-2 text-center text-lg shadow-sm placeholder:italic placeholder:text-stone-500 focus:outline-none focus:ring-1 dark:bg-stone-700',
 					)}
 					type='search'
 				/>
-				<label className='font-grenze flex w-4/5 flex-row items-center justify-center gap-2 px-4 text-center text-stone-500 md:w-1/2'>
-					<input
-						type='checkbox'
-						className='checkbox checkbox-xs checkbox-primary'
-						checked={selectedFood}
-						onChange={() => setSelectedFood(prev => !prev)}
-					/>
-					<span>include food items</span>
-				</label>
+
 				<Collapsible title='filter results'>
-					<div className='flex w-full flex-col items-center justify-start md:flex-row md:items-start md:justify-center'>
-						{/* FILTER FOR MATERIAL */}
-						{/* <SelectFilter
-							value={selectedMaterial}
-							options={itemMaterialOptions}
-							onChange={o => setSelectedMaterial(o)}
-							placeholder='Material'
-							isMulti
-						/> */}
-						{/* FILTER FOR RARITY */}
-						<SelectFilter
-							value={selectedRarity}
-							options={itemRarityOptions}
-							onChange={o => setSelectedRarity(o)}
-							placeholder='Rarity'
-							isMulti
-						/>
-						{/* FILTER FOR TYPE */}
-						<SelectFilter
-							value={selectedType}
-							options={itemTypeOptions}
-							onChange={o => setSelectedType(o)}
-							placeholder='Item type'
-							isMulti
-						/>
+					<div className='flex flex-col items-center'>
+						<div className='flex w-full flex-col items-center justify-start md:flex-row md:items-start md:justify-center'>
+							{/* FILTER FOR MATERIAL */}
+							<SelectFilter
+								value={selectedMaterial}
+								options={itemMaterialOptions}
+								onChange={o => setSelectedMaterial(o)}
+								placeholder='Material'
+								isMulti
+							/>
+							{/* FILTER FOR RARITY */}
+							<SelectFilter
+								value={selectedRarity}
+								options={itemRarityOptions}
+								onChange={o => setSelectedRarity(o)}
+								placeholder='Rarity'
+								isMulti
+							/>
+							{/* FILTER FOR TYPE */}
+							<SelectFilter
+								value={selectedType}
+								options={itemTypeOptions}
+								onChange={o => setSelectedType(o)}
+								placeholder='Item type'
+								isMulti
+							/>
+						</div>
+						<label className='font-grenze flex w-4/5 flex-row items-center justify-center gap-2 px-4 text-center text-stone-500 md:w-1/2'>
+							<input
+								type='checkbox'
+								className='checkbox checkbox-xs checkbox-primary'
+								checked={selectedFood}
+								onChange={() => setSelectedFood(prev => !prev)}
+							/>
+							<span>include food items</span>
+						</label>
 					</div>
 				</Collapsible>
 				{isEditor && (
@@ -243,11 +251,9 @@ const ItemsSearch = () => {
 											{i.componentType}
 										</th>
 									)}
-									{i.weight ? (
-										<th className='text-center font-normal'>{i.weight}</th>
-									) : (
-										<th></th>
-									)}
+
+									<th className='text-center font-normal'>{i.weight ?? '-'}</th>
+
 									<th className='text-right font-normal'>
 										{i.value !== 0 && i.value !== null && (
 											<span className='flex flex-row items-baseline justify-center gap-1'>
@@ -281,7 +287,11 @@ const ItemsSearch = () => {
 												)}
 											</span>
 										)}
-										{!i.value && !i.valueWeight && <></>}
+										{!i.value && !i.valueWeight && (
+											<span className='flex flex-row items-baseline justify-center gap-1'>
+												-
+											</span>
+										)}
 									</th>
 								</tr>
 							))}

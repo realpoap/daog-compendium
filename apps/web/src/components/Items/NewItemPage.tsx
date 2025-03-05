@@ -62,7 +62,6 @@ const NewItemPage = () => {
 			);
 			return zodResolver(NewItemSchema)(data, context, options);
 		},
-
 		shouldFocusError: true,
 	});
 
@@ -260,10 +259,7 @@ const NewItemPage = () => {
 									label='Protection'
 									width='digit'
 								>
-									<InputNumber
-										name='protection'
-										defaultValue={0}
-									/>
+									<InputNumber name='protection' />
 								</Field>
 								<Field
 									name='maxDurability'
@@ -272,7 +268,7 @@ const NewItemPage = () => {
 								>
 									<InputNumber
 										name='maxDurability'
-										defaultValue={1}
+										defaultValue={'1'}
 									/>
 								</Field>
 							</div>
@@ -333,22 +329,26 @@ const NewItemPage = () => {
 											: watchMaterial === 'scales'
 												? ['', 'fire']
 												: watchMaterial === 'crystal'
-													? ['', 'moon', 'onyx']
+													? ['', 'moon', 'onyx', 'jade']
 													: watchMaterial === 'iron'
 														? ['', 'blood', 'black']
 														: watchMaterial === 'steel'
 															? ['', 'damascus', 'anvil', 'gardonium']
-															: watchMaterial === 'bone'
-																? ['', 'magical', 'mycellyum']
-																: watchMaterial === 'wood'
-																	? ['', 'enchanted']
-																	: watchMaterial === 'stone'
-																		? ['', 'flint', 'granit']
-																		: watchMaterial === 'gold'
-																			? ['', 'cursed', 'pale']
-																			: watchMaterial === 'dragon'
-																				? ['', 'ancient']
-																				: ['']
+															: watchMaterial === 'silver'
+																? ['', 'witch', 'gardonium']
+																: watchMaterial === 'bone'
+																	? ['', 'magical', 'mycellyum']
+																	: watchMaterial === 'wood'
+																		? ['', 'enchanted']
+																		: watchMaterial === 'stone'
+																			? ['', 'flint', 'granit', 'volcanic']
+																			: watchMaterial === 'soil'
+																				? ['', 'argile', 'ceramic']
+																				: watchMaterial === 'gold'
+																					? ['', 'cursed', 'pale']
+																					: watchMaterial === 'dragon'
+																						? ['', 'ancient']
+																						: ['']
 								}
 								defaultValue={''}
 							/>
@@ -429,20 +429,14 @@ const NewItemPage = () => {
 							label='Magic Protection'
 							width='digit'
 						>
-							<InputNumber
-								name='magicProtection'
-								defaultValue={0}
-							/>
+							<InputNumber name='magicProtection' />
 						</Field>
 						<Field
 							name='magicWeight'
 							label='Magic Burden'
 							width='digit'
 						>
-							<InputNumber
-								name='magicWeight'
-								defaultValue={0}
-							/>
+							<InputNumber name='magicWeight' />
 						</Field>
 					</div>
 					<div className='flex w-full flex-row justify-center gap-x-4 align-baseline'>
@@ -453,8 +447,7 @@ const NewItemPage = () => {
 						>
 							<InputNumber
 								name='weight'
-								defaultValue={0}
-								step={0.1}
+								step={'0.1'}
 							/>
 						</Field>
 						<Field
@@ -462,10 +455,7 @@ const NewItemPage = () => {
 							label='Value (MA)'
 							width='digit'
 						>
-							<InputNumber
-								name='value'
-								defaultValue={0}
-							/>
+							<InputNumber name='value' />
 						</Field>
 						<Field
 							name='valueWeight'
@@ -474,8 +464,7 @@ const NewItemPage = () => {
 						>
 							<InputNumber
 								name='valueWeight'
-								defaultValue={0}
-								step={0.1}
+								step={'0.1'}
 							/>
 						</Field>
 					</div>
@@ -492,30 +481,21 @@ const NewItemPage = () => {
 										label='CEL'
 										width='digit'
 									>
-										<InputNumber
-											name='constraints.CEL'
-											defaultValue={0}
-										/>
+										<InputNumber name='constraints.CEL' />
 									</Field>
 									<Field
 										name='constraints.AGI'
 										label='AGI'
 										width='digit'
 									>
-										<InputNumber
-											name='constraints.AGI'
-											defaultValue={0}
-										/>
+										<InputNumber name='constraints.AGI' />
 									</Field>
 									<Field
 										name='constraints.DEX'
 										label='DEX'
 										width='digit'
 									>
-										<InputNumber
-											name='constraints.DEX'
-											defaultValue={0}
-										/>
+										<InputNumber name='constraints.DEX' />
 									</Field>
 								</div>
 							</section>
@@ -529,30 +509,21 @@ const NewItemPage = () => {
 										label='STR'
 										width='digit'
 									>
-										<InputNumber
-											name='constraints.STR'
-											defaultValue={0}
-										/>
+										<InputNumber name='constraints.STR' />
 									</Field>
 									<Field
 										name='constraints.END'
 										label='END'
 										width='digit'
 									>
-										<InputNumber
-											name='constraints.END'
-											defaultValue={0}
-										/>
+										<InputNumber name='constraints.END' />
 									</Field>
 									<Field
 										name='constraints.VIT'
 										label='VIT'
 										width='digit'
 									>
-										<InputNumber
-											name='constraints.VIT'
-											defaultValue={0}
-										/>
+										<InputNumber name='constraints.VIT' />
 									</Field>
 								</div>
 							</section>
@@ -566,30 +537,21 @@ const NewItemPage = () => {
 										label='WIL'
 										width='digit'
 									>
-										<InputNumber
-											name='constraints.WIL'
-											defaultValue={0}
-										/>
+										<InputNumber name='constraints.WIL' />
 									</Field>
 									<Field
 										name='constraints.INS'
 										label='INS'
 										width='digit'
 									>
-										<InputNumber
-											name='constraints.INS'
-											defaultValue={0}
-										/>
+										<InputNumber name='constraints.INS' />
 									</Field>
 									<Field
 										name='constraints.SEN'
 										label='SEN'
 										width='digit'
 									>
-										<InputNumber
-											name='constraints.SEN'
-											defaultValue={0}
-										/>
+										<InputNumber name='constraints.SEN' />
 									</Field>
 								</div>
 							</section>
@@ -603,30 +565,21 @@ const NewItemPage = () => {
 										label='CHA'
 										width='digit'
 									>
-										<InputNumber
-											name='constraints.CHA'
-											defaultValue={0}
-										/>
+										<InputNumber name='constraints.CHA' />
 									</Field>
 									<Field
 										name='constraints.SOC'
 										label='SOC'
 										width='digit'
 									>
-										<InputNumber
-											name='constraints.SOC'
-											defaultValue={0}
-										/>
+										<InputNumber name='constraints.SOC' />
 									</Field>
 									<Field
 										name='constraints.ERU'
 										label='ERU'
 										width='digit'
 									>
-										<InputNumber
-											name='constraints.ERU'
-											defaultValue={0}
-										/>
+										<InputNumber name='constraints.ERU' />
 									</Field>
 								</div>
 							</section>

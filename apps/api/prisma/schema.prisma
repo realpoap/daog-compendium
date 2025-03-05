@@ -317,6 +317,7 @@ model Item {
   usage           String?
   damages         String?
   inflictType     String[]
+  isCritical  Boolean?
   rangeType rangeType?
   range String?
   weaponType  weaponType?
