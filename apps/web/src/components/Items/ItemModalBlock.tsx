@@ -11,13 +11,11 @@ type Props = {
 const ItemModalBlock = ({ item }: Props) => {
 	return (
 		<>
-			<div className='modal-box dark:bg-stone-800'>
-				<NameBlock item={item} />
-				<DescBlock item={item} />
-				<div className='divider divider-neutral'></div>
-				<PropertiesBlock item={item} />
-				<ValueBlock item={item} />
-			</div>
+			<NameBlock item={item} />
+			<DescBlock item={item} />
+			<div className='divider divider-neutral'></div>
+			<PropertiesBlock item={item} />
+			<ValueBlock item={item} />
 		</>
 	);
 };
