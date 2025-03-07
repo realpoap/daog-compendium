@@ -3,17 +3,14 @@ import { useNavigate } from '@tanstack/react-router';
 import toast from 'react-hot-toast';
 import { FiCopy } from 'rocketicons/fi';
 import { ActionButton } from '../Buttons';
-import DescBlock from './Blocks/DescBlock';
-import NameBlock from './Blocks/NameBlock';
-import PropertiesBlock from './Blocks/PropertiesBlock';
-import ValueBlock from './Blocks/ValueBlock';
+import ItemModalBlock from './ItemModalBlock';
 
 type Props = { item: Item };
 
 const ItemModal = ({ item }: Props) => {
 	const navigate = useNavigate();
 
-	const shareUrl = `${import.meta.env.VITE_FRONT_URL}/daog-compendium/#/items/share/${item.id}`;
+	const shareUrl = `${import.meta.env.VITE_FRONT_URL}/daog-compendium/#/items/item/${item.id}/share`;
 
 	return (
 		<dialog
@@ -21,19 +18,16 @@ const ItemModal = ({ item }: Props) => {
 			className='modal'
 		>
 			<div className='modal-box gap-2 text-sm md:text-base dark:bg-stone-800'>
-				<NameBlock item={item} />
-				<DescBlock item={item} />
-				<div className='divider divider-neutral'></div>
-				<PropertiesBlock item={item} />
-				<ValueBlock item={item} />
+				{'itemType' in item && <ItemModalBlock item={item} />}
+
 				<div className='flex flex-row gap-4'>
 					<ActionButton
 						color='accent'
 						textColor='stone-800'
 						onClick={() =>
 							navigate({
-								to: `/items/edit/$id`,
-								params: { id: `${item?.id}` },
+								to: `/items/$type/$id/edit`,
+								params: { type: 'item', id: `${item?.id}` },
 							})
 						}
 					>

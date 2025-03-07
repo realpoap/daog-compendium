@@ -11,10 +11,13 @@ import {
 	rangeType,
 	weaponType,
 } from '@/types/itemOptions';
+import { capitalizeFirstLetter } from '@/utils/capitalize';
 import { cn } from '@/utils/classNames';
 import { trpc } from '@/utils/trpc';
-import { NewItem, NewItemSchema } from '@api/lib/ZodItem';
+import { StatProfil } from '@api/lib/ZodCreature';
+import { Item, ItemSchema } from '@api/lib/ZodItem';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -33,38 +36,58 @@ import MultiSelect from '../RHFComponents/MultiSelect';
 import StatsForm from '../StatsForm';
 import TitleBack from '../TitleBack';
 
-const NewItemPage = () => {
+type Props = {
+	id: string;
+};
+
+const ItemEditForm = ({ id }: Props) => {
+	const { history } = useRouter();
 	const utils = trpc.useUtils();
 
 	const [nameField, setNameField] = useState('');
 	const [nameArray, setNameArray] = useState<string[]>([]);
-
 	const [inflictTypes, setInflictTypes] = useState<string[]>([]);
 	const [resistTypes, setResistTypes] = useState<string[]>([]);
 
-	const createItem = trpc.items.create.useMutation({
+	const itemById = trpc.items.getById.useQuery(id);
+	const updateItem = trpc.items.update.useMutation({
 		onSuccess: () => {
-			toast.success('item created !');
+			toast.success('Item edited !');
 			utils.items.getById.invalidate();
+			history.go(-1);
 		},
 		onError: error => {
 			toast.error('Something bad happened...');
 			throw new Error(error.message);
 		},
 	});
-	const methods = useForm<NewItem>({
+
+	const methods = useForm<Item>({
 		mode: 'onChange',
 		resolver: async (data, context, options) => {
 			// you can debug your validation schema here
 			console.log('formData', data);
 			console.log(
 				'validation result',
-				await zodResolver(NewItemSchema)(data, context, options),
+				await zodResolver(ItemSchema)(data, context, options),
 			);
-			return zodResolver(NewItemSchema)(data, context, options);
+			return zodResolver(ItemSchema)(data, context, options);
 		},
 		shouldFocusError: true,
 	});
+
+	useEffect(() => {
+		if (!itemById.data) return;
+		setNameArray(itemById.data.name);
+		methods.reset(itemById.data as Item);
+		methods.setValue('name', ['']);
+		//UPDATE INFLICT TYPES
+		setInflictTypes(itemById.data.inflictType);
+		methods.setValue('inflictType', itemById.data.inflictType);
+		//UPDATE RESIST TYPES
+		setResistTypes(itemById.data.resistType);
+		methods.setValue('resistType', itemById.data.resistType);
+	}, [itemById.data]);
 
 	useEffect(() => {
 		//UPDATE NAME ARRAY
@@ -79,12 +102,29 @@ const NewItemPage = () => {
 		methods.setValue('resistType', resistTypes);
 		//DURABILITY
 		methods.setValue('durability', methods.getValues('maxDurability'));
+		//CONSTRAINTS
+		const constraints = methods.getValues('constraints');
+		if (constraints) {
+			Object.entries(constraints).map(([k, v]) => {
+				if (v === null) {
+					constraints[k as keyof StatProfil] = 0;
+				}
+			});
+			methods.setValue('constraints', constraints);
+		}
 	}, [methods.formState, inflictTypes, resistTypes]);
 
-	const onSubmit = async (data: NewItem) => {
-		createItem.mutate(data);
+	const watchItemType = methods.watch('itemType');
+	const watchMaterial = methods.watch('material');
+	const watchMaterialType = methods.watch('materialType');
+	const watchUsage = methods.watch('usage');
+	const watchQuality = methods.watch('quality');
+
+	const onSubmit = async (data: Item) => {
+		utils.items.getById.invalidate();
+		updateItem.mutate(data);
 	};
-	// ADDING NAMES
+
 	const handleKeyDown = (e: React.KeyboardEvent) => {
 		if (e.key !== ',' || e.code !== 'Comma') return;
 		const value = (e.target as HTMLInputElement).value;
@@ -92,31 +132,45 @@ const NewItemPage = () => {
 		setNameArray([...nameArray, value]);
 		(e.target as HTMLInputElement).value = '';
 	};
+
 	const handleKeyUp = (e: React.KeyboardEvent) => {
 		if (e.key !== ',' || e.code !== 'Comma') return;
 		(e.target as HTMLInputElement).value = '';
 	};
+
 	const removeName = (index: number) => {
 		setNameArray(nameArray.filter((_el, i) => i !== Number(index)));
 	};
+
 	const addName = (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
-		setNameArray([...nameArray, nameField]);
+		setNameArray([...nameArray, capitalizeFirstLetter(nameField)]);
 		setNameField('');
 	};
 
-	const watchItemType = methods.watch('itemType');
-	const watchMaterial = methods.watch('material');
-	const watchMaterialType = methods.watch('materialType');
-	const watchUsage = methods.watch('usage');
-	const watchQuality = methods.watch('quality');
+	//Loading -----------------------------------------------------------------
+	if (itemById.isLoading && !itemById.data) {
+		return (
+			<div className='font-grenze flex h-screen flex-col items-center justify-center'>
+				<p>Loading item</p>
+				<span className='loading loading-dots loading-md'></span>
+			</div>
+		);
+	}
+	// define item object data after query success
+	const item = itemById?.data;
+
+	/////////////////////////////////////////
+	// RETURN
+	/////////////////////////////////////////
+
 	return (
 		<div className='mt-sm flex flex-col items-center justify-center p-2 px-2'>
-			<TitleBack title='New item' />
+			<TitleBack title={item?.name !== undefined ? item?.name[0] : 'Edit'} />{' '}
 			<div className='my-2 flex gap-1'>
 				{nameArray.map((n, index) => (
 					<span
-						key={n}
+						key={`${item?.id}-${n}`}
 						className='badge font-cabin bg-primary inline-flex cursor-pointer border-0 text-center align-middle font-semibold text-stone-800 hover:bg-stone-500 hover:text-red-500 md:text-lg'
 						onClick={() => removeName(index)}
 					>
@@ -124,7 +178,7 @@ const NewItemPage = () => {
 					</span>
 				))}
 			</div>
-
+			{/* Modals ------------------------------------------------- */}
 			<FormProvider {...methods}>
 				<form
 					onSubmit={methods.handleSubmit(onSubmit)}
@@ -159,7 +213,7 @@ const NewItemPage = () => {
 						<Select
 							name='itemType'
 							options={itemTypeOptions}
-							defaultValue={''}
+							defaultValue={item?.itemType as string}
 						/>
 					</Field>
 
@@ -175,7 +229,7 @@ const NewItemPage = () => {
 									<Select
 										name='usage'
 										options={itemUsageOptions}
-										defaultValue={''}
+										defaultValue={(item?.usage as string) ?? ''}
 									/>
 								</Field>
 								{watchUsage === 'fighting' && (
@@ -187,7 +241,7 @@ const NewItemPage = () => {
 										<Select
 											name='weaponType'
 											options={weaponType}
-											defaultValue={'versatile'}
+											defaultValue={(item?.weaponType as string) ?? ''}
 										/>
 									</Field>
 								)}
@@ -201,7 +255,7 @@ const NewItemPage = () => {
 									<Select
 										name='rangeType'
 										options={rangeType}
-										defaultValue={'close'}
+										defaultValue={(item?.rangeType as string) ?? 'close'}
 									/>
 								</Field>
 								<Field
@@ -215,17 +269,28 @@ const NewItemPage = () => {
 									/>
 								</Field>
 							</div>
-							<Field
-								name='damages'
-								width='third'
-								label='Damages'
-							>
-								<Input
+							<div className='flex flex-row justify-center gap-4'>
+								<Field
 									name='damages'
-									type='text'
-								/>
-							</Field>
-
+									width='third'
+									label='Damages'
+								>
+									<Input
+										name='damages'
+										type='text'
+									/>
+								</Field>
+								<Field
+									name='isCritical'
+									label='Critical'
+									width='third'
+								>
+									<Checkbox
+										name='isCritical'
+										label='critical damages'
+									/>
+								</Field>
+							</div>
 							<Field
 								name='inflictType'
 								label='Damage types'
@@ -237,16 +302,6 @@ const NewItemPage = () => {
 									values={inflictTypes}
 									setValues={setInflictTypes}
 									placeholder='Select one or several damage types'
-								/>
-							</Field>
-							<Field
-								name='isCritical'
-								label='Critical'
-								width='third'
-							>
-								<Checkbox
-									name='isCritical'
-									label='critical damages'
 								/>
 							</Field>
 						</>
@@ -262,7 +317,7 @@ const NewItemPage = () => {
 									<Select
 										name='armorClass'
 										options={itemArmorOptions}
-										defaultValue={'none'}
+										defaultValue={(item?.rangeType as string) ?? 'none'}
 									/>
 								</Field>
 								<Field
@@ -312,12 +367,12 @@ const NewItemPage = () => {
 						<Field
 							name='materialType'
 							width='small'
-							label='Material type'
+							label='MaterialType'
 						>
 							<Select
 								name='materialType'
 								options={itemMaterialOptions}
-								defaultValue={''}
+								defaultValue={item?.materialType as string}
 							/>
 						</Field>
 						<Field
@@ -332,7 +387,7 @@ const NewItemPage = () => {
 										? ['', ...organicMaterialTypeOptions]
 										: ['', ...mineralMaterialTypeOptions]
 								}
-								defaultValue={''}
+								defaultValue={item?.materialType as string}
 							/>
 						</Field>
 						<Field
@@ -371,7 +426,7 @@ const NewItemPage = () => {
 																						? ['', 'ancient']
 																						: ['']
 								}
-								defaultValue={''}
+								defaultValue={item?.materialType as string}
 							/>
 						</Field>
 					</div>
@@ -387,7 +442,7 @@ const NewItemPage = () => {
 								<Select
 									name='quality'
 									options={itemQualityOptions}
-									defaultValue={'common'}
+									defaultValue={(item?.quality as string) ?? 'common'}
 								/>
 							</Field>
 							<Field
@@ -398,7 +453,7 @@ const NewItemPage = () => {
 								<Select
 									name='rarity'
 									options={itemRarityOptions}
-									defaultValue={'common'}
+									defaultValue={(item?.rarity as string) ?? 'common'}
 								/>
 							</Field>
 						</div>
@@ -499,7 +554,7 @@ const NewItemPage = () => {
 						isLoading={methods.formState.isSubmitting}
 						color='accent'
 						textColor='stone-800'
-						text='Create'
+						text='Update'
 					/>
 				</form>
 			</FormProvider>
@@ -507,4 +562,4 @@ const NewItemPage = () => {
 	);
 };
 
-export default NewItemPage;
+export default ItemEditForm;

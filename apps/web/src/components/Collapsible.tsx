@@ -13,7 +13,7 @@ const Collapsible = ({ title, children }: Props) => {
 						</div>
 						<h3 className='align-middle'>{title}</h3>
 					</summary>
-					<div className='mx-0 mb-2 flex w-full flex-col items-center justify-center md:mx-10 md:w-[80dvw]'>
+					<div className='mx-0 mb-2 flex w-full flex-col items-center justify-start md:w-full'>
 						{children}
 					</div>
 				</details>
