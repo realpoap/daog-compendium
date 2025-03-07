@@ -1,3 +1,4 @@
+import { cn } from '@/utils/classNames';
 import { Item } from '@api/lib/ZodItem';
 import { useNavigate } from '@tanstack/react-router';
 import toast from 'react-hot-toast';
@@ -17,7 +18,12 @@ const ItemModal = ({ item }: Props) => {
 			id='item-modal'
 			className='modal'
 		>
-			<div className='modal-box gap-2 text-sm md:text-base dark:bg-stone-800'>
+			<div
+				className={cn(
+					'modal-box gap-2 text-sm md:text-base dark:bg-stone-800',
+					{ glass: item.isRelic },
+				)}
+			>
 				{'itemType' in item && <ItemModalBlock item={item} />}
 
 				<div className='flex flex-row gap-4'>

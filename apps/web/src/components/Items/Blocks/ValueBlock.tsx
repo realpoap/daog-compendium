@@ -61,7 +61,12 @@ const ValueBlock = ({ item }: Props) => {
 					Weight : {item.weight}{' '}
 					<GiWeight className='dark:icon-stone-200 icon-sm' />
 				</span>
-				<span>{'itemType' in item && item.isRelic && `relic`}</span>
+				{'itemType' in item && item.isRelic && (
+					<span className='animate-shake text-sm italic'>
+						This {item.itemType} is a precious relic : thread carefully when
+						selling it.
+					</span>
+				)}
 				<span>
 					Magic load : {('itemType' in item && item.magicWeight) ?? 0}
 					<GiCursedStar className='dark:icon-stone-200 icon-md ml-1' />
