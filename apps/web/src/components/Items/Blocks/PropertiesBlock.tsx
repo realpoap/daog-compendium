@@ -20,7 +20,9 @@ const PropertiesBlock = ({ item }: Props) => {
 								{item.range && <span>({item.range})</span>}
 							</span>
 						)}
-						<span>Damages : {item.damages}</span>
+						<span>
+							Damages : {item.damages} <span>Deals critical damages !</span>
+						</span>
 						<div className='flex flex-row gap-2'>
 							Damage types :
 							{item.inflictType &&
@@ -38,7 +40,10 @@ const PropertiesBlock = ({ item }: Props) => {
 					<div className='flex flex-col'>
 						<div className='flex flex-col'>
 							<span>Armor : {item.armorClass}</span>
-							<span>Protection : {item.protection}</span>
+							<span>
+								Protection : {item.protection}{' '}
+								<span>Resist critical damages !</span>
+							</span>
 							<span>
 								Durability : {item.durability} /{' '}
 								{item.maxDurability ?? item.durability}
