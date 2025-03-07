@@ -1,3 +1,4 @@
+import TagBadge from '@/components/TagBadge';
 import { cn } from '@/utils/classNames';
 import { Component, CreatureComponent } from '@api/lib/ZodComponent';
 
@@ -18,7 +19,9 @@ export const ComponentsTags = ({ setTags, tags, list }: Props) => {
 	};
 
 	const handleSelect = (item: Component) => {
-		const input = document.getElementById('item-input') as HTMLInputElement;
+		const input = document.getElementById(
+			'component-input',
+		) as HTMLInputElement;
 		input.value = '';
 		setSearchTerm('');
 		const addedItem = {
@@ -33,42 +36,53 @@ export const ComponentsTags = ({ setTags, tags, list }: Props) => {
 		setTags(tags.filter((_el, i) => i !== Number(index)));
 	};
 	return (
-		<div
-			className={cn(
-				'font-cabin flex w-full flex-row flex-wrap items-center gap-2 rounded-lg p-2 text-lg text-purple-900 caret-purple-900 shadow-sm focus:border-purple-900 focus:outline-none focus:ring-1 focus:ring-purple-900 dark:bg-stone-700 dark:text-purple-400 dark:caret-purple-400 dark:placeholder:text-stone-400 dark:focus:border-purple-400 dark:focus:ring-purple-400',
-			)}
-		>
-			{tags.map((tag, index) => (
-				<span
-					key={tag.id}
-					className='badge font-cabin inline-flex cursor-pointer border-0 bg-purple-500 text-center align-middle text-lg font-semibold text-stone-800 hover:bg-stone-500 hover:text-red-500'
-					onClick={() => removeTag(index)}
-				>
-					{tag.name}
-				</span>
-			))}
-			<div className='items-left flex flex-1 flex-col justify-between gap-2 text-left'>
-				<input
-					className={cn(
-						'flex-1 bg-transparent px-2 placeholder:italic placeholder:text-stone-500 focus:outline-none focus:ring-0',
-					)}
-					placeholder='Search items'
-					type='text'
-					id='item-input'
-					onChange={handleChange}
-				/>
-				{searchTerm && (
-					<div className='align-center z-10 ml-2 flex max-h-svh flex-col justify-start rounded dark:bg-stone-700'>
-						<ResultList
-							tags={results}
-							results={list}
-							searchTerm={searchTerm}
-							handleSelect={handleSelect}
-						/>
-					</div>
+		<>
+			<div
+				className={cn(
+					'font-cabin text-secondary caret-secondary focus:border-secondary focus:ring-secondary dark:text-primary dark:caret-primary dark:focus:border-primary dark:focus:ring-primary mb-2 flex w-full flex-row flex-wrap items-center gap-2 rounded-lg p-2 text-lg shadow-sm focus:outline-none focus:ring-1 dark:bg-stone-700 dark:placeholder:text-stone-400',
 				)}
+			>
+				<div className='items-left flex flex-1 flex-col justify-between gap-2 text-left'>
+					<input
+						className={cn(
+							'flex-1 bg-transparent px-2 placeholder:italic placeholder:text-stone-500 focus:outline-none focus:ring-0',
+						)}
+						placeholder='Search items'
+						type='text'
+						id='component-input'
+						onChange={handleChange}
+					/>
+				</div>
 			</div>
-		</div>
+			{searchTerm && (
+				<div
+					className={cn(
+						`items-left '*:-mt-2' z-10 flex max-h-[20dvh] w-fit flex-col justify-start`,
+						{
+							'*:dark:bg-stone-700': results.length !== 0,
+							'*:-mt-2': results.length === 0,
+						},
+					)}
+				>
+					<ResultList
+						tags={results}
+						results={list}
+						searchTerm={searchTerm}
+						handleSelect={handleSelect}
+					/>
+				</div>
+			)}
+
+			<div className='flex flex-row gap-2'>
+				{tags.map((tag, index) => (
+					<TagBadge
+						key={tag.id}
+						text={tag.name}
+						onClick={() => removeTag(index)}
+					/>
+				))}
+			</div>
+		</>
 	);
 };
 type ResultListProps = {

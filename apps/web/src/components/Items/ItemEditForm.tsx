@@ -78,7 +78,7 @@ const ItemEditForm = ({ id }: Props) => {
 
 	useEffect(() => {
 		if (!itemById.data) return;
-		setNameArray(itemById.data.name);
+		setNameArray(itemById.data.name !== undefined ? itemById.data.name : []);
 		methods.reset(itemById.data as Item);
 		methods.setValue('name', ['']);
 		//UPDATE INFLICT TYPES
@@ -91,10 +91,10 @@ const ItemEditForm = ({ id }: Props) => {
 
 	useEffect(() => {
 		//UPDATE NAME ARRAY
-		if (nameArray[0] !== null) {
+		if (nameArray[0] !== null || nameArray[0] !== undefined) {
 			methods.setValue('name', nameArray);
 		}
-		const searchNameEdit = `${methods.getValues('name')[0]} - ${methods.getValues('materialType')} (${methods.getValues('quality')})}`;
+		const searchNameEdit = `${methods.getValues('name')[0]} - ${methods.getValues('materialType')} (${methods.getValues('quality')})`;
 		methods.setValue('searchName', searchNameEdit);
 		//UPDATE INFLICT TYPES
 		methods.setValue('inflictType', inflictTypes);
@@ -166,17 +166,24 @@ const ItemEditForm = ({ id }: Props) => {
 
 	return (
 		<div className='mt-sm flex flex-col items-center justify-center p-2 px-2'>
-			<TitleBack title={item?.name !== undefined ? item?.name[0] : 'Edit'} />{' '}
+			<TitleBack
+				title={
+					item?.name !== undefined
+						? capitalizeFirstLetter(item?.name[0])
+						: 'Edit'
+				}
+			/>{' '}
 			<div className='my-2 flex gap-1'>
-				{nameArray.map((n, index) => (
-					<span
-						key={`${item?.id}-${n}`}
-						className='badge font-cabin bg-primary inline-flex cursor-pointer border-0 text-center align-middle font-semibold text-stone-800 hover:bg-stone-500 hover:text-red-500 md:text-lg'
-						onClick={() => removeName(index)}
-					>
-						{n}
-					</span>
-				))}
+				{item?.name !== undefined &&
+					nameArray.map((n, index) => (
+						<span
+							key={`${item?.id}-${n}`}
+							className='badge font-cabin bg-primary inline-flex cursor-pointer border-0 text-center align-middle font-semibold text-stone-800 hover:bg-stone-500 hover:text-red-500 md:text-lg'
+							onClick={() => removeName(index)}
+						>
+							{n}
+						</span>
+					))}
 			</div>
 			{/* Modals ------------------------------------------------- */}
 			<FormProvider {...methods}>
@@ -409,7 +416,7 @@ const ItemEditForm = ({ id }: Props) => {
 													: watchMaterial === 'iron'
 														? ['', 'blood', 'black']
 														: watchMaterial === 'steel'
-															? ['', 'damascus', 'anvil', 'gardonium']
+															? ['', 'damascus', 'anvil', 'king']
 															: watchMaterial === 'silver'
 																? ['', 'witch', 'gardonium']
 																: watchMaterial === 'bone'

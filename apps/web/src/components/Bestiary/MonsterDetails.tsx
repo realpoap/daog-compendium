@@ -22,6 +22,7 @@ import Collapsible from '../Collapsible';
 import Ability from './Ability';
 import ActionComponent from './ActionComponent';
 import CalculatedStats from './CalculatedStats';
+import CreatureComponentBlock from './CreatureComponentBlock';
 import ItemComponent from './ItemComponent';
 import StatsTable from './StatsTable';
 import ActionForm from './utils/ActionForm';
@@ -98,7 +99,6 @@ const MonsterDetails = () => {
 						})
 					}
 				/>
-
 				<div className='align-center relative mt-4 flex flex-col items-center justify-center text-wrap text-center'>
 					<label className='swap swap-flip hover:animate-wiggle text-9xl'>
 						{/* this hidden checkbox controls the state */}
@@ -171,7 +171,6 @@ const MonsterDetails = () => {
 						{monster?.size} {monster?.alignment} {monster?.type}
 					</p>
 				</div>
-
 				{monster?.attributes && (
 					<div className='flex w-full flex-row flex-wrap items-center justify-center gap-2 overflow-visible px-2 align-middle'>
 						{attributes.map(a => (
@@ -251,7 +250,6 @@ const MonsterDetails = () => {
 						</ul>
 					</div>
 				)}
-
 				<div className='flex flex-row items-end justify-center gap-8 align-baseline'>
 					<div className='align-center mt-4 flex flex-col items-center justify-center text-center'>
 						<div className='relative flex'>
@@ -283,7 +281,6 @@ const MonsterDetails = () => {
 					)}
 				</div>
 				{monster && <CalculatedStats monster={monster} />}
-
 				{monster && (
 					<div className='md:w-[54dvw] lg:w-2/5'>
 						<Collapsible title='show stats'>
@@ -291,7 +288,6 @@ const MonsterDetails = () => {
 						</Collapsible>
 					</div>
 				)}
-
 				{isEditor && (
 					<>
 						{createPortal(
@@ -305,7 +301,6 @@ const MonsterDetails = () => {
 						)}
 					</>
 				)}
-
 				{monster?.magicDomain.length !== 0 && (
 					<div className='flex flex-col items-center justify-center'>
 						<h3 className='font-grenze line mb-1 border-b-2 text-4xl font-semibold tracking-wider'>
@@ -319,7 +314,6 @@ const MonsterDetails = () => {
 						</ul>
 					</div>
 				)}
-
 				<ActionComponent
 					actionList={monster?.actionList as ActionList}
 					actions={actions}
@@ -341,10 +335,8 @@ const MonsterDetails = () => {
 						<FiPlus className='icon-stone-900' />
 					</SmallCircleButton>
 				)}
-				<ItemComponent
-					items={monster?.loot}
-					//components={monster?.scavenge}
-				/>
+				<ItemComponent items={monster?.loot} />
+				<CreatureComponentBlock components={monster?.scavenge} />
 			</div>
 			{isEditor && (
 				<ActionButton

@@ -52,6 +52,9 @@ export const ComponentSchema = z.object({
 
 export type Component = z.infer<typeof ComponentSchema>;
 
+export const NewComponentSchema = ComponentSchema.omit({ id: true });
+export type NewComponent = z.infer<typeof NewComponentSchema>;
+
 export const CreatureComponentSchema = z.object({
 	id: z.string(),
 	name: z.string(),

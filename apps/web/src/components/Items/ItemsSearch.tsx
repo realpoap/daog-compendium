@@ -42,7 +42,7 @@ const ItemsSearch = () => {
 	const [selectedMaterial, setSelectedMaterial] = useState<Option[]>([]);
 	const [selectedRarity, setSelectedRarity] = useState<Option[]>([]);
 	const [selectedType, setSelectedType] = useState<Option[]>([]);
-	const [selectedFood, setSelectedFood] = useState<boolean>(false);
+	const [selectedFood, setSelectedFood] = useState<boolean>(true);
 
 	useEffect(() => {
 		if (getAllItems.data && getAllComponents.data)
@@ -154,10 +154,19 @@ const ItemsSearch = () => {
 					onChange={e => setSearch(e.target.value)}
 					placeholder='a curious trinket...'
 					className={cn(
-						'font-grenze dark:text-primary dark:caret-primary dark:focus:border-primary dark:focus:ring-primary text-secondary caret-secondary focus:border-secondary focus:ring-secondary w-60s rounded-lg border border-none p-1 pl-2 text-center text-lg shadow-sm placeholder:italic placeholder:text-stone-500 focus:outline-none focus:ring-1 dark:bg-stone-700',
+						'font-grenze dark:text-primary dark:caret-primary dark:focus:border-primary dark:focus:ring-primary text-secondary caret-secondary focus:border-secondary focus:ring-secondary rounded-lg border border-none p-1 pl-2 text-center text-lg shadow-sm placeholder:italic placeholder:text-stone-500 focus:outline-none focus:ring-1 md:w-1/2 dark:bg-stone-700',
 					)}
 					type='search'
 				/>
+				<label className='font-grenze mt-1 flex w-4/5 flex-row items-center justify-center gap-2 px-4 text-center text-stone-500 md:w-1/2'>
+					<input
+						type='checkbox'
+						className='checkbox checkbox-xs checkbox-primary'
+						checked={selectedFood}
+						onChange={() => setSelectedFood(prev => !prev)}
+					/>
+					<span>include food items</span>
+				</label>
 
 				<Collapsible title='filter results'>
 					<div className='flex flex-col items-center'>
@@ -187,15 +196,6 @@ const ItemsSearch = () => {
 								isMulti
 							/>
 						</div>
-						<label className='font-grenze flex w-4/5 flex-row items-center justify-center gap-2 px-4 text-center text-stone-500 md:w-1/2'>
-							<input
-								type='checkbox'
-								className='checkbox checkbox-xs checkbox-primary'
-								checked={selectedFood}
-								onChange={() => setSelectedFood(prev => !prev)}
-							/>
-							<span>include food items</span>
-						</label>
 					</div>
 				</Collapsible>
 				{isEditor && (

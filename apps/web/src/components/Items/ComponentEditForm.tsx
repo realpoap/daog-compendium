@@ -75,7 +75,7 @@ const ComponentEditForm = ({ id }: Props) => {
 		if (nameArray[0] !== null) {
 			methods.setValue('name', nameArray);
 		}
-		const searchNameEdit = `${methods.getValues('name')[0]} - ${methods.getValues('componentType')} (${methods.getValues('rarity')})}`;
+		const searchNameEdit = `${methods.getValues('name')[0]} - ${methods.getValues('componentType')} (${methods.getValues('rarity')})`;
 		methods.setValue('searchName', searchNameEdit);
 		//UPDATE INFLICT TYPES
 		methods.setValue('habitat', methods.getValues('habitat'));
@@ -241,46 +241,48 @@ const ComponentEditForm = ({ id }: Props) => {
 							</div>
 						)}
 					</Collapsible>
-					<Field
-						name='uses.ointment'
-						label='Ointment'
-						width='third'
-					>
-						<Checkbox
+					<div className='flex flex-row gap-2'>
+						<Field
 							name='uses.ointment'
-							label=''
-						/>
-					</Field>
-					<Field
-						name='uses.potion'
-						label='Potion'
-						width='third'
-					>
-						<Checkbox
+							label='Ointment'
+							width='third'
+						>
+							<Checkbox
+								name='uses.ointment'
+								label=''
+							/>
+						</Field>
+						<Field
 							name='uses.potion'
-							label=''
-						/>
-					</Field>
-					<Field
-						name='uses.extract'
-						label='Extract'
-						width='third'
-					>
-						<Checkbox
+							label='Potion'
+							width='third'
+						>
+							<Checkbox
+								name='uses.potion'
+								label=''
+							/>
+						</Field>
+						<Field
 							name='uses.extract'
-							label=''
-						/>
-					</Field>
-					<Field
-						name='uses.catalyst'
-						label='Catalyst'
-						width='third'
-					>
-						<Checkbox
+							label='Extract'
+							width='third'
+						>
+							<Checkbox
+								name='uses.extract'
+								label=''
+							/>
+						</Field>
+						<Field
 							name='uses.catalyst'
-							label=''
-						/>
-					</Field>
+							label='Catalyst'
+							width='third'
+						>
+							<Checkbox
+								name='uses.catalyst'
+								label=''
+							/>
+						</Field>
+					</div>
 
 					<div className='flex w-full flex-row justify-center gap-x-4 align-baseline'>
 						<Field

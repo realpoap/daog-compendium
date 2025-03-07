@@ -18,7 +18,7 @@ export const Textarea = ({
 	return (
 		<textarea
 			className={cn(
-				'font-cabin text-md text-secondary caret-secondary focus:border-secondary focus:ring-secondary dark:text-primary dark:caret-primary dark:focus:border-primary dark:focus:ring-primary w-full rounded-md px-2 py-1 text-center shadow-sm placeholder:italic focus:outline-none focus:ring-1 dark:bg-stone-700',
+				'font-cabin text-md text-secondary caret-secondary focus:border-secondary focus:ring-secondary dark:text-primary dark:caret-primary dark:focus:border-primary dark:focus:ring-primary w-full rounded-md px-2 py-1 text-center shadow-sm placeholder:italic focus:outline-none focus:ring-1 dark:bg-stone-700 dark:placeholder:text-stone-400',
 				{
 					'select-error': errors[name],
 					'ring-error': errors[name],

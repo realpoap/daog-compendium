@@ -48,7 +48,7 @@ const NameBlock = ({ item }: Props) => {
 				)}
 			>
 				<span>
-					{item?.name && capitalizeFirstLetter(item?.name[0])}{' '}
+					{item.name[0] !== undefined && capitalizeFirstLetter(item?.name[0])}{' '}
 					{'itemType' in item && item.isRelic && (
 						<GiPolarStar className='icon-md icon-stone-200 relative -top-2 animate-pulse' />
 					)}
