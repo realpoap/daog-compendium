@@ -21,7 +21,8 @@ const PropertiesBlock = ({ item }: Props) => {
 							</span>
 						)}
 						<span>
-							Damages : {item.damages} <span>Deals critical damages !</span>
+							Damages : {item.damages}{' '}
+							<span className='text-sm'>(Deals critical damages !)</span>
 						</span>
 						<div className='flex flex-row gap-2'>
 							Damage types :
@@ -42,7 +43,7 @@ const PropertiesBlock = ({ item }: Props) => {
 							<span>Armor : {item.armorClass}</span>
 							<span>
 								Protection : {item.protection}{' '}
-								<span>Resist critical damages !</span>
+								<span className='text-sm'>(Resist critical damages !)</span>
 							</span>
 							<span>
 								Durability : {item.durability} /{' '}

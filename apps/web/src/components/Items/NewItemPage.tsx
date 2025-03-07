@@ -106,6 +106,8 @@ const NewItemPage = () => {
 		if (nameArray[0] !== null) {
 			methods.setValue('name', nameArray);
 		}
+		if (methods.getValues('isCritical') === undefined)
+			methods.setValue('isCritical', false);
 		const searchNameEdit = `${methods.getValues('name')[0]} - ${methods.getValues('materialType')} (${methods.getValues('quality')})}`;
 		methods.setValue('searchName', searchNameEdit);
 		//UPDATE INFLICT TYPES
@@ -501,44 +503,45 @@ const NewItemPage = () => {
 										defaultValue={'common'}
 									/>
 								</Field>
-							</div>
-							<Field
-								name='description'
-								label='Description'
-							>
-								<Textarea
+								<Field
 									name='description'
-									placeholder='The obscure legend of this artifact enfolds...'
-								/>
-							</Field>
-							<Field
-								name='properties'
-								label='Properties'
-							>
-								<Textarea
+									label='Description'
+								>
+									<Textarea
+										name='description'
+										placeholder='The obscure legend of this artifact enfolds...'
+									/>
+								</Field>
+								<Field
 									name='properties'
-									placeholder='The craftmanship or the magic imbued give this object curious properties...'
-								/>
-							</Field>
+									label='Properties'
+								>
+									<Textarea
+										name='properties'
+										placeholder='The craftmanship or the magic imbued give this object curious properties...'
+									/>
+								</Field>
+							</div>
+
 							<div className='ml-auto flex w-full flex-col justify-center md:flex-row'>
 								<Field
 									name='isFood'
-									label='Food'
+									label=''
 									width='third'
 								>
 									<Checkbox
 										name='isFood'
-										label='can be consumed'
+										label='Consumable'
 									/>
 								</Field>
 								<Field
 									name='isRelic'
-									label='Relic'
+									label=''
 									width='third'
 								>
 									<Checkbox
 										name='isRelic'
-										label='is a relic'
+										label='Relic'
 									/>
 								</Field>
 							</div>
