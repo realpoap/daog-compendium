@@ -10,7 +10,7 @@ type Props = {
 
 const ComponentModalBlock = ({ item }: Props) => {
 	return (
-		<div className='modal-box dark:bg-stone-800'>
+		<>
 			<NameBlock item={item} />
 			<DescBlock item={item} />
 
@@ -19,7 +19,7 @@ const ComponentModalBlock = ({ item }: Props) => {
 				<div className='divider divider-horizontal divider-neutral'></div>
 				<ValueBlock item={item} />
 			</div>
-		</div>
+		</>
 	);
 };
 

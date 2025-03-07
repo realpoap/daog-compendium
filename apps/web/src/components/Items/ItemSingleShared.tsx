@@ -28,10 +28,12 @@ const ItemSingleShared = () => {
 	return (
 		<div className='flex flex-col items-center'>
 			<BackButton onClick={() => navigate({ to: `/items` })} />
-			{type === 'item' && item && <ItemModalBlock item={item} />}
-			{type === 'component' && component && (
-				<ComponentModalBlock item={component} />
-			)}
+			<div className='modal-box dark:bg-stone-800'>
+				{type === 'item' && item && <ItemModalBlock item={item} />}
+				{type === 'component' && component && (
+					<ComponentModalBlock item={component} />
+				)}
+			</div>
 		</div>
 	);
 };
