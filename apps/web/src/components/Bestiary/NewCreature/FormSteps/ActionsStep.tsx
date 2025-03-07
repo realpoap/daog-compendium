@@ -64,7 +64,6 @@ const ActionsStep = ({
 			<div className='flex flex-row flex-wrap items-center justify-center gap-4 px-[4vw] md:flex-row'>
 				<Field
 					name='actionList.main'
-					width='small'
 					label='Main'
 				>
 					<InputNumber name='actionList.main' />
@@ -72,7 +71,6 @@ const ActionsStep = ({
 				{creature.isBoss && (
 					<Field
 						name='actionList.epic'
-						width='small'
 						label='Epics'
 					>
 						<InputNumber name='actionList.epic' />

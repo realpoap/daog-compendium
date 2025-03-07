@@ -25,12 +25,12 @@ const LootStep = ({
 	const componentsList = trpc.components.getAll.useQuery();
 	const itemsList = trpc.items.getAll.useQuery();
 	const [components, setComponents] = useState<CreatureComponent[]>([]);
-	const [items, setItems] = useState<CreatureItem[]>([]);
+	const [items, setItems] = useState<CreatureComponent[]>([]);
 
 	useEffect(() => {
 		if (componentsList.data) {
 			const list = componentsList.data;
-			const compObjects = [] as CreatureItem[];
+			const compObjects = [] as CreatureComponent[];
 			components?.map(comp => {
 				if (comp) {
 					const foundObj = list.find(el => el.id === comp.id);
@@ -83,7 +83,7 @@ const LootStep = ({
 						not :
 					</p>
 					{items.length !== 0 ? (
-						<div className='mt-4 w-full p-2'>
+						<div className='h-fit w-full p-2'>
 							{items?.map(i => <li key={i.id}>{i.name}</li>)}
 						</div>
 					) : (
@@ -108,10 +108,10 @@ const LootStep = ({
 				<h3 className='font-grenze text-left text-4xl text-purple-400'>
 					Scavenge
 				</h3>
-				<div className='font-noto italic text-stone-500'>
+				<div className='font-cabin mb-2 mt-0 italic text-stone-500'>
 					<p>Components and parts scavenged after the creature is slain :</p>
 					{components.length !== 0 ? (
-						<div className='mt-4 h-4 w-full p-2'>
+						<div className='h-fit w-full p-2'>
 							{components?.map(c => <li key={c.id}>{c.name}</li>)}
 						</div>
 					) : (
@@ -122,7 +122,6 @@ const LootStep = ({
 					name='components'
 					label='Search Components'
 				>
-					<></>
 					{componentsList.data ? (
 						<ComponentsTags
 							setTags={setComponents}
