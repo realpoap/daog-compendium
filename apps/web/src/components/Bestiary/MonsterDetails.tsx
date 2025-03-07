@@ -327,10 +327,7 @@ const MonsterDetails = () => {
 					creatureId={monster?.id as string}
 					creatureName={monster?.name as string}
 				/>
-				<ItemComponent
-					items={monster?.loot}
-					//components={monster?.scavenge}
-				/>
+
 				{isEditor && (
 					<SmallCircleButton
 						onClick={e => {
@@ -344,6 +341,10 @@ const MonsterDetails = () => {
 						<FiPlus className='icon-stone-900' />
 					</SmallCircleButton>
 				)}
+				<ItemComponent
+					items={monster?.loot}
+					//components={monster?.scavenge}
+				/>
 			</div>
 			{isEditor && (
 				<ActionButton

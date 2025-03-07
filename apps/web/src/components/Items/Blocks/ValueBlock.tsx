@@ -1,17 +1,18 @@
+import { Component } from '@api/lib/ZodComponent';
 import { Item } from '@api/lib/ZodItem';
 import { useEffect, useState } from 'react';
 import { GiCursedStar, GiTwoCoins, GiWeight } from 'rocketicons/gi';
 import { TbSwitchHorizontal } from 'rocketicons/tb';
 
 type Props = {
-	item: Item;
+	item: Item | Component;
 };
 
 const ValueBlock = ({ item }: Props) => {
 	const [sellPrice, setSellPrice] = useState(0);
 
 	useEffect(() => {
-		if (item.value !== null) {
+		if (item.value !== null && 'itemType' in item) {
 			switch (item.quality) {
 				case 'poor':
 					setSellPrice(item.value * 0.2);
@@ -45,22 +46,24 @@ const ValueBlock = ({ item }: Props) => {
 					{item.value && item?.value % 100}{' '}
 					<GiTwoCoins className='icon-stone-300 icon-xs md:icon-sm w-fit' />
 				</div>
-				<TbSwitchHorizontal className='icon-neutral' />
-				<div>
-					Reselling for : {sellPrice && Math.floor(sellPrice / 100)}{' '}
-					<GiTwoCoins className='icon-goldenrod-300 icon-xs md:icon-sm w-fit' />{' '}
-					{sellPrice && sellPrice % 100}{' '}
-					<GiTwoCoins className='icon-stone-300 icon-xs md:icon-sm w-fit' />
-				</div>
+				{'itemType' in item && <TbSwitchHorizontal className='icon-neutral' />}
+				{'itemType' in item && (
+					<div>
+						Reselling for : {sellPrice && Math.floor(sellPrice / 100)}{' '}
+						<GiTwoCoins className='icon-goldenrod-300 icon-xs md:icon-sm w-fit' />{' '}
+						{sellPrice && sellPrice % 100}{' '}
+						<GiTwoCoins className='icon-stone-300 icon-xs md:icon-sm w-fit' />
+					</div>
+				)}
 			</div>
 			<div className='items-top flex flex-col justify-center'>
 				<span>
 					Weight : {item.weight}{' '}
 					<GiWeight className='dark:icon-stone-200 icon-sm' />
 				</span>
-				<span>{item.isRelic && `relic`}</span>
+				<span>{'itemType' in item && item.isRelic && `relic`}</span>
 				<span>
-					Magic load : {item.magicWeight ?? 0}
+					Magic load : {('itemType' in item && item.magicWeight) ?? 0}
 					<GiCursedStar className='dark:icon-stone-200 icon-md ml-1' />
 				</span>
 			</div>

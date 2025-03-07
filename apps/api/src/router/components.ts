@@ -1,5 +1,5 @@
-import { prisma } from '@api/prismaClient';
 import { ComponentSchema } from '@api/lib/ZodComponent';
+import { prisma } from '@api/prismaClient';
 import { procedure, router } from '@api/trpc';
 import { z } from 'zod';
 
@@ -75,10 +75,10 @@ export const componentsRouter = router({
 			});
 		}),
 	update: procedure.input(ComponentSchema).mutation(async ({ input }) => {
-		console.log('💌 updating component :', input.searchName);
+		const { id, ...component } = input;
 		return await prisma.component.update({
-			where: { searchName: input.searchName },
-			data: input,
+			where: { id: id },
+			data: component,
 		});
 	}),
 });

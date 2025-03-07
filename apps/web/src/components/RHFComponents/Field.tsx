@@ -20,9 +20,9 @@ export const Field = (props: {
 				: width === 'small'
 					? 'w-1/4'
 					: width === 'tiny'
-						? 'w-1/5'
+						? 'w-1/5 md:w-1/4'
 						: width === 'digit'
-							? 'w-1/6 md:w-1/12'
+							? 'w-1/6 md:w-1/4'
 							: 'w-11/12';
 	return (
 		<div className={`${widthClass} form-control self-center`}>

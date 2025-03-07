@@ -15,8 +15,16 @@ const ItemComponent = ({ items }: Props) => {
 			</h3>
 			<GiRollingDiceCup className='dark:icon-stone-200-2xl hover:icon-primary' />
 			<Collapsible title='see details'>
-				<ul className='flex flex-col items-center justify-start'>
-					{items?.map(item => <li key={item.id}>{item.name}</li>)}
+				<ul className='flex flex-col justify-start'>
+					{items?.map(item => (
+						<li
+							className={'flex flex-row justify-start gap-2'}
+							key={item.id}
+						>
+							<span>{item.quantity}x</span>
+							<span>{item.name}</span>
+						</li>
+					))}
 				</ul>
 			</Collapsible>
 		</div>

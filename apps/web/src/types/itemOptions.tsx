@@ -284,6 +284,13 @@ export const itemTypeOptions = [
 		label: 'Book',
 		value: 'book',
 	},
+];
+
+export const componentTypeOptions = [
+	{
+		label: 'Animal',
+		value: 'animal',
+	},
 	{
 		label: 'Plant',
 		value: 'plant',
@@ -295,6 +302,10 @@ export const itemTypeOptions = [
 	{
 		label: 'Ferment',
 		value: 'ferment',
+	},
+	{
+		label: 'Food',
+		value: 'food',
 	},
 	{
 		label: 'Spice',

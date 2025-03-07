@@ -1,37 +1,39 @@
 import { trpc } from '@/utils/trpc';
-import { useParams } from '@tanstack/react-router';
-import DescBlock from './Blocks/DescBlock';
-import NameBlock from './Blocks/NameBlock';
-import PropertiesBlock from './Blocks/PropertiesBlock';
-import ValueBlock from './Blocks/ValueBlock';
+import { useNavigate, useParams } from '@tanstack/react-router';
+import toast from 'react-hot-toast';
+import { BackButton } from '../Buttons';
+import ComponentModalBlock from './ComponentModalBlock';
+import ItemModalBlock from './ItemModalBlock';
 
 const ItemSingleShared = () => {
-	const { id } = useParams({ strict: false });
-	const itemById = trpc.items.getById.useQuery(id as string);
+	const { id, type } = useParams({ strict: false });
+	const navigate = useNavigate();
+
+	const itemById = trpc.items.getById.useQuery(id as string, {
+		enabled: type === 'item',
+	});
+	const componentById = trpc.components.getById.useQuery(id as string, {
+		enabled: type === 'component',
+	});
 	//Loading -----------------------------------------------------------------
-	if (itemById.isLoading && !itemById.data) {
-		return (
-			<div className='font-grenze flex h-screen flex-col items-center justify-center'>
-				<p>Loading item</p>
-				<span className='loading loading-dots loading-md'></span>
-			</div>
-		);
+	if (!id) {
+		toast.error('Cannot find item.');
+		history.go(-1);
 	}
+
 	// define item object data after query success
-	if (itemById.isSuccess && itemById.data) {
-		const item = itemById?.data;
-		return (
-			<div className='flex flex-col items-center'>
-				<div className='modal-box text-sm md:text-base dark:bg-stone-800'>
-					<NameBlock item={item} />
-					<DescBlock item={item} />
-					<div className='divider divider-neutral'></div>
-					<PropertiesBlock item={item} />
-					<ValueBlock item={item} />
-				</div>
-			</div>
-		);
-	}
+	const item = itemById.data;
+	const component = componentById.data;
+
+	return (
+		<div className='flex flex-col items-center'>
+			<BackButton onClick={() => navigate({ to: `/items` })} />
+			{type === 'item' && item && <ItemModalBlock item={item} />}
+			{type === 'component' && component && (
+				<ComponentModalBlock item={component} />
+			)}
+		</div>
+	);
 };
 
 export default ItemSingleShared;
