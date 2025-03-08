@@ -1,4 +1,3 @@
-import daisyui from 'daisyui';
 import icons from 'rocketicons/tailwind';
 import type { Config } from 'tailwindcss';
 
@@ -6,12 +5,12 @@ import sharedConfig from '@repo/tailwind-config';
 
 const config: Pick<
 	Config,
-	'content' | 'presets' | 'darkMode' | 'plugins' | 'theme' | 'daisyui'
+	'content' | 'presets' | 'darkMode' | 'plugins' | 'theme'
 > = {
 	content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
 	presets: [sharedConfig],
 	darkMode: ['media', 'class'],
-	plugins: [icons, daisyui, require('tailwindcss-animate')],
+	plugins: [icons, require('tailwindcss-animate')],
 	theme: {
 		extend: {
 			screen: {
@@ -115,19 +114,19 @@ const config: Pick<
 			},
 		},
 	},
-	daisyui: {
-		themes: [
-			{
-				mytheme: {
-					primary: '#c184fc',
-					secondary: '#5d2a65',
-					accent: '#9ACD32',
-					neutral: '#78716c',
-					'base-100': '#ffffff',
-				},
-			},
-		],
-	},
+	// daisyui: {
+	// 	themes: [
+	// 		{
+	// 			mytheme: {
+	// 				primary: '#c184fc',
+	// 				secondary: '#5d2a65',
+	// 				accent: '#9ACD32',
+	// 				neutral: '#78716c',
+	// 				'base-100': '#ffffff',
+	// 			},
+	// 		},
+	// 	],
+	// },
 };
 
 export default config;

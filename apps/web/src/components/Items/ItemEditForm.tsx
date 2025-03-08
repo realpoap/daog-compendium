@@ -175,6 +175,7 @@ const ItemEditForm = ({ id }: Props) => {
 			/>{' '}
 			<div className='my-2 flex gap-1'>
 				{item?.name !== undefined &&
+					item.name.length > 1 &&
 					nameArray.map((n, index) => (
 						<span
 							key={`${item?.id}-${n}`}
