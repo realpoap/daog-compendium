@@ -65,7 +65,10 @@ export const ItemSchema = z.object({
 	id: z.string(),
 	searchName: z.string(),
 	constraints: StatProfilSchema.nullable(),
-	name: z.string().array(),
+	name: z
+		.string()
+		.min(5, { message: 'Must be 5 or more characters long' })
+		.array(),
 	material: z.string(),
 	materialType: z.string(),
 	materialSubType: z.string().nullable().optional(),
@@ -74,7 +77,13 @@ export const ItemSchema = z.object({
 	quality: qualityTypeSchema,
 	rarity: raritySchema,
 	weight: z.number().nullable(),
-	value: z.number().nullable(),
+	value: z
+		.number({
+			required_error: 'Value is required',
+			invalid_type_error: 'Value must be a number',
+		})
+		.positive()
+		.nullable(),
 	valueWeight: z.number().nullable().optional(),
 	maxDurability: z.number().int().nullable().optional(),
 	durability: z.number().int().nullable().optional(),

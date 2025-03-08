@@ -103,7 +103,9 @@ const NewItemPage = () => {
 
 	useEffect(() => {
 		//UPDATE NAME ARRAY
-		if (nameArray[0] !== null) {
+		if (nameArray[0] !== null || nameArray[0] !== undefined) {
+			methods.setValue('name', nameArray);
+		} else {
 			methods.setValue('name', nameArray);
 		}
 		if (methods.getValues('isCritical') === undefined)
@@ -503,6 +505,8 @@ const NewItemPage = () => {
 										defaultValue={'common'}
 									/>
 								</Field>
+							</div>
+							<div className='flex w-full flex-col justify-start'>
 								<Field
 									name='description'
 									label='Description'
@@ -523,7 +527,7 @@ const NewItemPage = () => {
 								</Field>
 							</div>
 
-							<div className='ml-auto flex w-full flex-col justify-center md:flex-row'>
+							<div className='ml-auto flex w-full flex-col items-center justify-center md:flex-row'>
 								<Field
 									name='isFood'
 									label=''
