@@ -94,19 +94,6 @@ const SpellSearch = () => {
 		}
 	}, [debouncedSearch, items, selectedDomain, selectedLevel, selectedTarget]);
 
-	let prevScrollpos = window.scrollY;
-	window.onscroll = function () {
-		const currentScrollPos = window.scrollY;
-		if (prevScrollpos > currentScrollPos) {
-			document.getElementById('add-button')?.classList.add('opacity-1');
-			document.getElementById('add-button')?.classList.remove('opacity-0');
-		} else {
-			document.getElementById('add-button')?.classList.add('opacity-0');
-			document.getElementById('add-button')?.classList.remove('opacity-1');
-		}
-		prevScrollpos = currentScrollPos;
-	};
-
 	if (query.isLoading) {
 		return <SkeletonList />;
 	}
@@ -116,7 +103,7 @@ const SpellSearch = () => {
 	if (query.data) {
 		return (
 			<div className='mt-sm flex min-h-[100dvh] flex-col items-center p-2'>
-				<div className='container sticky top-10 z-10 flex min-h-[20dvh] flex-col items-center bg-gradient-to-b from-stone-100 from-80% dark:from-stone-800'>
+				<div className='container sticky top-10 z-10 flex min-h-[25dvh] flex-col items-center bg-gradient-to-b from-stone-100 from-80% dark:from-stone-800'>
 					<h1 className='font-grenze sticky mx-auto my-4 text-center text-6xl font-bold tracking-wide text-purple-900 md:mt-8 dark:text-purple-400'>
 						Spells
 						{query.data && <TitleCount number={query.data.length} />}
@@ -125,7 +112,7 @@ const SpellSearch = () => {
 						onChange={e => setSearch(e.target.value)}
 						placeholder='some strange wizardry...'
 						className={cn(
-							'font-grenze dark:text-primary dark:caret-primary dark:focus:border-primary dark:focus:ring-primary mb-4 w-60 rounded-lg border border-none p-1 pl-2 text-center text-lg text-purple-900 caret-purple-900 shadow-sm placeholder:italic placeholder:text-stone-500 focus:border-purple-900 focus:outline-none focus:ring-1 focus:ring-purple-900 dark:bg-stone-700',
+							'font-grenze dark:text-primary dark:caret-primary dark:focus:border-primary dark:focus:ring-primary text-secondary caret-secondary focus:border-secondary focus:ring-secondary rounded-lg border border-none p-1 pl-2 text-center text-lg shadow-sm placeholder:italic placeholder:text-stone-500 focus:outline-none focus:ring-1 md:w-1/2 dark:bg-stone-700',
 						)}
 						type='search'
 					/>
@@ -162,14 +149,14 @@ const SpellSearch = () => {
 						<Link
 							id='add-button'
 							to={'/spells/add'}
-							className='badge bg-accent z-20 mb-2 h-10 w-10 border-none shadow-md shadow-stone-900 transition-opacity duration-200'
+							className='badge bg-accent fixed bottom-4 z-20 my-2 h-10 w-10 border-none text-stone-900 shadow-md shadow-stone-900 transition-opacity duration-200'
 						>
-							<RiAddLine className='icon-white-2xl' />
+							<RiAddLine className='icon-stone-900-2xl' />
 						</Link>
 					)}
 				</div>
 
-				<div className='max-w-screen container z-0 flex snap-y snap-mandatory flex-col items-center justify-start overflow-hidden text-center'>
+				<div className='max-w-screen z-0 flex snap-y snap-mandatory flex-col items-center justify-start overflow-hidden text-center'>
 					{prunedItems.length === 0 && (
 						<div className='font-grenze flex flex-col items-center justify-center'>
 							<h3 className='text-4xl'>No spell found</h3>

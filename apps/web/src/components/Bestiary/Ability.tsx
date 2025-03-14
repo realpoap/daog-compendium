@@ -113,7 +113,7 @@ const Ability = ({
 					onTouchStart={openTooltip}
 					onTouchEnd={closeTooltip}
 					className={cn(
-						'badge badge-md font-cabin cursor-pointer border-none bg-purple-300 px-4 py-3 font-semibold shadow-sm',
+						'badge badge-md font-cabin bg-primary cursor-pointer border-none px-4 py-3 font-semibold text-stone-900 shadow-sm',
 						{
 							'hover:animate-shake': edit,
 							'transition-all': edit,
@@ -121,9 +121,9 @@ const Ability = ({
 							'hover:bg-stone-800': edit,
 							'hover:text-red-500': edit,
 							'hover:shadow-black': edit,
-							'hover:bg-purple-500': !edit,
+							'hover:bg-secondary': !edit,
 							'hover:font-bold': !edit,
-							'hover:text-purple-300': !edit,
+							'hover:text-stone-100': !edit,
 						},
 					)}
 					onClick={() => removeAttribute(name)}

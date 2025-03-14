@@ -22,7 +22,7 @@ import {
 	GiVibratingBall,
 } from 'rocketicons/gi';
 import { z } from 'zod';
-import { ActionButton } from '../Buttons';
+import { ActionButton, BackButton } from '../Buttons';
 
 type Spell = z.infer<typeof SpellSchema>;
 
@@ -57,23 +57,20 @@ const SpellDetails = () => {
 	return (
 		<div className='flex w-full flex-col justify-center'>
 			<div className='align-center flex flex-col items-center justify-center gap-2'>
-				<button
-					className='font-cabin mt-1 max-h-fit max-w-fit px-8 py-2 align-middle text-base uppercase text-stone-500 hover:text-stone-200'
+				<BackButton
 					onClick={() =>
 						navigate({
 							to: '/spells',
 						})
 					}
-				>
-					<span className='text-2xl'>&#8249;</span> Back
-				</button>
+				/>
 			</div>
 
 			<div className='top-20dvh sticky mt-4 flex flex-col items-center text-center'>
 				<div className='flex items-center justify-center'>
 					<div
 						className={cn(
-							`*:icon-stone-500 *z:0 z-10 flex size-12 flex-col items-center justify-center overflow-clip rounded-full border-2 border-stone-200 *:shadow-stone-800 *:drop-shadow-lg`,
+							'*:icon-stone-500 *:hover:icon-primary hover:border-primary hover:animate-wiggle flex size-12 items-center justify-center overflow-clip rounded-full border-2 border-stone-500 *:shadow-stone-800 *:drop-shadow-lg',
 							{
 								'*:icon-4xl *:mr-2': spell?.type === 'mouflette',
 								'*:icon-4xl *:-mt-2': spell?.type === 'blood',
@@ -84,7 +81,7 @@ const SpellDetails = () => {
 						{Icon}
 					</div>
 				</div>
-				<span className='text-md font-noto text-stone-400'>
+				<span className='text-md font-cabin text-stone-400'>
 					~ {spell?.number} ~
 				</span>
 				<div className='sticky top-10 w-full bg-stone-800 py-4'>
@@ -97,7 +94,7 @@ const SpellDetails = () => {
 					</h1>
 					<p
 						className={cn(
-							'font-noto text-lg font-bold tracking-wider text-purple-900 opacity-80 dark:text-purple-400',
+							'font-cabin dark:text-primary text-lg font-bold tracking-wider text-purple-900 opacity-80',
 						)}
 					>
 						{spell?.titleGlaise}
@@ -118,19 +115,19 @@ const SpellDetails = () => {
 								: ' creatures'}
 					{' //'}
 				</span>
-				<div className='font-noto my-4 flex w-full flex-row items-baseline justify-center align-baseline dark:text-stone-200'>
-					<span className='font-noto align-baseline text-sm font-semibold'>
-						<GiPolarStar className='icon-stone-900 dark:icon-stone-100 icon-md mr-1' />
+				<div className='font-cabin my-4 flex w-full flex-row items-baseline justify-center align-baseline dark:text-stone-200'>
+					<span className='font-cabin align-baseline text-sm font-semibold'>
+						<GiPolarStar className='icon-stone-900 dark:icon-stone-100 icon-base' />
 						{spell?.level}
 					</span>
 					<span className='text-md mx-2 align-baseline font-semibold'>|</span>
-					<span className='font-noto align-baseline text-sm font-semibold'>
-						<GiDrop className='icon-stone-900 dark:icon-stone-100 icon-md' />
+					<span className='font-cabin align-baseline text-sm font-semibold'>
+						<GiDrop className='icon-stone-900 dark:icon-stone-100 icon-base' />
 						{spell?.cost}
 					</span>
 					<span className='text-md mx-2 align-baseline font-semibold'>|</span>
-					<span className='text-md font-noto align-baseline font-semibold'>
-						<GiFairyWand className='icon-stone-900 dark:icon-stone-100 icon-md mr-1' />
+					<span className='text-md font-cabin align-baseline font-semibold'>
+						<GiFairyWand className='icon-stone-900 dark:icon-stone-100 icon-base' />
 						{spell?.difficulty}
 					</span>
 				</div>
@@ -143,42 +140,42 @@ const SpellDetails = () => {
 				</div>
 				<div
 					className={cn(
-						'font-noto text-md my-1 max-w-72 text-left text-justify text-stone-700 md:line-clamp-none md:max-w-xl md:text-center dark:text-stone-400',
+						'font-cabin text-md my-1 max-w-72 text-left text-justify text-stone-700 md:line-clamp-none md:max-w-xl md:text-center dark:text-stone-400',
 					)}
 				>
 					{spell?.description}
 				</div>
-				<div>
-					<span className='font-noto mr-2 align-baseline text-sm font-semibold'>
+				<div className='flex flex-row'>
+					<span className='font-cabin mr-2 align-baseline text-sm font-semibold'>
 						{spell?.casting === 'instant' ? (
-							<GiFlake className='icon-stone-400 icon-md' />
+							<GiFlake className='icon-stone-400 icon-base' />
 						) : spell?.casting === 'delayed' ? (
-							<GiVibratingBall className='icon-stone-400 icon-md' />
+							<GiVibratingBall className='icon-stone-400 icon-base' />
 						) : spell?.casting === 'ritual' ? (
-							<GiPentacle className='icon-stone-400 icon-md' />
+							<GiPentacle className='icon-stone-400 icon-base' />
 						) : spell?.casting === 'concentration' ? (
-							<GiSheikahEye className='icon-stone-400 icon-md' />
+							<GiSheikahEye className='icon-stone-400 icon-base' />
 						) : spell?.casting === 'upkeep' ? (
-							<GiStarCycle className='icon-stone-400 icon-md' />
+							<GiStarCycle className='icon-stone-400 icon-base' />
 						) : (
 							''
 						)}
 					</span>
-					<span className='font-noto mr-2 align-baseline text-sm font-semibold'>
+					<span className='font-cabin mr-2 align-baseline text-sm font-semibold'>
 						{spell?.targetType === 'random' ? (
-							<GiCardRandom className='icon-stone-400 icon-md' />
+							<GiCardRandom className='icon-stone-400 icon-base' />
 						) : spell?.targetType === 'single' ? (
-							<GiPerson className='icon-stone-400 icon-md' />
+							<GiPerson className='icon-stone-400 icon-base' />
 						) : spell?.targetType === 'multiple' ? (
-							<GiBackup className='icon-stone-400 icon-md' />
+							<GiBackup className='icon-stone-400 icon-base' />
 						) : spell?.targetType === 'self' ? (
-							<GiCharacter className='icon-stone-400 icon-md' />
+							<GiCharacter className='icon-stone-400 icon-base' />
 						) : (
 							''
 						)}
 					</span>
 				</div>
-				<div className='font-noto text-wider my-4 flex flex-col gap-1 align-baseline text-sm font-medium'>
+				<div className='font-cabin text-wider my-4 flex flex-col gap-1 align-baseline text-sm font-medium'>
 					{spell?.duration && (
 						<div>
 							<p className='font-grenze text-xl tracking-wide text-purple-400'>
@@ -212,14 +209,14 @@ const SpellDetails = () => {
 						</div>
 					)}
 				</div>
-				<div className='light:text-stone-900 dark:text-stone-200'>
-					<span className='align-baseline text-base font-semibold'>
-						<GiSwordWound className='icon-stone-900 dark:icon-stone-100 icon-md mr-2' />
+				<div className='flex flex-row text-stone-900 dark:text-stone-200'>
+					<span className='flex flex-row align-baseline text-base font-semibold'>
+						<GiSwordWound className='icon-stone-900 dark:icon-stone-100 icon-base mr-2' />
 						{spell?.damages || '~'}
 					</span>
 					<span className='mx-4 align-baseline text-sm font-semibold'>|</span>
-					<span className='font-noto align-baseline text-base font-semibold'>
-						<GiHeartPlus className='icon-stone-900 dark:icon-stone-100 icon-md mr-2' />
+					<span className='font-cabin flex flex-row align-baseline text-base font-semibold'>
+						<GiHeartPlus className='icon-stone-900 dark:icon-stone-100 icon-base mr-2' />
 						{spell?.heal || '~'}
 					</span>
 				</div>

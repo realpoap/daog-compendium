@@ -8,7 +8,7 @@ type Props = {
 
 const CreatureComponentBlock = ({ components }: Props) => {
 	return (
-		<div className='my-4 flex w-full flex-col items-center justify-center gap-2 px-2'>
+		<div className='card flex w-full flex-col items-center justify-center gap-2 rounded-lg bg-stone-700 p-2'>
 			<div className='flex flex-row items-center gap-2'>
 				<h3 className='font-grenze text-4xl font-semibold tracking-wider'>
 					Scavenge

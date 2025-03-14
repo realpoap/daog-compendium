@@ -202,14 +202,14 @@ const ItemsSearch = () => {
 					<Link
 						id='add-button'
 						to={'/items/add'}
-						className='badge bg-accent fixed bottom-4 z-20 my-2 h-10 w-10 border-none shadow-md shadow-stone-900 transition-opacity duration-200'
+						className='badge bg-accent fixed bottom-4 z-20 my-2 h-10 w-10 border-none text-stone-900 shadow-md shadow-stone-900 transition-opacity duration-200'
 					>
-						<RiAddLine className='icon-white-2xl' />
+						<RiAddLine className='icon-stone-900-2xl' />
 					</Link>
 				)}
 			</div>
 			<div className='mx-6 overflow-x-auto md:mx-0'>
-				<table className='table-xs md:table-sm hover mx-0 table whitespace-normal border-stone-500 px-0'>
+				<table className='table-xs md:table-sm mx-0 table whitespace-normal border-stone-500 px-0'>
 					<thead>
 						<tr className='font-grenze w-full border-stone-500 text-lg dark:text-stone-200'>
 							<th>Name</th>
