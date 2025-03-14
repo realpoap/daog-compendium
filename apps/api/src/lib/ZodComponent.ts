@@ -37,7 +37,10 @@ export const ComponentSchema = z.object({
 	habitat: HabitatTypeSchema.array(),
 	id: z.string(),
 	searchName: z.string(),
-	name: z.string().array(),
+	name: z
+		.string()
+		.min(5, { message: 'Must be 5 or more characters long' })
+		.array(),
 	componentType: z.string(),
 	isFood: z.boolean().nullable(),
 	scienceName: z.string(),

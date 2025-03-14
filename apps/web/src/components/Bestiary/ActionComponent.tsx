@@ -19,7 +19,7 @@ const ActionComponent = ({
 	creatureName,
 }: ActionComponentProps) => {
 	return (
-		<div className='my-4 flex h-fit w-full flex-col items-center justify-start gap-2 px-2'>
+		<div className='my-4 flex w-full flex-col items-center justify-start gap-2 px-2'>
 			<h3 className='font-grenze text-4xl font-semibold tracking-wider'>
 				Actions
 			</h3>

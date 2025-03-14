@@ -44,17 +44,19 @@ const ValueBlock = ({ item }: Props) => {
 					selling it.
 				</span>
 			)}
-			<div className='flex w-full flex-row items-center justify-between'>
-				<div>
+			<div className='flex w-full flex-col items-start md:flex-row md:items-center md:justify-between md:gap-2'>
+				<div className='flex w-fit flex-row items-end justify-start gap-1'>
 					<span>Market value : </span>
 					{item.value && Math.floor(item?.value / 100)}{' '}
 					<GiTwoCoins className='icon-goldenrod-300 icon-xs md:icon-sm w-fit' />{' '}
 					{item.value && item?.value % 100}{' '}
 					<GiTwoCoins className='icon-stone-300 icon-xs md:icon-sm w-fit' />
 				</div>
-				{'itemType' in item && <TbSwitchHorizontal className='icon-neutral' />}
 				{'itemType' in item && (
-					<div>
+					<TbSwitchHorizontal className='icon-neutral icon-base rotate-90 md:rotate-0' />
+				)}
+				{'itemType' in item && (
+					<div className='flex w-fit flex-row items-end justify-end gap-1'>
 						Reselling for : {sellPrice && Math.floor(sellPrice / 100)}{' '}
 						<GiTwoCoins className='icon-goldenrod-300 icon-xs md:icon-sm w-fit' />{' '}
 						{sellPrice && sellPrice % 100}{' '}
@@ -63,14 +65,14 @@ const ValueBlock = ({ item }: Props) => {
 				)}
 			</div>
 			<div className='items-top flex flex-col justify-center'>
-				<span>
+				<span className='flex flex-row items-center gap-2'>
 					Weight : {item.weight}{' '}
 					<GiWeight className='dark:icon-stone-200 icon-sm' />
 				</span>
 
-				<span>
+				<span className='flex flex-row items-center gap-2'>
 					Magic load : {('itemType' in item && item.magicWeight) ?? 0}
-					<GiCursedStar className='dark:icon-stone-200 icon-md ml-1' />
+					<GiCursedStar className='dark:icon-stone-200 icon-sm ml-1' />
 				</span>
 			</div>
 		</div>

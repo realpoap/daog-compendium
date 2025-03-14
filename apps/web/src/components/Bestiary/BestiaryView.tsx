@@ -143,7 +143,7 @@ const BestiaryView = () => {
 
 	return (
 		<div className='mt-sm flex h-[100dvh] flex-col items-center p-2'>
-			<div className='container sticky top-8 z-10 flex flex-col items-center bg-gradient-to-b from-stone-100 from-80% pb-8 dark:from-stone-800'>
+			<div className='h-content container sticky top-8 z-10 flex min-h-[25dvh] flex-col items-center bg-gradient-to-b from-stone-100 from-80% pb-8 dark:from-stone-800'>
 				<h1 className='font-grenze dark:text-primary text-secondary sticky z-10 mx-auto my-4 text-center text-6xl font-bold tracking-wide md:mt-8'>
 					Bestiary
 					{getAllCreatures.data && (
@@ -154,71 +154,73 @@ const BestiaryView = () => {
 					onChange={e => setSearch(e.target.value)}
 					placeholder='a curious monster...'
 					className={cn(
-						'font-grenze dark:text-primary dark:caret-primary dark:focus:border-primary dark:focus:ring-primary text-secondary caret-secondary focus:border-secondary focus:ring-secondary mb-4 w-60 rounded-lg border border-none p-1 pl-2 text-center text-lg shadow-sm placeholder:italic placeholder:text-stone-500 focus:outline-none focus:ring-1 dark:bg-stone-700',
+						'font-grenze dark:text-primary dark:caret-primary dark:focus:border-primary dark:focus:ring-primary text-secondary caret-secondary focus:border-secondary focus:ring-secondary rounded-lg border border-none p-1 pl-2 text-center text-lg shadow-sm placeholder:italic placeholder:text-stone-500 focus:outline-none focus:ring-1 md:w-1/2 dark:bg-stone-700',
 					)}
 					type='search'
 				/>
 
 				<Collapsible title='filter results'>
-					<div className='flex w-full flex-col items-center justify-start gap-1 md:flex-row md:items-start md:justify-center'>
-						{/* FILTER FOR HABITATS */}
-						<SelectFilter
-							value={selectedHabitat}
-							options={creatureHabitatOptions}
-							onChange={o => setSelectedHabitat(o)}
-							placeholder='Habitats'
-							isMulti
-						/>
-						{/* FILTER FOR TYPES */}
-						<SelectFilter
-							value={selectedType}
-							options={creatureTypeOptions}
-							onChange={o => setSelectedType(o)}
-							placeholder='Types'
-							isMulti
-						/>
-					</div>
-					<div className='flex flex-row gap-4'>
-						<label className='font-grenze mb-4 flex w-4/5 flex-row items-center justify-center gap-2 px-4 text-center text-stone-500 md:w-1/2'>
-							<input
-								type='checkbox'
-								defaultChecked
-								className='checkbox checkbox-xs checkbox-primary'
-								checked={selectedMundane}
-								onChange={() => setSelectedMundane(prev => !prev)}
+					<div className='flex- container m-4 flex-col items-center bg-stone-100 shadow-lg md:w-1/2 dark:bg-stone-800'>
+						<div className='flex w-full flex-col items-center justify-start gap-1 md:flex-row md:items-start md:justify-center'>
+							{/* FILTER FOR HABITATS */}
+							<SelectFilter
+								value={selectedHabitat}
+								options={creatureHabitatOptions}
+								onChange={o => setSelectedHabitat(o)}
+								placeholder='Habitats'
+								isMulti
 							/>
-							<span>Mundane</span>
-						</label>
-						<label className='font-grenze mb-4 flex w-4/5 flex-row items-center justify-center gap-2 px-4 text-center text-stone-500 md:w-1/2'>
-							<input
-								type='checkbox'
-								defaultChecked
-								className='checkbox checkbox-xs checkbox-primary'
-								checked={selectedLegendary}
-								onChange={() => setSelectedLegendary(prev => !prev)}
+							{/* FILTER FOR TYPES */}
+							<SelectFilter
+								value={selectedType}
+								options={creatureTypeOptions}
+								onChange={o => setSelectedType(o)}
+								placeholder='Types'
+								isMulti
 							/>
-							<span>Legendary</span>
-						</label>
-					</div>
-					<div className='mb-4 flex w-3/5 flex-col items-center justify-start gap-1 md:justify-center'>
-						<label className='font-grenze text-cemter w-full px-4 text-stone-500'>
-							<div className='flex flex-row justify-between'>
-								<span>Max Level</span>
-								<span className='text-primary font-cabin text-sm'>
-									{selectedMaxLevel}
-								</span>
-							</div>
-							<input
-								type='range'
-								min={rangeLevel.min}
-								max={rangeLevel.max}
-								value={selectedMaxLevel}
-								defaultValue={rangeLevel.max}
-								step='5'
-								onChange={e => setSelectedMaxLevel(Number(e.target.value))}
-								className='range range-primary rounded-xs h-2'
-							/>
-						</label>
+						</div>
+						<div className='flex flex-row gap-4'>
+							<label className='font-grenze mb-4 flex w-4/5 flex-row items-center justify-center gap-2 px-4 text-center text-stone-500 md:w-1/2'>
+								<input
+									type='checkbox'
+									defaultChecked
+									className='checkbox checkbox-xs checkbox-primary'
+									checked={selectedMundane}
+									onChange={() => setSelectedMundane(prev => !prev)}
+								/>
+								<span>Mundane</span>
+							</label>
+							<label className='font-grenze mb-4 flex w-4/5 flex-row items-center justify-center gap-2 px-4 text-center text-stone-500 md:w-1/2'>
+								<input
+									type='checkbox'
+									defaultChecked
+									className='checkbox checkbox-xs checkbox-primary'
+									checked={selectedLegendary}
+									onChange={() => setSelectedLegendary(prev => !prev)}
+								/>
+								<span>Legendary</span>
+							</label>
+						</div>
+						<div className='mb-4 flex w-3/5 flex-col items-center justify-start gap-1 md:justify-center'>
+							<label className='font-grenze text-cemter w-full px-4 text-stone-500'>
+								<div className='flex flex-row justify-between'>
+									<span>Max Level</span>
+									<span className='text-primary font-cabin text-sm'>
+										{selectedMaxLevel}
+									</span>
+								</div>
+								<input
+									type='range'
+									min={rangeLevel.min}
+									max={rangeLevel.max}
+									value={selectedMaxLevel}
+									defaultValue={rangeLevel.max}
+									step='5'
+									onChange={e => setSelectedMaxLevel(Number(e.target.value))}
+									className='range range-primary rounded-xs h-2'
+								/>
+							</label>
+						</div>
 					</div>
 				</Collapsible>
 
@@ -226,9 +228,9 @@ const BestiaryView = () => {
 					<Link
 						id='add-button'
 						to={'/bestiary/add'}
-						className='badge bg-accent z-20 my-2 h-10 w-10 border-none shadow-md shadow-stone-900 transition-opacity duration-200'
+						className='badge bg-accent fixed bottom-4 z-20 my-2 h-10 w-10 border-none text-stone-900 shadow-md shadow-stone-900 transition-opacity duration-200'
 					>
-						<RiAddLine className='icon-white-2xl' />
+						<RiAddLine className='icon-stone-900-2xl' />
 					</Link>
 				)}
 			</div>

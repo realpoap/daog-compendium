@@ -29,6 +29,12 @@ function Index() {
 	const creatureLatest = trpc.creatures.getLatest.useQuery(undefined, {
 		enabled: isOnline === true,
 	});
+	const itemCount = trpc.items.getTotal.useQuery(undefined, {
+		enabled: isOnline === true,
+	});
+	const componentCount = trpc.components.getTotal.useQuery(undefined, {
+		enabled: isOnline === true,
+	});
 
 	if (!isOnline)
 		return (
@@ -51,13 +57,13 @@ function Index() {
 
 	if (user && !isAuthLoading) {
 		return (
-			<div className='flex h-fit w-full flex-col items-center justify-start'>
+			<div className='flex h-fit w-full flex-col items-center justify-start px-4'>
 				<h1 className='font-grenze py-4 text-center text-4xl'>
 					Welcome {capitalizeFirstLetter(user?.name)} !
 				</h1>
 
-				<section className='flex w-full flex-row justify-around gap-4 p-4 md:flex-row md:justify-center'>
-					<div className='stats h-5/12 w-full shadow md:h-1/4 md:w-1/2 dark:bg-stone-700'>
+				<section className='flex w-full flex-row flex-wrap justify-around gap-4 p-4 md:flex-row md:justify-center'>
+					<div className='stats h-5/12 w-full rounded-xl shadow md:h-1/4 md:w-5/12 dark:bg-stone-700'>
 						<div className='stat flex flex-col justify-start gap-1 p-4'>
 							<div className='stat-title dark:text-purple-200'>Spell count</div>
 							<div className='stat-value font-grenze text-primary pb-2 text-4xl md:text-6xl'>
@@ -71,7 +77,7 @@ function Index() {
 							</div>
 						</div>
 					</div>
-					<div className='stats h-5/12 w-full shadow md:h-1/4 md:w-1/2 dark:bg-stone-700'>
+					<div className='stats h-5/12 w-full rounded-xl shadow md:h-1/4 md:w-5/12 dark:bg-stone-700'>
 						<div className='stat flex flex-col justify-start gap-1 p-4'>
 							<div className='stat-title dark:text-purple-200'>
 								Creature count
@@ -84,6 +90,24 @@ function Index() {
 								<span className='font-grenze text-primary text-lg md:text-xl'>
 									{creatureLatest?.data?.name}{' '}
 								</span>
+							</div>
+						</div>
+					</div>
+					<div className='stats h-5/12 w-full rounded-xl shadow md:h-1/4 md:w-5/12 dark:bg-stone-700'>
+						<div className='stat flex flex-col justify-start gap-1 p-4 md:flex-row md:justify-between'>
+							<div>
+								<div className='stat-title dark:text-purple-200'>Items</div>
+								<div className='stat-value font-grenze text-primary pb-2 text-4xl md:text-6xl'>
+									{itemCount?.data?.name}
+								</div>
+							</div>
+							<div>
+								<div className='stat-title dark:text-purple-200'>
+									Components
+								</div>
+								<div className='stat-value font-grenze text-primary pb-2 text-4xl md:text-6xl'>
+									{componentCount?.data?.name}
+								</div>
 							</div>
 						</div>
 					</div>
