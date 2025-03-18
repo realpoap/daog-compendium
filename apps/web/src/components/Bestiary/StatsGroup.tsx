@@ -12,19 +12,19 @@ const StatsGroup = ({ text, inputs }: Props) => {
 		<table className='table-xs font-cabin m-0 table w-1/2 border-separate p-0'>
 			<thead className='text-center font-bold dark:text-stone-200'>
 				{text ? (
-					<tr className='mb-0 border border-b-2 border-stone-500 text-center text-sm'>
+					<tr className='border-neutral border-1 mb-0 text-center text-sm'>
 						<td
 							colSpan={3}
-							className='font-grenze p-0 tracking-wider text-stone-500'
+							className='font-grenze text-neutral p-0 text-base tracking-wider'
 						>
 							{text}
 						</td>
 					</tr>
 				) : null}
-				<tr className='text-primary text-sm tracking-wider'>
+				<tr className='text-primary text-sm'>
 					{titles.map((t, i) => (
 						<th
-							className='p-0 px-1'
+							className='p-0 px-0'
 							key={`${text}-${i}`}
 						>
 							{t}
@@ -36,7 +36,7 @@ const StatsGroup = ({ text, inputs }: Props) => {
 				<tr className='text-center'>
 					{values.map((v, i) => (
 						<th
-							className='border-spacing-1 rounded-md px-1 text-base font-light hover:bg-stone-500'
+							className='hover:bg-tile border-spacing-1 rounded-md px-1 text-base font-light'
 							key={`${text}-${i}`}
 						>
 							{v}

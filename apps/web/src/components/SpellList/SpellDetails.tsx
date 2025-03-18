@@ -55,7 +55,7 @@ const SpellDetails = () => {
 	}
 
 	return (
-		<div className='flex w-full flex-col justify-center'>
+		<div className='flex w-full flex-col justify-center px-8'>
 			<div className='align-center flex flex-col items-center justify-center gap-2'>
 				<BackButton
 					onClick={() =>
@@ -66,11 +66,11 @@ const SpellDetails = () => {
 				/>
 			</div>
 
-			<div className='top-20dvh sticky mt-4 flex flex-col items-center text-center'>
-				<div className='flex items-center justify-center'>
+			<div className='top-20dvh card sticky mt-4 flex flex-col items-center gap-2 rounded-xl bg-stone-800 p-2 text-center'>
+				<div className='mt-2 flex items-center justify-center'>
 					<div
 						className={cn(
-							'*:icon-stone-500 *:hover:icon-primary hover:border-primary hover:animate-wiggle flex size-12 items-center justify-center overflow-clip rounded-full border-2 border-stone-500 *:shadow-stone-800 *:drop-shadow-lg',
+							'*:icon-stone-500 hover:*:icon-primary hover:border-primary hover:animate-wiggle *:shadow-background flex size-12 items-center justify-center overflow-clip rounded-full border-2 border-stone-500 *:drop-shadow-lg',
 							{
 								'*:icon-4xl *:mr-2': spell?.type === 'mouflette',
 								'*:icon-4xl *:-mt-2': spell?.type === 'blood',
@@ -81,10 +81,10 @@ const SpellDetails = () => {
 						{Icon}
 					</div>
 				</div>
-				<span className='text-md font-cabin text-stone-400'>
+				<span className='text-md font-cabin text-neutral-content'>
 					~ {spell?.number} ~
 				</span>
-				<div className='sticky top-10 w-full bg-stone-800 py-4'>
+				<div className='w-full'>
 					<h1
 						className={cn(
 							'font-grenze text-primary text-wrap text-5xl font-extrabold tracking-wider',
@@ -94,16 +94,16 @@ const SpellDetails = () => {
 					</h1>
 					<p
 						className={cn(
-							'font-cabin dark:text-primary text-lg font-bold tracking-wider text-purple-900 opacity-80',
+							'font-cabin dark:text-primary text-secondary text-lg font-bold tracking-wider opacity-80',
 						)}
 					>
 						{spell?.titleGlaise}
 					</p>
 				</div>
-				<span className='font-grenze mr-1 align-baseline text-2xl font-semibold capitalize tracking-wider dark:text-stone-200'>
+				<span className='font-grenze dark:text-base-content mr-1 align-baseline text-2xl font-semibold capitalize tracking-wider'>
 					{spell?.type}
 				</span>
-				<span className='font-cabin align-baseline text-sm font-light italic dark:text-stone-400'>
+				<span className='font-cabin dark:text-neutral-content align-baseline text-sm font-light italic'>
 					{'//'} {spell?.casting} spell to {spell?.action}{' '}
 					{spell?.targetType !== 'none' && spell?.targetType}
 					{spell?.targetType === 'none'
@@ -115,7 +115,7 @@ const SpellDetails = () => {
 								: ' creatures'}
 					{' //'}
 				</span>
-				<div className='font-cabin my-4 flex w-full flex-row items-baseline justify-center align-baseline dark:text-stone-200'>
+				<div className='font-cabin dark:text-base-content my-4 flex w-full flex-row items-baseline justify-center align-baseline'>
 					<span className='font-cabin align-baseline text-sm font-semibold'>
 						<GiPolarStar className='icon-stone-900 dark:icon-stone-100 icon-base' />
 						{spell?.level}

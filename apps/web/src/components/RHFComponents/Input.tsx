@@ -23,7 +23,7 @@ export const Input = ({
 		<>
 			<input
 				className={cn(
-					'disabled:glass font-cabin autofill:font-cabin text-primary caret-secondary focus:border-secondary focus:ring-secondary dark:text-primary dark:caret-primary dark:focus:border-primary dark:focus:ring-primary text-md w-full rounded-md px-2 py-1 shadow-sm placeholder:italic focus:outline-none focus:ring-1 disabled:text-stone-800 dark:bg-stone-700 dark:placeholder:text-stone-400 autofill:dark:bg-stone-700 dark:active:bg-stone-700',
+					'disabled:glass font-cabin autofill:font-cabin text-primary caret-secondary focus:border-secondary focus:ring-secondary dark:text-primary dark:caret-primary dark:focus:border-primary dark:focus:ring-primary text-md dark:placeholder:text-neutral w-full rounded-md px-2 py-1 shadow-sm placeholder:italic focus:outline-none focus:ring-1 disabled:text-stone-800 dark:bg-stone-700 autofill:dark:bg-stone-700 dark:active:bg-stone-700',
 					{
 						'select-error': errors[name],
 						'ring-error': errors[name],

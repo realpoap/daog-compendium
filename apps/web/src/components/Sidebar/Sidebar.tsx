@@ -31,7 +31,7 @@ const Sidebar = () => {
 
 	return (
 		<header className='sticky top-0 z-50 h-fit'>
-			<section className='font-grenze dark:bg-base-200 mx-auto flex w-full flex-row items-center justify-between gap-4 bg-stone-100 p-2 shadow-md shadow-stone-900'>
+			<section className='font-grenze dark:bg-card mx-auto flex w-full flex-row items-center justify-between gap-4 bg-stone-100 p-2 shadow-md shadow-stone-900'>
 				<div className='w-content flex flex-row items-center justify-start gap-2'>
 					<h1 className='text-2xl font-bold tracking-wider dark:text-stone-100'>
 						<Link
@@ -75,20 +75,20 @@ const Sidebar = () => {
 					onClick={toggleMenu}
 					className='cursor-pointer'
 				>
-					<BiMenu className='icon-stone-900 dark:icon-stone-100 icon-2xl' />
+					<BiMenu className='icon-background dark:icon-stone-200 icon-2xl' />
 				</button>
 			</section>
 			<section
 				onClick={toggleMenu}
 				id='mobile-menu'
-				className={`${open ? 'flex' : 'hidden'} fixed top-0 h-screen w-screen origin-top flex-col justify-center overflow-hidden overflow-y-scroll overscroll-y-none bg-purple-900 text-5xl text-stone-100`}
+				className={`${open ? 'flex' : 'hidden'} bg-primary fixed top-0 h-screen w-screen flex-col justify-center overflow-hidden overflow-y-scroll overscroll-y-none text-5xl text-stone-200`}
 			>
 				<button className='font-grenze fixed top-2 self-end px-6 text-6xl'>
 					&times;
 				</button>
 				<nav
 					aria-label='mobile'
-					className='font-grenze font-semi-bold z-50 flex h-screen flex-1 flex-col items-center justify-center gap-6 py-8'
+					className='font-grenze font-semi-bold *:hover:text-card z-50 flex h-screen flex-1 flex-col items-center justify-center gap-6 py-8'
 				>
 					<Nav />
 					{user && (
@@ -97,7 +97,7 @@ const Sidebar = () => {
 							onClick={logout}
 							className='cursor-pointer'
 						>
-							<BiLogOut className='icon-stone-900 dark:icon-stone-100 icon-2xl' />
+							<BiLogOut className='icon-background hover:icon-card dark:icon-stone-200 icon-4xl' />
 						</button>
 					)}
 					{!user && (
@@ -106,7 +106,7 @@ const Sidebar = () => {
 							onClick={goToHome}
 							className='cursor-pointer'
 						>
-							<BiLogIn className='icon-stone-900 dark:icon-stone-100 icon-2xl' />
+							<BiLogIn className='icon-background hover:icon-card dark:icon-stone-200 icon-4xl' />
 						</button>
 					)}
 				</nav>

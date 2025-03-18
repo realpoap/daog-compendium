@@ -10,7 +10,7 @@ type Props = {
 
 const MonsterStatsCard = ({ monster }: Props) => {
 	return (
-		<div className='card flex w-full flex-col items-center gap-2 rounded-lg bg-stone-700 p-2'>
+		<div className='card bg-card flex w-full flex-col items-center gap-2 rounded-lg p-2'>
 			<h3 className='font-grenze text-4xl font-semibold tracking-wider'>
 				Stats
 			</h3>

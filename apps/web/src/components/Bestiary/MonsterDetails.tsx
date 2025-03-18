@@ -83,7 +83,7 @@ const MonsterDetails = () => {
 	const monster = monsterById.data;
 
 	return (
-		<div className='item-center flex h-[100dvh] w-full flex-col items-center p-4 md:w-1/2'>
+		<div className='flex w-full flex-col items-center p-8'>
 			<div className='align-center flex flex-col items-center justify-center gap-4'>
 				<BackButton
 					onClick={() =>
@@ -92,9 +92,9 @@ const MonsterDetails = () => {
 						})
 					}
 				/>
-				<div className='card indicator w-full items-center gap-2 rounded-xl bg-stone-700 p-2'>
+				<div className='card indicator bg-card w-full items-center gap-2 rounded-xl p-2'>
 					{monster?.isBoss && (
-						<span className='indicator-item badge badge-lg indicator bg-goldenrod-500 glass absolute top-2 size-7 animate-bounce content-center items-center rounded-full border-0 p-0 shadow-sm shadow-stone-900'>
+						<span className='indicator-item badge badge-lg indicator bg-pirategold glass absolute top-2 size-7 animate-bounce content-center items-center rounded-full border-0 p-0 shadow-sm shadow-stone-900'>
 							<GiCrownedSkull className='dark:icon-stone-800 icon-sm align-center absolute m-0 p-0' />
 						</span>
 					)}
@@ -107,7 +107,7 @@ const MonsterDetails = () => {
 								<div className='mt-1 flex flex-col items-center justify-center'>
 									<div
 										className={cn(
-											'*:icon-stone-500 *:hover:icon-primary hover:border-primary hover:animate-wiggle flex size-12 items-center justify-center overflow-clip rounded-full border-2 border-stone-500 *:shadow-stone-800 *:drop-shadow-lg',
+											'*:icon-stone-500 hover:*:icon-primary hover:border-primary hover:animate-wiggle flex size-12 items-center justify-center overflow-clip rounded-full border-2 border-stone-500 *:shadow-stone-800 *:drop-shadow-lg',
 											{
 												'*:icon-5xl *:mt-1': monster?.type === 'wyrm',
 												'*:icon-6xl *:mr-1 *:mt-2': monster?.type === 'fae',
@@ -129,7 +129,7 @@ const MonsterDetails = () => {
 										{ 'animate-shake': monster?.level && monster?.level > 30 },
 									)}
 								>
-									<GiRoundStar className='icon-7xl icon-primary relative inline-block shadow-lg shadow-stone-800' />
+									<GiRoundStar className='icon-7xl icon-primary shadow-background relative inline-block *:shadow-lg' />
 									<span className='font-grenze absolute top-[0.85rem] z-20 inline-block text-xl font-bold dark:text-stone-800'>
 										{monster?.level}
 									</span>
@@ -250,7 +250,7 @@ const MonsterDetails = () => {
 				{monster && <MonsterStatsCard monster={monster} />}
 
 				{monster?.magicDomain.length !== 0 && (
-					<div className='card flex w-full flex-col items-center justify-center rounded-lg bg-stone-700 p-2'>
+					<div className='card bg-card flex w-full flex-col items-center justify-center rounded-lg p-2'>
 						<h3 className='font-grenze line mb-1 border-b-2 text-4xl font-semibold tracking-wider'>
 							Spells
 						</h3>
@@ -262,7 +262,7 @@ const MonsterDetails = () => {
 						</ul>
 					</div>
 				)}
-				<div className='card w-full rounded-lg bg-stone-700 p-2'>
+				<div className='card bg-card w-full rounded-lg p-2'>
 					<ActionComponent
 						actionList={monster?.actionList as ActionList}
 						actions={actions}

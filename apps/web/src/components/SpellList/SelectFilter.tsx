@@ -58,19 +58,19 @@ const SelectFilter = ({
 			onClick={() => setIsOpen(prev => !prev)}
 			onBlur={() => setIsOpen(false)}
 			tabIndex={0}
-			className='font-cabin focus:border-primary m-1 flex w-fit flex-col items-start justify-start gap-2 rounded-lg border-stone-200 bg-stone-700 px-2 shadow-lg outline-none'
+			className='font-cabin active:border-primary active:border-1 focus:border-1 focus:border-primary bg-tile m-1 flex w-fit flex-col items-start justify-start gap-2 rounded-lg border-stone-200 px-2 shadow-lg outline-none'
 		>
-			<div className='w-full'>
+			<div className='w-full flex-col items-center'>
 				<div className='flex h-fit w-full flex-row items-center justify-stretch gap-2'>
-					<span className='flex flex-1 overflow-hidden'>
+					<span className='flex flex-1 overflow-scroll'>
 						{isMulti
 							? value.length === 0 && (
-									<span className='font-grenze text-lg text-stone-500'>
+									<span className='font-grenze text-neutral-content text-lg'>
 										{placeholder}
 									</span>
 								)
 							: value === null && (
-									<span className='font-grenze text-lg text-stone-500'>
+									<span className='font-grenze text-neutral-content text-lg'>
 										{placeholder}
 									</span>
 								)}
@@ -78,7 +78,7 @@ const SelectFilter = ({
 							? value.map(v => (
 									<button
 										key={`btn-${v.value}`}
-										className='btn btn-sm btn-ghost hover:animate-shake hover:bg-stone-900 hover:text-red-500'
+										className='btn btn-sm btn-ghost hover:animate-shake hover:bg-background hover:text-error'
 										onClick={e => {
 											e.stopPropagation();
 											selectOption(v);
@@ -94,45 +94,48 @@ const SelectFilter = ({
 							e.stopPropagation();
 							clearOptions();
 						}}
-						className='hover:text-primary cursor-pointer bg-none p-0 text-3xl text-stone-500'
+						className='hover:text-primary text-neutral-content cursor-pointer bg-none p-0 text-3xl'
 					>
 						&times;
 					</button>
 					<div className='divider divider-horizontal m-0 w-1 rounded'></div>
 
-					<span className='hover:text-primary mt-1 cursor-pointer bg-none p-0 text-2xl text-stone-500'>
+					<span className='hover:text-primary text-neutral-content mt-1 cursor-pointer bg-none p-0 text-2xl'>
 						&#9662;
 					</span>
 				</div>
-				<ul
-					className={cn(
-						`h-42 z-50 flex w-full list-none flex-col flex-wrap rounded-lg bg-stone-700`,
-						{
-							hidden: !isOpen,
-						},
-					)}
+				<div
+					className={cn('flex flex-col items-center', {
+						hidden: !isOpen,
+					})}
 				>
-					{options.map(o => (
-						<li
-							onClick={e => {
-								e.stopPropagation();
-								selectOption(o);
-								setIsOpen(false);
-							}}
-							className={cn(
-								'w-full cursor-pointer rounded-md p-1 hover:bg-stone-500',
-								{
-									hidden: isMulti
-										? value.includes(o)
-										: value?.value === o.value,
-								},
-							)}
-							key={o.value}
-						>
-							{o.label}
-						</li>
-					))}
-				</ul>
+					<ul
+						className={cn(
+							`shadow-background h-34 bg-tile align-center absolute z-50 mx-4 mt-2 flex w-full list-none flex-col flex-wrap items-center justify-start rounded-lg p-2 shadow-lg *:m-0 md:w-1/2`,
+						)}
+					>
+						{options.map(o => (
+							<li
+								onClick={e => {
+									e.stopPropagation();
+									selectOption(o);
+									setIsOpen(false);
+								}}
+								className={cn(
+									'hover:bg-primary hover:text-background w-fit cursor-pointer rounded-md px-2',
+									{
+										hidden: isMulti
+											? value.includes(o)
+											: value?.value === o.value,
+									},
+								)}
+								key={o.value}
+							>
+								{o.label}
+							</li>
+						))}
+					</ul>
+				</div>
 			</div>
 		</div>
 	);

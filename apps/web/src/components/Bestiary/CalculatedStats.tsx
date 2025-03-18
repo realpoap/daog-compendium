@@ -72,7 +72,7 @@ const CalculatedStats = ({ monster }: Props) => {
 		<>
 			<button>
 				<GiRollingDiceCup
-					className='icon-2xl dark:icon-stone-200 hover:icon-primary mt-4 hover:shadow-stone-900 hover:drop-shadow-lg'
+					className='icon-2xl dark:icon-stone-200 hover:icon-primary hover:shadow-background mt-4 hover:drop-shadow-lg'
 					onClick={() => {
 						stopTimer();
 						const avantage = calcSizeAvantage(monster);
@@ -82,10 +82,10 @@ const CalculatedStats = ({ monster }: Props) => {
 					}}
 				/>
 			</button>
-			<div className='font-cabin ml-4 flex w-full list-none flex-col items-start justify-center gap-2 px-8 text-base font-semibold md:w-1/2 md:flex-row'>
+			<div className='font-cabin ml-4 flex w-full list-none flex-col items-start justify-center gap-2 px-4 text-base font-semibold md:flex-row'>
 				<div className='flex w-full justify-center gap-2 space-x-2 md:w-1/2 md:justify-start'>
 					<span className='flex w-1/4 items-center justify-between after:pl-2 after:text-stone-500 after:content-["|"]'>
-						<GiThunderSkull className='icon-stone-900 dark:icon-stone-200 icon-base mr-2' />
+						<GiThunderSkull className='icon-background dark:icon-stone-200 icon-base mr-2' />
 						{monster?.initiative ? (
 							<RolledStat
 								rolledStat={rolledInit}
@@ -97,7 +97,7 @@ const CalculatedStats = ({ monster }: Props) => {
 						)}
 					</span>
 					<span className='flex w-1/4 items-center justify-between after:pl-2 after:text-stone-500 after:content-["|"]'>
-						<GiSwordWound className='icon-stone-900 dark:icon-stone-200 icon-base mr-2' />
+						<GiSwordWound className='icon-background dark:icon-stone-200 icon-base mr-2' />
 						{monster?.attack ? (
 							<RolledStat
 								rolledStat={rolledAttack}
@@ -110,7 +110,7 @@ const CalculatedStats = ({ monster }: Props) => {
 					</span>
 
 					<span className='flex w-1/4 items-center justify-between after:pl-2 after:text-stone-500 after:content-["|"]'>
-						<GiCheckedShield className='icon-stone-900 dark:icon-stone-200 mr-2 size-[1.1rem]' />
+						<GiCheckedShield className='icon-background dark:icon-stone-200 mr-2 size-[1.1rem]' />
 						{monster?.defense ? (
 							<RolledStat
 								rolledStat={rolledDefense}
@@ -122,13 +122,13 @@ const CalculatedStats = ({ monster }: Props) => {
 						)}
 					</span>
 					<span className='flex w-1/4 items-center justify-between after:pl-2 after:text-stone-500 md:after:text-stone-500 md:after:content-["|"]'>
-						<GiArmorVest className='icon-stone-900 dark:icon-stone-200 mr-2 size-[1.1rem]' />
+						<GiArmorVest className='icon-background dark:icon-stone-200 mr-2 size-[1.1rem]' />
 						{monster?.armor || '~'}
 					</span>
 				</div>
 				<div className='flex w-full items-center justify-center gap-2 space-x-2 md:w-1/2 md:justify-start'>
 					<span className='flex w-1/4 items-center justify-between after:pl-2 after:text-stone-500 after:content-["|"]'>
-						<GiBullseye className='icon-stone-900 dark:icon-stone-200 icon-base mr-2' />
+						<GiBullseye className='icon-background dark:icon-stone-200 icon-base mr-2' />
 						{monster?.ranged ? (
 							<RolledStat
 								rolledStat={rolledRanged}
@@ -140,7 +140,7 @@ const CalculatedStats = ({ monster }: Props) => {
 						)}
 					</span>
 					<span className='flex w-1/4 items-center justify-between after:pl-2 after:text-stone-500 after:content-["|"]'>
-						<GiSemiClosedEye className='icon-stone-900 dark:icon-stone-200 icon-sm mr-2' />
+						<GiSemiClosedEye className='icon-background dark:icon-stone-200 icon-sm mr-2' />
 						{monster?.perception ? (
 							<RolledStat
 								rolledStat={rolledPerception}
@@ -152,7 +152,7 @@ const CalculatedStats = ({ monster }: Props) => {
 						)}
 					</span>
 					<span className='flex w-1/4 items-center justify-between after:pl-2 after:text-stone-500 after:content-["|"]'>
-						<GiHood className='icon-stone-900 dark:icon-stone-200 icon-base mr-2' />
+						<GiHood className='icon-background dark:icon-stone-200 icon-base mr-2' />
 						{monster?.discretion ? (
 							<RolledStat
 								rolledStat={rolledDiscretion}
@@ -164,7 +164,7 @@ const CalculatedStats = ({ monster }: Props) => {
 						)}
 					</span>
 					<span className='flex w-1/4 items-center justify-between after:pl-2 after:text-transparent after:content-["|"]'>
-						<GiFairyWand className='icon-stone-900 dark:icon-stone-200 icon-sm max-w-1/6 mr-2' />
+						<GiFairyWand className='icon-background dark:icon-stone-200 mr-2 size-4' />
 						{monster?.magic || '~'}
 					</span>
 				</div>

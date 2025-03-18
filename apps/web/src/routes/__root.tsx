@@ -6,7 +6,7 @@ export const Route = createRootRoute({
 	component: () => (
 		<div
 			className={cn(
-				'h-[100dvh] overflow-y-scroll bg-stone-100 text-stone-900 dark:bg-stone-800 dark:text-stone-200',
+				'dark:bg-background h-[100dvh] overflow-y-scroll bg-stone-100 text-stone-900 dark:text-stone-200',
 			)}
 		>
 			<Sidebar />

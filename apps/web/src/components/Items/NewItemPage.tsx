@@ -23,7 +23,7 @@ import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { RiAddLine } from 'rocketicons/ri';
-import { SubmitButton } from '../Buttons';
+import { SmallCircleButton, SubmitButton } from '../Buttons';
 import Collapsible from '../Collapsible';
 import {
 	Checkbox,
@@ -176,13 +176,15 @@ const NewItemPage = () => {
 			<TitleBack title='New item' />
 			{/* RADIO TYPE */}
 			<>
-				<legend className='font-grenze text-neutral text-2xl'>
+				<legend className='font-grenze text-neutral mb-2 text-2xl'>
 					Select the type of item
 				</legend>
-				<div className='flex flex-row items-center'>
-					<div className='modal-box flex w-full flex-col items-center bg-stone-700'>
+				<div className='flex w-full flex-row items-center gap-2 md:w-1/2'>
+					<div className='card flex w-full flex-col items-center rounded-xl bg-stone-700 p-2'>
 						<input
-							className={cn('label checkbox checkbox-primary cursor-pointer')}
+							className={cn(
+								'label checkbox checkbox-primary peer cursor-pointer',
+							)}
 							defaultChecked={false}
 							type='radio'
 							value={'item'}
@@ -197,9 +199,11 @@ const NewItemPage = () => {
 							Item
 						</label>
 					</div>
-					<div className='modal-box flex w-full flex-col items-center overflow-hidden bg-stone-700'>
+					<div className='card flex w-full flex-col items-center rounded-xl bg-stone-700 p-2'>
 						<input
-							className={cn('label checkbox checkbox-primary cursor-pointer')}
+							className={cn(
+								'label checkbox checkbox-primary peer cursor-pointer',
+							)}
 							defaultChecked={false}
 							type='radio'
 							value={'component'}
@@ -240,7 +244,12 @@ const NewItemPage = () => {
 								<input
 									id='addNameInput'
 									className={cn(
-										'disabled:glass font-cabin autofill:font-cabin text-primary caret-secondary focus:border-secondary focus:ring-secondary dark:text-primary dark:caret-primary dark:focus:border-primary dark:focus:ring-primary text-md w-full rounded-md px-2 py-1 shadow-sm placeholder:italic focus:outline-none focus:ring-1 disabled:text-stone-800 dark:bg-stone-700 dark:placeholder:text-stone-400 autofill:dark:bg-stone-700 dark:active:bg-stone-700',
+										'disabled:glass input font-cabin autofill:font-cabin text-primary caret-secondary focus:border-secondary focus:ring-secondary dark:text-primary dark:caret-primary dark:focus:border-primary dark:focus:ring-primary text-md dark:placeholder:text-neutral-content w-full rounded-md px-2 py-1 shadow-sm placeholder:italic focus:outline-none focus:ring-1 disabled:text-stone-800 dark:bg-stone-700 autofill:dark:bg-stone-700 dark:active:bg-stone-700',
+										{
+											'select-error': methods.formState.errors['name'],
+											'ring-error': methods.formState.errors['name'],
+											'ring-1': methods.formState.errors['name'],
+										},
 									)}
 									placeholder={'You can add several names'}
 									onKeyDown={handleKeyDown}
@@ -248,14 +257,17 @@ const NewItemPage = () => {
 									value={nameField}
 									onChange={e => setNameField(e.target.value)}
 								/>
-								<button
-									className='btn btn-circle btn-accent btn-xs'
-									onClick={addName}
-								>
+
+								<SmallCircleButton onClick={addName}>
 									<RiAddLine className='icon-stone-800-sm' />
-								</button>
+								</SmallCircleButton>
 							</div>
 						</label>
+						{methods.formState.errors['name'] && (
+							<p className='text-error font-cabin pt-1 text-sm italic'>
+								You must enter at least one name
+							</p>
+						)}
 						<Field
 							name='itemType'
 							label='Type'
@@ -624,7 +636,12 @@ const NewItemPage = () => {
 								<input
 									id='addNameInput'
 									className={cn(
-										'disabled:glass font-cabin autofill:font-cabin text-primary caret-secondary focus:border-secondary focus:ring-secondary dark:text-primary dark:caret-primary dark:focus:border-primary dark:focus:ring-primary text-md w-full rounded-md px-2 py-1 shadow-sm placeholder:italic focus:outline-none focus:ring-1 disabled:text-stone-800 dark:bg-stone-700 dark:placeholder:text-stone-400 autofill:dark:bg-stone-700 dark:active:bg-stone-700',
+										'disabled:glass input font-cabin autofill:font-cabin text-primary caret-secondary focus:border-secondary focus:ring-secondary dark:text-primary dark:caret-primary dark:focus:border-primary dark:focus:ring-primary text-md dark:placeholder:text-neutral-content w-full rounded-md px-2 py-1 shadow-sm placeholder:italic focus:outline-none focus:ring-1 disabled:text-stone-800 dark:bg-stone-700 autofill:dark:bg-stone-700 dark:active:bg-stone-700',
+										{
+											'select-error': methods2.formState.errors['name'],
+											'ring-error': methods2.formState.errors['name'],
+											'ring-1': methods2.formState.errors['name'],
+										},
 									)}
 									placeholder={'You can add several names'}
 									onKeyDown={handleKeyDown}
@@ -640,6 +657,11 @@ const NewItemPage = () => {
 								</button>
 							</div>
 						</label>
+						{methods2.formState.errors['name'] && (
+							<p className='text-error font-cabin pt-1 text-sm italic'>
+								You must enter at least one name
+							</p>
+						)}
 						<Field
 							name='scienceName'
 							label='Scientific Name'
@@ -730,12 +752,16 @@ const NewItemPage = () => {
 								</div>
 							)}
 						</Collapsible>
-						<div className='flex flex-col items-center gap-2 md:flex-row'>
-							<fieldset className='fieldset'>
-								<legend className='fieldset-legend font-grenze text-neutral text-2xl'>
+						<fieldset className='fieldset mb-4 flex flex-col items-center md:items-center'>
+							<div className='flex flex-col'>
+								<legend className='font-grenze text-neutral text-2xl'>
 									Usages :
 								</legend>
-
+								<p className='font-cabin text-neutral'>
+									Check all that applies
+								</p>
+							</div>
+							<div className='-ml-16 flex flex-col items-start gap-0 md:ml-0 md:flex-row md:items-center md:gap-4'>
 								<Field
 									name='uses.ointment'
 									label=''
@@ -776,11 +802,8 @@ const NewItemPage = () => {
 										label='Catalyst'
 									/>
 								</Field>
-								<p className='fieldset-label font-cabin text-neutral'>
-									Check all that applies
-								</p>
-							</fieldset>
-						</div>
+							</div>
+						</fieldset>
 
 						<div className='flex w-full flex-row justify-center gap-x-4 align-baseline'>
 							<Field
