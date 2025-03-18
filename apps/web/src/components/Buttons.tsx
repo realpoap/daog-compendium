@@ -25,7 +25,7 @@ export const ActionButton = ({
 			disabled={isLoading ? isLoading : false}
 			onClick={onClick}
 			className={cn(
-				`badge badge-lg bg-${color} font-cabin m-y-2 disabled:bg-${color} disabled:hover:glass disabled:hover:bg-${color} mt-8 flex cursor-pointer flex-col items-center justify-center self-center rounded-full px-4 py-2 text-sm font-bold uppercase md:text-base text-${textColor} align-middle transition-all duration-100 hover:ring-2 hover:ring-stone-200 disabled:opacity-100 disabled:hover:ring-0`,
+				`badge badge-lg bg-${color} font-cabin m-y-2 relative disabled:bg-${color} disabled:glass disabled:hover:bg-${color} mt-8 flex cursor-pointer flex-col items-center justify-center self-center rounded-full px-4 py-2 text-sm font-bold uppercase md:text-base text-${textColor} align-middle transition-all duration-100 before:absolute before:inset-0 before:rounded-[inherit] before:bg-[linear-gradient(45deg,transparent_25%,theme(colors.white/.5)_50%,transparent_75%,transparent_100%)] before:bg-[length:250%_250%,100%_100%] before:bg-[position:200%_0,0_0] before:bg-no-repeat before:[transition:background-position_0s_ease] hover:before:bg-[position:-100%_0,0_0] hover:before:duration-[800ms] focus:ring-2 focus:ring-stone-200 disabled:opacity-100 disabled:hover:ring-0 dark:before:bg-[linear-gradient(45deg,transparent_25%,theme(colors.white)_50%,transparent_75%,transparent_100%)]`,
 			)}
 		>
 			{children}
@@ -119,7 +119,7 @@ export const SmallCircleButton = ({
 	return (
 		<button
 			className={cn(
-				`btn-sm btn-circle bg-accent font-cabin z-20 flex flex-col items-center justify-center self-center text-stone-900 shadow-sm shadow-stone-900 transition-all duration-100 hover:ring-2 hover:ring-stone-200`,
+				`btn-sm btn-circle bg-accent font-cabin relative z-20 flex cursor-pointer flex-col items-center justify-center self-center text-stone-900 shadow-sm shadow-stone-900 transition-all duration-100 before:absolute before:inset-0 before:rounded-[inherit] before:bg-[linear-gradient(45deg,transparent_25%,theme(colors.white/.5)_50%,transparent_75%,transparent_100%)] before:bg-[length:250%_250%,100%_100%] before:bg-[position:200%_0,0_0] before:bg-no-repeat before:[transition:background-position_0s_ease] hover:before:bg-[position:-100%_0,0_0] hover:before:duration-[800ms] focus:ring-2 focus:ring-stone-200 dark:before:bg-[linear-gradient(45deg,transparent_25%,theme(colors.white)_50%,transparent_75%,transparent_100%)]`,
 				color,
 			)}
 			onClick={onClick}
@@ -136,7 +136,7 @@ export const BackButton = ({
 }) => {
 	return (
 		<button
-			className='badge font-cabin mt-4 flex items-center justify-center border-none bg-stone-500 pl-0 align-middle text-base uppercase text-stone-800 hover:bg-stone-200'
+			className='badge badge-sm font-cabin mt-4 flex flex-row items-center justify-center border-none bg-stone-500 pl-1 align-middle text-xs uppercase text-stone-800 hover:bg-stone-200'
 			onClick={onClick}
 		>
 			<FiChevronLeft className='icon-stone-800-sm' /> Back

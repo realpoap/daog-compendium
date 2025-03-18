@@ -15,6 +15,8 @@ const ItemModalBlock = ({ item }: Props) => {
 			<DescBlock item={item} />
 			<div className='divider divider-neutral'></div>
 			<PropertiesBlock item={item} />
+			<div className='divider divider-neutral'></div>
+
 			<ValueBlock item={item} />
 		</>
 	);

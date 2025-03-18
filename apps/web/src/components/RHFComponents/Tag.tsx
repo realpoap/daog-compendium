@@ -31,7 +31,7 @@ export const Tag = ({ name, id, placeholder, type, setTags, tags }: Props) => {
 	return (
 		<div
 			className={cn(
-				'font-cabin text-secondary caret-secondary focus:border-secondary focus:ring-secondary dark:text-primary dark:caret-primary dark:focus:border-primary dark:focus:ring-primary flex w-full flex-row flex-wrap items-center gap-2 rounded-lg p-2 shadow-sm placeholder:italic focus:outline-none focus:ring-1 md:text-lg dark:bg-stone-700 dark:placeholder:text-stone-400',
+				'font-cabin text-secondary caret-secondary focus:border-secondary focus:ring-secondary dark:text-primary dark:caret-primary dark:focus:border-primary dark:focus:ring-primary dark:placeholder:text-neutral flex w-full flex-row flex-wrap items-center gap-2 rounded-lg p-2 shadow-sm placeholder:italic focus:outline-none focus:ring-1 md:text-lg dark:bg-stone-700',
 				{
 					'select-error': errors[name],
 					'ring-error': errors[name],

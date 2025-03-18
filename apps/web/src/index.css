@@ -12,101 +12,32 @@
 
 @config "../tailwind.config.js";
 
-@plugin "daisyui/theme" {
-	name: 'daog-dark';
-	default: true;
-	prefersdark: true;
-	color-scheme: 'dark';
-
-	--color-base-100: oklch(21% 0.006 56.043);
-	--color-base-200: oklch(26% 0.007 34.298);
-	--color-base-300: oklch(37% 0.01 67.558);
-	--color-base-content: oklch(97% 0.001 106.424);
-	--color-primary: oklch(72.27% 0.177 305.91);
-	--color-primary-content: oklch(21% 0.006 56.043);
-	--color-secondary: oklch(40% 0.17 325.612);
-	--color-secondary-content: oklch(94% 0.028 342.258);
-	--color-accent: oklch(78.485% 0.18374 126.64);
-	--color-accent-content: oklch(21% 0.006 56.043);
-	--color-neutral: oklch(44% 0.011 73.639);
-	--color-neutral-content: oklch(97% 0.001 106.424);
-	--color-info: oklch(58% 0.233 277.117);
-	--color-info-content: oklch(21% 0.006 56.043);
-	--color-success: oklch(72% 0.219 149.579);
-	--color-success-content: oklch(21% 0.006 56.043);
-	--color-warning: oklch(76% 0.188 70.08);
-	--color-warning-content: oklch(21% 0.006 56.043);
-	--color-error: oklch(63% 0.237 25.331);
-	--color-error-content: oklch(21% 0.006 56.043);
-	--btn-text-case: 'uppercase';
-	--radius-selector: 2rem;
-	--radius-field: 1rem;
-	--radius-box: 2rem;
-	--size-selector: 0.21875rem;
-	--size-field: 0.21875rem;
-	--border: 1px;
-	--depth: 1;
-	--noise: 1;
-}
-
-@plugin "daisyui/theme" {
-	name: 'daog-light';
-	default: false;
-	prefersdark: false;
-	color-scheme: 'light';
-	--color-base-100: oklch(98% 0.001 106.423);
-	--color-base-200: oklch(97% 0.001 106.424);
-	--color-base-300: oklch(92% 0.003 48.717);
-	--color-base-content: oklch(21% 0.006 56.043);
-	--color-primary: oklch(71% 0.203 305.504);
-	--color-primary-content: oklch(98% 0.001 106.423);
-	--color-secondary: oklch(40% 0.17 325.612);
-	--color-secondary-content: oklch(97% 0.014 343.198);
-	--color-accent: oklch(84% 0.238 128.85);
-	--color-accent-content: oklch(21% 0.006 56.043);
-	--color-neutral: oklch(86% 0.005 56.366);
-	--color-neutral-content: oklch(21% 0.006 56.043);
-	--color-info: oklch(58% 0.233 277.117);
-	--color-info-content: oklch(21% 0.006 56.043);
-	--color-success: oklch(72% 0.219 149.579);
-	--color-success-content: oklch(21% 0.006 56.043);
-	--color-warning: oklch(76% 0.188 70.08);
-	--color-warning-content: oklch(21% 0.006 56.043);
-	--color-error: oklch(63% 0.237 25.331);
-	--color-error-content: oklch(21% 0.006 56.043);
-	--radius-selector: 2rem;
-	--radius-field: 1rem;
-	--radius-box: 2rem;
-	--size-selector: 0.21875rem;
-	--size-field: 0.21875rem;
-	--border: 1px;
-	--depth: 1;
-	--noise: 1;
-}
-
 @theme {
 	--font-grenze: 'Grenze', 'serif';
 	--font-cabin: 'Cabin', 'sans-serif';
-	--color-base-100: oklch(21% 0.006 56.043);
-	--color-base-200: oklch(26% 0.007 34.298);
-	--color-base-300: oklch(37% 0.01 67.558);
+	--color-background: oklch(21% 0.006 56.043);
+	--color-card: oklch(26% 0.007 34.298);
+	--color-tile: oklch(37% 0.01 67.558);
+	--color-greyish: oklch(71.37% 0.0192 261.32);
 	--color-base-content: oklch(97% 0.001 106.424);
-	--color-primary: oklch(71% 0.203 305.504);
+	--color-primary: oklch(70.7% 0.19701077968484998 306.62917069511036);
 	--color-primary-content: oklch(21% 0.006 56.043);
 	--color-secondary: oklch(40% 0.17 325.612);
 	--color-secondary-content: oklch(94% 0.028 342.258);
 	--color-accent: oklch(78.485% 0.18374 126.64);
 	--color-accent-content: oklch(21% 0.006 56.043);
 	--color-neutral: oklch(44% 0.011 73.639);
-	--color-neutral-content: oklch(97% 0.001 106.424);
-	--color-info: oklch(58% 0.233 277.117);
+	--color-neutral-content: oklch(71.61% 0.0091 56.26);
+	--color-info: oklch(68.01% 0.1583 276.93);
 	--color-info-content: oklch(21% 0.006 56.043);
 	--color-success: oklch(72% 0.219 149.579);
 	--color-success-content: oklch(21% 0.006 56.043);
-	--color-warning: oklch(76% 0.188 70.08);
+	--color-warning: oklch(73.14% 0.18259476626871804 50.63107616167181);
 	--color-warning-content: oklch(21% 0.006 56.043);
-	--color-error: oklch(63% 0.237 25.331);
+	--color-error: oklch(63.68% 0.2078 25.33);
 	--color-error-content: oklch(21% 0.006 56.043);
+	--color-pirategold: oklch(74.93% 0.1556 72.22);
+	--color-iron: oklch(85.46% 0 233.66);
 	--btn-text-case: 'uppercase';
 	--radius-selector: 2rem;
 	--radius-field: 1rem;

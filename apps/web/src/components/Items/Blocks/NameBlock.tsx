@@ -36,13 +36,13 @@ const NameBlock = ({ item }: Props) => {
 				className={cn(
 					'font-grenze flex flex-row justify-between text-4xl font-bold',
 					{
-						'text-gray-500 dark:text-gray-500':
+						'text-greyish dark:text-greyish':
 							'quality' in item && item.quality === 'poor',
-						'text-teal-500 dark:text-teal-500':
+						'text-info dark:text-info':
 							'rarity' in item && item.rarity === 'unusual',
 						'dark:text-accent text-accent':
 							'rarity' in item && item.rarity === 'rare',
-						'text-orange-500 dark:text-orange-500':
+						'text-warning dark:text-warning':
 							'rarity' in item && item.rarity === 'fabled',
 					},
 				)}
@@ -50,7 +50,7 @@ const NameBlock = ({ item }: Props) => {
 				<span>
 					{item.name[0] !== undefined && capitalizeFirstLetter(item?.name[0])}{' '}
 					{'itemType' in item && item.isRelic && (
-						<GiPolarStar className='icon-md icon-stone-200 relative -top-2 animate-pulse' />
+						<GiPolarStar className='icon-base icon-stone-200 indicator -top-2 animate-pulse' />
 					)}
 				</span>
 				<div>
@@ -58,14 +58,14 @@ const NameBlock = ({ item }: Props) => {
 						item?.itemType === 'weapon' &&
 						item.rangeType === 'close' && (
 							<GiSwordWound
-								className={cn('icon-stone-200-xl', {
+								className={cn('icon-stone-200-2xl mt-2', {
 									'icon-gray-500 dark:icon-gray-500':
 										'quality' in item && item.quality === 'poor',
-									'icon-teal-500 dark:icon-teal-500':
+									'icon-info dark:icon-info':
 										'rarity' in item && item.rarity === 'unusual',
 									'dark:icon-accent icon-accent':
 										'rarity' in item && item.rarity === 'rare',
-									'icon-orange-500 dark:icon-orange-500':
+									'icon-warning dark:icon-warning':
 										'rarity' in item && item.rarity === 'fabled',
 								})}
 							/>
@@ -74,252 +74,252 @@ const NameBlock = ({ item }: Props) => {
 						item?.itemType === 'weapon' &&
 						item.rangeType !== 'close' && (
 							<GiBullseye
-								className={cn('icon-stone-200-xl', {
+								className={cn('icon-stone-200-2xl mt-2', {
 									'icon-gray-500 dark:icon-gray-500':
 										'quality' in item && item.quality === 'poor',
-									'icon-teal-500 dark:icon-teal-500':
+									'icon-info dark:icon-info':
 										'rarity' in item && item.rarity === 'unusual',
 									'dark:icon-accent icon-accent':
 										'rarity' in item && item.rarity === 'rare',
-									'icon-orange-500 dark:icon-orange-500':
+									'icon-warning dark:icon-warning':
 										'rarity' in item && item.rarity === 'fabled',
 								})}
 							/>
 						)}
 					{'itemType' in item && item?.itemType === 'armor' && (
 						<GiArmorVest
-							className={cn('icon-stone-200-xl', {
+							className={cn('icon-stone-200-2xl mt-2', {
 								'icon-gray-500 dark:icon-gray-500':
 									'quality' in item && item.quality === 'poor',
-								'icon-teal-500 dark:icon-teal-500':
+								'icon-info dark:icon-info':
 									'rarity' in item && item.rarity === 'unusual',
 								'dark:icon-accent icon-accent':
 									'rarity' in item && item.rarity === 'rare',
-								'icon-orange-500 dark:icon-orange-500':
+								'icon-warning dark:icon-warning':
 									'rarity' in item && item.rarity === 'fabled',
 							})}
 						/>
 					)}
 					{'itemType' in item && item?.itemType === 'shield' && (
 						<GiCheckedShield
-							className={cn('icon-stone-200-xl', {
+							className={cn('icon-stone-200-2xl mt-2', {
 								'icon-gray-500 dark:icon-gray-500':
 									'quality' in item && item.quality === 'poor',
-								'icon-teal-500 dark:icon-teal-500':
+								'icon-info dark:icon-info':
 									'rarity' in item && item.rarity === 'unusual',
 								'dark:icon-accent icon-accent':
 									'rarity' in item && item.rarity === 'rare',
-								'icon-orange-500 dark:icon-orange-500':
+								'icon-warning dark:icon-warning':
 									'rarity' in item && item.rarity === 'fabled',
 							})}
 						/>
 					)}
 					{'itemType' in item && item?.itemType === 'trinket' && (
 						<GiJeweledChalice
-							className={cn('icon-stone-200-xl', {
+							className={cn('icon-stone-200-2xl mt-2', {
 								'icon-gray-500 dark:icon-gray-500':
 									'quality' in item && item.quality === 'poor',
-								'icon-teal-500 dark:icon-teal-500':
+								'icon-info dark:icon-info':
 									'rarity' in item && item.rarity === 'unusual',
 								'dark:icon-accent icon-accent':
 									'rarity' in item && item.rarity === 'rare',
-								'icon-orange-500 dark:icon-orange-500':
+								'icon-warning dark:icon-warning':
 									'rarity' in item && item.rarity === 'fabled',
 							})}
 						/>
 					)}
 					{'itemType' in item && item?.itemType === 'jewel' && (
 						<GiGemPendant
-							className={cn('icon-stone-200-xl', {
+							className={cn('icon-stone-200-2xl mt-2', {
 								'icon-gray-500 dark:icon-gray-500':
 									'quality' in item && item.quality === 'poor',
-								'icon-teal-500 dark:icon-teal-500':
+								'icon-info dark:icon-info':
 									'rarity' in item && item.rarity === 'unusual',
 								'dark:icon-accent icon-accent':
 									'rarity' in item && item.rarity === 'rare',
-								'icon-orange-500 dark:icon-orange-500':
+								'icon-warning dark:icon-warning':
 									'rarity' in item && item.rarity === 'fabled',
 							})}
 						/>
 					)}
 					{'itemType' in item && item?.itemType === 'garnment' && (
 						<GiPoncho
-							className={cn('icon-stone-200-xl', {
+							className={cn('icon-stone-200-2xl mt-2', {
 								'icon-gray-500 dark:icon-gray-500':
 									'quality' in item && item.quality === 'poor',
-								'icon-teal-500 dark:icon-teal-500':
+								'icon-info dark:icon-info':
 									'rarity' in item && item.rarity === 'unusual',
 								'dark:icon-accent icon-accent':
 									'rarity' in item && item.rarity === 'rare',
-								'icon-orange-500 dark:icon-orange-500':
+								'icon-warning dark:icon-warning':
 									'rarity' in item && item.rarity === 'fabled',
 							})}
 						/>
 					)}
 					{'itemType' in item && item?.itemType === 'junk' && (
 						<GiBrokenBottle
-							className={cn('icon-stone-200-xl', {
+							className={cn('icon-stone-200-2xl mt-2', {
 								'icon-gray-500 dark:icon-gray-500':
 									'quality' in item && item.quality === 'poor',
-								'icon-teal-500 dark:icon-teal-500':
+								'icon-info dark:icon-info':
 									'rarity' in item && item.rarity === 'unusual',
 								'dark:icon-accent icon-accent':
 									'rarity' in item && item.rarity === 'rare',
-								'icon-orange-500 dark:icon-orange-500':
+								'icon-warning dark:icon-warning':
 									'rarity' in item && item.rarity === 'fabled',
 							})}
 						/>
 					)}
 					{'itemType' in item && item?.itemType === 'book' && (
 						<GiWhiteBook
-							className={cn('icon-stone-200-xl', {
+							className={cn('icon-stone-200-2xl mt-2', {
 								'icon-gray-500 dark:icon-gray-500':
 									'quality' in item && item.quality === 'poor',
-								'icon-teal-500 dark:icon-teal-500':
+								'icon-info dark:icon-info':
 									'rarity' in item && item.rarity === 'unusual',
 								'dark:icon-accent icon-accent':
 									'rarity' in item && item.rarity === 'rare',
-								'icon-orange-500 dark:icon-orange-500':
+								'icon-warning dark:icon-warning':
 									'rarity' in item && item.rarity === 'fabled',
 							})}
 						/>
 					)}
 					{'itemType' in item && item?.itemType === 'accessory' && (
 						<GiRopeCoil
-							className={cn('icon-stone-200-xl', {
+							className={cn('icon-stone-200-2xl mt-2', {
 								'icon-gray-500 dark:icon-gray-500':
 									'quality' in item && item.quality === 'poor',
-								'icon-teal-500 dark:icon-teal-500':
+								'icon-info dark:icon-info':
 									'rarity' in item && item.rarity === 'unusual',
 								'dark:icon-accent icon-accent':
 									'rarity' in item && item.rarity === 'rare',
-								'icon-orange-500 dark:icon-orange-500':
+								'icon-warning dark:icon-warning':
 									'rarity' in item && item.rarity === 'fabled',
 							})}
 						/>
 					)}
 					{'itemType' in item && item?.itemType === 'ammunition' && (
 						<GiArrowCluster
-							className={cn('icon-stone-200-xl', {
+							className={cn('icon-stone-200-2xl mt-2', {
 								'icon-gray-500 dark:icon-gray-500':
 									'quality' in item && item.quality === 'poor',
-								'icon-teal-500 dark:icon-teal-500':
+								'icon-info dark:icon-info':
 									'rarity' in item && item.rarity === 'unusual',
 								'dark:icon-accent icon-accent':
 									'rarity' in item && item.rarity === 'rare',
-								'icon-orange-500 dark:icon-orange-500':
+								'icon-warning dark:icon-warning':
 									'rarity' in item && item.rarity === 'fabled',
 							})}
 						/>
 					)}
 					{'itemType' in item && item?.itemType === 'potion' && (
 						<GiPotionBall
-							className={cn('icon-stone-200-xl', {
+							className={cn('icon-stone-200-2xl mt-2', {
 								'icon-gray-500 dark:icon-gray-500':
 									'quality' in item && item.quality === 'poor',
-								'icon-teal-500 dark:icon-teal-500':
+								'icon-info dark:icon-info':
 									'rarity' in item && item.rarity === 'unusual',
 								'dark:icon-accent icon-accent':
 									'rarity' in item && item.rarity === 'rare',
-								'icon-orange-500 dark:icon-orange-500':
+								'icon-warning dark:icon-warning':
 									'rarity' in item && item.rarity === 'fabled',
 							})}
 						/>
 					)}
 					{'itemType' in item && item?.itemType === 'food' && (
 						<GiChickenLeg
-							className={cn('icon-stone-200-xl', {
+							className={cn('icon-stone-200-2xl mt-2', {
 								'icon-gray-500 dark:icon-gray-500':
 									'quality' in item && item.quality === 'poor',
-								'icon-teal-500 dark:icon-teal-500':
+								'icon-info dark:icon-info':
 									'rarity' in item && item.rarity === 'unusual',
 								'dark:icon-accent icon-accent':
 									'rarity' in item && item.rarity === 'rare',
-								'icon-orange-500 dark:icon-orange-500':
+								'icon-warning dark:icon-warning':
 									'rarity' in item && item.rarity === 'fabled',
 							})}
 						/>
 					)}
 					{'componentType' in item && item?.componentType === 'fungus' && (
 						<GiMushroomGills
-							className={cn('icon-stone-200-xl', {
+							className={cn('icon-stone-200-2xl mt-2', {
 								'icon-gray-500 dark:icon-gray-500':
 									'quality' in item && item.quality === 'poor',
-								'icon-teal-500 dark:icon-teal-500':
+								'icon-info dark:icon-info':
 									'rarity' in item && item.rarity === 'unusual',
 								'dark:icon-accent icon-accent':
 									'rarity' in item && item.rarity === 'rare',
-								'icon-orange-500 dark:icon-orange-500':
+								'icon-warning dark:icon-warning':
 									'rarity' in item && item.rarity === 'fabled',
 							})}
 						/>
 					)}
 					{'componentType' in item && item?.componentType === 'animal' && (
 						<GiChicken
-							className={cn('icon-stone-200-xl', {
+							className={cn('icon-stone-200-2xl mt-2', {
 								'icon-gray-500 dark:icon-gray-500':
 									'quality' in item && item.quality === 'poor',
-								'icon-teal-500 dark:icon-teal-500':
+								'icon-info dark:icon-info':
 									'rarity' in item && item.rarity === 'unusual',
 								'dark:icon-accent icon-accent':
 									'rarity' in item && item.rarity === 'rare',
-								'icon-orange-500 dark:icon-orange-500':
+								'icon-warning dark:icon-warning':
 									'rarity' in item && item.rarity === 'fabled',
 							})}
 						/>
 					)}
 					{'componentType' in item && item?.componentType === 'plant' && (
 						<GiDaisy
-							className={cn('icon-stone-200-xl', {
+							className={cn('icon-stone-200-2xl mt-2', {
 								'icon-gray-500 dark:icon-gray-500':
 									'quality' in item && item.quality === 'poor',
-								'icon-teal-500 dark:icon-teal-500':
+								'icon-info dark:icon-info':
 									'rarity' in item && item.rarity === 'unusual',
 								'dark:icon-accent icon-accent':
 									'rarity' in item && item.rarity === 'rare',
-								'icon-orange-500 dark:icon-orange-500':
+								'icon-warning dark:icon-warning':
 									'rarity' in item && item.rarity === 'fabled',
 							})}
 						/>
 					)}
 					{'componentType' in item && item?.componentType === 'mineral' && (
 						<GiStonePile
-							className={cn('icon-stone-200-xl', {
+							className={cn('icon-stone-200-2xl mt-2', {
 								'icon-gray-500 dark:icon-gray-500':
 									'quality' in item && item.quality === 'poor',
-								'icon-teal-500 dark:icon-teal-500':
+								'icon-info dark:icon-info':
 									'rarity' in item && item.rarity === 'unusual',
 								'dark:icon-accent icon-accent':
 									'rarity' in item && item.rarity === 'rare',
-								'icon-orange-500 dark:icon-orange-500':
+								'icon-warning dark:icon-warning':
 									'rarity' in item && item.rarity === 'fabled',
 							})}
 						/>
 					)}
 					{'componentType' in item && item?.componentType === 'spice' && (
 						<GiPowder
-							className={cn('icon-stone-200-xl', {
+							className={cn('icon-stone-200-2xl mt-2', {
 								'icon-gray-500 dark:icon-gray-500':
 									'quality' in item && item.quality === 'poor',
-								'icon-teal-500 dark:icon-teal-500':
+								'icon-info dark:icon-info':
 									'rarity' in item && item.rarity === 'unusual',
 								'dark:icon-accent icon-accent':
 									'rarity' in item && item.rarity === 'rare',
-								'icon-orange-500 dark:icon-orange-500':
+								'icon-warning dark:icon-warning':
 									'rarity' in item && item.rarity === 'fabled',
 							})}
 						/>
 					)}
 					{'componentType' in item && item?.componentType === 'ferment' && (
 						<GiClothJar
-							className={cn('icon-stone-200-xl', {
+							className={cn('icon-stone-200-2xl mt-2', {
 								'icon-gray-500 dark:icon-gray-500':
 									'quality' in item && item.quality === 'poor',
-								'icon-teal-500 dark:icon-teal-500':
+								'icon-info dark:icon-info':
 									'rarity' in item && item.rarity === 'unusual',
 								'dark:icon-accent icon-accent':
 									'rarity' in item && item.rarity === 'rare',
-								'icon-orange-500 dark:icon-orange-500':
+								'icon-warning dark:icon-warning':
 									'rarity' in item && item.rarity === 'fabled',
 							})}
 						/>
@@ -330,11 +330,11 @@ const NameBlock = ({ item }: Props) => {
 				className={cn('font-grenze text-xl font-bold tracking-wide', {
 					'text-gray-500 dark:text-gray-500':
 						'quality' in item && item.quality === 'poor',
-					'text-teal-500 dark:text-teal-500':
+					'text-info dark:text-info':
 						'rarity' in item && item.rarity === 'unusual',
 					'dark:text-accent text-accent':
 						'rarity' in item && item.rarity === 'rare',
-					'text-orange-500 dark:text-orange-500':
+					'text-warning dark:text-warning':
 						'rarity' in item && item.rarity === 'fabled',
 				})}
 			>

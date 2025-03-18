@@ -23,7 +23,9 @@ export const HabitatTypeSchema = z.enum([
 	'volcano',
 ]);
 
-export const raritySchema = z.enum(['common', 'unusual', 'rare', 'fabled']);
+export const raritySchema = z.enum(['common', 'unusual', 'rare', 'fabled'], {
+	errorMap: () => ({ message: 'Rarity is required' }),
+});
 
 export const componentUsesSchema = z.object({
 	ointment: z.boolean(),
@@ -40,7 +42,8 @@ export const ComponentSchema = z.object({
 	name: z
 		.string()
 		.min(5, { message: 'Must be 5 or more characters long' })
-		.array(),
+		.array()
+		.min(1),
 	componentType: z.string(),
 	isFood: z.boolean().nullable(),
 	scienceName: z.string(),

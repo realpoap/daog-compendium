@@ -63,13 +63,13 @@ function Index() {
 				</h1>
 
 				<section className='flex w-full flex-row flex-wrap justify-around gap-4 p-4 md:flex-row md:justify-center'>
-					<div className='stats h-5/12 w-full rounded-xl shadow md:h-1/4 md:w-5/12 dark:bg-stone-700'>
+					<div className='stats h-5/12 dark:bg-card w-full rounded-xl shadow md:h-1/4 md:w-5/12'>
 						<div className='stat flex flex-col justify-start gap-1 p-4'>
-							<div className='stat-title dark:text-purple-200'>Spell count</div>
+							<div className='stat-title dark:text-stone-200'>Spell count</div>
 							<div className='stat-value font-grenze text-primary pb-2 text-4xl md:text-6xl'>
 								{spellCount?.data?.number}
 							</div>
-							<div className='stat-desc flex flex-col dark:text-purple-200'>
+							<div className='stat-desc flex flex-col dark:text-stone-200'>
 								<span>Recently added: </span>
 								<span className='font-grenze text-primary text-lg md:text-xl'>
 									{spellLatest?.data?.titleCommon}{' '}
@@ -77,15 +77,15 @@ function Index() {
 							</div>
 						</div>
 					</div>
-					<div className='stats h-5/12 w-full rounded-xl shadow md:h-1/4 md:w-5/12 dark:bg-stone-700'>
+					<div className='stats h-5/12 dark:bg-card w-full rounded-xl shadow md:h-1/4 md:w-5/12'>
 						<div className='stat flex flex-col justify-start gap-1 p-4'>
-							<div className='stat-title dark:text-purple-200'>
+							<div className='stat-title dark:text-stone-200'>
 								Creature count
 							</div>
 							<div className='stat-value font-grenze text-primary pb-2 text-4xl md:text-6xl'>
 								{creatureCount?.data?.name}
 							</div>
-							<div className='stat-desc flex flex-col dark:text-purple-200'>
+							<div className='stat-desc flex flex-col dark:text-stone-200'>
 								<span>Recently added: </span>
 								<span className='font-grenze text-primary text-lg md:text-xl'>
 									{creatureLatest?.data?.name}{' '}
@@ -93,7 +93,7 @@ function Index() {
 							</div>
 						</div>
 					</div>
-					<div className='stats h-5/12 w-full rounded-xl shadow md:h-1/4 md:w-5/12 dark:bg-stone-700'>
+					<div className='stats h-5/12 w-full rounded-xl shadow md:h-1/4 md:w-5/12 dark:bg-stone-800'>
 						<div className='stat flex flex-col justify-start gap-1 p-4 md:flex-row md:justify-between'>
 							<div>
 								<div className='stat-title dark:text-purple-200'>Items</div>

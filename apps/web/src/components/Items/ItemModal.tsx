@@ -19,10 +19,9 @@ const ItemModal = ({ item }: Props) => {
 			className='modal'
 		>
 			<div
-				className={cn(
-					'modal-box gap-2 text-sm md:text-base dark:bg-stone-800',
-					{ glass: item.isRelic },
-				)}
+				className={cn('modal-box dark:bg-card gap-2 text-sm md:text-base', {
+					glass: item.isRelic,
+				})}
 			>
 				{'itemType' in item && <ItemModalBlock item={item} />}
 
@@ -59,15 +58,15 @@ const ItemModal = ({ item }: Props) => {
 								.then(() => toast('Item copied to clipboard !'))
 						}
 					>
-						<FiCopy className='icon-neutral' />
+						<FiCopy className='icon-neutral-base hover:icon-neutral-content cursor-pointer' />
 					</button>
 				</div>
 			</div>
 			<form
 				method='dialog'
-				className='modal-backdrop'
+				className='modal-backdrop text-neutral-content'
 			>
-				<button>close</button>
+				<button className='text-neutral-content'>close</button>
 			</form>
 		</dialog>
 	);

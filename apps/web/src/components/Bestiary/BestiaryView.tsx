@@ -9,12 +9,7 @@ import { HabitatTypeType } from '@api/lib/zod-prisma';
 import { Creature } from '@api/lib/ZodCreature';
 import { Link } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
-import {
-	GiCheckedShield,
-	GiRoundStar,
-	GiSwordWound,
-	GiThunderSkull,
-} from 'rocketicons/gi';
+import { GiRoundStar } from 'rocketicons/gi';
 import { RiAddLine } from 'rocketicons/ri';
 import { useDebounce } from 'use-debounce';
 import Collapsible from '../Collapsible';
@@ -142,8 +137,8 @@ const BestiaryView = () => {
 	}
 
 	return (
-		<div className='mt-sm flex h-[100dvh] flex-col items-center p-2'>
-			<div className='h-content container sticky top-8 z-10 flex min-h-[25dvh] flex-col items-center bg-gradient-to-b from-stone-100 from-80% pb-8 dark:from-stone-800'>
+		<div className='mt-sm flex h-[100dvh] flex-col items-center px-2'>
+			<div className='h-content dark:from-background container sticky top-8 z-10 flex min-h-[25dvh] w-full flex-col items-center bg-gradient-to-b from-stone-100 from-80% pb-8'>
 				<h1 className='font-grenze dark:text-primary text-secondary sticky z-10 mx-auto my-4 text-center text-6xl font-bold tracking-wide md:mt-8'>
 					Bestiary
 					{getAllCreatures.data && (
@@ -160,7 +155,7 @@ const BestiaryView = () => {
 				/>
 
 				<Collapsible title='filter results'>
-					<div className='flex- container m-4 flex-col items-center bg-stone-100 shadow-lg md:w-1/2 dark:bg-stone-800'>
+					<div className='flex- dark:bg-background container m-4 flex-col items-center bg-stone-100 md:w-1/2'>
 						<div className='flex w-full flex-col items-center justify-start gap-1 md:flex-row md:items-start md:justify-center'>
 							{/* FILTER FOR HABITATS */}
 							<SelectFilter
@@ -201,9 +196,9 @@ const BestiaryView = () => {
 								<span>Legendary</span>
 							</label>
 						</div>
-						<div className='mb-4 flex w-3/5 flex-col items-center justify-start gap-1 md:justify-center'>
-							<label className='font-grenze text-cemter w-full px-4 text-stone-500'>
-								<div className='flex flex-row justify-between'>
+						<div className='mb-4 flex w-full flex-col items-center justify-start gap-1 md:justify-center'>
+							<label className='font-grenze text-cemter text-neutral-content w-full px-4'>
+								<div className='flex flex-row justify-between gap-2'>
 									<span>Max Level</span>
 									<span className='text-primary font-cabin text-sm'>
 										{selectedMaxLevel}
@@ -215,9 +210,9 @@ const BestiaryView = () => {
 									max={rangeLevel.max}
 									value={selectedMaxLevel}
 									defaultValue={rangeLevel.max}
-									step='5'
+									step='1'
 									onChange={e => setSelectedMaxLevel(Number(e.target.value))}
-									className='range range-primary rounded-xs h-2'
+									className='range range-primary rounded-xs h-2 w-full'
 								/>
 							</label>
 						</div>
@@ -250,11 +245,14 @@ const BestiaryView = () => {
 						to={`/bestiary/$id`}
 						params={{ id: `${m.id}` }}
 					>
-						<div className='group flex w-full translate-y-8 snap-center flex-col items-center rounded-md p-1 pb-2 text-center opacity-100 transition-all duration-1000 ease-out hover:bg-stone-700 hover:shadow-sm'>
-							<span className='font-cabin pt-1 align-baseline text-sm text-stone-500 transition-colors duration-500 group-hover:text-stone-200'>
-								<GiRoundStar className='icon-stone-500 group-hover:icon-stone-200 size-4 pb-1 pr-1 transition-colors duration-500' />
-								{m.level}
-							</span>
+						<div className='group flex w-full translate-y-8 snap-center flex-col items-center rounded-lg p-1 pb-2 text-center opacity-100 transition-all duration-1000 ease-out hover:bg-stone-700 hover:shadow-sm'>
+							<div className='flex flex-row items-center gap-1'>
+								<GiRoundStar className='icon-neutral group-hover:icon-stone-200 size-4 transition-colors duration-500' />
+								<span className='font-cabin text-neutral align-baseline text-sm transition-colors duration-500 group-hover:text-stone-200'>
+									{m.level}
+								</span>
+							</div>
+
 							<p
 								className={cn(
 									'font-noto text-primary font-bold tracking-wider',
@@ -262,7 +260,7 @@ const BestiaryView = () => {
 							>
 								{m.name}
 							</p>
-							<ul className='font-cabin font-regular flex w-3/4 list-none flex-row flex-wrap items-center justify-center gap-1 align-middle text-sm md:w-full'>
+							{/* <ul className='font-cabin font-regular flex w-3/4 list-none flex-row flex-wrap items-center justify-center gap-1 align-middle text-sm md:w-full'>
 								<span className='after:pl-2 after:text-stone-500 after:content-["|"]'>
 									<GiThunderSkull className='icon-stone-900 dark:icon-stone-200 mr-1 size-[1.1rem]' />
 									{m?.initiative || '~'}
@@ -275,7 +273,7 @@ const BestiaryView = () => {
 									<GiCheckedShield className='icon-stone-900 dark:icon-stone-200 mr-1 size-[0.9rem] align-middle' />
 									{m?.defense || '~'}
 								</span>
-							</ul>
+							</ul> */}
 							<span className='font-cabin text-sm text-stone-500 transition-colors duration-500 group-hover:text-stone-200'>
 								{'// '} {m.size} {m.alignment} {m.type} {' //'}
 							</span>

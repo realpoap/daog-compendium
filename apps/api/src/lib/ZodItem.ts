@@ -16,20 +16,25 @@ const StatProfilSchema = z.object({
 	ERU: z.number().int(),
 });
 
-export const ItemTypeSchema = z.enum([
-	'weapon',
-	'armor',
-	'shield',
-	'garnment',
-	'accessory',
-	'trinket',
-	'jewel',
-	'potion',
-	'ammunition',
-	'food',
-	'junk',
-	'book',
-]);
+export const ItemTypeSchema = z.enum(
+	[
+		'weapon',
+		'armor',
+		'shield',
+		'garnment',
+		'accessory',
+		'trinket',
+		'jewel',
+		'potion',
+		'ammunition',
+		'food',
+		'junk',
+		'book',
+	],
+	{
+		errorMap: () => ({ message: 'You must select a type for the item' }),
+	},
+);
 
 export type ItemTypeType = `${z.infer<typeof ItemTypeSchema>}`;
 
@@ -68,7 +73,8 @@ export const ItemSchema = z.object({
 	name: z
 		.string()
 		.min(5, { message: 'Must be 5 or more characters long' })
-		.array(),
+		.array()
+		.min(1),
 	material: z.string(),
 	materialType: z.string(),
 	materialSubType: z.string().nullable().optional(),
@@ -82,7 +88,6 @@ export const ItemSchema = z.object({
 			required_error: 'Value is required',
 			invalid_type_error: 'Value must be a number',
 		})
-		.positive()
 		.nullable(),
 	valueWeight: z.number().nullable().optional(),
 	maxDurability: z.number().int().nullable().optional(),

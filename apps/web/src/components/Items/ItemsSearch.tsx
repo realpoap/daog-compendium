@@ -144,8 +144,8 @@ const ItemsSearch = () => {
 
 	return (
 		<div className='flex flex-col items-center'>
-			<div className='container sticky top-10 z-10 flex min-h-[30dvh] flex-col items-center bg-gradient-to-b from-stone-100 from-80% dark:from-stone-800'>
-				<h1 className='font-grenze text-secondary sticky mx-auto my-4 text-center text-6xl font-bold tracking-wide md:mt-8 dark:text-purple-400'>
+			<div className='dark:from-background container sticky top-10 z-10 flex min-h-[30dvh] flex-col items-center bg-gradient-to-b from-stone-100 from-80%'>
+				<h1 className='font-grenze text-secondary dark:text-primary sticky mx-auto my-4 text-center text-6xl font-bold tracking-wide md:mt-8'>
 					Items
 					{prunedItems && <TitleCount number={prunedItems.length} />}
 				</h1>
@@ -202,106 +202,109 @@ const ItemsSearch = () => {
 					<Link
 						id='add-button'
 						to={'/items/add'}
-						className='badge bg-accent fixed bottom-4 z-20 my-2 h-10 w-10 border-none text-stone-900 shadow-md shadow-stone-900 transition-opacity duration-200'
+						className='badge bg-accent text-background shadow-background fixed bottom-4 z-20 my-2 h-10 w-10 border-none shadow-md transition-opacity duration-200'
 					>
-						<RiAddLine className='icon-stone-900-2xl' />
+						<RiAddLine className='icon-background-2xl' />
 					</Link>
 				)}
 			</div>
-			<div className='mx-6 overflow-x-auto md:mx-0'>
-				<table className='table-xs md:table-sm mx-0 table whitespace-normal border-stone-500 px-0'>
-					<thead>
-						<tr className='font-grenze w-full border-stone-500 text-lg dark:text-stone-200'>
-							<th>Name</th>
-							<th className='text-center'>Type</th>
-							<th className='text-center'>Weight</th>
-							<th className='text-center'>Value</th>
-						</tr>
-					</thead>
-					<tbody className='w-full text-xs font-normal md:text-sm'>
-						{prunedItems &&
-							prunedItems.map(i => (
-								<tr
-									key={i.id}
-									className='dark:border-neutral hover:dark:bg-neutral mx-0 w-full cursor-pointer px-0 font-normal'
-									onClick={e => {
-										e.stopPropagation();
-										openItemModal(i);
-									}}
-								>
-									<th
-										className={cn('font-normal dark:text-stone-200', {
-											'text-gray-500 dark:text-gray-500':
-												'quality' in i && i.quality === 'poor',
-											'text-teal-500 dark:text-teal-500':
-												'rarity' in i && i.rarity === 'unusual',
-											'dark:text-accent text-accent':
-												'rarity' in i && i.rarity === 'rare',
-											'text-orange-500 dark:text-orange-500':
-												'rarity' in i && i.rarity === 'fabled',
-										})}
+			{prunedItems.length === 0 && (
+				<div className='font-grenze flex flex-col items-center justify-center'>
+					<h3 className='text-4xl'>No item found</h3>
+					<span className='font-cabin italic'>The coffers are empty ...</span>
+				</div>
+			)}
+			{prunedItems.length > 0 && (
+				<div className='mx-6 overflow-x-auto md:mx-0'>
+					<table className='table-xs md:table-sm border-neutral * mx-0 table whitespace-normal px-0'>
+						<thead>
+							<tr className='font-grenze border-neutral w-full text-lg dark:text-stone-200'>
+								<th>Name</th>
+
+								<th className='text-center'>Weight</th>
+								<th className='text-center'>Value</th>
+							</tr>
+						</thead>
+						<tbody className='w-full text-xs font-normal md:text-sm'>
+							{prunedItems &&
+								prunedItems.map(i => (
+									<tr
+										key={i.id}
+										className='dark:border-card hover:dark:bg-card mx-0 w-full cursor-pointer px-0 font-normal'
+										onClick={e => {
+											e.stopPropagation();
+											openItemModal(i);
+										}}
 									>
-										{capitalizeFirstLetter(i.name.join(', '))}
-									</th>
-									{'itemType' in i && (
-										<th className='text-center font-normal'>{i.itemType}</th>
-									)}
-									{'componentType' in i && (
-										<th className='text-center font-normal'>
-											{i.componentType}
+										<th
+											className={cn('font-normal dark:text-stone-200', {
+												'text-neutral dark:text-greyish':
+													'quality' in i && i.quality === 'poor',
+												'text-info dark:text-info':
+													'rarity' in i && i.rarity === 'unusual',
+												'dark:text-accent text-accent':
+													'rarity' in i && i.rarity === 'rare',
+												'text-warning dark:text-warning':
+													'rarity' in i && i.rarity === 'fabled',
+											})}
+										>
+											{capitalizeFirstLetter(i.name.join(', '))}
 										</th>
-									)}
 
-									<th className='text-center font-normal'>{i.weight ?? '-'}</th>
+										<th className='text-center font-normal'>
+											{i.weight ?? '-'}
+										</th>
 
-									<th className='text-right font-normal'>
-										{i.value !== 0 && i.value !== null && (
-											<span className='flex flex-row items-baseline justify-center gap-1'>
-												{Math.floor(i?.value / 100) !== 0 && i.value !== 0 && (
-													<span>
-														{Math.floor(i?.value / 100)}
-														<GiTwoCoins className='icon-goldenrod-300 icon-xs md:icon-sm w-fit' />
-													</span>
-												)}
-												{i?.value % 100 !== 0 && i.value !== 0 && (
-													<span>
-														{i?.value % 100}
-														<GiTwoCoins className='icon-stone-300 icon-xs md:icon-sm w-fit' />
-													</span>
-												)}
-											</span>
-										)}
-										{!i.value && i.valueWeight && i.valueWeight !== 0 && (
-											<span className='flex flex-row items-baseline justify-center gap-1'>
-												{Math.floor(i?.valueWeight / 100) !== 0 && (
-													<span>
-														{Math.floor(i?.valueWeight / 100)}
-														<GiTwoCoins className='icon-goldenrod-300 icon-xs md:icon-sm w-fit' />
-													</span>
-												)}
-												{i?.valueWeight % 100 !== 0 && (
-													<span>
-														{i?.valueWeight % 100}
-														<GiTwoCoins className='icon-stone-300 icon-xs md:icon-sm w-fit' />
-													</span>
-												)}
-											</span>
-										)}
-										{!i.value && !i.valueWeight && (
-											<span className='flex flex-row items-baseline justify-center gap-1'>
-												-
-											</span>
-										)}
-									</th>
-								</tr>
-							))}
-					</tbody>
-				</table>
-				{selected && 'itemType' in selected && <ItemModal item={selected} />}
-				{selected && 'componentType' in selected && (
-					<ComponentModal item={selected} />
-				)}
-			</div>
+										<th className='p-0 text-right font-normal'>
+											{i.value !== 0 && i.value !== null && (
+												<span className='flex flex-row items-center justify-center gap-1'>
+													{Math.floor(i?.value / 100) !== 0 &&
+														i.value !== 0 && (
+															<span className='flex flex-row items-end gap-[0.1rem]'>
+																{Math.floor(i?.value / 100)}
+																<GiTwoCoins className='icon-pirategold md:icon-sm size-3' />
+															</span>
+														)}
+													{i?.value % 100 !== 0 && i.value !== 0 && (
+														<span className='flex flex-row items-end gap-[0.1rem]'>
+															{i?.value % 100}
+															<GiTwoCoins className='icon-iron md:icon-sm size-3' />
+														</span>
+													)}
+												</span>
+											)}
+											{!i.value && i.valueWeight && i.valueWeight !== 0 && (
+												<span className='flex flex-row items-baseline justify-center'>
+													{Math.floor(i?.valueWeight / 100) !== 0 && (
+														<span className='flex flex-row items-end gap-[0.1rem]'>
+															{Math.floor(i?.valueWeight / 100)}
+															<GiTwoCoins className='icon-pirategold md:icon-sm size-3' />
+														</span>
+													)}
+													{i?.valueWeight % 100 !== 0 && (
+														<span className='flex flex-row items-end gap-[0.1rem]'>
+															{i?.valueWeight % 100}
+															<GiTwoCoins className='icon-iron md:icon-sm size-3' />
+														</span>
+													)}
+												</span>
+											)}
+											{!i.value && !i.valueWeight && (
+												<span className='flex flex-row items-baseline justify-center gap-1'>
+													-
+												</span>
+											)}
+										</th>
+									</tr>
+								))}
+						</tbody>
+					</table>
+					{selected && 'itemType' in selected && <ItemModal item={selected} />}
+					{selected && 'componentType' in selected && (
+						<ComponentModal item={selected} />
+					)}
+				</div>
+			)}
 
 			{/* <div className='hidden'>
 				<button

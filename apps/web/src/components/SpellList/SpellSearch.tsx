@@ -10,7 +10,6 @@ import { trpc } from '@/utils/trpc';
 import { SpellSchema } from '@api/lib/zod-prisma/index';
 import { Link } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
-import { GiDrop, GiFairyWand, GiPolarStar } from 'rocketicons/gi';
 import { RiAddLine } from 'rocketicons/ri';
 import { useDebounce } from 'use-debounce';
 import { z } from 'zod';
@@ -103,7 +102,7 @@ const SpellSearch = () => {
 	if (query.data) {
 		return (
 			<div className='mt-sm flex min-h-[100dvh] flex-col items-center p-2'>
-				<div className='container sticky top-10 z-10 flex min-h-[25dvh] flex-col items-center bg-gradient-to-b from-stone-100 from-80% dark:from-stone-800'>
+				<div className='dark:from-background container sticky top-10 z-10 flex min-h-[25dvh] flex-col items-center bg-gradient-to-b from-stone-100 from-80%'>
 					<h1 className='font-grenze sticky mx-auto my-4 text-center text-6xl font-bold tracking-wide text-purple-900 md:mt-8 dark:text-purple-400'>
 						Spells
 						{query.data && <TitleCount number={query.data.length} />}
@@ -112,7 +111,7 @@ const SpellSearch = () => {
 						onChange={e => setSearch(e.target.value)}
 						placeholder='some strange wizardry...'
 						className={cn(
-							'font-grenze dark:text-primary dark:caret-primary dark:focus:border-primary dark:focus:ring-primary text-secondary caret-secondary focus:border-secondary focus:ring-secondary rounded-lg border border-none p-1 pl-2 text-center text-lg shadow-sm placeholder:italic placeholder:text-stone-500 focus:outline-none focus:ring-1 md:w-1/2 dark:bg-stone-700',
+							'font-grenze dark:text-primary dark:caret-primary dark:focus:border-primary dark:focus:ring-primary text-secondary caret-secondary focus:border-secondary focus:ring-secondary dark:bg-tile placeholder:text-neutral-content rounded-lg border border-none p-1 pl-2 text-center text-lg shadow-sm placeholder:italic focus:outline-none focus:ring-1 md:w-1/2',
 						)}
 						type='search'
 					/>
@@ -156,7 +155,7 @@ const SpellSearch = () => {
 					)}
 				</div>
 
-				<div className='max-w-screen z-0 flex snap-y snap-mandatory flex-col items-center justify-start overflow-hidden text-center'>
+				<div className='z-0 flex w-full snap-y snap-mandatory flex-col items-center justify-start gap-1 overflow-hidden px-4 text-center'>
 					{prunedItems.length === 0 && (
 						<div className='font-grenze flex flex-col items-center justify-center'>
 							<h3 className='text-4xl'>No spell found</h3>
@@ -173,9 +172,9 @@ const SpellSearch = () => {
 							to={`/spells/$id`}
 							params={{ id: `${d.number}` }}
 						>
-							<div className='font-cabin group flex w-full translate-y-8 snap-center flex-col items-center rounded-md p-1 pb-2 text-center opacity-100 transition-all duration-1000 ease-out hover:bg-stone-700 hover:shadow-sm'>
+							<div className='font-cabin hover:bg-card group flex w-full translate-y-8 snap-center flex-col items-center rounded-lg p-1 pb-2 text-center opacity-100 transition-all duration-1000 ease-out hover:shadow-sm'>
 								<div>
-									<span className='font-cabin text-sm text-stone-500 transition-colors duration-500 after:px-2 after:content-["-"] group-hover:text-stone-200'>
+									<span className='font-cabin text-xs text-stone-500 transition-colors duration-500 after:px-2 after:content-["-"] group-hover:text-stone-200 md:text-sm'>
 										#{d.number}
 									</span>
 									<span className='font-cabin font-regular align-baseline text-sm capitalize text-stone-500 transition-colors duration-500 group-hover:text-stone-200'>
@@ -190,7 +189,7 @@ const SpellSearch = () => {
 									{d.titleCommon}
 								</p>
 
-								<ul className='font-cabin font-regular flex w-3/4 list-none flex-row flex-wrap items-center justify-center gap-1 align-middle text-sm md:w-full'>
+								{/* <ul className='font-cabin font-regular flex w-3/4 list-none flex-row flex-wrap items-center justify-center gap-1 align-middle text-sm md:w-full'>
 									<span className='after:pl-2 after:text-stone-500 after:content-["|"]'>
 										<GiPolarStar className='icon-stone-900 dark:icon-stone-200 icon-sm mr-1' />
 										{d?.level}
@@ -205,7 +204,7 @@ const SpellSearch = () => {
 										<GiFairyWand className='icon-stone-900 dark:icon-stone-200 icon-sm mr-1' />
 										{d.difficulty}
 									</span>
-								</ul>
+								</ul> */}
 								<span className='font-cabin text-sm text-stone-500 transition-colors duration-500 group-hover:text-stone-200'>
 									{'// '} {d?.casting} spell to {d?.action}{' '}
 									{d?.targetType !== 'none' && d?.targetType}
@@ -218,13 +217,13 @@ const SpellSearch = () => {
 												: ' creatures'}
 									{' //'}
 								</span>
-								<div
+								{/* <div
 									className={cn(
-										'font-noto mt-1 line-clamp-2 max-w-72 text-sm italic text-stone-700 md:line-clamp-none md:max-w-xl md:text-ellipsis dark:text-stone-400',
+										'font-noto text-card mt-1 line-clamp-2 max-w-72 text-sm italic md:line-clamp-none md:max-w-xl md:text-ellipsis dark:text-stone-400',
 									)}
 								>
 									{d.flavor}
-								</div>
+								</div> */}
 							</div>
 						</Link>
 					))}
