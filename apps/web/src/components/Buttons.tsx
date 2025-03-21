@@ -136,10 +136,11 @@ export const BackButton = ({
 }) => {
 	return (
 		<button
-			className='badge badge-sm font-cabin mt-4 flex flex-row items-center justify-center border-none bg-stone-500 pl-1 align-middle text-xs uppercase text-stone-800 hover:bg-stone-200'
+			className='badge badge-md font-cabin bg-tile hover:bg-neutral text-background mt-4 flex flex-row items-center justify-center border-none text-sm uppercase'
 			onClick={onClick}
 		>
-			<FiChevronLeft className='icon-stone-800-sm' /> Back
+			<FiChevronLeft className='icon-background-sm' />{' '}
+			<span className='mx-0'>Back</span>
 		</button>
 	);
 };

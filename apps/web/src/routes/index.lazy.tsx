@@ -5,7 +5,7 @@ import useNetworkStatus from '@/hooks/useNetworkStatus';
 import { useAuth } from '@/store/authContext';
 import { capitalizeFirstLetter } from '@/utils/capitalize';
 import { trpc } from '@/utils/trpc';
-import { createLazyFileRoute } from '@tanstack/react-router';
+import { createLazyFileRoute, Link } from '@tanstack/react-router';
 
 export const Route = createLazyFileRoute('/')({
 	component: Index,
@@ -38,10 +38,13 @@ function Index() {
 
 	if (!isOnline)
 		return (
-			<p className='text-center'>
-				Waiting for server to go live
-				<span className='loading-dots-xs'></span>
-			</p>
+			<div className='font-grenze mt-10 flex flex-col items-center justify-center gap-2'>
+				<h3 className='text-4xl'>Collecting resources</h3>
+				<span className='font-cabin italic'>
+					Please wait while we search for the knowledge within the library ...
+				</span>
+				<progress className='progress w-56'></progress>
+			</div>
 		);
 
 	if (isAuthLoading) {
@@ -71,9 +74,16 @@ function Index() {
 							</div>
 							<div className='stat-desc flex flex-col dark:text-stone-200'>
 								<span>Recently added: </span>
-								<span className='font-grenze text-primary text-lg md:text-xl'>
-									{spellLatest?.data?.titleCommon}{' '}
-								</span>
+								{spellLatest.data && (
+									<Link
+										key={spellLatest?.data.titleCommon}
+										to={`/spells/$id`}
+										params={{ id: `${spellLatest?.data.number}` }}
+										className='font-grenze text-primary text-lg md:text-xl'
+									>
+										{spellLatest?.data?.titleCommon}{' '}
+									</Link>
+								)}
 							</div>
 						</div>
 					</div>
@@ -87,9 +97,16 @@ function Index() {
 							</div>
 							<div className='stat-desc flex flex-col dark:text-stone-200'>
 								<span>Recently added: </span>
-								<span className='font-grenze text-primary text-lg md:text-xl'>
-									{creatureLatest?.data?.name}{' '}
-								</span>
+								{creatureLatest.data && (
+									<Link
+										key={creatureLatest?.data.fullname}
+										to={`/bestiary/$id`}
+										params={{ id: `${creatureLatest?.data.id}` }}
+										className='font-grenze text-primary text-lg md:text-xl'
+									>
+										{creatureLatest?.data?.name}
+									</Link>
+								)}
 							</div>
 						</div>
 					</div>

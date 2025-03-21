@@ -149,7 +149,7 @@ const BestiaryView = () => {
 					onChange={e => setSearch(e.target.value)}
 					placeholder='a curious monster...'
 					className={cn(
-						'font-grenze dark:text-primary dark:caret-primary dark:focus:border-primary dark:focus:ring-primary text-secondary caret-secondary focus:border-secondary focus:ring-secondary rounded-lg border border-none p-1 pl-2 text-center text-lg shadow-sm placeholder:italic placeholder:text-stone-500 focus:outline-none focus:ring-1 md:w-1/2 dark:bg-stone-700',
+						'font-grenze dark:text-primary dark:caret-primary dark:focus:border-primary dark:focus:ring-primary text-primary input caret-primary focus:border-secondary focus:ring-secondary dark:bg-tile placeholder:text-neutral-content rounded-lg border border-none p-1 pl-2 text-center text-lg shadow-sm placeholder:italic focus:outline-none focus:ring-1 md:w-1/2',
 					)}
 					type='search'
 				/>
@@ -245,7 +245,7 @@ const BestiaryView = () => {
 						to={`/bestiary/$id`}
 						params={{ id: `${m.id}` }}
 					>
-						<div className='group flex w-full translate-y-8 snap-center flex-col items-center rounded-lg p-1 pb-2 text-center opacity-100 transition-all duration-1000 ease-out hover:bg-stone-700 hover:shadow-sm'>
+						<div className='hover:bg-card group flex w-full translate-y-8 snap-center flex-col items-center rounded-lg p-1 pb-2 text-center opacity-100 transition-all duration-500 ease-out hover:shadow-sm'>
 							<div className='flex flex-row items-center gap-1'>
 								<GiRoundStar className='icon-neutral group-hover:icon-stone-200 size-4 transition-colors duration-500' />
 								<span className='font-cabin text-neutral align-baseline text-sm transition-colors duration-500 group-hover:text-stone-200'>
