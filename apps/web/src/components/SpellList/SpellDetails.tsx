@@ -55,7 +55,7 @@ const SpellDetails = () => {
 	}
 
 	return (
-		<div className='flex w-full flex-col justify-center px-8'>
+		<div className='flex w-full flex-col justify-center px-4'>
 			<div className='align-center flex flex-col items-center justify-center gap-2'>
 				<BackButton
 					onClick={() =>
@@ -66,7 +66,7 @@ const SpellDetails = () => {
 				/>
 			</div>
 
-			<div className='top-20dvh card sticky mt-4 flex flex-col items-center gap-2 rounded-xl bg-stone-800 p-2 text-center'>
+			<div className='card bg-card mt-4 flex flex-col items-center gap-2 rounded-xl p-2 text-center'>
 				<div className='mt-2 flex items-center justify-center'>
 					<div
 						className={cn(

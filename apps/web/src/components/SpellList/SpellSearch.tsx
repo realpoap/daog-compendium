@@ -103,7 +103,7 @@ const SpellSearch = () => {
 		return (
 			<div className='mt-sm flex min-h-[100dvh] flex-col items-center p-2'>
 				<div className='dark:from-background container sticky top-10 z-10 flex min-h-[25dvh] flex-col items-center bg-gradient-to-b from-stone-100 from-80%'>
-					<h1 className='font-grenze sticky mx-auto my-4 text-center text-6xl font-bold tracking-wide text-purple-900 md:mt-8 dark:text-purple-400'>
+					<h1 className='font-grenze dark:text-primary sticky mx-auto my-4 text-center text-6xl font-bold tracking-wide text-purple-900 md:mt-8'>
 						Spells
 						{query.data && <TitleCount number={query.data.length} />}
 					</h1>
@@ -172,7 +172,7 @@ const SpellSearch = () => {
 							to={`/spells/$id`}
 							params={{ id: `${d.number}` }}
 						>
-							<div className='font-cabin hover:bg-card group flex w-full translate-y-8 snap-center flex-col items-center rounded-lg p-1 pb-2 text-center opacity-100 transition-all duration-1000 ease-out hover:shadow-sm'>
+							<div className='font-cabin hover:bg-card group flex w-full translate-y-8 snap-center flex-col items-center rounded-lg p-1 pb-2 text-center opacity-100 transition-all duration-500 ease-out hover:shadow-sm'>
 								<div>
 									<span className='font-cabin text-xs text-stone-500 transition-colors duration-500 after:px-2 after:content-["-"] group-hover:text-stone-200 md:text-sm'>
 										#{d.number}
@@ -205,7 +205,7 @@ const SpellSearch = () => {
 										{d.difficulty}
 									</span>
 								</ul> */}
-								<span className='font-cabin text-sm text-stone-500 transition-colors duration-500 group-hover:text-stone-200'>
+								<span className='font-cabin text-sm italic text-stone-500 transition-colors duration-500 group-hover:text-stone-200'>
 									{'// '} {d?.casting} spell to {d?.action}{' '}
 									{d?.targetType !== 'none' && d?.targetType}
 									{d?.targetType === 'none'

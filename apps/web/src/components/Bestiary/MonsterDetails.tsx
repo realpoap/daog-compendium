@@ -83,8 +83,8 @@ const MonsterDetails = () => {
 	const monster = monsterById.data;
 
 	return (
-		<div className='flex w-full flex-col items-center p-8'>
-			<div className='align-center flex flex-col items-center justify-center gap-4'>
+		<div className='flex w-full flex-col items-center px-8'>
+			<div className='align-center flex flex-col items-center justify-center gap-2'>
 				<BackButton
 					onClick={() =>
 						navigate({
@@ -92,7 +92,7 @@ const MonsterDetails = () => {
 						})
 					}
 				/>
-				<div className='card indicator bg-card w-full items-center gap-2 rounded-xl p-2'>
+				<div className='card indicator bg-card flex w-full flex-col items-center gap-2 rounded-xl p-2'>
 					{monster?.isBoss && (
 						<span className='indicator-item badge badge-lg indicator bg-pirategold glass absolute top-2 size-7 animate-bounce content-center items-center rounded-full border-0 p-0 shadow-sm shadow-stone-900'>
 							<GiCrownedSkull className='dark:icon-stone-800 icon-sm align-center absolute m-0 p-0' />

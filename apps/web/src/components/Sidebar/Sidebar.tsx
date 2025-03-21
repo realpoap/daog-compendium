@@ -1,7 +1,7 @@
 import { useAuth } from '@/store/authContext';
 import { Link, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
-import { BiLogIn, BiLogOut, BiMenu } from 'rocketicons/bi';
+import { BiLogIn, BiLogOut, BiMenu, BiX } from 'rocketicons/bi';
 import daogLogo from '../../data/daog-app.png';
 
 import useNetworkStatus from '@/hooks/useNetworkStatus';
@@ -66,7 +66,7 @@ const Sidebar = () => {
 
 				<nav
 					aria-label='main'
-					className={`${open ? 'font-grenze block' : 'font-cabin hidden'} mx-auto w-fit space-x-10 text-lg md:block`}
+					className={`${open ? 'font-grenze block' : 'font-cabin hidden'} *:hover:text-primary mx-auto w-fit space-x-10 text-lg md:block`}
 				>
 					<Nav />
 				</nav>
@@ -75,20 +75,21 @@ const Sidebar = () => {
 					onClick={toggleMenu}
 					className='cursor-pointer'
 				>
-					<BiMenu className='icon-background dark:icon-stone-200 icon-2xl' />
+					<BiMenu className='icon-background dark:icon-content icon-2xl' />
 				</button>
 			</section>
+
 			<section
 				onClick={toggleMenu}
 				id='mobile-menu'
-				className={`${open ? 'flex' : 'hidden'} bg-primary fixed top-0 h-screen w-screen flex-col justify-center overflow-hidden overflow-y-scroll overscroll-y-none text-5xl text-stone-200`}
+				className={`${open ? 'flex' : 'hidden'} bg-primary text-content from-secondary fixed top-0 z-30 h-screen w-screen flex-col justify-center overflow-hidden overflow-y-scroll overscroll-y-none bg-gradient-to-t from-[-70%] text-5xl`}
 			>
-				<button className='font-grenze fixed top-2 self-end px-6 text-6xl'>
-					&times;
+				<button className='font-grenze absolute top-2 z-50 cursor-pointer self-end px-4 hover:opacity-80'>
+					<BiX className='icon-background dark:icon-content icon-7xl cursor-pointer' />
 				</button>
 				<nav
 					aria-label='mobile'
-					className='font-grenze font-semi-bold *:hover:text-card z-50 flex h-screen flex-1 flex-col items-center justify-center gap-6 py-8'
+					className='font-grenze font-semi-bold z-40 flex h-screen flex-1 flex-col items-center justify-center gap-8 *:hover:opacity-80'
 				>
 					<Nav />
 					{user && (
@@ -97,7 +98,7 @@ const Sidebar = () => {
 							onClick={logout}
 							className='cursor-pointer'
 						>
-							<BiLogOut className='icon-background hover:icon-card dark:icon-stone-200 icon-4xl' />
+							<BiLogOut className='icon-background dark:icon-content icon-4xl hover:opacity-80' />
 						</button>
 					)}
 					{!user && (
@@ -106,7 +107,7 @@ const Sidebar = () => {
 							onClick={goToHome}
 							className='cursor-pointer'
 						>
-							<BiLogIn className='icon-background hover:icon-card dark:icon-stone-200 icon-4xl' />
+							<BiLogIn className='icon-background dark:icon-content icon-4xl hover:opacity-80' />
 						</button>
 					)}
 				</nav>

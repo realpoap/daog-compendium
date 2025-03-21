@@ -11,7 +11,7 @@ const Nav = () => {
 					key={i.title}
 					to={i.path}
 					className={cn(
-						`[&.active]:underline-background z-50 w-full text-center align-middle [&.active]:font-bold [&.active]:underline [&.active]:underline-offset-4`,
+						`[&.active]:underline-primary z-50 w-full text-center align-middle [&.active]:font-bold [&.active]:underline [&.active]:underline-offset-4`,
 					)}
 				>
 					{i.title}

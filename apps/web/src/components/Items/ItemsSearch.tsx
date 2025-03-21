@@ -154,7 +154,7 @@ const ItemsSearch = () => {
 					onChange={e => setSearch(e.target.value)}
 					placeholder='a curious trinket...'
 					className={cn(
-						'font-grenze dark:text-primary dark:caret-primary dark:focus:border-primary dark:focus:ring-primary text-secondary caret-secondary focus:border-secondary focus:ring-secondary rounded-lg border border-none p-1 pl-2 text-center text-lg shadow-sm placeholder:italic placeholder:text-stone-500 focus:outline-none focus:ring-1 md:w-1/2 dark:bg-stone-700',
+						'font-grenze dark:text-primary dark:caret-primary dark:focus:border-primary dark:focus:ring-primary text-secondary caret-secondary focus:border-secondary focus:ring-secondary dark:bg-tile placeholder:text-neutral-content rounded-lg border border-none p-1 pl-2 text-center text-lg shadow-sm placeholder:italic focus:outline-none focus:ring-1 md:w-1/2',
 					)}
 					type='search'
 				/>
