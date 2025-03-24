@@ -17,7 +17,7 @@ export const createAccessToken = async (id: string) => {
 			});
 		} else {
 			// Handle internal server errors
-			console.error('Internal Server Error:', error);
+			console.error('Internal Server Error:', JSON.stringify(error, null, 2));
 
 			throw new TRPCError({
 				code: 'INTERNAL_SERVER_ERROR',
@@ -39,7 +39,7 @@ export const createRefreshToken = async (id: string) => {
 			});
 		} else {
 			// Handle internal server errors
-			console.error('Internal Server Error:', error);
+			console.error('Internal Server Error:', JSON.stringify(error, null, 2));
 
 			throw new TRPCError({
 				code: 'INTERNAL_SERVER_ERROR',
@@ -53,7 +53,7 @@ export const verifyAccessToken = async (token: string) => {
 	try {
 		console.log(token);
 		const verified = await jwt.verify(token, secretAccess);
-		console.log(verified);
+		console.info(verified);
 		return verified;
 	} catch (error) {
 		if (error instanceof Error) {
@@ -63,7 +63,7 @@ export const verifyAccessToken = async (token: string) => {
 			});
 		} else {
 			// Handle internal server errors
-			console.error('Internal Server Error:', error);
+			console.error('Internal Server Error:', JSON.stringify(error, null, 2));
 
 			throw new TRPCError({
 				code: 'INTERNAL_SERVER_ERROR',
@@ -74,9 +74,9 @@ export const verifyAccessToken = async (token: string) => {
 };
 export const verifyRefreshToken = async (token: string) => {
 	try {
-		console.log(token);
+		console.info(token);
 		const verified = await jwt.verify(token, secretRefresh);
-		console.log(verified);
+		console.info(verified);
 		return verified;
 	} catch (error) {
 		if (error instanceof Error) {
@@ -86,7 +86,7 @@ export const verifyRefreshToken = async (token: string) => {
 			});
 		} else {
 			// Handle internal server errors
-			console.error('Internal Server Error:', error);
+			console.error('Internal Server Error:', JSON.stringify(error, null, 2));
 
 			throw new TRPCError({
 				code: 'INTERNAL_SERVER_ERROR',

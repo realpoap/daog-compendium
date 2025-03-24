@@ -48,17 +48,17 @@ async function main() {
 	);
 
 	app.get('/healthcheck', (_req, res) => {
-		console.log(`Monitoring health 🩺...`);
+		console.info(`Monitoring health 🩺...`);
 		res.sendStatus(200);
 	});
 
 	app.get('/', (_req, res) => {
-		console.log(`Server is running now ! Front end set as : ${origin}`);
+		console.info(`Server is running now ! Front end set as : ${origin}`);
 		res.send(`Server is running now ! Front end set as : ${origin}`);
 	});
 
 	app.listen(port, () => {
-		console.log(`App listening on port: ${port}`);
+		console.assert(`App listening on port: ${port}`);
 	});
 }
 

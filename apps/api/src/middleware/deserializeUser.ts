@@ -35,7 +35,7 @@ export const deserializeUser = async ({
 	const decoded = jwt.verify(access_token, accessSecret);
 
 	if (!decoded) {
-		console.warn('Did not decode access token');
+		console.error('Did not decode access token');
 		return notAuthenticated;
 	}
 	const decodedId = decoded.sub as string;

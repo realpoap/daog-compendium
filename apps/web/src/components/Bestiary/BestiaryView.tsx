@@ -178,7 +178,6 @@ const BestiaryView = () => {
 							<label className='font-grenze mb-4 flex w-4/5 flex-row items-center justify-center gap-2 px-4 text-center text-stone-500 md:w-1/2'>
 								<input
 									type='checkbox'
-									defaultChecked
 									className='checkbox checkbox-xs checkbox-primary'
 									checked={selectedMundane}
 									onChange={() => setSelectedMundane(prev => !prev)}
@@ -188,7 +187,6 @@ const BestiaryView = () => {
 							<label className='font-grenze mb-4 flex w-4/5 flex-row items-center justify-center gap-2 px-4 text-center text-stone-500 md:w-1/2'>
 								<input
 									type='checkbox'
-									defaultChecked
 									className='checkbox checkbox-xs checkbox-primary'
 									checked={selectedLegendary}
 									onChange={() => setSelectedLegendary(prev => !prev)}

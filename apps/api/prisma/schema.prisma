@@ -27,6 +27,8 @@ model User {
   isOwner   Boolean  @default(false)
   role      Role     @default(VIEWER)
   createdAt DateTime @default(now())
+  characters  String[]
+  campaigns  String[]
 
   @@unique([name, password, email])
 }
@@ -39,6 +41,10 @@ enum Role {
 
 model Character {
   id String              @id @default(auto()) @map("_id") @db.ObjectId
+  creator String?
+  owner String?
+  campaigns String?
+  isDead  Boolean?  @default(false)
   fullname        String              @unique
   avatar  String?
   name  String
@@ -83,6 +89,31 @@ model Character {
 type StatVariable {
   current Int
   max Int
+}
+
+model Campaigns {
+  id    String              @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  difficulty  Difficulty?
+  players String[]
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+  nextSession DateTime?
+  dm  String
+  creator String
+  active  Boolean? @default(false)
+}
+
+enum Difficulty {
+  effortless
+  natural
+  easy
+  tricky
+  tough
+  ambitious
+  despairing
+  insane
+  infernal
 }
 
 type Carreer {
