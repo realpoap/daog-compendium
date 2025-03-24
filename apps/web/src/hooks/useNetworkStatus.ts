@@ -6,7 +6,7 @@ const useNetworkStatus = () => {
 	const [isOnline, setOnline] = useState<boolean>(false);
 
 	const updateNetworkStatus = async () => {
-		console.log('mode:', mode);
+		//console.info('mode:', mode);
 
 		if (mode === 'production') {
 			const req = await fetch(
@@ -19,7 +19,7 @@ const useNetworkStatus = () => {
 			}
 		}
 		if (mode === 'development') {
-			console.log('in dev server ping');
+			//console.log('in dev server ping');
 			setTimeout(() => {
 				setOnline(true);
 			}, 1000);

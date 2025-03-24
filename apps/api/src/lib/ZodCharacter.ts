@@ -33,6 +33,9 @@ export const CharacterSchema = z.object({
 		.nullable(),
 	magicDomain: SpellTypeSchema.array(),
 	id: z.string(),
+	creator: z.string().nullable(),
+  owner: z.string().nullable(),
+  campaigns: z.string().nullable(),
 	fullname: z.string(),
 	name: z.string(),
 	surname: z.string().nullable(),
@@ -76,6 +79,9 @@ export const NewCharacterSchema = z.object({
 	species: z.string(),
 	subspecies: z.string().nullable(),
 	level: z.number().int(),
+	creator: z.string().nullable(),
+  owner: z.string().nullable(),
+  campaigns: z.string().nullable(),
 });
 
 export type NewCharacter = z.infer<typeof NewCharacterSchema>;

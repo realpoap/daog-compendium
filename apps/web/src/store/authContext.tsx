@@ -1,16 +1,13 @@
 import { useProvideAuth } from '@/hooks/useProvideAuthx';
-import { CreateUserInput, LoginUserInput } from '@api/lib/ZodUser';
+import {
+	CreateUserInput,
+	LoginUserInput,
+	UserWithoutPass,
+} from '@api/lib/ZodUser';
 import React, { createContext, useContext } from 'react';
 
 type AuthContextType = {
-	user: {
-		role: 'VIEWER' | 'EDITOR' | 'ADMIN';
-		id: string;
-		email: string;
-		name: string;
-		isOwner: boolean;
-		createdAt: Date;
-	} | null;
+	user: UserWithoutPass | null;
 	accessToken: string;
 	authErrors: string;
 	isAuthLoading: boolean;

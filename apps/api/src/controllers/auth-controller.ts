@@ -75,7 +75,7 @@ export const registerHandler = async ({
 			});
 		} else {
 			// Handle internal server errors
-			console.error('Internal Server Error:', error);
+			console.error('Internal Server Error:', JSON.stringify(error, null, 2));
 
 			throw new TRPCError({
 				code: 'INTERNAL_SERVER_ERROR',
@@ -115,7 +115,7 @@ export const loginHandler = async ({
 			...accessTokenCookieOptions,
 			httpOnly: false,
 		});
-		console.log('cookies after login:', ctx.req.cookies);
+		//console.log('cookies after login:', ctx.req.cookies);
 
 		// Send Access Token
 		return {
@@ -131,7 +131,7 @@ export const loginHandler = async ({
 			});
 		} else {
 			// Handle internal server errors
-			console.error('Internal Server Error:', error);
+			console.error('Internal Server Error:', JSON.stringify(error, null, 2));
 
 			throw new TRPCError({
 				code: 'INTERNAL_SERVER_ERROR',

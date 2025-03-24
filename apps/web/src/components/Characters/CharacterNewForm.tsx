@@ -1,3 +1,4 @@
+import { useAuth } from '@/store/authContext';
 import { characterSpecieOptions } from '@/types/characterOptions';
 import { trpc } from '@/utils/trpc';
 import { NewCharacter, NewCharacterSchema } from '@api/lib/ZodCharacter';
@@ -7,12 +8,19 @@ import { FormProvider, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { SubmitButton } from '../Buttons';
 import { Field, Input, InputNumber, Select } from '../RHFComponents';
+import { Option } from '../SpellList/SelectFilter';
 
-const CharacterNewForm = () => {
+type Props = {
+	campaigns: Option[];
+};
+
+const CharacterNewForm = ({ campaigns }: Props) => {
+	const { user } = useAuth();
+	const utils = trpc.useUtils();
 	const createCharacter = trpc.characters.create.useMutation({
 		onSuccess: () => {
+			utils.characters.getAll.invalidate();
 			toast.success('Character created !');
-			history.go(-1);
 		},
 		onError: error => {
 			if (error.data?.code === 'UNAUTHORIZED') {
@@ -41,6 +49,8 @@ const CharacterNewForm = () => {
 			'fullname',
 			`${methods.getValues('name')} (${methods.getValues('subspecies') + ' '}${methods.getValues('species')}) - lvl ${methods.getValues('level')}`,
 		);
+		user?.id && methods.setValue('creator', user?.id);
+		user?.id && methods.setValue('owner', user?.id);
 	}, [methods.formState]);
 
 	const onSubmit = async (data: NewCharacter) => {
@@ -53,7 +63,7 @@ const CharacterNewForm = () => {
 		<FormProvider {...methods}>
 			<form
 				onSubmit={methods.handleSubmit(onSubmit)}
-				className='flex w-full flex-col md:w-2/3'
+				className='bg-background flex w-full flex-col rounded-lg p-4 shadow shadow-lg md:w-2/3'
 			>
 				<Field name='name'>
 					<Input
@@ -111,6 +121,17 @@ const CharacterNewForm = () => {
 						<InputNumber name='level' />
 					</Field>
 				</div>
+				<Field
+					name='campaigns'
+					width='full'
+					label='active campaign'
+				>
+					<Select
+						name='campaigns'
+						options={campaigns}
+						defaultValue=''
+					/>
+				</Field>
 				<SubmitButton
 					isLoading={methods.formState.isSubmitting}
 					color='accent'

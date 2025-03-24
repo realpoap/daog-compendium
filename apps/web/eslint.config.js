@@ -9,6 +9,16 @@ import tseslint from 'typescript-eslint';
 export default [
 	{ files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'] },
 	{
+		"ignorePatterns": [
+			"node_modules/",
+			"**/node_modules/",
+			"/**/node_modules/*",
+			"out/",
+			"dist/",
+			"build/"
+		]
+	},
+	{
 		languageOptions: {
 			globals: globals.browser,
 			parser: '@typescript-eslint/parser',

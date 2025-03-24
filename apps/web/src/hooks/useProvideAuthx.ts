@@ -1,7 +1,6 @@
 import { capitalizeFirstLetter } from '@/utils/capitalize';
 import { trpc } from '@/utils/trpc';
-import { UserSchema } from '@api/lib/zod-prisma';
-import { CreateUserInput, LoginUserInput } from '@api/lib/ZodUser';
+import { CreateUserInput, LoginUserInput, UserSchema } from '@api/lib/ZodUser';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
@@ -31,7 +30,8 @@ export const useProvideAuth = () => {
 		onError: error => {
 			if (error) {
 				setAuthErrors(error?.message);
-				console.log(authErrors);
+				console.group('ProvideAuth hook errors');
+				console.error(authErrors);
 			}
 			toast.error('Could not create user...');
 			setAuthLoading(false);
@@ -49,7 +49,8 @@ export const useProvideAuth = () => {
 		onError: error => {
 			if (error) {
 				setAuthErrors(error?.message);
-				console.log(authErrors);
+				console.group('ProvideAuth hook errors');
+				console.error(authErrors);
 			}
 			setAccessToken('');
 			setUser(null);
@@ -62,6 +63,9 @@ export const useProvideAuth = () => {
 	const logoutUser = trpc.auth.logout.useMutation({
 		onSuccess: () => {
 			setUser(null);
+			utils.characters.getAll.reset();
+			utils.campaigns.getAll.reset();
+			utils.campaigns.getByDMId.reset();
 			setAccessToken('');
 			toast.success('Successfully logged out');
 			setAuthLoading(false);
@@ -69,7 +73,8 @@ export const useProvideAuth = () => {
 		onError: error => {
 			if (error) {
 				setAuthErrors(error?.message);
-				console.log(authErrors);
+				console.group('ProvideAuth hook errors');
+				console.error(authErrors);
 			}
 			toast.error('Could not log out');
 			setAuthLoading(false);
@@ -82,14 +87,14 @@ export const useProvideAuth = () => {
 	}, [me.data]);
 
 	const getMe = async () => {
-		console.log('calling getMe()');
+		//console.log('calling getMe()');
 		if (me.data?.user) {
 			if (logged && !isAuthLoading && user) {
 				if (user.name !== undefined) {
 					toast.success(`Welcome back ${capitalizeFirstLetter(user.name)}`);
 				}
 			} else {
-				console.log('calling login with:', user?.name);
+				//console.log('Calling login with:', user?.name);
 				const currentUser = {
 					email: me.data.user?.email,
 					password: me.data.user?.password,

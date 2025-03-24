@@ -31,7 +31,7 @@ const Sidebar = () => {
 
 	return (
 		<header className='sticky top-0 z-50 h-fit'>
-			<section className='font-grenze dark:bg-card mx-auto flex w-full flex-row items-center justify-between gap-4 bg-stone-100 p-2 shadow-md shadow-stone-900'>
+			<section className='font-grenze dark:bg-card mx-auto flex h-12 w-full flex-row items-center justify-between gap-4 bg-stone-100 p-2 shadow-md shadow-stone-900'>
 				<div className='w-content flex flex-row items-center justify-start gap-2'>
 					<h1 className='text-2xl font-bold tracking-wider dark:text-stone-100'>
 						<Link

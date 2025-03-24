@@ -1,6 +1,7 @@
 import { capitalizeFirstLetter } from '@/utils/capitalize';
 import { cn } from '@/utils/classNames';
 import { useFormContext } from 'react-hook-form';
+import { Option as SelectOption } from '../SpellList/SelectFilter';
 
 export const Select = ({
 	name,
@@ -9,7 +10,7 @@ export const Select = ({
 	defaultValue,
 }: {
 	name: string;
-	options: Array<{ label: string; value: string; icon?: JSX.Element } | string>;
+	options: Array<SelectOption | string>;
 	id?: string;
 	defaultValue: string;
 }) => {
@@ -22,7 +23,7 @@ export const Select = ({
 		<select
 			defaultValue={defaultValue}
 			className={cn(
-				'select select-bordered font-cabin text-error text-md text-secondary caret-secondary focus:border-secondary focus:ring-secondary dark:text-primary dark:caret-primary dark:focus:border-primary dark:focus:ring-primary peer-default:dark:text-neutral *:font-cabin h-8 min-h-6 w-full rounded-md px-2 py-0 shadow-sm focus:outline-none focus:ring-1 dark:bg-stone-700',
+				'select select-bordered font-cabin text-error text-md text-secondary caret-secondary focus:border-secondary focus:ring-secondary dark:text-primary dark:caret-primary dark:focus:border-primary dark:focus:ring-primary peer-default:dark:text-neutral h-8 min-h-6 w-full rounded-md px-2 py-0 shadow-sm focus:outline-none focus:ring-1 dark:bg-stone-700',
 				{
 					'select-error': errors[name],
 					'ring-error': errors[name],
@@ -41,10 +42,16 @@ export const Select = ({
 			</option>
 			{options.map(item => (
 				<option
-					key={typeof item === 'string' ? item : item.value}
+					key={typeof item === 'string' ? item : item.label}
 					value={typeof item === 'string' ? item : item.value}
+					className={cn(
+						'font-cabin text-content text-base font-normal capitalize',
+					)}
 				>
-					{capitalizeFirstLetter(typeof item === 'string' ? item : item.value)}
+					{typeof item === 'string' && capitalizeFirstLetter(item)}
+					{typeof item !== 'string' &&
+						typeof item.value === 'string' &&
+						capitalizeFirstLetter(item.label)}
 				</option>
 			))}
 		</select>
