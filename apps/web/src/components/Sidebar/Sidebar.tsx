@@ -66,7 +66,7 @@ const Sidebar = () => {
 
 				<nav
 					aria-label='main'
-					className={`${open ? 'font-grenze block' : 'font-cabin hidden'} *:hover:text-primary mx-auto w-fit space-x-10 text-lg md:block`}
+					className={`${open ? 'font-grenze block' : 'font-cabin hidden'} *:hover:text-primary mx-auto w-fit space-x-8 text-lg md:block`}
 				>
 					<Nav />
 				</nav>

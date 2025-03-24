@@ -136,10 +136,11 @@ const NewItemPage = () => {
 	}, [methods2.formState, habitatTypes]);
 
 	const onItemSubmit = async (data: NewItem) => {
-		if (radioType === 'item') createItem.mutate(data as NewItem);
+		if (radioType === 'item') await createItem.mutate(data as NewItem);
 	};
 	const onComponentSubmit = async (data: NewComponent) => {
-		if (radioType === 'component') createComponent.mutate(data as NewComponent);
+		if (radioType === 'component')
+			await createComponent.mutate(data as NewComponent);
 	};
 
 	// ADDING NAMES

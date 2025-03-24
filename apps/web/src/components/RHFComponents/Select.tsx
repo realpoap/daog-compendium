@@ -22,7 +22,7 @@ export const Select = ({
 		<select
 			defaultValue={defaultValue}
 			className={cn(
-				'select select-bordered font-cabin text-md text-secondary caret-secondary focus:border-secondary focus:ring-secondary dark:text-primary dark:caret-primary dark:focus:border-primary dark:focus:ring-primary peer-default:dark:text-neutral h-8 min-h-6 w-full rounded-md px-2 py-0 shadow-sm focus:outline-none focus:ring-1 dark:bg-stone-700',
+				'select select-bordered font-cabin text-error text-md text-secondary caret-secondary focus:border-secondary focus:ring-secondary dark:text-primary dark:caret-primary dark:focus:border-primary dark:focus:ring-primary peer-default:dark:text-neutral *:font-cabin h-8 min-h-6 w-full rounded-md px-2 py-0 shadow-sm focus:outline-none focus:ring-1 dark:bg-stone-700',
 				{
 					'select-error': errors[name],
 					'ring-error': errors[name],
@@ -43,7 +43,6 @@ export const Select = ({
 				<option
 					key={typeof item === 'string' ? item : item.value}
 					value={typeof item === 'string' ? item : item.value}
-					className='active:bg-accent hover:bg-accent focus-within:bg-accent text-md font-cabin'
 				>
 					{capitalizeFirstLetter(typeof item === 'string' ? item : item.value)}
 				</option>

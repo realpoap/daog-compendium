@@ -7,7 +7,7 @@ import {
 	ZodCreature,
 	ZodNewCreature,
 } from '@api/lib/ZodCreature';
-import { procedure, router } from '@api/trpc';
+import { procedure, router, secureProcedure } from '@api/trpc';
 import { z } from 'zod';
 
 export const creaturesRouter = router({
@@ -70,25 +70,27 @@ export const creaturesRouter = router({
 			where: { id: input },
 		});
 	}),
-	create: procedure.input(ZodNewCreature).mutation(async ({ input }) => {
+	create: secureProcedure.input(ZodNewCreature).mutation(async ({ input }) => {
 		console.log('💌 creating creature :', input.fullname, ' ...');
 		return await prisma.creature.create({
 			data: input,
 		});
 	}),
-	createMany: procedure.input(ZodNewCreature).mutation(async ({ input }) => {
-		return await prisma.creature.createMany({
-			data: input,
-		});
-	}),
-	update: procedure.input(ZodCreature).mutation(async ({ input }) => {
+	createMany: secureProcedure
+		.input(ZodNewCreature)
+		.mutation(async ({ input }) => {
+			return await prisma.creature.createMany({
+				data: input,
+			});
+		}),
+	update: secureProcedure.input(ZodCreature).mutation(async ({ input }) => {
 		const { id, ...creature } = input;
 		return await prisma.creature.update({
 			where: { id: id },
 			data: creature,
 		});
 	}),
-	addAction: procedure.input(ActionSchema).mutation(async ({ input }) => {
+	addAction: secureProcedure.input(ActionSchema).mutation(async ({ input }) => {
 		const { id, ...action } = input; // id is not action.id
 		return await prisma.creature.update({
 			where: { id: id },
@@ -99,7 +101,7 @@ export const creaturesRouter = router({
 			},
 		});
 	}),
-	updateAction: procedure
+	updateAction: secureProcedure
 		.input(ActionArraySchema)
 		.mutation(async ({ input }) => {
 			try {
@@ -113,18 +115,20 @@ export const creaturesRouter = router({
 				serverErrorHandler(error);
 			}
 		}),
-	addAttribute: procedure.input(AttributeSchema).mutation(async ({ input }) => {
-		const { id, ...attribute } = input;
-		return await prisma.creature.update({
-			where: { id: id },
-			data: {
-				attributes: {
-					push: attribute,
+	addAttribute: secureProcedure
+		.input(AttributeSchema)
+		.mutation(async ({ input }) => {
+			const { id, ...attribute } = input;
+			return await prisma.creature.update({
+				where: { id: id },
+				data: {
+					attributes: {
+						push: attribute,
+					},
 				},
-			},
-		});
-	}),
-	updateAttribute: procedure
+			});
+		}),
+	updateAttribute: secureProcedure
 		.input(AttributeArraySchema)
 		.mutation(async ({ input }) => {
 			try {
@@ -138,7 +142,7 @@ export const creaturesRouter = router({
 				serverErrorHandler(error);
 			}
 		}),
-	delete: procedure.input(z.string()).mutation(async ({ input }) => {
+	delete: secureProcedure.input(z.string()).mutation(async ({ input }) => {
 		try {
 			return await prisma.creature.delete({
 				where: { id: input },

@@ -5,7 +5,7 @@ import {
 	qualityTypeSchema,
 } from '@api/lib/ZodItem';
 import { prisma } from '@api/prismaClient';
-import { procedure, router } from '@api/trpc';
+import { procedure, router, secureProcedure } from '@api/trpc';
 import { z } from 'zod';
 
 const ItemNewSchema = z.object({
@@ -55,19 +55,21 @@ export const itemsRouter = router({
 			where: { id: input },
 		});
 	}),
-	create: procedure.input(NewItemSchema).mutation(async ({ input }) => {
+	create: secureProcedure.input(NewItemSchema).mutation(async ({ input }) => {
 		console.log('💌 creating item #', input.name);
 		return await prisma.item.create({
 			data: input,
 		});
 	}),
-	createMany: procedure.input(ItemNewSchema).mutation(async ({ input }) => {
-		console.log('💌 creating multiple items ...');
-		return await prisma.item.createMany({
-			data: input,
-		});
-	}),
-	update: procedure.input(ItemSchema).mutation(async ({ input }) => {
+	createMany: secureProcedure
+		.input(ItemNewSchema)
+		.mutation(async ({ input }) => {
+			console.log('💌 creating multiple items ...');
+			return await prisma.item.createMany({
+				data: input,
+			});
+		}),
+	update: secureProcedure.input(ItemSchema).mutation(async ({ input }) => {
 		const { id, ...item } = input;
 		return await prisma.item.update({
 			where: { id: id },

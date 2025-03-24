@@ -15,9 +15,9 @@
 @theme {
 	--font-grenze: 'Grenze', 'serif';
 	--font-cabin: 'Cabin', 'sans-serif';
-	--color-background: oklch(21% 0.006 56.043);
-	--color-card: oklch(26% 0.007 34.298);
-	--color-tile: oklch(37% 0.01 67.558);
+	--color-background: oklch(26.8% 0.007 34.298);
+	--color-card: oklch(30% 0.007 34.298);
+	--color-tile: oklch(35% 0.007 34.298);
 	--color-greyish: oklch(71.37% 0.0192 261.32);
 	--color-content: oklch(97% 0.001 106.424);
 	--color-primary: oklch(70.7% 0.19701077968484998 306.62917069511036);
@@ -37,7 +37,7 @@
 	--color-error: oklch(63.68% 0.2078 25.33);
 	--color-error-content: oklch(21% 0.006 56.043);
 	--color-pirategold: oklch(74.93% 0.1556 72.22);
-	--color-iron: oklch(85.46% 0 233.66);
+	--color-iron: oklch(80% 0 233.66);
 	--btn-text-case: 'uppercase';
 	--radius-selector: 2rem;
 	--radius-field: 1rem;

@@ -30,6 +30,7 @@ import { Route as ItemsTypeIdEditImport } from './routes/items/$type/$id.edit'
 const IndexLazyImport = createFileRoute('/')()
 const SpellsIndexLazyImport = createFileRoute('/spells/')()
 const ItemsIndexLazyImport = createFileRoute('/items/')()
+const CharactersIndexLazyImport = createFileRoute('/characters/')()
 const BestiaryIndexLazyImport = createFileRoute('/bestiary/')()
 
 // Create/Update Routes
@@ -51,6 +52,14 @@ const ItemsIndexLazyRoute = ItemsIndexLazyImport.update({
   path: '/items/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/items/index.lazy').then((d) => d.Route))
+
+const CharactersIndexLazyRoute = CharactersIndexLazyImport.update({
+  id: '/characters/',
+  path: '/characters/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/characters/index.lazy').then((d) => d.Route),
+)
 
 const BestiaryIndexLazyRoute = BestiaryIndexLazyImport.update({
   id: '/bestiary/',
@@ -193,6 +202,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BestiaryIndexLazyImport
       parentRoute: typeof rootRoute
     }
+    '/characters/': {
+      id: '/characters/'
+      path: '/characters'
+      fullPath: '/characters'
+      preLoaderRoute: typeof CharactersIndexLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/items/': {
       id: '/items/'
       path: '/items'
@@ -250,6 +266,7 @@ export interface FileRoutesByFullPath {
   '/spells/$id': typeof SpellsIdRoute
   '/spells/add': typeof SpellsAddRoute
   '/bestiary': typeof BestiaryIndexLazyRoute
+  '/characters': typeof CharactersIndexLazyRoute
   '/items': typeof ItemsIndexLazyRoute
   '/spells': typeof SpellsIndexLazyRoute
   '/bestiary/edit/$id': typeof BestiaryEditIdRoute
@@ -268,6 +285,7 @@ export interface FileRoutesByTo {
   '/spells/$id': typeof SpellsIdRoute
   '/spells/add': typeof SpellsAddRoute
   '/bestiary': typeof BestiaryIndexLazyRoute
+  '/characters': typeof CharactersIndexLazyRoute
   '/items': typeof ItemsIndexLazyRoute
   '/spells': typeof SpellsIndexLazyRoute
   '/bestiary/edit/$id': typeof BestiaryEditIdRoute
@@ -287,6 +305,7 @@ export interface FileRoutesById {
   '/spells/$id': typeof SpellsIdRoute
   '/spells/add': typeof SpellsAddRoute
   '/bestiary/': typeof BestiaryIndexLazyRoute
+  '/characters/': typeof CharactersIndexLazyRoute
   '/items/': typeof ItemsIndexLazyRoute
   '/spells/': typeof SpellsIndexLazyRoute
   '/bestiary/edit/$id': typeof BestiaryEditIdRoute
@@ -307,6 +326,7 @@ export interface FileRouteTypes {
     | '/spells/$id'
     | '/spells/add'
     | '/bestiary'
+    | '/characters'
     | '/items'
     | '/spells'
     | '/bestiary/edit/$id'
@@ -324,6 +344,7 @@ export interface FileRouteTypes {
     | '/spells/$id'
     | '/spells/add'
     | '/bestiary'
+    | '/characters'
     | '/items'
     | '/spells'
     | '/bestiary/edit/$id'
@@ -341,6 +362,7 @@ export interface FileRouteTypes {
     | '/spells/$id'
     | '/spells/add'
     | '/bestiary/'
+    | '/characters/'
     | '/items/'
     | '/spells/'
     | '/bestiary/edit/$id'
@@ -360,6 +382,7 @@ export interface RootRouteChildren {
   SpellsIdRoute: typeof SpellsIdRoute
   SpellsAddRoute: typeof SpellsAddRoute
   BestiaryIndexLazyRoute: typeof BestiaryIndexLazyRoute
+  CharactersIndexLazyRoute: typeof CharactersIndexLazyRoute
   ItemsIndexLazyRoute: typeof ItemsIndexLazyRoute
   SpellsIndexLazyRoute: typeof SpellsIndexLazyRoute
   BestiaryEditIdRoute: typeof BestiaryEditIdRoute
@@ -378,6 +401,7 @@ const rootRouteChildren: RootRouteChildren = {
   SpellsIdRoute: SpellsIdRoute,
   SpellsAddRoute: SpellsAddRoute,
   BestiaryIndexLazyRoute: BestiaryIndexLazyRoute,
+  CharactersIndexLazyRoute: CharactersIndexLazyRoute,
   ItemsIndexLazyRoute: ItemsIndexLazyRoute,
   SpellsIndexLazyRoute: SpellsIndexLazyRoute,
   BestiaryEditIdRoute: BestiaryEditIdRoute,
@@ -405,6 +429,7 @@ export const routeTree = rootRoute
         "/spells/$id",
         "/spells/add",
         "/bestiary/",
+        "/characters/",
         "/items/",
         "/spells/",
         "/bestiary/edit/$id",
@@ -439,6 +464,9 @@ export const routeTree = rootRoute
     },
     "/bestiary/": {
       "filePath": "bestiary/index.lazy.tsx"
+    },
+    "/characters/": {
+      "filePath": "characters/index.lazy.tsx"
     },
     "/items/": {
       "filePath": "items/index.lazy.tsx"

@@ -37,6 +37,83 @@ enum Role {
   ADMIN
 }
 
+model Character {
+  id String              @id @default(auto()) @map("_id") @db.ObjectId
+  fullname        String              @unique
+  avatar  String?
+  name  String
+  surname         String?
+  species String
+  subspecies String?
+  size            CreatureSize? @default(average)
+  alignment       Alignment?
+  level Int @default(1)
+  createdAt       DateTime?           @default(now())
+  updatedAt       DateTime? @updatedAt
+  background          String?
+  description     String?
+  glory           Int?
+  stats           StatProfil?
+  isBoss          Boolean?            @default(false)
+  isCaster        Boolean?  @default(false)
+  magicDomain     SpellType[]
+  health StatVariable?
+  spirit  StatVariable?
+  actionList      ActionList?
+  initiative      Int?
+  attack          Int?
+  attackBonus     Int?
+  defense         Int?
+  defenseBonus    Int?
+  ranged          Int?
+  rangedBonus     Int?
+  armor           Int?
+  armorClass      Int?
+  perception      Int?
+  perceptionBonus Int?
+  discretion      Int?
+  discretionBonus Int?
+  magic           Int?
+  careers String[]
+  skills  Skill[]
+  feats Feat[]
+  fighterType String?
+}
+
+type StatVariable {
+  current Int
+  max Int
+}
+
+type Carreer {
+  current String
+  master  String
+  statBonus StatProfil
+  skills  String[]
+  dangerous Boolean?
+  illegal Boolean?
+  arcane  Boolean?
+}
+
+type Skill {
+  name  String
+  mastery String
+  description String?
+  playerLevel Int?
+  playerPoints Int?
+}
+
+type Feat {
+  name  String
+  mastery String
+  description String
+  combatEffects String?
+  travelEffects String?
+  passive String?
+  rank Int
+  color String
+}
+
 model Creature {
   id              String              @id @default(auto()) @map("_id") @db.ObjectId
   fullname        String              @unique
