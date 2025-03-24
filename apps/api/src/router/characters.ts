@@ -1,15 +1,15 @@
 import { serverErrorHandler } from '@api/lib/utils/errorHandler';
-import { NewActionSchema } from '@api/lib/ZodAction';
+import { CharacterSchema, NewCharacterSchema } from '@api/lib/ZodCharacter';
 import { prisma } from '@api/prismaClient';
 import { procedure, router, secureProcedure } from '@api/trpc';
 import { z } from 'zod';
 
-export const actionsRouter = router({
+export const charactersRouter = router({
 	getAll: procedure.query(async () => {
 		try {
-			return await prisma.action.findMany({
+			return await prisma.character.findMany({
 				orderBy: {
-					name: 'asc',
+					updatedAt: 'asc',
 				},
 			});
 		} catch (error) {
@@ -18,7 +18,7 @@ export const actionsRouter = router({
 	}),
 	getTotal: procedure.query(async () => {
 		try {
-			return await prisma.action.count({
+			return await prisma.character.count({
 				select: {
 					_all: true,
 					name: true, // count all records with name non-null
@@ -33,35 +33,37 @@ export const actionsRouter = router({
 			where: { id: input },
 		});
 	}),
-	getBySearchName: procedure.input(z.string()).query(async ({ input }) => {
+	getByFullName: procedure.input(z.string()).query(async ({ input }) => {
 		try {
-			return await prisma.action.findFirstOrThrow({
-				where: { searchName: input },
+			return await prisma.character.findFirstOrThrow({
+				where: { fullname: input },
 			});
 		} catch (error) {
 			serverErrorHandler(error);
 		}
 	}),
-	create: secureProcedure.input(NewActionSchema).mutation(async ({ input }) => {
-		try {
-			return await prisma.action.create({
-				data: input,
-			});
-		} catch (error) {
-			serverErrorHandler(error);
-		}
-	}),
-	createMany: secureProcedure
-		.input(NewActionSchema)
+	create: secureProcedure
+		.input(NewCharacterSchema)
 		.mutation(async ({ input }) => {
-			return await prisma.action.createMany({
+			try {
+				return await prisma.character.create({
+					data: input,
+				});
+			} catch (error) {
+				serverErrorHandler(error);
+			}
+		}),
+	createMany: secureProcedure
+		.input(NewCharacterSchema)
+		.mutation(async ({ input }) => {
+			return await prisma.character.createMany({
 				data: input,
 			});
 		}),
-	update: secureProcedure.input(NewActionSchema).mutation(async ({ input }) => {
+	update: secureProcedure.input(CharacterSchema).mutation(async ({ input }) => {
 		try {
 			return await prisma.action.update({
-				where: { searchName: input.searchName },
+				where: { id: input.id },
 				data: input,
 			});
 		} catch (error) {
@@ -70,8 +72,8 @@ export const actionsRouter = router({
 	}),
 	delete: secureProcedure.input(z.string()).mutation(async ({ input }) => {
 		try {
-			return await prisma.action.delete({
-				where: { searchName: input },
+			return await prisma.character.delete({
+				where: { id: input },
 			});
 		} catch (error) {
 			serverErrorHandler(error);

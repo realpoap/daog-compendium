@@ -29,7 +29,7 @@ export function App() {
 			<AuthContextProvider>
 				<Toaster toastOptions={{ duration: 1000 }}>
 					{(t: Toast) => (
-						<div className='toast toast-top toast-center rounded-lg bg-stone-200 px-2 py-1 dark:bg-stone-700'>
+						<div className='toast toast-top toast-center dark:bg-tile text-content rounded-lg bg-stone-200 px-2 py-1 shadow shadow-lg'>
 							<div className='flex flex-row'>
 								<ToastIcon toast={t} />
 								<p className='px-2'>{resolveValue(t.message, t)}</p>

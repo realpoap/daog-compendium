@@ -110,7 +110,7 @@ function Index() {
 							</div>
 						</div>
 					</div>
-					<div className='stats h-5/12 w-full rounded-xl shadow md:h-1/4 md:w-5/12 dark:bg-stone-800'>
+					<div className='stats h-5/12 dark:bg-card w-full rounded-xl shadow md:h-1/4 md:w-5/12'>
 						<div className='stat flex flex-col justify-start gap-1 p-4 md:flex-row md:justify-between'>
 							<div>
 								<div className='stat-title dark:text-purple-200'>Items</div>

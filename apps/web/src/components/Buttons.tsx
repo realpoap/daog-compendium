@@ -119,7 +119,7 @@ export const SmallCircleButton = ({
 	return (
 		<button
 			className={cn(
-				`btn-sm btn-circle bg-accent font-cabin relative z-20 flex cursor-pointer flex-col items-center justify-center self-center text-stone-900 shadow-sm shadow-stone-900 transition-all duration-100 before:absolute before:inset-0 before:rounded-[inherit] before:bg-[linear-gradient(45deg,transparent_25%,theme(colors.white/.5)_50%,transparent_75%,transparent_100%)] before:bg-[length:250%_250%,100%_100%] before:bg-[position:200%_0,0_0] before:bg-no-repeat before:[transition:background-position_0s_ease] hover:before:bg-[position:-100%_0,0_0] hover:before:duration-[800ms] focus:ring-2 focus:ring-stone-200 dark:before:bg-[linear-gradient(45deg,transparent_25%,theme(colors.white)_50%,transparent_75%,transparent_100%)]`,
+				`btn-sm btn-circle bg-accent font-cabin relative z-20 flex cursor-pointer flex-col items-center justify-center self-center text-stone-900 shadow-sm shadow-stone-900 transition-all duration-100 before:absolute before:inset-0 before:rounded-[inherit] before:bg-[linear-gradient(45deg,transparent_25%,theme(colors.white/.5)_50%,transparent_75%,transparent_100%)] before:bg-[length:250%_250%,100%_100%] before:bg-[position:200%_0,0_0] before:bg-no-repeat before:[transition:background-position_0s_ease] hover:before:bg-[position:-100%_0,0_0] hover:before:duration-[800ms] active:ring-2 active:ring-stone-200 dark:before:bg-[linear-gradient(45deg,transparent_25%,theme(colors.white)_50%,transparent_75%,transparent_100%)]`,
 				color,
 			)}
 			onClick={onClick}
@@ -136,10 +136,10 @@ export const BackButton = ({
 }) => {
 	return (
 		<button
-			className='badge badge-md font-cabin bg-tile hover:bg-neutral text-background mt-4 flex flex-row items-center justify-center border-none text-sm uppercase'
+			className='badge badge-md font-cabin bg-tile hover:bg-neutral text-background mt-4 border-none text-sm uppercase'
 			onClick={onClick}
 		>
-			<FiChevronLeft className='icon-background-sm' />{' '}
+			<FiChevronLeft className='icon-background-sm' />
 			<span className='mx-0'>Back</span>
 		</button>
 	);

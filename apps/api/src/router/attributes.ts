@@ -2,7 +2,7 @@ import { serverErrorHandler } from '@api/lib/utils/errorHandler';
 import { AttributeSchema } from '@api/lib/zod-prisma';
 import { NewAttributeSchema } from '@api/lib/ZodCreature';
 import { prisma } from '@api/prismaClient';
-import { procedure, router } from '@api/trpc';
+import { procedure, router, secureProcedure } from '@api/trpc';
 import { z } from 'zod';
 
 export const attributesRouter = router({
@@ -41,18 +41,20 @@ export const attributesRouter = router({
 			where: { name: input },
 		});
 	}),
-	create: procedure.input(NewAttributeSchema).mutation(async ({ input }) => {
-		try {
-			console.log('💌 creating attribute #', input.name);
-			return await prisma.attribute.create({
-				data: input,
-			});
-		} catch (error) {
-			console.error('Error in attribute.create:', error);
-			throw new Error(`Internal server error`);
-		}
-	}),
-	createMany: procedure
+	create: secureProcedure
+		.input(NewAttributeSchema)
+		.mutation(async ({ input }) => {
+			try {
+				console.log('💌 creating attribute #', input.name);
+				return await prisma.attribute.create({
+					data: input,
+				});
+			} catch (error) {
+				console.error('Error in attribute.create:', error);
+				throw new Error(`Internal server error`);
+			}
+		}),
+	createMany: secureProcedure
 		.input(NewAttributeSchema)
 		.mutation(async ({ input }) => {
 			console.log('💌 creating multiple attributes ...');
@@ -60,7 +62,7 @@ export const attributesRouter = router({
 				data: input,
 			});
 		}),
-	update: procedure.input(AttributeSchema).mutation(async ({ input }) => {
+	update: secureProcedure.input(AttributeSchema).mutation(async ({ input }) => {
 		try {
 			const { id, ...attribute } = input;
 			return await prisma.attribute.update({

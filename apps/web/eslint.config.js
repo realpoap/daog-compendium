@@ -40,6 +40,7 @@ export default [
 				},
 			],
 			'@typescript-eslint/no-explicit-any': 'warn',
+			'prettier/prettier': ['error', { endOfLine: 'auto' }],
 		},
 	},
 	pluginReact.configs.flat.recommended,
