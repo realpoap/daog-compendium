@@ -1,3 +1,4 @@
+import { useAuth } from '@/store/authContext';
 import {
 	creatureAlignmentOptions,
 	creatureHabitatOptions,
@@ -208,6 +209,7 @@ const MonsterEdit = () => {
 					>
 						<Textarea name='description' />
 					</Field>
+
 					<Collapsible title='change stats'>
 						<div className='flex flex-col flex-wrap items-center justify-between px-[2vw] md:w-full md:flex-row'>
 							<section className='container mb-6 flex flex-col items-center justify-center md:w-1/2'>

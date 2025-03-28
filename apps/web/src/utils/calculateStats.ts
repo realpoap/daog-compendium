@@ -1,5 +1,6 @@
 import { HabitatTypeType, SpellTypeType } from '@api/lib/zod-prisma';
 import { NewAction } from '@api/lib/ZodAction';
+import { Character } from '@api/lib/ZodCharacter';
 import { CreatureComponent } from '@api/lib/ZodComponent';
 import { Creature, CreatureAttribute, NewCreature } from '@api/lib/ZodCreature';
 import { CreatureItem } from '@api/lib/ZodItem';
@@ -225,6 +226,165 @@ const calcModifiersBonus = (creature: Creature | NewCreature) => {
 	}
 
 	return calCreature;
+};
+
+export const calcCharacterStats = (c: Character) => {
+	if (!c.stats) {
+		c.stats = {
+			CEL: 15,
+			AGI: 15,
+			DEX: 15,
+			STR: 15,
+			END: 15,
+			VIT: 15,
+			WIL: 15,
+			INS: 15,
+			SEN: 15,
+			CHA: 15,
+			SOC: 15,
+			ERU: 15,
+		};
+	}
+	if (!c.weight) {
+		c.weight = {
+			current: 0,
+			max: 0,
+		};
+	}
+	if (!c.health) {
+		c.health = {
+			current: 0,
+			max: 0,
+		};
+	}
+	if (!c.spirit) {
+		c.spirit = {
+			current: 0,
+			max: 0,
+		};
+	}
+	const levelBonus = Math.floor(c.level / 5);
+	c.actionList = {
+		main: levelBonus,
+		limited: levelBonus,
+		free: 1,
+		travel: 2,
+		epic: c.isBoss ? levelBonus : 0,
+	};
+	const maxHealth = c.glory
+		? c.stats.VIT + Number(c.isPun) + c.glory
+		: c.stats.VIT + Number(c.isPun);
+	const maxSpirit = c.glory
+		? c.stats.SEN + Number(c.isPun) + c.glory
+		: c.stats.SEN + Number(c.isPun);
+	c.health = {
+		current: c.health.current,
+		max: maxHealth,
+	};
+	c.spirit = {
+		current: c.spirit.current,
+		max: maxSpirit,
+	};
+
+	c.initiative = c.initiativeBonus
+		? c.initiativeBonus + c.stats.CEL + c.stats.WIL
+		: c.stats.CEL + c.stats.WIL;
+
+	if (c.attackBonus) {
+		c.attack =
+			c.attackType === 'STR'
+				? c.attackBonus + c.stats.STR
+				: c.attackBonus + c.stats.AGI;
+	} else {
+		c.attack = c.attackType === 'STR' ? c.stats.STR : c.stats.AGI;
+	}
+
+	if (c.weight && c.carryWeight && c.weightBonus) {
+		c.defenseType =
+			c.carryWeight >
+			c.stats.END * 0.5 + Math.floor(c.stats.END / 10) + levelBonus
+				? 'STR'
+				: 'AGI';
+	}
+	if (c.defenseBonus) {
+		c.defense =
+			c.defenseType === 'STR'
+				? c.defenseBonus + c.defense + c.stats.STR
+				: c.defenseBonus +
+					c.stats.AGI +
+					Math.floor(c.stats.AGI / 10) +
+					levelBonus;
+	} else {
+		c.defense =
+			c.defenseType === 'STR'
+				? c.defense + c.stats.STR
+				: c.stats.AGI + Math.floor(c.stats.AGI / 10) + levelBonus;
+	}
+	if (c.armor) {
+		c.armorClass =
+			c.armor > 15
+				? 5
+				: c.armor > 10
+					? 4
+					: c.armor > 5
+						? 3
+						: c.armor > 3
+							? 2
+							: c.armor > 1
+								? 1
+								: 0;
+	}
+	c.ranged = c.rangedBonus
+		? c.rangedBonus + c.stats.CEL + Math.floor(c.stats.DEX / 10) + levelBonus
+		: c.stats.CEL + Math.floor(c.stats.DEX / 10) + levelBonus;
+
+	c.perception = c.perceptionBonus
+		? c.perceptionBonus +
+			c.stats.INS +
+			Math.floor(c.stats.INS / 10) +
+			levelBonus
+		: c.stats.INS + Math.floor(c.stats.INS / 10) + levelBonus;
+	switch (c.size) {
+		case 'tiny':
+			c.sizeBonus = -5;
+			break;
+		case 'small':
+			c.sizeBonus = -2;
+			break;
+		case 'large':
+			c.sizeBonus = +2;
+			break;
+		case 'huge':
+			c.sizeBonus = +5;
+			break;
+		case 'gigantic':
+			c.sizeBonus = +10;
+			break;
+
+		default:
+			break;
+	}
+	if (c.sizeBonus) {
+		c.discretion = c.discretionBonus
+			? c.discretionBonus +
+				c.stats.AGI +
+				Math.floor(c.stats.AGI / 10) +
+				levelBonus -
+				c.sizeBonus
+			: c.stats.AGI + Math.floor(c.stats.AGI / 10) + levelBonus - c.sizeBonus;
+	} else {
+		c.discretion = c.discretionBonus
+			? c.discretionBonus +
+				c.stats.AGI +
+				Math.floor(c.stats.AGI / 10) +
+				levelBonus
+			: c.stats.AGI + Math.floor(c.stats.AGI / 10) + levelBonus;
+	}
+
+	c.magic = Math.floor(c.stats.SEN / 10) + levelBonus;
+
+	console.log('😎 Character after calculation : ', c);
+	return c;
 };
 
 export const defaultCreature: NewCreature = {

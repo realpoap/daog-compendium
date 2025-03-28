@@ -29,7 +29,7 @@ export const charactersRouter = router({
 		}
 	}),
 	getById: procedure.input(z.string()).query(async ({ input }) => {
-		return await prisma.action.findFirstOrThrow({
+		return await prisma.character.findFirstOrThrow({
 			where: { id: input },
 		});
 	}),
@@ -61,10 +61,11 @@ export const charactersRouter = router({
 			});
 		}),
 	update: secureProcedure.input(CharacterSchema).mutation(async ({ input }) => {
+		const { id, ...char } = input;
 		try {
-			return await prisma.action.update({
-				where: { id: input.id },
-				data: input,
+			return await prisma.character.update({
+				where: { id: id },
+				data: char,
 			});
 		} catch (error) {
 			serverErrorHandler(error);

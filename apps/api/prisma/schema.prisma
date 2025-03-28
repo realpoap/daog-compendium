@@ -44,51 +44,63 @@ model Character {
   creator String?
   owner String?
   campaigns String?
-  isDead  Boolean?  @default(false)
+  isDead  Boolean  @default(false)
   fullname        String              @unique
-  avatar  String?
+  //avatar  String?
   name  String
   surname         String?
   species String
   subspecies String?
   size            CreatureSize? @default(average)
-  alignment       Alignment?
+  sizeBonus Int? @default(0)
+  alignment       Alignment? @default(neutral)
   level Int @default(1)
+  experience Int @default(0)
   createdAt       DateTime?           @default(now())
   updatedAt       DateTime? @updatedAt
   background          String?
   description     String?
-  glory           Int?
-  stats           StatProfil?
-  isBoss          Boolean?            @default(false)
-  isCaster        Boolean?  @default(false)
-  magicDomain     SpellType[]
+  glory           Int @default(0)
+  luck  Int @default(0)
+  stats           StatProfil
+  isBoss          Boolean            @default(false)
+  isCaster        Boolean  @default(false)
+  isPun      Boolean  @default(false)
+  //magicDomain     SpellType[]
   health StatVariable?
   spirit  StatVariable?
   actionList      ActionList?
-  initiative      Int?
-  attack          Int?
-  attackBonus     Int?
-  defense         Int?
-  defenseBonus    Int?
-  ranged          Int?
-  rangedBonus     Int?
-  armor           Int?
-  armorClass      Int?
-  perception      Int?
-  perceptionBonus Int?
-  discretion      Int?
-  discretionBonus Int?
-  magic           Int?
+  attackType  String @default("STR")
+  defenseType  String @default("AGI")
+  initiative Int @default(0)
+  initiativeBonus Int @default(0)
+  attack          Int @default(0)
+  attackBonus     Int @default(0)
+  defense         Int @default(0)
+  defenseBonus    Int @default(0)
+  ranged          Int @default(0)
+  rangedBonus     Int @default(0)
+  armor           Int @default(0)
+  armorClass      Int @default(0)
+  perception      Int @default(0)
+  perceptionBonus Int @default(0)
+  discretion      Int @default(0)
+  discretionBonus Int @default(0)
+  magic           Int @default(0)
+  exhaustion  Int @default(0)
   careers String[]
   skills  Skill[]
   feats Feat[]
   fighterType String?
+  weight StatVariable
+  weightBonus  Int @default(0)
+  carryWeight  Int @default(0)
+  weightClass Int @default(0)
 }
 
 type StatVariable {
-  current Int
-  max Int
+  current Int @default(0)
+  max Int @default(0)
 }
 
 model Campaigns {
@@ -152,6 +164,7 @@ model Creature {
   rank            String?
   isBoss          Boolean?            @default(false)
   isCaster        Boolean?            @default(false)
+  isDead       Boolean?            @default(false)
   magicDomain     SpellType[]
   type            Type?
   habitat         HabitatType[]
@@ -253,9 +266,9 @@ enum Alignment {
 
 type ActionList {
   main    Int  @default(1)
-  limited Int?
-  free    Int?
-  travel  Int?
+  limited Int? 
+  free    Int? 
+  travel  Int? 
   epic    Int  @default(0)
 }
 
@@ -315,18 +328,18 @@ enum CreatureSize {
 }
 
 type StatProfil {
-  CEL Int
-  AGI Int
-  DEX Int
-  STR Int
-  END Int
-  VIT Int
-  WIL Int
-  INS Int
-  SEN Int
-  CHA Int
-  SOC Int
-  ERU Int
+  CEL Int @default(15)
+  AGI Int @default(15)
+  DEX Int @default(15)
+  STR Int @default(15)
+  END Int @default(15)
+  VIT Int @default(15)
+  WIL Int @default(15)
+  INS Int @default(15)
+  SEN Int @default(15)
+  CHA Int @default(15)
+  SOC Int @default(15)
+  ERU Int @default(15)
 }
 
 model Spell {

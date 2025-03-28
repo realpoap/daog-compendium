@@ -51,6 +51,26 @@ const CharacterNewForm = ({ campaigns }: Props) => {
 		);
 		user?.id && methods.setValue('creator', user?.id);
 		user?.id && methods.setValue('owner', user?.id);
+		methods.setValue('health.max', 0);
+		methods.setValue('health.current', 0);
+		methods.setValue('spirit.max', 0);
+		methods.setValue('spirit.current', 0);
+		methods.setValue('weight.max', 0);
+		methods.setValue('weight.current', 0);
+		methods.setValue('stats', {
+			CEL: 15,
+			AGI: 15,
+			DEX: 15,
+			STR: 15,
+			END: 15,
+			VIT: 15,
+			WIL: 15,
+			INS: 15,
+			SEN: 15,
+			CHA: 15,
+			SOC: 15,
+			ERU: 15,
+		});
 	}, [methods.formState]);
 
 	const onSubmit = async (data: NewCharacter) => {
@@ -63,7 +83,7 @@ const CharacterNewForm = ({ campaigns }: Props) => {
 		<FormProvider {...methods}>
 			<form
 				onSubmit={methods.handleSubmit(onSubmit)}
-				className='bg-background flex w-full flex-col rounded-lg p-4 shadow shadow-lg md:w-2/3'
+				className='bg-background flex w-full flex-col rounded-lg p-4 shadow shadow-lg md:w-3/4'
 			>
 				<Field name='name'>
 					<Input
