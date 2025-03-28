@@ -3,10 +3,12 @@ import { capitalizeFirstLetter } from '@/utils/capitalize';
 import { cn } from '@/utils/classNames';
 import { trpc } from '@/utils/trpc';
 import { Campaign } from '@api/lib/ZodCampaign';
+import { useNavigate } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { BiX } from 'rocketicons/bi';
 import { FiEdit, FiTrash2 } from 'rocketicons/fi';
+import { GiGlassHeart, GiPotionBall, GiTombstone } from 'rocketicons/gi';
 import { ActionButton, SmallCircleButton } from '../Buttons';
 import Collapsible from '../Collapsible';
 import { Option } from '../SpellList/SelectFilter';
@@ -18,7 +20,7 @@ const CharactersView = () => {
 	const utils = trpc.useUtils();
 	const { user } = useAuth();
 	const isEditor = user?.role === 'ADMIN' || user?.role === 'EDITOR';
-	//const isOwner = user?.characters
+	const navigate = useNavigate();
 
 	const [campaigns, setCampaigns] = useState<Campaign[]>([]);
 	const [campaignOptions, setCampaignOptions] = useState<Option[]>([]);
@@ -87,21 +89,19 @@ const CharactersView = () => {
 	};
 
 	return (
-		<div className='flex w-full flex-row items-start justify-start overflow-y-scroll'>
+		<div className='relative h-full w-full'>
 			<div
 				className={cn(
-					'mt-sm transition-full fixed flex h-full w-full flex-col items-center px-2 duration-300',
+					'mt-sm transition-full absolute flex h-full w-full flex-col items-center justify-start px-2 duration-300',
 					{
 						'md:left-0 md:w-full': !panelOpen,
 						'md:left-1/3 md:w-2/3': panelOpen,
 					},
 				)}
+				onClick={() => setPanelOpen(false)}
 			>
-				<div
-					className='h-content dark:from-background container sticky top-0 z-10 flex min-h-[25dvh] w-full flex-col items-center bg-gradient-to-b from-stone-100 from-80% pb-8'
-					onClick={() => setPanelOpen(false)}
-				>
-					<h1 className='font-grenze dark:text-primary text-secondary sticky z-0 mx-auto my-4 text-center text-6xl font-bold tracking-wide md:mt-8'>
+				<div className='dark:from-background container sticky top-8 z-10 flex h-fit min-h-[25dvh] w-full flex-col items-center bg-gradient-to-b from-stone-100 from-80% pb-8'>
+					<h1 className='font-grenze dark:text-primary text-secondary sticky top-4 z-10 mx-auto mt-4 text-center text-6xl font-bold tracking-wide md:mt-8'>
 						Characters
 						{getAllCharacters.data && (
 							<TitleCount number={getAllCharacters.data.length} />
@@ -113,7 +113,7 @@ const CharactersView = () => {
 						textColor='background'
 						onClick={e => {
 							e.stopPropagation();
-							setPanelOpen(true);
+							setPanelOpen(prev => !prev);
 						}}
 					>
 						Campaigns
@@ -126,9 +126,12 @@ const CharactersView = () => {
 					)}
 				</div>
 				<div
-					className={cn('w-full transition-all duration-300 md:w-3/4', {
-						'md:w-full': panelOpen,
-					})}
+					className={cn(
+						'z-0 mt-8 flex h-full w-full flex-col justify-start transition-all duration-300 md:w-3/4',
+						{
+							'md:w-full': panelOpen,
+						},
+					)}
 				>
 					{campaigns
 						.filter(a => {
@@ -144,9 +147,25 @@ const CharactersView = () => {
 								className='mb-4'
 								key={k.id}
 							>
-								<h4 className='font-grenze text-neutral text-xl tracking-wide'>
-									{k.name}
-								</h4>
+								<div className='flex flex-row items-baseline gap-4'>
+									<h4 className='font-grenze text-neutral text-2xl tracking-wide'>
+										{k.name}
+									</h4>
+									{/* {k.createdAt && (
+										<span className='font-cabin text-content'>
+											started{' '}
+											{Math.ceil(
+												Math.abs(new Date() - new Date(k.createdAt)) /
+													(1000 * 3600 * 24),
+											)}{' '}
+											day ago
+										</span>
+									)} */}
+									<span className='font-cabin text-content'>Avg lvl :</span>
+
+									<span className='font-cabin text-content'>Set encounter</span>
+								</div>
+
 								<ul className='list bg-card rounded-lg shadow-md'>
 									{getAllCharacters.data
 										?.filter(charac => charac.campaigns === k.id)
@@ -163,8 +182,17 @@ const CharactersView = () => {
 													</div>
 												</div>
 												<div className='flex flex-col items-start'>
-													<div className='text-primary text-base font-semibold'>
+													<div
+														className={cn(
+															'text-primary flex flex-row text-base font-semibold',
+															{ 'text-neutral': char.isDead },
+														)}
+													>
 														{char.name}
+														{char.surname ? `, ${char.surname}` : ''}
+														{char.isDead && (
+															<GiTombstone className='icon-neutral dark:icon-neutral icon-base mr-2' />
+														)}
 													</div>
 													<div className='flex flex-row gap-2'>
 														<div className='text-neutral-content text-sm capitalize'>
@@ -174,6 +202,7 @@ const CharactersView = () => {
 															Lvl. {char.level}
 														</div>
 													</div>
+
 													<div className='flex flex-col'>
 														<div className='text-neutral-content align-right italic'>
 															{campaigns
@@ -185,19 +214,43 @@ const CharactersView = () => {
 																))}
 														</div>
 													</div>
+													<div className='flex flex-row'>
+														<progress
+															className='progress progress-primary h-1 w-full md:w-full'
+															value={char.experience}
+															max={char.level * 100}
+														></progress>
+													</div>
+												</div>
+												<div className='flex flex-col justify-center gap-2'>
+													<div className='font-cabin text-error flex flex-row'>
+														<GiGlassHeart className='icon-error dark:icon-error icon-base mr-2' />{' '}
+														{char?.health?.current}
+													</div>
+
+													{char.isCaster && (
+														<div className='font-cabin text-info flex flex-row'>
+															<GiPotionBall className='icon-info dark:icon-info icon-base mr-2' />{' '}
+															{char?.spirit?.current}
+														</div>
+													)}
 												</div>
 												<div className='flex flex-col items-center justify-start gap-1'>
-													{isEditor && (
+													{(isEditor || char.creator === user?.id) && (
 														<SmallCircleButton
 															color='bg-accent'
 															onClick={e => {
 																e.stopPropagation();
+																navigate({
+																	to: '/characters/edit/$id',
+																	params: { id: `${char?.id}` },
+																});
 															}}
 														>
 															<FiEdit className='icon-stone-900-sm' />
 														</SmallCircleButton>
 													)}
-													{isEditor && (
+													{user?.role === 'ADMIN' && (
 														<SmallCircleButton
 															color='bg-error'
 															onClick={e => {
