@@ -46,14 +46,14 @@ model Character {
   campaigns String?
   isDead  Boolean  @default(false)
   fullname        String              @unique
-  //avatar  String?
+  avatar  String?
   name  String
   surname         String?
   species String
   subspecies String?
-  size            CreatureSize? @default(average)
-  sizeBonus Int? @default(0)
-  alignment       Alignment? @default(neutral)
+  size            CreatureSize @default(average)
+  sizeBonus Int @default(0)
+  alignment       Alignment @default(neutral)
   level Int @default(1)
   experience Int @default(0)
   createdAt       DateTime?           @default(now())
