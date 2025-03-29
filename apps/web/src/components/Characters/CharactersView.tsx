@@ -105,7 +105,7 @@ const CharactersView = () => {
 				value: id as string,
 			})),
 		);
-	}, [user, getAllCampaigns.data, getDMCampaigns.data]);
+	}, [user, getAllCampaigns.data, getDMCampaigns.data, getAllCharacters.data]);
 
 	// SET UP AVG LEVELS
 	const setAvgCampaignsLevel = () => {
@@ -166,10 +166,9 @@ const CharactersView = () => {
 			newExp = newExp - maxExp;
 			toast.success('Level up ! 🎉');
 		} else if (char.experience && newExp <= 0) {
-			//100 -200
-			currentLvl -= 1; // 12
-			maxExp = currentLvl * 100; // 1200
-			newExp = Math.abs(maxExp + newExp); // 50
+			currentLvl -= 1;
+			maxExp = currentLvl * 100;
+			newExp = Math.abs(maxExp + newExp);
 			toast.error('Down 1 level ! 👇');
 		}
 		await updateCharExp.mutate({
@@ -246,44 +245,35 @@ const CharactersView = () => {
 						})
 						.map(k => (
 							<div
-								className='mb-4'
+								className='mb-4 flex flex-col items-center'
 								key={k.id}
 							>
-								<div className='flex flex-row items-center justify-between gap-4'>
-									<div className='flex flex-row items-baseline gap-4'>
+								<div className='flex w-full flex-col items-center md:flex-row md:justify-between md:gap-4'>
+									<div className='flex w-full flex-col items-start md:flex-row md:items-baseline md:gap-4'>
 										<h4 className='font-grenze text-primary text-2xl tracking-wide'>
 											{k.name}
 										</h4>
-										{k.createdAt && (
-											<span className='font-cabin text-neutral-content italic'>
-												started{' '}
-												{getDaysFrom(k.createdAt) > 1
-													? `${getDaysFrom(k.createdAt)} days ago`
-													: `${getDaysFrom(k.createdAt)} day ago`}
+										<div className='flex flex-row gap-2'>
+											{k.createdAt && (
+												<span className='font-cabin text-neutral-content italic'>
+													started{' '}
+													{getDaysFrom(k.createdAt) > 1
+														? `${getDaysFrom(k.createdAt)} days ago`
+														: `${getDaysFrom(k.createdAt)} day ago`}
+												</span>
+											)}
+											<span className='font-cabin text-neutral-content'>-</span>
+											<span className='font-cabin text-neutral-content'>
+												nb : {k.charNb}
 											</span>
-										)}
-										<span className='font-cabin text-neutral-content'>-</span>
-										<span className='font-cabin text-neutral-content'>
-											nb : {k.charNb}
-										</span>
-										<span className='font-cabin text-neutral-content'>
-											avg lvl : {k.avgLevel}
-										</span>
-									</div>
-
-									<div className='relative -top-4'>
-										{' '}
-										<ActionButton
-											color='primary'
-											textColor='background'
-										>
-											{' '}
-											set encounter{' '}
-										</ActionButton>
+											<span className='font-cabin text-neutral-content'>
+												avg lvl : {k.avgLevel}
+											</span>
+										</div>
 									</div>
 								</div>
 
-								<ul className='list bg-card rounded-lg shadow-md'>
+								<ul className='list bg-card w-full rounded-lg shadow-md'>
 									{getAllCharacters.data
 										?.filter(charac => charac.campaigns === k.id)
 										.map(char => (
@@ -298,6 +288,16 @@ const CharactersView = () => {
 											/>
 										))}
 								</ul>
+								<div className='-mt-4'>
+									{' '}
+									<ActionButton
+										color='primary'
+										textColor='background'
+									>
+										{' '}
+										set encounter{' '}
+									</ActionButton>
+								</div>
 							</div>
 						))}
 					<div className='mb-4'>
