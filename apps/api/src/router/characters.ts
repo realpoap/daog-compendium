@@ -1,5 +1,9 @@
 import { serverErrorHandler } from '@api/lib/utils/errorHandler';
-import { CharacterSchema, NewCharacterSchema } from '@api/lib/ZodCharacter';
+import {
+	CharacterSchema,
+	ExpUpdateSchema,
+	NewCharacterSchema,
+} from '@api/lib/ZodCharacter';
 import { prisma } from '@api/prismaClient';
 import { procedure, router, secureProcedure } from '@api/trpc';
 import { z } from 'zod';
@@ -71,6 +75,39 @@ export const charactersRouter = router({
 			serverErrorHandler(error);
 		}
 	}),
+	updateCampaign: secureProcedure
+		.input(z.string().array())
+		.mutation(async ({ input }) => {
+			try {
+				return await prisma.character.update({
+					where: {
+						id: input[0],
+					},
+					data: {
+						campaigns: input[1],
+					},
+				});
+			} catch (error) {
+				serverErrorHandler(error);
+			}
+		}),
+	updateXp: secureProcedure
+		.input(ExpUpdateSchema)
+		.mutation(async ({ input }) => {
+			try {
+				return await prisma.character.update({
+					where: {
+						id: input.id,
+					},
+					data: {
+						experience: input.experience,
+						level: input.level,
+					},
+				});
+			} catch (error) {
+				serverErrorHandler(error);
+			}
+		}),
 	delete: secureProcedure.input(z.string()).mutation(async ({ input }) => {
 		try {
 			return await prisma.character.delete({

@@ -21,16 +21,12 @@ export type StatVariable = z.infer<typeof StatVariableSchema>;
 
 export const CharacterSchema = z.object({
 	id: z.string(),
-	size: z
-		.enum(['tiny', 'small', 'average', 'large', 'huge', 'gigantic'], {
-			errorMap: () => ({ message: 'A character must have a size' }),
-		})
-		.nullable(),
-	alignment: z
-		.enum(['saint', 'good', 'neutral', 'bad', 'evil'], {
-			errorMap: () => ({ message: 'Choose an alignment' }),
-		})
-		.nullable(),
+	size: z.enum(['tiny', 'small', 'average', 'large', 'huge', 'gigantic'], {
+		errorMap: () => ({ message: 'A character must have a size' }),
+	}),
+	alignment: z.enum(['saint', 'good', 'neutral', 'bad', 'evil'], {
+		errorMap: () => ({ message: 'Choose an alignment' }),
+	}),
 	//magicDomain: SpellTypeSchema.array(),
 	creator: z.string().nullable(),
 	owner: z.string().nullable(),
@@ -75,7 +71,7 @@ export const CharacterSchema = z.object({
 	fighterType: z.string().nullable(),
 	attackType: z.string(),
 	defenseType: z.string(),
-	actionList: ActionListSchema,
+	actionList: ActionListSchema.nullable(),
 	stats: StatProfilSchema,
 	health: StatVariableSchema,
 	spirit: StatVariableSchema,
@@ -83,6 +79,12 @@ export const CharacterSchema = z.object({
 });
 
 export type Character = z.infer<typeof CharacterSchema>;
+
+export const ExpUpdateSchema = z.object({
+	id: z.string(),
+	experience: z.number().int().optional(),
+	level: z.number().int(),
+});
 
 export const NewCharacterSchema = z.object({
 	fullname: z.string(),
