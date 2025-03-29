@@ -21,16 +21,12 @@ export type StatVariable = z.infer<typeof StatVariableSchema>;
 
 export const CharacterSchema = z.object({
 	id: z.string(),
-	size: z
-		.enum(['tiny', 'small', 'average', 'large', 'huge', 'gigantic'], {
-			errorMap: () => ({ message: 'A character must have a size' }),
-		})
-		.nullable(),
-	alignment: z
-		.enum(['saint', 'good', 'neutral', 'bad', 'evil'], {
-			errorMap: () => ({ message: 'Choose an alignment' }),
-		})
-		.nullable(),
+	size: z.enum(['tiny', 'small', 'average', 'large', 'huge', 'gigantic'], {
+		errorMap: () => ({ message: 'A character must have a size' }),
+	}),
+	alignment: z.enum(['saint', 'good', 'neutral', 'bad', 'evil'], {
+		errorMap: () => ({ message: 'Choose an alignment' }),
+	}),
 	//magicDomain: SpellTypeSchema.array(),
 	creator: z.string().nullable(),
 	owner: z.string().nullable(),
@@ -46,36 +42,36 @@ export const CharacterSchema = z.object({
 	updatedAt: z.coerce.date().nullable(),
 	background: z.string().nullable(),
 	description: z.string().nullable(),
-	glory: z.number().int().nullable(),
-	luck: z.number().int().nullable(),
-	isBoss: z.boolean().nullable(),
-	isPun: z.boolean().nullable(),
-	isCaster: z.boolean().nullable(),
-	isDead: z.boolean().nullable(),
-	initiative: z.number().int().nullable(),
-	initiativeBonus: z.number().int().nullable(),
+	glory: z.number().int(),
+	luck: z.number().int(),
+	isBoss: z.boolean(),
+	isPun: z.boolean(),
+	isCaster: z.boolean(),
+	isDead: z.boolean(),
+	initiative: z.number().int(),
+	initiativeBonus: z.number().int(),
 	attack: z.number().int(),
-	attackBonus: z.number().int().nullable(),
+	attackBonus: z.number().int(),
 	defense: z.number().int(),
-	defenseBonus: z.number().int().nullable(),
+	defenseBonus: z.number().int(),
 	ranged: z.number().int(),
-	rangedBonus: z.number().int().nullable(),
-	armor: z.number().int().nullable(),
-	armorClass: z.number().int().nullable(),
+	rangedBonus: z.number().int(),
+	armor: z.number().int(),
+	armorClass: z.number().int(),
 	perception: z.number().int(),
-	perceptionBonus: z.number().int().nullable(),
-	discretion: z.number().int().nullable(),
-	discretionBonus: z.number().int().nullable(),
-	magic: z.number().int().nullable(),
-	sizeBonus: z.number().int().nullable(),
-	weightBonus: z.number().int().nullable(),
-	carryWeight: z.number().int().nullable(),
-	weightClass: z.number().int().nullable(), //0= ok, 1=over, 2=noway
+	perceptionBonus: z.number().int(),
+	discretion: z.number().int(),
+	discretionBonus: z.number().int(),
+	magic: z.number().int(),
+	sizeBonus: z.number().int(),
+	weightBonus: z.number().int(),
+	carryWeight: z.number().int(),
+	weightClass: z.number().int(), //0= ok, 1=over, 2=noway
 	careers: z.string().array(),
 	fighterType: z.string().nullable(),
-	attackType: z.string().nullable(),
-	defenseType: z.string().nullable(),
-	actionList: ActionListSchema,
+	attackType: z.string(),
+	defenseType: z.string(),
+	actionList: ActionListSchema.nullable(),
 	stats: StatProfilSchema,
 	health: StatVariableSchema,
 	spirit: StatVariableSchema,
@@ -83,6 +79,12 @@ export const CharacterSchema = z.object({
 });
 
 export type Character = z.infer<typeof CharacterSchema>;
+
+export const ExpUpdateSchema = z.object({
+	id: z.string(),
+	experience: z.number().int().optional(),
+	level: z.number().int(),
+});
 
 export const NewCharacterSchema = z.object({
 	fullname: z.string(),

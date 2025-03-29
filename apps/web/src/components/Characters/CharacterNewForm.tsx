@@ -51,12 +51,6 @@ const CharacterNewForm = ({ campaigns }: Props) => {
 		);
 		user?.id && methods.setValue('creator', user?.id);
 		user?.id && methods.setValue('owner', user?.id);
-		methods.setValue('health.max', 0);
-		methods.setValue('health.current', 0);
-		methods.setValue('spirit.max', 0);
-		methods.setValue('spirit.current', 0);
-		methods.setValue('weight.max', 0);
-		methods.setValue('weight.current', 0);
 		methods.setValue('stats', {
 			CEL: 15,
 			AGI: 15,
@@ -71,6 +65,13 @@ const CharacterNewForm = ({ campaigns }: Props) => {
 			SOC: 15,
 			ERU: 15,
 		});
+		const levelBonus = Math.floor(methods.getValues('level') / 5);
+		methods.setValue('health.max', 15 + levelBonus + 1);
+		methods.setValue('health.current', 15 + levelBonus + 1);
+		methods.setValue('spirit.max', 15 + levelBonus + 1);
+		methods.setValue('spirit.current', 15 + levelBonus + 1);
+		methods.setValue('weight.max', 7);
+		methods.setValue('weight.current', 0);
 	}, [methods.formState]);
 
 	const onSubmit = async (data: NewCharacter) => {

@@ -46,14 +46,14 @@ model Character {
   campaigns String?
   isDead  Boolean  @default(false)
   fullname        String              @unique
-  //avatar  String?
+  avatar  String?
   name  String
   surname         String?
   species String
   subspecies String?
-  size            CreatureSize? @default(average)
-  sizeBonus Int? @default(0)
-  alignment       Alignment? @default(neutral)
+  size            CreatureSize @default(average)
+  sizeBonus Int @default(0)
+  alignment       Alignment @default(neutral)
   level Int @default(1)
   experience Int @default(0)
   createdAt       DateTime?           @default(now())
@@ -67,8 +67,8 @@ model Character {
   isCaster        Boolean  @default(false)
   isPun      Boolean  @default(false)
   //magicDomain     SpellType[]
-  health StatVariable?
-  spirit  StatVariable?
+  health StatVariable
+  spirit  StatVariable
   actionList      ActionList?
   attackType  String @default("STR")
   defenseType  String @default("AGI")
@@ -108,6 +108,10 @@ model Campaigns {
   name String
   difficulty  Difficulty?
   players String[]
+  avgLevel Int?
+  minLevel Int?
+  maxLevel Int?
+  charNb Int?
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt
   nextSession DateTime?

@@ -272,11 +272,19 @@ export const calcCharacterStats = (c: Character) => {
 		epic: c.isBoss ? levelBonus : 0,
 	};
 	const maxHealth = c.glory
-		? c.stats.VIT + Number(c.isPun) + c.glory
-		: c.stats.VIT + Number(c.isPun);
+		? c.stats.VIT +
+			Number(c.isPun) +
+			levelBonus +
+			Math.floor(c.stats.VIT / 10) +
+			c.glory
+		: c.stats.VIT + Number(c.isPun) + levelBonus + Math.floor(c.stats.VIT / 10);
 	const maxSpirit = c.glory
-		? c.stats.SEN + Number(c.isPun) + c.glory
-		: c.stats.SEN + Number(c.isPun);
+		? c.stats.SEN +
+			Number(c.isPun) +
+			levelBonus +
+			Math.floor(c.stats.SEN / 10) +
+			c.glory
+		: c.stats.SEN + Number(c.isPun) + levelBonus + Math.floor(c.stats.SEN / 10);
 	c.health = {
 		current: c.health.current,
 		max: maxHealth,
