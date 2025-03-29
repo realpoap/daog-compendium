@@ -86,15 +86,16 @@ const CharactersView = () => {
 
 	// SETUP CAMPAIGNS
 	useEffect(() => {
+		//add viewer characters
 		if (
 			getDMCampaigns &&
-			user !== null &&
+			user &&
 			user.role === 'EDITOR' &&
 			getDMCampaigns.data
 		) {
 			setCampaigns(getDMCampaigns.data);
 		}
-		if (user !== null && user.role === 'ADMIN' && getAllCampaigns.data) {
+		if (user && user.role === 'ADMIN' && getAllCampaigns.data) {
 			setCampaigns(getAllCampaigns.data);
 		}
 		setAvgCampaignsLevel();
@@ -183,6 +184,11 @@ const CharactersView = () => {
 		const date = now.getTime() - new Date(start).getTime();
 		return Math.ceil(Math.abs(date / (1000 * 3600 * 24)));
 	};
+
+	if (!user)
+		navigate({
+			to: '/',
+		});
 
 	return (
 		<div className='relative h-full w-full'>
