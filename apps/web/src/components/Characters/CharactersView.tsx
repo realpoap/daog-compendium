@@ -134,7 +134,7 @@ const CharactersView = () => {
 		}
 	};
 
-	if (!getAllCharacters.data || getAllCharacters.isLoading)
+	if (!getAllCharacters.data || !getAllCharacters.data)
 		return (
 			<div className='font-grenze mt-10 flex flex-col items-center justify-center gap-2 px-4'>
 				<h3 className='text-4xl'>Collecting resources</h3>
