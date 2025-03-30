@@ -9,7 +9,7 @@ export const campaignsRouter = router({
 		try {
 			return await prisma.campaigns.findMany({
 				orderBy: {
-					updatedAt: 'desc',
+					createdAt: 'desc',
 				},
 			});
 		} catch (error) {
@@ -29,7 +29,7 @@ export const campaignsRouter = router({
 		}
 	}),
 	getById: procedure.input(z.string()).query(async ({ input }) => {
-		return await prisma.action.findFirstOrThrow({
+		return await prisma.campaigns.findFirstOrThrow({
 			where: { id: input },
 		});
 	}),
@@ -37,6 +37,20 @@ export const campaignsRouter = router({
 		try {
 			return await prisma.campaigns.findMany({
 				where: { dm: input },
+			});
+		} catch (error) {
+			serverErrorHandler(error);
+		}
+	}),
+	getByPlayer: procedure.input(z.string()).query(async ({ input }) => {
+		try {
+			console.info(input);
+			return await prisma.campaigns.findMany({
+				where: {
+					players: {
+						has: input,
+					},
+				},
 			});
 		} catch (error) {
 			serverErrorHandler(error);
@@ -62,7 +76,7 @@ export const campaignsRouter = router({
 		}),
 	update: secureProcedure.input(CampaignSchema).mutation(async ({ input }) => {
 		try {
-			return await prisma.action.update({
+			return await prisma.campaigns.update({
 				where: { id: input.id },
 				data: input,
 			});
@@ -70,6 +84,36 @@ export const campaignsRouter = router({
 			serverErrorHandler(error);
 		}
 	}),
+	updatePlayers: secureProcedure
+		.input(z.object({ id: z.string(), players: z.string().array() }))
+		.mutation(async ({ input }) => {
+			try {
+				return await prisma.campaigns.update({
+					where: {
+						id: input.id,
+					},
+					data: {
+						players: input.players,
+					},
+				});
+			} catch (error) {
+				serverErrorHandler(error);
+			}
+		}),
+	toggleActive: secureProcedure
+		.input(z.object({ id: z.string(), active: z.boolean() }))
+		.mutation(async ({ input }) => {
+			try {
+				return await prisma.campaigns.update({
+					where: { id: input.id },
+					data: {
+						active: input.active,
+					},
+				});
+			} catch (error) {
+				serverErrorHandler(error);
+			}
+		}),
 	delete: secureProcedure.input(z.string()).mutation(async ({ input }) => {
 		try {
 			return await prisma.campaigns.delete({

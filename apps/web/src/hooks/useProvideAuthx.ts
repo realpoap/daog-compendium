@@ -64,8 +64,9 @@ export const useProvideAuth = () => {
 		onSuccess: () => {
 			setUser(null);
 			utils.characters.getAll.reset();
-			utils.campaigns.getAll.reset();
 			utils.campaigns.getByDMId.reset();
+			utils.campaigns.getByPlayer.reset();
+			utils.campaigns.getAll.reset();
 			setAccessToken('');
 			toast.success('Successfully logged out');
 			setAuthLoading(false);

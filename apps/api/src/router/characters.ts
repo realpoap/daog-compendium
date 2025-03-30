@@ -1,5 +1,6 @@
 import { serverErrorHandler } from '@api/lib/utils/errorHandler';
 import {
+	CampaignUpdateSchema,
 	CharacterSchema,
 	ExpUpdateSchema,
 	NewCharacterSchema,
@@ -13,7 +14,7 @@ export const charactersRouter = router({
 		try {
 			return await prisma.character.findMany({
 				orderBy: {
-					updatedAt: 'asc',
+					createdAt: 'asc',
 				},
 			});
 		} catch (error) {
@@ -76,15 +77,31 @@ export const charactersRouter = router({
 		}
 	}),
 	updateCampaign: secureProcedure
-		.input(z.string().array())
+		.input(CampaignUpdateSchema)
 		.mutation(async ({ input }) => {
 			try {
 				return await prisma.character.update({
 					where: {
-						id: input[0],
+						id: input.id,
 					},
 					data: {
-						campaigns: input[1],
+						campaign: input.campaignId,
+					},
+				});
+			} catch (error) {
+				serverErrorHandler(error);
+			}
+		}),
+	updateOwner: secureProcedure
+		.input(z.object({ id: z.string(), userId: z.string() }))
+		.mutation(async ({ input }) => {
+			try {
+				return await prisma.character.update({
+					where: {
+						id: input.id,
+					},
+					data: {
+						owner: input.userId,
 					},
 				});
 			} catch (error) {

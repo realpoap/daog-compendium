@@ -41,9 +41,9 @@ enum Role {
 
 model Character {
   id String              @id @default(auto()) @map("_id") @db.ObjectId
-  creator String?
-  owner String?
-  campaigns String?
+  creator String
+  owner String
+  campaign String
   isDead  Boolean  @default(false)
   fullname        String              @unique
   avatar  String?

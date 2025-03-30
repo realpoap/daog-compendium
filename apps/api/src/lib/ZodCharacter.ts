@@ -28,9 +28,9 @@ export const CharacterSchema = z.object({
 		errorMap: () => ({ message: 'Choose an alignment' }),
 	}),
 	//magicDomain: SpellTypeSchema.array(),
-	creator: z.string().nullable(),
-	owner: z.string().nullable(),
-	campaigns: z.string().nullable(),
+	creator: z.string(),
+	owner: z.string(),
+	campaign: z.string(),
 	fullname: z.string(),
 	name: z.string(),
 	surname: z.string().nullable(),
@@ -86,15 +86,20 @@ export const ExpUpdateSchema = z.object({
 	level: z.number().int(),
 });
 
+export const CampaignUpdateSchema = z.object({
+	id: z.string(),
+	campaignId: z.string(),
+});
+
 export const NewCharacterSchema = z.object({
 	fullname: z.string(),
 	name: z.string(),
 	species: z.string(),
 	subspecies: z.string().optional().nullable(),
 	level: z.number().int(),
-	creator: z.string().nullable(),
-	owner: z.string().nullable(),
-	campaigns: z.string().nullable(),
+	creator: z.string(),
+	owner: z.string(),
+	campaign: z.string(),
 	stats: StatProfilSchema,
 	health: StatVariableSchema,
 	spirit: StatVariableSchema,

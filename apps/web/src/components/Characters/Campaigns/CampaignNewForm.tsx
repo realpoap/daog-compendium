@@ -14,6 +14,7 @@ const CampaignNewForm = () => {
 	const createCampaign = trpc.campaigns.create.useMutation({
 		onSuccess: () => {
 			utils.campaigns.getAll.refetch();
+			methods.reset();
 			toast.success('Campaign created !');
 		},
 		onError: error => {
