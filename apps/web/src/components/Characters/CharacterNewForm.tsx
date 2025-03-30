@@ -20,6 +20,8 @@ const CharacterNewForm = ({ campaigns }: Props) => {
 	const createCharacter = trpc.characters.create.useMutation({
 		onSuccess: () => {
 			utils.characters.getAll.invalidate();
+			methods.reset();
+			(document.getElementById('add-char-modal') as HTMLDialogElement).close();
 			toast.success('Character created !');
 		},
 		onError: error => {
@@ -72,7 +74,7 @@ const CharacterNewForm = ({ campaigns }: Props) => {
 		methods.setValue('spirit.current', 15 + levelBonus + 1);
 		methods.setValue('weight.max', 7);
 		methods.setValue('weight.current', 0);
-	}, [methods.formState]);
+	}, [methods.formState, methods.handleSubmit]);
 
 	const onSubmit = async (data: NewCharacter) => {
 		await createCharacter.mutate(data);
@@ -81,86 +83,104 @@ const CharacterNewForm = ({ campaigns }: Props) => {
 	const watchSpecie = methods.watch('species');
 
 	return (
-		<FormProvider {...methods}>
-			<form
-				onSubmit={methods.handleSubmit(onSubmit)}
-				className='bg-background flex w-full flex-col rounded-lg p-4 shadow shadow-lg md:w-3/4'
-			>
-				<Field name='name'>
-					<Input
-						name='name'
-						type='text'
-					/>
-				</Field>
-				<div className='flex flex-row items-center justify-center gap-4'>
-					<Field
-						name='species'
-						width='third'
+		<dialog
+			className='modal h-[100dvh] w-[100dvw]'
+			id='add-char-modal'
+		>
+			<div className='modal-box bg-background flex flex-col items-center'>
+				<FormProvider {...methods}>
+					<form
+						onSubmit={methods.handleSubmit(onSubmit)}
+						className='flex w-full flex-col rounded-lg p-4 md:w-3/4'
 					>
-						<Select
-							name='species'
-							options={characterSpecieOptions}
-							defaultValue=''
-						/>
-					</Field>
-					{(watchSpecie === 'human' ||
-						watchSpecie === 'elf' ||
-						watchSpecie === 'dwarf' ||
-						watchSpecie === 'gobelin' ||
-						watchSpecie === 'gnome' ||
-						watchSpecie === 'orc') && (
-						<Field
-							name='subspecies'
-							width='third'
-							label='Sub-Species'
-						>
-							<Select
-								name='subspecies'
-								defaultValue=''
-								options={
-									watchSpecie === 'human'
-										? ['moufflian', 'inclay']
-										: watchSpecie === 'elf'
-											? ['bourguignon', 'armagnac']
-											: watchSpecie === 'dwarf'
-												? ['durkran', 'grey']
-												: watchSpecie === 'gobelin'
-													? ['republican', 'royalist']
-													: watchSpecie === 'gnome'
-														? ['free', 'wild']
-														: watchSpecie === 'orc'
-															? ['villous', 'pipourray']
-															: ['']
-								}
+						<Field name='name'>
+							<Input
+								name='name'
+								type='text'
 							/>
 						</Field>
-					)}
-					<Field
-						name='level'
-						width='digit'
-					>
-						<InputNumber name='level' />
-					</Field>
+						<div className='flex flex-row items-center justify-center gap-4'>
+							<Field
+								name='species'
+								width='third'
+							>
+								<Select
+									name='species'
+									options={characterSpecieOptions}
+									defaultValue=''
+								/>
+							</Field>
+							{(watchSpecie === 'human' ||
+								watchSpecie === 'elf' ||
+								watchSpecie === 'dwarf' ||
+								watchSpecie === 'gobelin' ||
+								watchSpecie === 'gnome' ||
+								watchSpecie === 'orc') && (
+								<Field
+									name='subspecies'
+									width='third'
+									label='Sub-Species'
+								>
+									<Select
+										name='subspecies'
+										defaultValue=''
+										options={
+											watchSpecie === 'human'
+												? ['moufflian', 'inclay']
+												: watchSpecie === 'elf'
+													? ['bourguignon', 'armagnac']
+													: watchSpecie === 'dwarf'
+														? ['durkran', 'grey']
+														: watchSpecie === 'gobelin'
+															? ['republican', 'royalist']
+															: watchSpecie === 'gnome'
+																? ['free', 'wild']
+																: watchSpecie === 'orc'
+																	? ['villous', 'pipourray']
+																	: ['']
+										}
+									/>
+								</Field>
+							)}
+							<Field
+								name='level'
+								width='digit'
+							>
+								<InputNumber name='level' />
+							</Field>
+						</div>
+						<Field
+							name='campaign'
+							width='full'
+							label='active campaign'
+						>
+							<Select
+								name='campaign'
+								options={campaigns}
+								defaultValue=''
+							/>
+						</Field>
+						<SubmitButton
+							isLoading={methods.formState.isSubmitting}
+							color='accent'
+							textColor='stone-800'
+							text='Create'
+						/>
+					</form>
+				</FormProvider>
+				<div className='flex flex-row justify-between'>
+					<p className='text-neutral py-4'>
+						Press ESC key or click outside to close
+					</p>
 				</div>
-				<Field
-					name='campaigns'
-					width='full'
-					label='active campaign'
-				>
-					<Select
-						name='campaigns'
-						options={campaigns}
-						defaultValue=''
-					/>
-				</Field>
-				<SubmitButton
-					isLoading={methods.formState.isSubmitting}
-					color='accent'
-					textColor='stone-800'
-					text='Create'
-				/>
+			</div>
+			<form
+				method='dialog'
+				className='modal-backdrop text-neutral-content'
+			>
+				<button>close</button>
 			</form>
-		</FormProvider>
+		</dialog>
 	);
 };
 

@@ -1,4 +1,4 @@
-import { helloRouter } from '@api/router/hello';
+import { usersRouter } from '@api/router/users';
 import { router } from '@api/trpc';
 import { actionsRouter } from './actions';
 import { attributesRouter } from './attributes';
@@ -11,7 +11,7 @@ import { itemsRouter } from './items';
 import { spellsRouter } from './spells';
 
 export const appRouter = router({
-	hello: helloRouter,
+	users: usersRouter,
 	spells: spellsRouter,
 	auth: authRouter,
 	creatures: creaturesRouter,

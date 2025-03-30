@@ -4,15 +4,17 @@ import { cn } from '@/utils/classNames';
 import { trpc } from '@/utils/trpc';
 import { Campaign } from '@api/lib/ZodCampaign';
 import { Character } from '@api/lib/ZodCharacter';
+import { UserWithoutPass } from '@api/lib/ZodUser';
 import { useNavigate } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { BiX } from 'rocketicons/bi';
-import { FiTrash2 } from 'rocketicons/fi';
+import { FiPower, FiTrash2 } from 'rocketicons/fi';
 import { ActionButton, SmallCircleButton } from '../Buttons';
 import Collapsible from '../Collapsible';
 import { Option } from '../SpellList/SelectFilter';
 import TitleCount from '../TitleCount';
+import Login from '../User/Login';
 import CampaignNewForm from './Campaigns/CampaignNewForm';
 import CharacterNewForm from './CharacterNewForm';
 import CharacterSummaryTile from './CharacterSummaryTile';
@@ -23,25 +25,42 @@ const CharactersView = () => {
 	const isEditor = user?.role === 'ADMIN' || user?.role === 'EDITOR';
 	const navigate = useNavigate();
 
+	const [users, setUsers] = useState<UserWithoutPass[]>([]);
 	const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+	const [characters, setCharacters] = useState<Character[]>([]);
 	const [campaignOptions, setCampaignOptions] = useState<Option[]>([]);
+	const [userOptions, setUserOptions] = useState<Option[]>([]);
 	const [panelOpen, setPanelOpen] = useState(false);
+
+	const getUserList = trpc.users.getAll.useQuery(undefined);
 
 	const getAllCharacters = trpc.characters.getAll.useQuery(undefined, {
 		enabled: user !== null,
 	});
-
+	const getPlayerCampaigns = trpc.campaigns.getByPlayer.useQuery(
+		user ? user.id : '',
+		{
+			enabled: user !== null && user.role !== 'ADMIN' && user.role !== 'EDITOR',
+		},
+	);
 	const getDMCampaigns = trpc.campaigns.getByDMId.useQuery(
 		user ? user.id : '',
 		{
 			enabled: user !== null && user.role === 'EDITOR',
 		},
 	);
-
 	const getAllCampaigns = trpc.campaigns.getAll.useQuery(undefined, {
 		enabled: user !== null && user.role === 'ADMIN',
 	});
-
+	const toggleActiveCampaign = trpc.campaigns.toggleActive.useMutation({
+		onSuccess: () => {
+			utils.campaigns.getAll.refetch();
+		},
+		onError: error => {
+			toast.error(error.message);
+			throw new Error(error.message);
+		},
+	});
 	const updateCharCampaign = trpc.characters.updateCampaign.useMutation({
 		onSuccess: () => {
 			utils.characters.getAll.invalidate();
@@ -52,9 +71,28 @@ const CharactersView = () => {
 			throw new Error(error.message);
 		},
 	});
-	const updateCharExp = trpc.characters.updateXp.useMutation({
+	const updateCharOwner = trpc.characters.updateOwner.useMutation({
 		onSuccess: () => {
 			utils.characters.getAll.invalidate();
+			toast.success('Assigned to player !');
+		},
+		onError: error => {
+			toast.error(error.message);
+			throw new Error(error.message);
+		},
+	});
+	const updateCharExp = trpc.characters.updateXp.useMutation({
+		onSuccess: () => {
+			toast.success('Experience updated !');
+		},
+		onError: error => {
+			toast.error(error.message);
+			throw new Error(error.message);
+		},
+	});
+	const updateCampPlayers = trpc.campaigns.updatePlayers.useMutation({
+		onSuccess: () => {
+			utils.campaigns.getByPlayer.invalidate();
 			toast.success('Experience updated !');
 		},
 		onError: error => {
@@ -72,7 +110,6 @@ const CharactersView = () => {
 			throw new Error(error.message);
 		},
 	});
-
 	const deleteCampaign = trpc.campaigns.delete.useMutation({
 		onSuccess: () => {
 			utils.campaigns.getAll.invalidate();
@@ -84,20 +121,32 @@ const CharactersView = () => {
 		},
 	});
 
+	useEffect(() => {
+		if (getUserList.data) setUsers(getUserList.data);
+		setUserOptions(
+			users.map(({ name, id }) => ({
+				label: name as string,
+				value: id as string,
+			})),
+		);
+	}, [getUserList.data, user]);
+
 	// SETUP CAMPAIGNS
 	useEffect(() => {
 		//add viewer characters
-		if (
+		if (user && getPlayerCampaigns.data) {
+			setCampaigns(getPlayerCampaigns.data);
+		} else if (
 			getDMCampaigns &&
 			user &&
 			user.role === 'EDITOR' &&
 			getDMCampaigns.data
 		) {
 			setCampaigns(getDMCampaigns.data);
-		}
-		if (user && user.role === 'ADMIN' && getAllCampaigns.data) {
+		} else if (user && user.role === 'ADMIN' && getAllCampaigns.data) {
 			setCampaigns(getAllCampaigns.data);
 		}
+
 		setAvgCampaignsLevel();
 		setCampaignOptions(
 			campaigns.map(({ name, id }) => ({
@@ -105,45 +154,49 @@ const CharactersView = () => {
 				value: id as string,
 			})),
 		);
-	}, [user, getAllCampaigns.data, getDMCampaigns.data, getAllCharacters.data]);
+	}, [
+		user,
+		getAllCampaigns.data,
+		getDMCampaigns.data,
+		getAllCharacters.data,
+		getPlayerCampaigns.data,
+		characters,
+	]);
+
+	// SETUP CHARACTERS
+	useEffect(() => {
+		if (getAllCharacters.data) setCharacters(getAllCharacters.data);
+		setAvgCampaignsLevel();
+	}, [getAllCharacters.data]);
 
 	// SET UP AVG LEVELS
 	const setAvgCampaignsLevel = () => {
-		if (campaigns.length > 0 && getAllCharacters.data) {
-			campaigns.map(k => {
+		if (campaigns.length > 0 && characters) {
+			campaigns.map(campaign => {
 				let charLevels: [number] = [0];
-				getAllCharacters.data?.map(c => {
-					if (c.campaigns === k.id) {
+				characters
+					.filter(c => c.campaign === campaign.id)
+					.map(c => {
 						charLevels.push(c.level);
-						!k.maxLevel || k.maxLevel < c.level
-							? (k.maxLevel = c.level)
-							: (k.maxLevel = k.maxLevel);
-						!k.minLevel || k.minLevel > c.level
-							? (k.minLevel = c.level)
-							: (k.minLevel = k.minLevel);
-					}
-				});
-				k.charNb = charLevels.length - 1;
-				k.avgLevel = Math.floor(
+						console.log(charLevels);
+						!campaign.maxLevel || campaign.maxLevel < c.level
+							? (campaign.maxLevel = c.level)
+							: (campaign.maxLevel = campaign.maxLevel);
+						!campaign.minLevel || campaign.minLevel > c.level
+							? (campaign.minLevel = c.level)
+							: (campaign.minLevel = campaign.minLevel);
+					});
+				campaign.charNb = charLevels.length - 1;
+				campaign.avgLevel = Math.ceil(
 					charLevels.reduce(function (a, b) {
 						return a + b;
-					}, 0) / k.charNb,
+					}, 0) / campaign.charNb,
 				);
-				console.warn(k.name, k.avgLevel);
+
+				console.warn(campaign.name, campaign.charNb, campaign.avgLevel);
 			});
 		}
 	};
-
-	if (!getAllCharacters.data || !getAllCharacters.data)
-		return (
-			<div className='font-grenze mt-10 flex flex-col items-center justify-center gap-2 px-4'>
-				<h3 className='text-4xl'>Collecting resources</h3>
-				<span className='font-cabin italic'>
-					Please wait while we search for the knowledge within the library ...
-				</span>
-				<progress className='progress w-56'></progress>
-			</div>
-		);
 
 	const handleDelete = async (id: string) => {
 		await deleteCharacter.mutate(id);
@@ -151,10 +204,40 @@ const CharactersView = () => {
 
 	const handleDeleteCampaign = async (id: string) => {
 		await deleteCampaign.mutate(id);
+		getAllCharacters.data
+			?.filter(c => c.campaign === id)
+			.map(async c => {
+				await updateCharCampaign.mutate({ id: c.id, campaignId: '' });
+			});
 	};
 
-	const handleCampaignChange = async (id: string, campaign: string) => {
-		await updateCharCampaign.mutate([id, campaign]);
+	const handleCampaignChange = async (
+		id: string,
+		campaign: string,
+		owner: string,
+	) => {
+		await updateCharCampaign.mutate({ id: id, campaignId: campaign });
+		// update list of players in campaign
+		const campaignTargeted = campaigns.find(c => c.id.toString() === campaign);
+		if (campaignTargeted) {
+			const players = campaignTargeted?.players;
+			players?.push(owner);
+			updateCampPlayers.mutate({ id: campaign, players: players });
+		}
+	};
+	const handleOwnerChange = async (
+		id: string,
+		user: string,
+		campaign: string,
+	) => {
+		await updateCharOwner.mutate({ id: id, userId: user });
+		// update list of players in campaign
+		const campaignTargeted = campaigns.find(c => c.id === campaign);
+		if (campaignTargeted) {
+			const players = campaignTargeted?.players;
+			players?.push(user);
+			updateCampPlayers.mutate({ id: campaign, players: players });
+		}
 	};
 
 	const handleXpChange = async (expInput: number, char: Character) => {
@@ -184,10 +267,24 @@ const CharactersView = () => {
 		return Math.ceil(Math.abs(date / (1000 * 3600 * 24)));
 	};
 
-	if (!user)
-		navigate({
-			to: '/',
-		});
+	if (!user) {
+		return (
+			<div>
+				<Login />
+			</div>
+		);
+	}
+
+	if (!characters)
+		return (
+			<div className='font-grenze mt-10 flex flex-col items-center justify-center gap-2 px-4'>
+				<h3 className='text-4xl'>Collecting resources</h3>
+				<span className='font-cabin italic'>
+					Please wait while we search for the knowledge within the library ...
+				</span>
+				<progress className='progress w-56'></progress>
+			</div>
+		);
 
 	return (
 		<div className='relative h-full w-full'>
@@ -204,27 +301,43 @@ const CharactersView = () => {
 				<div className='dark:from-background container sticky top-8 z-10 flex h-fit min-h-[25dvh] w-full flex-col items-center bg-gradient-to-b from-stone-100 from-80% pb-8'>
 					<h1 className='font-grenze dark:text-primary text-secondary sticky top-4 z-10 mx-auto mt-4 text-center text-6xl font-bold tracking-wide md:mt-8'>
 						Characters
-						{getAllCharacters.data && (
-							<TitleCount number={getAllCharacters.data.length} />
-						)}
+						{characters && <TitleCount number={characters.length} />}
 					</h1>
+					<div className='iems-center flex flex-col gap-0'>
+						<ActionButton
+							color='primary'
+							textColor='background'
+							onClick={e => {
+								e.stopPropagation();
+								setPanelOpen(prev => !prev);
+							}}
+						>
+							Campaigns
+						</ActionButton>
 
-					<ActionButton
-						color='primary'
-						textColor='background'
-						onClick={e => {
-							e.stopPropagation();
-							setPanelOpen(prev => !prev);
-						}}
-					>
-						Campaigns
-					</ActionButton>
+						{user && (
+							<>
+								<ActionButton
+									color='accent'
+									textColor='background'
+									onClick={() => {
+										(
+											document.getElementById(
+												'add-char-modal',
+											) as HTMLDialogElement
+										).showModal();
+									}}
+								>
+									Add Character
+								</ActionButton>
 
-					{user && isEditor && (
-						<Collapsible title='new character'>
-							<CharacterNewForm campaigns={campaignOptions} />
-						</Collapsible>
-					)}
+								<CharacterNewForm
+									campaigns={campaignOptions}
+									users={userOptions}
+								/>
+							</>
+						)}
+					</div>
 				</div>
 				<div
 					className={cn(
@@ -235,14 +348,7 @@ const CharactersView = () => {
 					)}
 				>
 					{campaigns
-						.filter(a => {
-							if (getAllCharacters.data) {
-								const activeChar = getAllCharacters?.data.filter(
-									o => o.campaigns === a.id,
-								);
-								return activeChar.length !== 0;
-							}
-						})
+						.filter(campaign => campaign.active)
 						.map(k => (
 							<div
 								className='mb-4 flex flex-col items-center'
@@ -253,6 +359,7 @@ const CharactersView = () => {
 										<h4 className='font-grenze text-primary text-2xl tracking-wide'>
 											{k.name}
 										</h4>
+
 										<div className='flex flex-row gap-2'>
 											{k.createdAt && (
 												<span className='font-cabin text-neutral-content italic'>
@@ -274,32 +381,38 @@ const CharactersView = () => {
 								</div>
 
 								<ul className='list bg-card w-full rounded-lg shadow-md'>
-									{getAllCharacters.data
-										?.filter(charac => charac.campaigns === k.id)
+									{characters
+										.filter(character => character.campaign !== '')
+										.filter(character => character.campaign === k.id.toString())
 										.map(char => (
 											<CharacterSummaryTile
-												key={char.fullname}
+												key={char.id}
 												handleDelete={handleDelete}
 												user={user}
 												char={char}
+												dm={k.dm}
 												campaignOptions={campaignOptions}
+												userOptions={userOptions}
 												updateCampaign={handleCampaignChange}
+												updateOwner={handleOwnerChange}
 												updateXp={handleXpChange}
 											/>
 										))}
 								</ul>
-								<div className='-mt-4'>
-									{' '}
-									<ActionButton
-										color='primary'
-										textColor='background'
-									>
-										{' '}
-										set encounter{' '}
-									</ActionButton>
-								</div>
+								{user?.id === k.dm ||
+									(user?.role === 'ADMIN' && (
+										<div className=''>
+											<ActionButton
+												color='primary'
+												textColor='background'
+											>
+												set encounter
+											</ActionButton>
+										</div>
+									))}
 							</div>
 						))}
+					{/* UNASSIGNED ---------------------------------------------------------------------- */}
 					<div className='mb-4'>
 						<div className='mb-2 flex flex-row items-center justify-between gap-4'>
 							<h4 className='font-grenze text-neutral-content text-2xl tracking-wide'>
@@ -307,12 +420,9 @@ const CharactersView = () => {
 							</h4>
 						</div>
 
-						{getAllCharacters.data
-							.filter(a => {
-								if (campaigns) {
-									return !campaigns.some(c => c.id === a.campaigns);
-								}
-							})
+						{characters
+							.filter(character => character.owner === user.id)
+							.filter(character => character.campaign === '')
 							.map(char => (
 								<ul
 									className='list bg-card rounded-lg shadow-md'
@@ -324,7 +434,9 @@ const CharactersView = () => {
 										user={user}
 										char={char}
 										updateCampaign={handleCampaignChange}
+										updateOwner={handleOwnerChange}
 										campaignOptions={campaignOptions}
+										userOptions={userOptions}
 										updateXp={handleXpChange}
 									/>
 									{/* <div className='ml-2 flex flex-row gap-2'>
@@ -357,7 +469,7 @@ const CharactersView = () => {
 					</div>
 				</div>
 			</div>
-
+			{/* CAMPAIGNS PANEL -------------------------------------------------------------------------------- */}
 			<div
 				className={cn(
 					'sidebar bg-card fixed bottom-0 left-0 top-12 z-20 w-5/6 px-4 shadow shadow-lg shadow-stone-900 transition-transform duration-500 md:w-1/3',
@@ -389,13 +501,29 @@ const CharactersView = () => {
 								})}
 							></span>
 							{capitalizeFirstLetter(camp.name)}
-
+							{(user?.role === 'ADMIN' || user?.id === camp.dm) && (
+								<button
+									onClick={() =>
+										toggleActiveCampaign.mutate({
+											id: camp.id,
+											active: !camp.active,
+										})
+									}
+								>
+									<FiPower
+										className={cn(`icon-sm cursor-pointer`, {
+											'icon-accent': camp.active,
+											'icon-neutral': !camp.active,
+										})}
+									/>
+								</button>
+							)}
 							{user?.role === 'ADMIN' && (
 								<SmallCircleButton
 									color='bg-error'
 									onClick={() => handleDeleteCampaign(camp.id)}
 								>
-									<FiTrash2 className='dark:icon-background-sm align-baseline' />
+									<FiTrash2 className='dark:icon-background sixe-3 md:icon-sm align-baseline' />
 								</SmallCircleButton>
 							)}
 						</li>
