@@ -331,10 +331,7 @@ const CharactersView = () => {
 									Add Character
 								</ActionButton>
 
-								<CharacterNewForm
-									campaigns={campaignOptions}
-									users={userOptions}
-								/>
+								<CharacterNewForm campaigns={campaignOptions} />
 							</>
 						)}
 					</div>
