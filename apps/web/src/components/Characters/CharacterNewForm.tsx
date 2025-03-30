@@ -12,10 +12,9 @@ import { Option } from '../SpellList/SelectFilter';
 
 type Props = {
 	campaigns: Option[];
-	users: Option[];
 };
 
-const CharacterNewForm = ({ campaigns, users }: Props) => {
+const CharacterNewForm = ({ campaigns }: Props) => {
 	const { user } = useAuth();
 	const utils = trpc.useUtils();
 	const createCharacter = trpc.characters.create.useMutation({
