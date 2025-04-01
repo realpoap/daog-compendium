@@ -41,62 +41,193 @@ enum Role {
 
 model Character {
   id String              @id @default(auto()) @map("_id") @db.ObjectId
+  fullname        String              @unique
+  createdAt       DateTime?           @default(now())
+  updatedAt       DateTime? @updatedAt
+  //------------------------------------------------------------------
+  bio Bio
+  path Path
+  status Status
+  masteries Masteries
+  profile Statistics
+  specifics Specifics
+  equipment Inventory
+
+}
+
+type Masteries {
+  crafting StatVariable 
+	fighting StatVariable 
+	defense StatVariable
+	detection StatVariable
+	discretion StatVariable
+	speech StatVariable
+	esoterism StatVariable
+	logic StatVariable
+	brawl StatVariable
+	magic StatVariable
+	preciseness StatVariable
+	movement StatVariable
+	trading StatVariable
+	perception StatVariable
+	performance StatVariable
+	persuasion StatVariable
+	physique StatVariable
+	knowledge StatVariable
+	sciences StatVariable
+	healing StatVariable
+	survival StatVariable
+	ranged StatVariable
+}
+
+type Statistics {
+  glory           Int @default(0)
+  luck  Int @default(0)
+  destiny  Int @default(0)
+  level Int @default(1)
+  experience Int @default(0)
+  stats           StatProfil?
+  statsStarting   StatProfil
+  speed Speed?
+  variables Variables
+  boni Variables
+}
+
+type Speed {
+  crawling Int @default(0)
+  walking Int @default(0)
+  running Int @default(0)
+  obstacle Int @default(0)
+}
+
+type Variables {
+  initiative Int @default(0)
+  attack          Int @default(0)
+  brawl          Int @default(0)
+  defense         Int @default(0)
+  ranged          Int @default(0)
+  perception      Int @default(0)
+  discretion      Int @default(0)
+  magic      Int @default(0)
+  bravery Int @default(0)
+	survival Int @default(0)
+	enigms Int @default(0)
+	speech Int @default(0)
+	trade Int @default(0)
+	performance Int @default(0)
+	intimidation Int @default(0)
+}
+
+type Bio {
   creator String
   owner String
   campaign String
   isDead  Boolean  @default(false)
-  fullname        String              @unique
   avatar  String?
   name  String
-  surname         String?
+  surname String?
   species String
   subspecies String?
-  size            CreatureSize @default(average)
-  sizeBonus Int @default(0)
-  alignment       Alignment @default(neutral)
-  level Int @default(1)
-  experience Int @default(0)
-  createdAt       DateTime?           @default(now())
-  updatedAt       DateTime? @updatedAt
-  background          String?
-  description     String?
-  glory           Int @default(0)
-  luck  Int @default(0)
-  stats           StatProfil
+  fighterType String?
   isBoss          Boolean            @default(false)
   isCaster        Boolean  @default(false)
   isPun      Boolean  @default(false)
-  //magicDomain     SpellType[]
-  health StatVariable
-  spirit  StatVariable
-  actionList      ActionList?
-  attackType  String @default("STR")
-  defenseType  String @default("AGI")
-  initiative Int @default(0)
-  initiativeBonus Int @default(0)
-  attack          Int @default(0)
-  attackBonus     Int @default(0)
-  defense         Int @default(0)
-  defenseBonus    Int @default(0)
-  ranged          Int @default(0)
-  rangedBonus     Int @default(0)
-  armor           Int @default(0)
+}
+
+enum gender {
+  male
+  female
+  fluid
+  unknown
+}
+
+type Specifics {
+  size            CreatureSize @default(average)
+  sizeBonus Int @default(0)
+  alignment       Alignment @default(neutral)
+  background          String?
+  description     String?
+  age Int?
+  gender gender?
+  weight Int?
+  height Int?
+  bornIn String?
+  restBonus Int?
+  dmgBonus Int?
+  speaks Language[]
+  massive Boolean @default(false)
+}
+
+type Language {
+  language languages
+  mastery Int @default(1)
+}
+
+enum languages {
+  common 
+  moufflian_slang  @map("moufflian slang")
+  clay
+  elven
+  dwarvish
+  gnomish
+  goblin
+  giant
+  troll
+  high_elven @map("high elven")
+  old_dwarvish @map("old dwarven")
+  titan
+  rosmary
+  dead_speech @map("dead speech")
+  fifilanto
+  primal
+  amphibian
+  silvan
+  signs
+  thieves_marks @map("thieves' marks")
+  forester_symbols @map("forester symbols")
+  dwarven_runes @map("dwarven runes")
+  kabbalistic_glyphs @map("cabalistic glyphs")
+}
+
+type Inventory {
+  weapons CreatureItem[]
+  armors CreatureItem[]
+  items CreatureItem[]
+  components CreatureComponent[]
+  armorValue           Int @default(0)
   armorClass      Int @default(0)
-  perception      Int @default(0)
-  perceptionBonus Int @default(0)
-  discretion      Int @default(0)
-  discretionBonus Int @default(0)
-  magic           Int @default(0)
-  exhaustion  Int @default(0)
+}
+
+type Path {
+  magicDomain SpellType[]
+  tree String?
   careers String[]
   skills  Skill[]
   feats Feat[]
-  fighterType String?
+  actions CreatureAction[]
+  actionList      ActionList?
+  attackType  String @default("STR")
+  defenseType  String @default("AGI")
+  skillPoints Int @default(0)
+}
+
+type Status {
   weight StatVariable
   weightBonus  Int @default(0)
   carryWeight  Int @default(0)
   weightClass Int @default(0)
+  exhaustion  Int @default(0)
+  health StatVariable
+  magicLoad StatVariable
+  spirit  StatVariable
+  gold  Int @default(0)
+  equipmentValue Int @default(0)
+  tempHealth Int?
+  tempSpirit Int?
+  advantages Int?
 }
+
+//-----------------------------------------------------
 
 type StatVariable {
   current Int @default(0)
@@ -146,8 +277,8 @@ type Skill {
   name  String
   mastery String
   description String?
-  playerLevel Int?
-  playerPoints Int?
+  playerLevel Int? @default(1)
+  playerPoints Int? @default(1)
 }
 
 type Feat {
@@ -159,6 +290,7 @@ type Feat {
   passive String?
   rank Int
   color String
+  racial Boolean?
 }
 
 model Creature {

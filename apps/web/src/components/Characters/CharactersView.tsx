@@ -175,15 +175,15 @@ const CharactersView = () => {
 			campaigns.map(campaign => {
 				let charLevels: [number] = [0];
 				characters
-					.filter(c => c.campaign === campaign.id)
+					.filter(character => character.bio.campaign === campaign.id)
 					.map(c => {
-						charLevels.push(c.level);
+						charLevels.push(c.profile.level);
 						console.log(charLevels);
-						!campaign.maxLevel || campaign.maxLevel < c.level
-							? (campaign.maxLevel = c.level)
+						!campaign.maxLevel || campaign.maxLevel < c.profile.level
+							? (campaign.maxLevel = c.profile.level)
 							: (campaign.maxLevel = campaign.maxLevel);
-						!campaign.minLevel || campaign.minLevel > c.level
-							? (campaign.minLevel = c.level)
+						!campaign.minLevel || campaign.minLevel > c.profile.level
+							? (campaign.minLevel = c.profile.level)
 							: (campaign.minLevel = campaign.minLevel);
 					});
 				campaign.charNb = charLevels.length - 1;
@@ -205,7 +205,7 @@ const CharactersView = () => {
 	const handleDeleteCampaign = async (id: string) => {
 		await deleteCampaign.mutate(id);
 		getAllCharacters.data
-			?.filter(c => c.campaign === id)
+			?.filter(character => character.bio.campaign === id)
 			.map(async c => {
 				await updateCharCampaign.mutate({ id: c.id, campaignId: '' });
 			});
@@ -241,14 +241,16 @@ const CharactersView = () => {
 	};
 
 	const handleXpChange = async (expInput: number, char: Character) => {
-		let maxExp = char.level * 100;
-		let currentLvl = char.level;
-		let newExp = char.experience ? char.experience + expInput : expInput; //-100
+		let maxExp = char.profile.level * 100;
+		let currentLvl = char.profile.level;
+		let newExp = char.profile.experience
+			? char.profile.experience + expInput
+			: expInput; //-100
 		if (newExp >= maxExp) {
 			currentLvl += 1;
 			newExp = newExp - maxExp;
 			toast.success('Level up ! 🎉');
-		} else if (char.experience && newExp <= 0) {
+		} else if (char.profile.experience && newExp <= 0) {
 			currentLvl -= 1;
 			maxExp = currentLvl * 100;
 			newExp = Math.abs(maxExp + newExp);
@@ -371,16 +373,18 @@ const CharactersView = () => {
 												nb : {k.charNb}
 											</span>
 											<span className='font-cabin text-neutral-content'>
-												avg lvl : {k.avgLevel}
+												avg lvl : {k.avgLevel || 0}
 											</span>
 										</div>
 									</div>
 								</div>
 
-								<ul className='list bg-card w-full rounded-lg shadow-md'>
+								<ul className='list flex w-full flex-col'>
 									{characters
-										.filter(character => character.campaign !== '')
-										.filter(character => character.campaign === k.id.toString())
+										.filter(character => character.bio.campaign !== '')
+										.filter(
+											character => character.bio.campaign === k.id.toString(),
+										)
 										.map(char => (
 											<CharacterSummaryTile
 												key={char.id}
@@ -418,11 +422,14 @@ const CharactersView = () => {
 						</div>
 
 						{characters
-							.filter(character => character.owner === user.id)
-							.filter(character => character.campaign === '')
+							.filter(character => {
+								if (character.bio.owner === user.id || user.role === 'ADMIN')
+									return true;
+							})
+							.filter(character => character.bio.campaign === '')
 							.map(char => (
 								<ul
-									className='list bg-card rounded-lg shadow-md'
+									className='list flex flex-col gap-4'
 									key={char.id}
 								>
 									<CharacterSummaryTile
@@ -436,31 +443,6 @@ const CharactersView = () => {
 										userOptions={userOptions}
 										updateXp={handleXpChange}
 									/>
-									{/* <div className='ml-2 flex flex-row gap-2'>
-										<select
-											aria-placeholder='Assign to campaign'
-											defaultValue='Assign to campaign'
-											className='input-sm text-error text-md text-secondary caret-secondary dark:text-primary dark:caret-primary peer-default:dark:text-neutral dark:bg-card min-h-fit w-fit rounded-md px-2 py-0 shadow-sm'
-											onChange={e =>
-												handleCampaignChange(char.id, e.target.value)
-											}
-										>
-											<option
-												selected
-												disabled
-											>
-												Assign to campaign
-											</option>
-											{campaignOptions.map(option => (
-												<option
-													className='bg-card'
-													value={option.value}
-												>
-													{option.label}
-												</option>
-											))}
-										</select>
-									</div> */}
 								</ul>
 							))}
 					</div>

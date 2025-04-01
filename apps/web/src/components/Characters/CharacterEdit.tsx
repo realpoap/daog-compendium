@@ -1,14 +1,16 @@
 import { useAuth } from '@/store/authContext';
 import {
 	creatureAlignmentOptions,
+	creatureGenderOptions,
 	creatureSizeOptions,
 } from '@/types/creatureOptions';
 import { calcCharacterStats } from '@/utils/calculateStats';
 import { trpc } from '@/utils/trpc';
 import { Character, CharacterSchema } from '@api/lib/ZodCharacter';
+import { SpellType } from '@api/lib/ZodSpell';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate, useParams } from '@tanstack/react-router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import {
@@ -33,6 +35,7 @@ const CharacterEdit = () => {
 
 	const isEditor = user?.role === 'ADMIN' || user?.role === 'EDITOR';
 	const utils = trpc.useUtils();
+	const [character, setCharacter] = useState<Character>();
 	const characterById = trpc.characters.getById.useQuery(id as string);
 
 	const methods = useForm<Character>({
@@ -50,27 +53,37 @@ const CharacterEdit = () => {
 
 	useEffect(() => {
 		if (!characterById.isSuccess) return;
-		methods.reset(characterById.data as Character);
-	}, [characterById.status]);
+		if (characterById.data) {
+			setCharacter(calcCharacterStats(characterById.data));
+
+			Object.entries(characterById.data).forEach(([name, value]) =>
+				methods.setValue(name as keyof Character, value),
+			);
+			console.groupCollapsed('Character');
+			console.dir(methods.getValues());
+			console.groupEnd();
+		}
+	}, [characterById.data]);
 
 	useEffect(() => {
-		const c = calcCharacterStats(methods.getValues());
-		id && methods.setValue('id', id);
-		methods.setValue('fullname', c.fullname);
-		methods.setValue('attack', c.attack);
-		methods.setValue('ranged', c.ranged);
-		methods.setValue('defense', c.defense);
-		methods.setValue('perception', c.perception);
-		methods.setValue('discretion', c.discretion);
-		methods.setValue('health', c.health);
-		methods.setValue('spirit', c.spirit);
-		methods.setValue('initiative', c.initiative);
-		methods.setValue('weight', c.weight);
-		methods.setValue('armorClass', c.armorClass);
-		methods.setValue('actionList', c.actionList);
-		methods.setValue('defenseType', c.defenseType);
-		// methods.setValue('magicDomain', domains as SpellTypeType[]);
-	}, [methods.formState.isValidating, methods.formState.isSubmitting]);
+		if (character) {
+			const c = calcCharacterStats(methods.getValues());
+			id && methods.setValue('id', id);
+
+			Object.entries(c).forEach(([name, value]) =>
+				methods.setValue(name as keyof Character, value),
+			);
+			methods.setValue('path.careers', []);
+			methods.setValue('path.magicDomain', [] as SpellType[]);
+			methods.setValue(
+				'fullname',
+				`${methods.getValues('bio.name')} (${methods.getValues('bio.subspecies') + ' '}${methods.getValues('bio.species')}) - lvl ${methods.getValues('profile.level')}`,
+			);
+			console.groupCollapsed('Character sent');
+			console.dir(methods.getValues());
+			console.groupEnd();
+		}
+	}, [methods.formState.isSubmitting]);
 
 	const updatecharacter = trpc.characters.update.useMutation({
 		onSuccess: () => {
@@ -92,7 +105,7 @@ const CharacterEdit = () => {
 		updatecharacter.mutate(data);
 	};
 
-	const watchExp = methods.watch('experience');
+	const watchExp = methods.watch('profile.experience');
 
 	//Loading -----------------------------------------------------------------
 	if (characterById.isLoading && !characterById.data) {
@@ -103,8 +116,6 @@ const CharacterEdit = () => {
 			</div>
 		);
 	}
-	// define spell object data after query success
-	const character = characterById?.data;
 
 	/////////////////////////////////////////
 	// RETURN
@@ -113,41 +124,41 @@ const CharacterEdit = () => {
 	return (
 		<div>
 			<div className='mt-sm flex flex-col items-center justify-center p-2 px-2'>
-				<TitleBack title={`${character?.name}`} />
+				<TitleBack title={`${character?.bio.name}`} />
 
 				<div className='flex flex-row gap-2'>
 					<div className='font-cabin flex flex-row after:pl-2 after:text-stone-500 after:content-["|"]'>
 						<GiThunderSkull className='icon-background dark:icon-stone-200 icon-base mr-2' />{' '}
-						{methods.getValues('initiative')}
+						{methods.getValues('profile.variables.initiative')}
 					</div>
 
 					<div className='font-cabin flex flex-row after:pl-2 after:text-stone-500 after:content-["|"]'>
 						<GiBullseye className='icon-background dark:icon-stone-200 icon-base mr-2' />{' '}
-						{methods.getValues('ranged')}
+						{methods.getValues('profile.variables.ranged')}
 					</div>
 					<div className='font-cabin flex flex-row after:pl-2 after:text-stone-500 after:content-["|"]'>
 						<GiSwordWound className='icon-background dark:icon-stone-200 icon-base mr-2' />{' '}
-						{methods.getValues('attack')}
+						{methods.getValues('profile.variables.attack')}
 					</div>
 					<div className='font-cabin flex flex-row after:pl-2 after:text-stone-500 after:content-["|"]'>
 						<GiCheckedShield className='icon-background dark:icon-stone-200 icon-base mr-2' />{' '}
-						{methods.getValues('defense')}
+						{methods.getValues('profile.variables.defense')}
 					</div>
 					<div className='font-cabin flex flex-row after:pl-2 after:text-stone-500 after:content-["|"]'>
 						<GiArmorVest className='icon-background dark:icon-stone-200 icon-base mr-2' />{' '}
-						{methods.getValues('armorClass')}
+						{methods.getValues('equipment.armorClass')}
 					</div>
 					<div className='font-cabin flex flex-row after:pl-2 after:text-stone-500 after:content-["|"]'>
 						<GiSemiClosedEye className='icon-background dark:icon-stone-200 icon-base mr-2' />{' '}
-						{methods.getValues('perception')}
+						{methods.getValues('profile.variables.perception')}
 					</div>
 					<div className='font-cabin flex flex-row after:pl-2 after:text-stone-500 after:content-["|"]'>
 						<GiHood className='icon-background dark:icon-stone-200 icon-base mr-2' />{' '}
-						{methods.getValues('discretion')}
+						{methods.getValues('profile.variables.discretion')}
 					</div>
 					<div className='font-cabin flex flex-row'>
 						<GiFairyWand className='icon-background dark:icon-stone-200 icon-base mr-2' />{' '}
-						{methods.getValues('magic')}
+						{methods.getValues('profile.variables.magic')}
 					</div>
 				</div>
 				<FormProvider {...methods}>
@@ -155,56 +166,98 @@ const CharacterEdit = () => {
 						onSubmit={methods.handleSubmit(onSubmit)}
 						className='flex w-full flex-col items-center md:w-2/3'
 					>
-						<Field name='name'>
+						<Field
+							name='bio.name'
+							label='name'
+						>
 							<Input
-								name='name'
+								name='bio.name'
 								type='text'
 							/>
 						</Field>
-						<Field name='surname'>
+						<Field
+							name='bio.surname'
+							label='surname'
+						>
 							<Input
-								name='surname'
+								name='bio.surname'
 								type='text'
 							/>
 						</Field>
-						<div className='mb-2 flex w-full flex-row items-center justify-center gap-4'>
+						<div className='flex w-full flex-row justify-center gap-4'>
 							<Field
-								name='level'
-								width='digit'
+								name='specifics.gender'
+								width='third'
+								label='gender'
 							>
-								<InputNumber name='level' />
+								<Select
+									name='specifics.gender'
+									options={creatureGenderOptions}
+									defaultValue=''
+								/>
 							</Field>
 							<Field
-								name='experience'
+								name='specifics.age'
 								width='digit'
+								label='age'
 							>
-								<InputNumber name='experience' />
+								<InputNumber name='specifics.age' />
+							</Field>
+							<Field
+								name='bio.isPun'
+								label=''
+								width='third'
+							>
+								<Checkbox
+									name='bio.isPun'
+									label='name is a pun'
+								/>
+							</Field>
+						</div>
+
+						<div className='mb-2 flex w-full flex-row items-center justify-center gap-4'>
+							<Field
+								name='profile.level'
+								width='digit'
+								label='level'
+							>
+								<InputNumber name='profile.level' />
+							</Field>
+							<Field
+								name='profile.experience'
+								width='digit'
+								label='experience'
+							>
+								<InputNumber name='profile.experience' />
 							</Field>
 						</div>
 						<progress
-							className='progress progress-primary w-full md:w-1/2'
+							className='progress progress-primary h-1 w-full md:w-1/2'
 							value={watchExp}
 							max={
-								methods.getValues('level') && methods.getValues('level') * 100
+								methods.getValues('profile.level') &&
+								methods.getValues('profile.level') * 100
 							}
 						></progress>
 						<div className='flex w-full flex-row justify-center gap-4'>
 							<Field
-								name='size'
+								name='specifics.size'
 								width='third'
+								label='size'
 							>
 								<Select
-									name='size'
+									name='specifics.size'
 									options={creatureSizeOptions}
 									defaultValue=''
 								/>
 							</Field>
 							<Field
-								name='alignment'
+								name='specifics.alignment'
 								width='third'
+								label='alignment'
 							>
 								<Select
-									name='alignment'
+									name='specifics.alignment'
 									options={creatureAlignmentOptions}
 									defaultValue=''
 								/>
@@ -212,86 +265,76 @@ const CharacterEdit = () => {
 						</div>
 						<div className='flex flex-row justify-center gap-4'>
 							<Field
-								name='health.current'
+								name='status.health.current'
 								label='health'
 							>
 								<InputNumber
-									name='health.current'
-									max={methods.getValues('health.max')}
+									name='status.health.current'
+									max={methods.getValues('status.health.max')}
 								/>
 							</Field>
 							<Field
-								name='spirit.current'
+								name='status.spirit.current'
 								label='spirit'
 							>
 								<InputNumber
-									name='spirit.current'
-									max={methods.getValues('spirit.max')}
+									name='status.spirit.current'
+									max={methods.getValues('status.spirit.max')}
 								/>
 							</Field>
 						</div>
 
 						<div className='flex w-full flex-row justify-center gap-4'>
 							<Field
-								name='glory'
+								name='statistics.glory'
 								width='digit'
+								label='glory'
 							>
-								<InputNumber name='glory' />
+								<InputNumber name='statistics.glory' />
 							</Field>
 							<Field
-								name='luck'
+								name='statistics.luck'
 								width='digit'
+								label='luck'
 							>
-								<InputNumber name='luck' />
+								<InputNumber name='statistics.luck' />
+							</Field>
+							<Field
+								name='statistics.destiny'
+								width='digit'
+								label='destiny'
+							>
+								<InputNumber name='statistics.destiny' />
 							</Field>
 
 							<Field
-								name='exhaustion'
+								name='status.exhaustion'
 								width='digit'
+								label='fatigue'
 							>
-								<InputNumber name='exhaustion' />
+								<InputNumber name='status.exhaustion' />
 							</Field>
 						</div>
-						{(isEditor || characterById?.data?.creator === user?.id) && (
+						{(isEditor || characterById?.data?.bio.creator === user?.id) && (
 							<>
 								<div className='flex w-full flex-row justify-center'>
 									<Field
-										name='isPun'
+										name='bio.isBoss'
 										label=''
 										width='third'
 									>
 										<Checkbox
-											name='isPun'
-											label='pun name'
+											name='bio.isBoss'
+											label='unique'
 										/>
 									</Field>
 									<Field
-										name='isBoss'
+										name='bio.isDead'
 										label=''
 										width='third'
 									>
 										<Checkbox
-											name='isBoss'
-											label='legendary'
-										/>
-									</Field>
-									<Field
-										name='isCaster'
-										label=''
-										width='third'
-									>
-										<Checkbox
-											name='isCaster'
-											label='caster'
-										/>
-									</Field>
-									<Field
-										name='isDead'
-										label=''
-										width='third'
-									>
-										<Checkbox
-											name='isDead'
+											name='bio.isDead'
 											label='dead'
 										/>
 									</Field>
@@ -304,25 +347,25 @@ const CharacterEdit = () => {
 											</h4>
 											<div className='flex flex-row justify-center gap-2'>
 												<Field
-													name='stats.CEL'
+													name='profile.stats.CEL'
 													width='small'
 													label='CEL'
 												>
-													<InputNumber name='stats.CEL' />
+													<InputNumber name='profile.stats.CEL' />
 												</Field>
 												<Field
-													name='stats.AGI'
+													name='profile.stats.AGI'
 													width='small'
 													label='AGI'
 												>
-													<InputNumber name='stats.AGI' />
+													<InputNumber name='profile.stats.AGI' />
 												</Field>
 												<Field
-													name='stats.DEX'
+													name='profile.stats.DEX'
 													width='small'
 													label='DEX'
 												>
-													<InputNumber name='stats.DEX' />
+													<InputNumber name='profile.stats.DEX' />
 												</Field>
 											</div>
 										</section>
@@ -332,25 +375,25 @@ const CharacterEdit = () => {
 											</h4>
 											<div className='flex flex-row justify-center gap-2'>
 												<Field
-													name='stats.STR'
+													name='profile.stats.STR'
 													width='small'
 													label='STR'
 												>
-													<InputNumber name='stats.STR' />
+													<InputNumber name='profile.stats.STR' />
 												</Field>
 												<Field
-													name='stats.END'
+													name='profile.stats.END'
 													width='small'
 													label='END'
 												>
-													<InputNumber name='stats.END' />
+													<InputNumber name='profile.stats.END' />
 												</Field>
 												<Field
-													name='stats.VIT'
+													name='profile.stats.VIT'
 													width='small'
 													label='VIT'
 												>
-													<InputNumber name='stats.VIT' />
+													<InputNumber name='profile.stats.VIT' />
 												</Field>
 											</div>
 										</section>
@@ -360,25 +403,25 @@ const CharacterEdit = () => {
 											</h4>
 											<div className='flex flex-row justify-center gap-2'>
 												<Field
-													name='stats.WIL'
+													name='profile.stats.WIL'
 													width='small'
 													label='WIL'
 												>
-													<InputNumber name='stats.WIL' />
+													<InputNumber name='profile.stats.WIL' />
 												</Field>
 												<Field
-													name='stats.INS'
+													name='profile.stats.INS'
 													width='small'
 													label='INS'
 												>
-													<InputNumber name='stats.INS' />
+													<InputNumber name='profile.stats.INS' />
 												</Field>
 												<Field
-													name='stats.SEN'
+													name='profile.stats.SEN'
 													width='small'
 													label='SEN'
 												>
-													<InputNumber name='stats.SEN' />
+													<InputNumber name='profile.stats.SEN' />
 												</Field>
 											</div>
 										</section>
@@ -388,25 +431,25 @@ const CharacterEdit = () => {
 											</h4>
 											<div className='flex flex-row justify-center gap-2'>
 												<Field
-													name='stats.CHA'
+													name='profile.stats.CHA'
 													width='small'
 													label='CHA'
 												>
-													<InputNumber name='stats.CHA' />
+													<InputNumber name='profile.stats.CHA' />
 												</Field>
 												<Field
-													name='stats.SOC'
+													name='profile.stats.SOC'
 													width='small'
 													label='SOC'
 												>
-													<InputNumber name='stats.SOC' />
+													<InputNumber name='profile.stats.SOC' />
 												</Field>
 												<Field
-													name='stats.ERU'
+													name='profile.stats.ERU'
 													width='small'
 													label='ERU'
 												>
-													<InputNumber name='stats.ERU' />
+													<InputNumber name='profile.stats.ERU' />
 												</Field>
 											</div>
 										</section>
@@ -415,46 +458,111 @@ const CharacterEdit = () => {
 								<Collapsible title='change modifiers'>
 									<div className='flex w-full flex-wrap items-center justify-center gap-4 pb-0 pr-0 md:flex-row'>
 										<Field
-											name='attackBonus'
-											label='&#xb1; Attack'
-											width='tiny'
+											name='profile.boni.initiative'
+											label='&#xb1; Initiative'
+											width='digit'
 										>
-											<InputNumber name='attackBonus' />
+											<InputNumber name='profile.boni.initiative' />
 										</Field>
 										<Field
-											name='defenseBonus'
-											label='&#xb1; Defense'
-											width='tiny'
-										>
-											<InputNumber name='defenseBonus' />
-										</Field>
-										<Field
-											name='rangedBonus'
+											name='profile.boni.ranged'
 											label='&#xb1; Ranged'
-											width='tiny'
+											width='digit'
 										>
-											<InputNumber name='rangedBonus' />
+											<InputNumber name='profile.boni.ranged' />
 										</Field>
 										<Field
-											name='perceptionBonus'
+											name='profile.boni.attack'
+											label='&#xb1; Attack'
+											width='digit'
+										>
+											<InputNumber name='profile.boni.attack' />
+										</Field>
+										<Field
+											name='profile.boni.defense'
+											label='&#xb1; Defense'
+											width='digit'
+										>
+											<InputNumber name='profile.boni.defense' />
+										</Field>
+
+										<Field
+											name='profile.boni.perception'
 											label='&#xb1; Perception'
-											width='tiny'
+											width='digit'
 										>
-											<InputNumber name='perceptionBonus' />
+											<InputNumber name='profile.boni.perception' />
 										</Field>
 										<Field
-											name='armor'
+											name='profile.boni.discretion'
+											label='&#xb1; Discretion'
+											width='digit'
+										>
+											<InputNumber name='profile.boni.discretion' />
+										</Field>
+
+										<Field
+											name='profile.boni.survival'
+											label='&#xb1; Survival'
+											width='digit'
+										>
+											<InputNumber name='profile.boni.survival' />
+										</Field>
+										<Field
+											name='profile.boni.enigms'
+											label='&#xb1; Logic'
+											width='digit'
+										>
+											<InputNumber name='profile.boni.enigms' />
+										</Field>
+										<Field
+											name='profile.boni.speech'
+											label='&#xb1; Speech'
+											width='digit'
+										>
+											<InputNumber name='profile.boni.speech' />
+										</Field>
+										<Field
+											name='profile.boni.trade'
+											label='&#xb1; Trade'
+											width='digit'
+										>
+											<InputNumber name='profile.boni.trade' />
+										</Field>
+										<Field
+											name='profile.boni.performance'
+											label='&#xb1; Performance'
+											width='digit'
+										>
+											<InputNumber name='profile.boni.performance' />
+										</Field>
+										<Field
+											name='profile.boni.initimidation'
+											label='&#xb1; Intimidation'
+											width='digit'
+										>
+											<InputNumber name='profile.boni.intimidation' />
+										</Field>
+										<Field
+											name='profile.boni.bravery'
+											label='&#xb1; Bravery'
+											width='digit'
+										>
+											<InputNumber name='profile.boni.bravery' />
+										</Field>
+										<Field
+											name='equipment.armorValue'
 											label='&#xb1; Armor'
-											width='tiny'
+											width='digit'
 										>
-											<InputNumber name='armor' />
+											<InputNumber name='equipment.armorValue' />
 										</Field>
 										<Field
-											name='magic'
+											name='profile.boni.magic'
 											label='&#xb1; Magic'
-											width='tiny'
+											width='digit'
 										>
-											<InputNumber name='magic' />
+											<InputNumber name='profile.boni.magic' />
 										</Field>
 									</div>
 								</Collapsible>
@@ -465,7 +573,7 @@ const CharacterEdit = () => {
 						<SubmitButton
 							isLoading={methods.formState.isSubmitting}
 							color='accent'
-							textColor='stone-800'
+							textColor='background'
 							text='Update'
 						/>
 					</form>

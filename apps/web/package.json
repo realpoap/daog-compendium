@@ -30,6 +30,7 @@
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.51.5",
     "react-hot-toast": "^2.4.1",
+    "react-images-uploading": "^3.1.7",
     "react-multi-select-component": "^4.3.4",
     "react-select": "^5.9.0",
     "react-share": "^5.2.2",
