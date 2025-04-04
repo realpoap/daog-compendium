@@ -36,27 +36,20 @@ async function main() {
 
 	app.use(
 		cors({
-			origin: (
-				origin: string | undefined, // Origin can be undefined for same-origin requests
-				callback: (error: Error | null, allow?: boolean) => void,
-			) => {
+			origin: (origin, callback) => {
+				console.log('Request origin:', origin); // 🔍 Debug log
 				if (!origin || allowedOrigins.includes(origin)) {
 					callback(null, true);
 				} else {
-					callback(new Error(`Not allowed by CORS: ${origin}`), false); // Changed 'true' to 'false' to correctly block
+					callback(new Error(`Not allowed by CORS: ${origin}`));
 				}
 			},
-			methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Added OPTIONS to the allowed methods
-			allowedHeaders: [
-				'Content-Type',
-				'Authorization',
-				'Access-Control-Allow-Methods',
-				'Access-Control-Allow-Origin',
-				'*',
-			],
+			methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+			allowedHeaders: ['Content-Type', 'Authorization'],
 			credentials: true,
 		}),
 	);
+	app.options('*', cors()); // Allow preflight across all routes
 
 	const IMAGEKIT_PRIVATE_KEY = process.env.IMAGEKIT_PRIVATE_KEY;
 	if (!IMAGEKIT_PRIVATE_KEY) {
@@ -69,20 +62,6 @@ async function main() {
 		publicKey: process.env.IMAGEKIT_PUBLIC_KEY || '',
 		privateKey: process.env.IMAGEKIT_PRIVATE_KEY || '',
 	});
-
-	// app.use((req, res, next) => {
-	// 	if (req.method === 'OPTIONS') {
-	// 		res.setHeader('Access-Control-Allow-Origin', '*');
-	// 		res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
-	// 		res.setHeader(
-	// 			'Access-Control-Allow-Headers',
-	// 			'Content-Type,Authorization',
-	// 		);
-	// 		res.status(204).end(); // respond with no content
-	// 	} else {
-	// 		next();
-	// 	}
-	// });
 
 	app.use(
 		'/trpc',
