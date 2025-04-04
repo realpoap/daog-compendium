@@ -1,10 +1,8 @@
 import { appRouter } from '@api/router/_app';
 import { createExpressMiddleware } from '@trpc/server/adapters/express';
 import cookieParser from 'cookie-parser';
-import cors from 'cors';
 import 'dotenv/config';
 import express from 'express';
-import ImageKit from 'imagekit';
 import { createContext } from './trpc';
 
 async function main() {
@@ -15,30 +13,36 @@ async function main() {
 	app.use(cookieParser());
 
 	// Configure specific origins and options:
-	const origin =
-		process.env.NODE_ENV === 'production' && process.env.IMAGEKIT_URL_ENDPOINT
-			? [process.env.FRONTEND_URL, process.env.IMAGEKIT_URL_ENDPOINT]
-			: ['http://localhost:3000', process.env.IMAGEKIT_URL_ENDPOINT];
-	app.use(
-		cors({
-			origin: origin,
-			methods: ['GET', 'POST', 'PUT', 'DELETE'],
-			allowedHeaders: ['Content-Type', 'Authorization'],
-			credentials: true, // If you need to handle cookies or authorization headers
-		}),
-	);
+	let origin: string[];
+	if (process.env.NODE_ENV === 'production') {
+		const frontendURL = process.env.FRONTEND_URL;
+		const imageKitURL = process.env.IMAGEKIT_URL_ENDPOINT;
+
+		if (frontendURL && imageKitURL) {
+			origin = [frontendURL, imageKitURL];
+		} else if (frontendURL) {
+			origin = [frontendURL];
+		} else if (imageKitURL) {
+			origin = [imageKitURL];
+		} else {
+			origin = []; // Or handle this case as needed, maybe log an error
+			console.error(
+				'Warning: Neither FRONTEND_URL nor IMAGEKIT_URL_ENDPOINT are defined in production.',
+			);
+		}
+	} else {
+		const imageKitURL = process.env.IMAGEKIT_URL_ENDPOINT;
+		origin = ['http://localhost:3000'];
+		if (imageKitURL) {
+			origin.push(imageKitURL);
+		}
+	}
 
 	const IMAGEKIT_PRIVATE_KEY = process.env.IMAGEKIT_PRIVATE_KEY;
 	if (!IMAGEKIT_PRIVATE_KEY) {
 		console.warn('ImageKit Private Key is missing');
 	}
 	if (IMAGEKIT_PRIVATE_KEY) console.info('ImageKit Private Key ok');
-
-	const imagekit = new ImageKit({
-		urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT || '',
-		publicKey: process.env.IMAGEKIT_PUBLIC_KEY || '',
-		privateKey: process.env.IMAGEKIT_PRIVATE_KEY || '',
-	});
 
 	app.use((req, res, next) => {
 		if (req.method === 'OPTIONS') {
