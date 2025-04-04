@@ -3,6 +3,7 @@ import { createExpressMiddleware } from '@trpc/server/adapters/express';
 import cookieParser from 'cookie-parser';
 import 'dotenv/config';
 import express from 'express';
+import ImageKit from 'imagekit';
 import { createContext } from './trpc';
 
 async function main() {
@@ -43,6 +44,12 @@ async function main() {
 		console.warn('ImageKit Private Key is missing');
 	}
 	if (IMAGEKIT_PRIVATE_KEY) console.info('ImageKit Private Key ok');
+
+	const imagekit = new ImageKit({
+		urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT || '',
+		publicKey: process.env.IMAGEKIT_PUBLIC_KEY || '',
+		privateKey: process.env.IMAGEKIT_PRIVATE_KEY || '',
+	});
 
 	app.use((req, res, next) => {
 		if (req.method === 'OPTIONS') {
