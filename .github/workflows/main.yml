@@ -53,6 +53,9 @@ jobs:
         env:
           VITE_API_URL: ${{ secrets.VITE_API_URL}}
           VITE_FRONT_URL: ${{ secrets.VITE_FRONT_URL}}
+          VITE_IMAGEKIT_AUTH_ENDPOINT: ${{ secrets.VITE_IMAGEKIT_AUTH_ENDPOINT}}
+          VITE_IMAGEKIT_PUBLIC_KEY: ${{ secrets.VITE_PUBLIC_KEY}}
+          VITE_IMAGEKIT_URL_ENDPOINT: ${{ secrets.VITE_IMAGEKIT_URL_ENDPOINT}}
 
       - name: Upload production-ready build files
         uses: actions/upload-pages-artifact@v3
