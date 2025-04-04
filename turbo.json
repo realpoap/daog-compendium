@@ -1,21 +1,45 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["**/.env.*local"],
+  "globalDependencies": [
+    "**/.env.*local"
+  ],
   "tasks": {
     "build": {
-      "env": ["VITE_API_URL", "DATABASE_URL", "ACCESS_TOKEN_SECRET", "FRONTEND_URL", "REFRESH_TOKEN_SECRET"],
-      "outputs": ["dist/**"]
+      "env": [
+        "VITE_API_URL",
+        "VITE_IMAGEKIT_URL_ENDPOINT",
+        "VITE_IMAGEKIT_AUTH_ENDPOINT",
+        "VITE_IMAGEKIT_PUBLIC_KEY",
+        "DATABASE_URL",
+        "ACCESS_TOKEN_SECRET",
+        "FRONTEND_URL",
+        "REFRESH_TOKEN_SECRET",
+        "IMAGEKIT_PUBLIC_KEY",
+        "IMAGEKIT_PRIVATE_KEY",
+        "IMAGEKIT_URL_ENDPOINT"
+      ],
+      "outputs": [
+        "dist/**"
+      ]
     },
     "api#build": {
-      "dependsOn": ["^build"],
+      "dependsOn": [
+        "^build"
+      ],
       "outputs": []
     },
     "web#build": {
-      "dependsOn": ["^build"],
-      "outputs": ["dist/**"]
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        "dist/**"
+      ]
     },
     "lint": {
-      "dependsOn": ["^lint"]
+      "dependsOn": [
+        "^lint"
+      ]
     },
     "dev": {
       "cache": false,
