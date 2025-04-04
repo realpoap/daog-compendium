@@ -30,31 +30,31 @@ async function main() {
 			allowedOrigins.push(process.env.IMAGEKIT_URL_ENDPOINT);
 	}
 
-	app.use(cors());
+	// app.use(cors());
 
-	// app.use(
-	// 	cors({
-	// 		origin: (
-	// 			origin: string | undefined, // Origin can be undefined for same-origin requests
-	// 			callback: (error: Error | null, allow?: boolean) => void,
-	// 		) => {
-	// 			if (!origin || allowedOrigins.includes(origin)) {
-	// 				callback(null, true);
-	// 			} else {
-	// 				callback(new Error(`Not allowed by CORS: ${origin}`), false); // Changed 'true' to 'false' to correctly block
-	// 			}
-	// 		},
-	// 		methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Added OPTIONS to the allowed methods
-	// 		allowedHeaders: [
-	// 			'Content-Type',
-	// 			'Authorization',
-	// 			'Access-Control-Allow-Methods',
-	// 			'Access-Control-Allow-Origin',
-	// 			'*',
-	// 		],
-	// 		credentials: true,
-	// 	}),
-	// );
+	app.use(
+		cors({
+			origin: (
+				origin: string | undefined, // Origin can be undefined for same-origin requests
+				callback: (error: Error | null, allow?: boolean) => void,
+			) => {
+				if (!origin || allowedOrigins.includes(origin)) {
+					callback(null, true);
+				} else {
+					callback(new Error(`Not allowed by CORS: ${origin}`), false); // Changed 'true' to 'false' to correctly block
+				}
+			},
+			methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Added OPTIONS to the allowed methods
+			allowedHeaders: [
+				'Content-Type',
+				'Authorization',
+				'Access-Control-Allow-Methods',
+				'Access-Control-Allow-Origin',
+				'*',
+			],
+			credentials: true,
+		}),
+	);
 
 	const IMAGEKIT_PRIVATE_KEY = process.env.IMAGEKIT_PRIVATE_KEY;
 	if (!IMAGEKIT_PRIVATE_KEY) {
@@ -68,19 +68,19 @@ async function main() {
 		privateKey: process.env.IMAGEKIT_PRIVATE_KEY || '',
 	});
 
-	// app.use((req, res, next) => {
-	// 	if (req.method === 'OPTIONS') {
-	// 		res.setHeader('Access-Control-Allow-Origin', '*');
-	// 		res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
-	// 		res.setHeader(
-	// 			'Access-Control-Allow-Headers',
-	// 			'Content-Type,Authorization',
-	// 		);
-	// 		res.status(204).end(); // respond with no content
-	// 	} else {
-	// 		next();
-	// 	}
-	// });
+	app.use((req, res, next) => {
+		if (req.method === 'OPTIONS') {
+			res.setHeader('Access-Control-Allow-Origin', '*');
+			res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
+			res.setHeader(
+				'Access-Control-Allow-Headers',
+				'Content-Type,Authorization',
+			);
+			res.status(204).end(); // respond with no content
+		} else {
+			next();
+		}
+	});
 
 	app.use(
 		'/trpc',
@@ -98,10 +98,10 @@ async function main() {
 		}),
 	);
 
-	app.get('/healthcheck', (_req, res) => {
-		console.info(`Monitoring health 🩺...`);
-		res.sendStatus(200);
-	});
+	// app.get('/healthcheck', (_req, res) => {
+	// 	console.info(`Monitoring health 🩺...`);
+	// 	res.sendStatus(200);
+	// });
 
 	app.get('/auth', function (_req, res) {
 		const result = imagekit.getAuthenticationParameters();
