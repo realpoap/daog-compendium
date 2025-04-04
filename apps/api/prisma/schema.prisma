@@ -209,6 +209,8 @@ type Path {
   careers String[]
   skills  Skill[]
   feats Feat[]
+  talentTree  String?
+  origin Origin?
   actions CreatureAction[]
   actionList      ActionList?
   attackType  String @default("STR")
@@ -230,6 +232,17 @@ type Status {
   tempHealth Int?
   tempSpirit Int?
   advantages Int?
+}
+
+type Origin {
+  name String
+  description String?
+  type String?
+  profileBonus StatProfil
+  skills Skill[]
+  knowledge String[]
+  equipmentA CreatureItem[]
+  equipmentB CreatureItem[]
 }
 
 //-----------------------------------------------------

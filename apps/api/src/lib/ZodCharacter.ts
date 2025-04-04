@@ -27,6 +27,8 @@ export const ImageSchema = z.object({
 });
 export type Image = z.infer<typeof ImageSchema>;
 
+
+
 export const BioSchema = z.object({
 	creator: z.string(),
 	owner: z.string(),
@@ -162,6 +164,19 @@ export const StatProfilSchema = z.object({
 	SOC: z.number().int(),
 	ERU: z.number().int(),
 });
+
+export const OriginSchema = z.object({
+  name: z.string(),
+  description: z.string().nullable().optional(),
+  type: z.string().nullable().optional(),
+  knowledge: z.string().array(),
+	profileBonus: StatProfilSchema,
+  skills: z.array(SkillSchema),
+	equipmentA: z.array(CreatureItemSchema).optional(),
+	equipmentB: z.array(CreatureItemSchema).optional(),
+})
+
+export type Origin = z.infer<typeof OriginSchema>
 
 export const SpeedSchema = z.object({
 	crawling: z.number().int(),
