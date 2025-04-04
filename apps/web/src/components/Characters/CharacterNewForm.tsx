@@ -54,12 +54,13 @@ const CharacterNewForm = ({ campaigns }: Props) => {
 	const methods = useForm<NewCharacter>({
 		mode: 'onChange',
 		resolver: async (data, context, options) => {
-			// you can debug your validation schema here
-			console.dir(
-				'Validation results',
-				await zodResolver(NewCharacterSchema)(data, context, options),
+			const result = await zodResolver(NewCharacterSchema)(
+				data,
+				context,
+				options,
 			);
-			return zodResolver(NewCharacterSchema)(data, context, options);
+			console.dir('Validation result:', result);
+			return result;
 		},
 		shouldFocusError: true,
 	});
@@ -162,7 +163,6 @@ const CharacterNewForm = ({ campaigns }: Props) => {
 			case 'troll':
 				methods.setValue('profile.statsStarting', troll.profile.statsStarting);
 				break;
-
 			default:
 				break;
 		}
@@ -181,10 +181,12 @@ const CharacterNewForm = ({ campaigns }: Props) => {
 		methods.setValue('path', {});
 		methods.setValue('masteries', masteriesReset);
 		methods.setValue('specifics', { description: '', background: '' });
-		methods.setValue('equipment', {});
 	}, [methods.formState]);
+	methods.setValue('equipment', {});
 
 	const onSubmit = async (data: NewCharacter) => {
+		console.log('handle submit');
+
 		await createCharacter.mutate(data);
 	};
 
@@ -201,7 +203,10 @@ const CharacterNewForm = ({ campaigns }: Props) => {
 						onSubmit={methods.handleSubmit(onSubmit)}
 						className='flex w-full flex-col rounded-lg p-4 md:w-3/4'
 					>
-						<Field name='bio.name'>
+						<Field
+							name='bio.name'
+							label='Name'
+						>
 							<Input
 								name='bio.name'
 								type='text'
@@ -211,6 +216,7 @@ const CharacterNewForm = ({ campaigns }: Props) => {
 							<Field
 								name='bio.species'
 								width='third'
+								label='Species'
 							>
 								<Select
 									name='bio.species'
@@ -253,6 +259,7 @@ const CharacterNewForm = ({ campaigns }: Props) => {
 							<Field
 								name='profile.level'
 								width='digit'
+								label='level'
 							>
 								<InputNumber
 									name='profile.level'
@@ -276,7 +283,7 @@ const CharacterNewForm = ({ campaigns }: Props) => {
 						<SubmitButton
 							isLoading={methods.formState.isSubmitting}
 							color='accent'
-							textColor='stone-800'
+							textColor='background'
 							text='Create'
 						/>
 					</form>
