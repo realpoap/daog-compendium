@@ -1,7 +1,7 @@
 import { appRouter } from '@api/router/_app';
 import { createExpressMiddleware } from '@trpc/server/adapters/express';
 import cookieParser from 'cookie-parser';
-import cors from 'cors';
+import cors from 'cors'; // Import the cors middleware correctly
 import 'dotenv/config';
 import express from 'express';
 import ImageKit from 'imagekit';
@@ -11,20 +11,46 @@ async function main() {
 	const port = process.env.PORT || 3000;
 
 	const app = express();
+	// const cors = require('cors'); // Remove this line, as you've already imported it
 
 	app.use(cookieParser());
 
-	// Configure specific origins and options:
-	const origin =
-		process.env.NODE_ENV === 'production'
-			? [process.env.FRONTEND_URL, process.env.IMAGEKIT_URL_ENDPOINT]
-			: true;
+	const allowedOrigins: string[] = [];
+
+	if (process.env.NODE_ENV === 'production') {
+		if (process.env.FRONTEND_URL) allowedOrigins.push(process.env.FRONTEND_URL);
+		if (process.env.IMAGEKIT_URL_ENDPOINT)
+			allowedOrigins.push(process.env.IMAGEKIT_URL_ENDPOINT);
+		if (allowedOrigins.length === 0) {
+			console.warn('Warning: No allowed origins configured in production.');
+		}
+	} else {
+		allowedOrigins.push('http://localhost:3000');
+		if (process.env.IMAGEKIT_URL_ENDPOINT)
+			allowedOrigins.push(process.env.IMAGEKIT_URL_ENDPOINT);
+	}
+
 	app.use(
 		cors({
-			origin: ['http://localhost:3000', 'https://your-frontend.com'],
-			methods: ['GET', 'POST', 'PUT', 'DELETE'],
-			allowedHeaders: ['Content-Type', 'Authorization'],
-			credentials: true, // If you need to handle cookies or authorization headers
+			origin: (
+				origin: string | undefined, // Origin can be undefined for same-origin requests
+				callback: (error: Error | null, allow?: boolean) => void,
+			) => {
+				if (!origin || allowedOrigins.includes(origin)) {
+					callback(null, true);
+				} else {
+					callback(new Error(`Not allowed by CORS: ${origin}`), false); // Changed 'true' to 'false' to correctly block
+				}
+			},
+			methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Added OPTIONS to the allowed methods
+			allowedHeaders: [
+				'Content-Type',
+				'Authorization',
+				'Access-Control-Allow-Methods',
+				'Access-Control-Allow-Origin',
+				'*',
+			],
+			credentials: true,
 		}),
 	);
 
@@ -40,19 +66,19 @@ async function main() {
 		privateKey: process.env.IMAGEKIT_PRIVATE_KEY || '',
 	});
 
-	app.use((req, res, next) => {
-		if (req.method === 'OPTIONS') {
-			res.setHeader('Access-Control-Allow-Origin', '*');
-			res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
-			res.setHeader(
-				'Access-Control-Allow-Headers',
-				'Content-Type,Authorization',
-			);
-			res.status(204).end(); // respond with no content
-		} else {
-			next();
-		}
-	});
+	// app.use((req, res, next) => {
+	// 	if (req.method === 'OPTIONS') {
+	// 		res.setHeader('Access-Control-Allow-Origin', '*');
+	// 		res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
+	// 		res.setHeader(
+	// 			'Access-Control-Allow-Headers',
+	// 			'Content-Type,Authorization',
+	// 		);
+	// 		res.status(204).end(); // respond with no content
+	// 	} else {
+	// 		next();
+	// 	}
+	// });
 
 	app.use(
 		'/trpc',
@@ -99,8 +125,10 @@ async function main() {
 	});
 
 	app.get('/', (_req, res) => {
-		console.info(`Server is running now ! Front end set as : ${origin}`);
-		res.send(`Server is running now ! Front end set as : ${origin}`);
+		console.info(
+			`Server is running now ! Front end set as : ${allowedOrigins}`,
+		);
+		res.send(`Server is running now ! Front end set as : ${allowedOrigins}`);
 	});
 
 	app.listen(port, () => {
@@ -108,4 +136,6 @@ async function main() {
 	});
 }
 
-void main();
+main().catch(err => {
+	console.error('Error starting the server:', err);
+});

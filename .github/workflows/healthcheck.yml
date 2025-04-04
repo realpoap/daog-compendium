@@ -2,7 +2,7 @@ name: Verify HealthCheck
 
 on:
   schedule:
-    - cron: '30 2 1 * *'
+    - cron: '0 6 1 * *' # Runs at 6:00 AM UTC,
 
 jobs:
   check_health:
