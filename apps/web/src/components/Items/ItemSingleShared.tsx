@@ -1,5 +1,8 @@
 import { trpc } from '@/utils/trpc';
+import { Component } from '@api/lib/ZodComponent';
+import { Item } from '@api/lib/ZodItem';
 import { useNavigate, useParams } from '@tanstack/react-router';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { BackButton } from '../Buttons';
 import ComponentModalBlock from './ComponentModalBlock';
@@ -7,6 +10,8 @@ import ItemModalBlock from './ItemModalBlock';
 
 const ItemSingleShared = () => {
 	const { id, type } = useParams({ strict: false });
+	const [item, setItem] = useState<Item>();
+	const [component, setComponent] = useState<Component>();
 	const navigate = useNavigate();
 
 	const itemById = trpc.items.getById.useQuery(id as string, {
@@ -15,24 +20,29 @@ const ItemSingleShared = () => {
 	const componentById = trpc.components.getById.useQuery(id as string, {
 		enabled: type === 'component',
 	});
+
 	//Loading -----------------------------------------------------------------
+
+	console.log(type, item);
+
+	// define item object data after query success
+	useEffect(() => {
+		itemById.data && setItem(itemById.data);
+		componentById.data && setComponent(componentById.data);
+	}, [itemById, item, component]);
 	if (!id) {
 		toast.error('Cannot find item.');
 		history.go(-1);
 	}
 
-	// define item object data after query success
-	const item = itemById.data;
-	const component = componentById.data;
-
 	return (
-		<div className='flex flex-col items-center'>
+		<div className='flex w-full flex-col items-center'>
 			<BackButton onClick={() => navigate({ to: `/items` })} />
-			<div className='modal-box dark:bg-stone-800'>
-				{type === 'item' && item && <ItemModalBlock item={item} />}
-				{type === 'component' && component && (
-					<ComponentModalBlock item={component} />
-				)}
+			<div className='mt-4 h-fit w-fit'>
+				<div className='dark:bg-card card p-8 shadow shadow-lg'>
+					{type === 'item' && item && <ItemModalBlock item={item} />}
+					{component && <ComponentModalBlock item={component} />}
+				</div>
 			</div>
 		</div>
 	);

@@ -36,7 +36,7 @@ export const characterSpecieOptions = [
 		value: 'troll',
 	},
 	{
-		label: 'Half-giant',
-		value: 'half-giant',
+		label: 'Half-Ogre',
+		value: 'half-ogre',
 	},
 ];

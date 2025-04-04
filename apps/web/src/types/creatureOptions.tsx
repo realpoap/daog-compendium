@@ -76,6 +76,24 @@ export const creatureTypeOptions = [
 	},
 ];
 
+export const creatureGenderOptions = [
+	{
+		label: 'Male',
+		value: 'male',
+	},
+	{
+		label: 'Female',
+		value: 'female',
+	},
+	{
+		label: 'Fluid',
+		value: 'fluid',
+	},
+	{
+		label: 'Unknown',
+		value: 'unknown',
+	},
+];
 export const creatureSizeOptions = [
 	{
 		label: 'Tiny',

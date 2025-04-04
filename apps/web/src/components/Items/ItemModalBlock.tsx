@@ -9,6 +9,7 @@ type Props = {
 };
 
 const ItemModalBlock = ({ item }: Props) => {
+	console.log('passed item', item);
 	return (
 		<>
 			<NameBlock item={item} />

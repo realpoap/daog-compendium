@@ -229,8 +229,8 @@ const calcModifiersBonus = (creature: Creature | NewCreature) => {
 };
 
 export const calcCharacterStats = (c: Character) => {
-	if (!c.stats) {
-		c.stats = {
+	if (!c.profile.statsStarting) {
+		c.profile.statsStarting = {
 			CEL: 15,
 			AGI: 15,
 			DEX: 15,
@@ -245,153 +245,222 @@ export const calcCharacterStats = (c: Character) => {
 			ERU: 15,
 		};
 	}
-	if (!c.weight) {
-		c.weight = {
+	if (!c.profile.stats) c.profile.stats = c.profile.statsStarting;
+	if (!c.status.weight) {
+		c.status.weight = {
 			current: 0,
 			max: 0,
 		};
 	}
-	if (!c.health) {
-		c.health = {
+	if (!c.status.health) {
+		c.status.health = {
 			current: 0,
 			max: 0,
 		};
 	}
-	if (!c.spirit) {
-		c.spirit = {
+	if (!c.status.spirit) {
+		c.status.spirit = {
 			current: 0,
 			max: 0,
 		};
 	}
-	const levelBonus = Math.floor(c.level / 5);
-	c.actionList = {
+	const levelBonus = Math.floor(c.profile.level / 5);
+	c.path.actionList = {
 		main: levelBonus,
 		limited: levelBonus,
 		free: 1,
 		travel: 2,
-		epic: c.isBoss ? levelBonus : 0,
+		epic: c.bio.isBoss ? levelBonus : 0,
 	};
-	const maxHealth = c.glory
-		? c.stats.VIT +
-			Number(c.isPun) +
+	const maxHealth = c.profile.glory
+		? c.profile.stats.VIT +
+			Number(c.bio.isPun) +
 			levelBonus +
-			Math.floor(c.stats.VIT / 10) +
-			c.glory
-		: c.stats.VIT + Number(c.isPun) + levelBonus + Math.floor(c.stats.VIT / 10);
-	const maxSpirit = c.glory
-		? c.stats.SEN +
-			Number(c.isPun) +
+			Math.floor(c.profile.stats.VIT / 10) +
+			c.profile.glory
+		: c.profile.stats.VIT +
+			Number(c.bio.isPun) +
 			levelBonus +
-			Math.floor(c.stats.SEN / 10) +
-			c.glory
-		: c.stats.SEN + Number(c.isPun) + levelBonus + Math.floor(c.stats.SEN / 10);
-	c.health = {
-		current: c.health.current,
+			Math.floor(c.profile.stats.VIT / 10);
+	const maxSpirit = c.profile.glory
+		? c.profile.stats.SEN +
+			levelBonus +
+			Math.floor(c.profile.stats.SEN / 10) +
+			c.profile.glory
+		: c.profile.stats.SEN + levelBonus + Math.floor(c.profile.stats.SEN / 10);
+	c.status.health = {
+		current: c.status.health.current,
 		max: maxHealth,
 	};
-	c.spirit = {
-		current: c.spirit.current,
+	c.status.spirit = {
+		current: c.status.spirit.current,
 		max: maxSpirit,
 	};
 
-	c.initiative = c.initiativeBonus
-		? c.initiativeBonus + c.stats.CEL + c.stats.WIL
-		: c.stats.CEL + c.stats.WIL;
-
-	if (c.attackBonus) {
-		c.attack =
-			c.attackType === 'STR'
-				? c.attackBonus + c.stats.STR
-				: c.attackBonus + c.stats.AGI;
-	} else {
-		c.attack = c.attackType === 'STR' ? c.stats.STR : c.stats.AGI;
-	}
-
-	if (c.weight && c.carryWeight && c.weightBonus) {
-		c.defenseType =
-			c.carryWeight >
-			c.stats.END * 0.5 + Math.floor(c.stats.END / 10) + levelBonus
-				? 'STR'
-				: 'AGI';
-	}
-	if (c.defenseBonus) {
-		c.defense =
-			c.defenseType === 'STR'
-				? c.defenseBonus + c.defense + c.stats.STR
-				: c.defenseBonus +
-					c.stats.AGI +
-					Math.floor(c.stats.AGI / 10) +
-					levelBonus;
-	} else {
-		c.defense =
-			c.defenseType === 'STR'
-				? c.defense + c.stats.STR
-				: c.stats.AGI + Math.floor(c.stats.AGI / 10) + levelBonus;
-	}
-	if (c.armor) {
-		c.armorClass =
-			c.armor > 15
-				? 5
-				: c.armor > 10
-					? 4
-					: c.armor > 5
-						? 3
-						: c.armor > 3
-							? 2
-							: c.armor > 1
-								? 1
-								: 0;
-	}
-	c.ranged = c.rangedBonus
-		? c.rangedBonus + c.stats.CEL + Math.floor(c.stats.DEX / 10) + levelBonus
-		: c.stats.CEL + Math.floor(c.stats.DEX / 10) + levelBonus;
-
-	c.perception = c.perceptionBonus
-		? c.perceptionBonus +
-			c.stats.INS +
-			Math.floor(c.stats.INS / 10) +
-			levelBonus
-		: c.stats.INS + Math.floor(c.stats.INS / 10) + levelBonus;
-	switch (c.size) {
+	// SIZEBONUS ---------------------------------------------------------------------------
+	switch (c.specifics.size) {
 		case 'tiny':
-			c.sizeBonus = -5;
+			c.specifics.sizeBonus = 5;
 			break;
 		case 'small':
-			c.sizeBonus = -2;
+			c.specifics.sizeBonus = 2;
 			break;
 		case 'large':
-			c.sizeBonus = +2;
+			c.specifics.sizeBonus = -2;
 			break;
 		case 'huge':
-			c.sizeBonus = +5;
+			c.specifics.sizeBonus = -5;
 			break;
 		case 'gigantic':
-			c.sizeBonus = +10;
+			c.specifics.sizeBonus = -10;
 			break;
 
 		default:
+			c.specifics.sizeBonus = 0;
 			break;
 	}
-	if (c.sizeBonus) {
-		c.discretion = c.discretionBonus
-			? c.discretionBonus +
-				c.stats.AGI +
-				Math.floor(c.stats.AGI / 10) +
-				levelBonus -
-				c.sizeBonus
-			: c.stats.AGI + Math.floor(c.stats.AGI / 10) + levelBonus - c.sizeBonus;
-	} else {
-		c.discretion = c.discretionBonus
-			? c.discretionBonus +
-				c.stats.AGI +
-				Math.floor(c.stats.AGI / 10) +
+
+	// INITIATIVE
+	c.profile.variables.initiative =
+		c.profile.boni.initiative +
+		c.profile.stats.CEL +
+		c.profile.stats.WIL +
+		c.masteries.movement.current +
+		c.specifics.sizeBonus;
+
+	// ATTACK --------------------------------------------------------------------------
+	c.profile.variables.attack =
+		c.path.attackType === 'STR'
+			? c.profile.boni.attack +
+				c.profile.stats.STR +
+				c.masteries.fighting.current
+			: c.profile.boni.attack +
+				c.profile.stats.AGI +
+				c.masteries.fighting.current;
+
+	// DEFENSE --------------------------------------------------------------------------
+
+	if (c.status.weight && c.status.carryWeight && c.status.weightBonus) {
+		c.path.defenseType =
+			c.status.carryWeight >
+			c.profile.stats.END * 0.5 +
+				Math.floor(c.profile.stats.END / 10) +
 				levelBonus
-			: c.stats.AGI + Math.floor(c.stats.AGI / 10) + levelBonus;
+				? 'STR'
+				: 'AGI';
 	}
 
-	c.magic = Math.floor(c.stats.SEN / 10) + levelBonus;
+	c.profile.variables.defense =
+		c.path.defenseType === 'STR'
+			? c.profile.boni.defense +
+				c.profile.variables.defense +
+				c.profile.stats.STR +
+				c.masteries.defense.current
+			: c.profile.boni.defense +
+				c.profile.stats.AGI +
+				Math.floor(c.profile.stats.AGI / 10) +
+				levelBonus +
+				c.masteries.defense.current;
 
-	console.log('😎 Character after calculation : ', c);
+	// ARMORVALUE ----------------------------------------------------------------
+	if (c.equipment.armorValue) {
+		c.equipment.armorClass =
+			c.equipment.armorValue > 15
+				? 5
+				: c.equipment.armorValue > 10
+					? 4
+					: c.equipment.armorValue > 5
+						? 3
+						: c.equipment.armorValue > 3
+							? 2
+							: c.equipment.armorValue > 1
+								? 1
+								: 0;
+	}
+
+	// RANGED ---------------------------------------------------------------------------
+
+	c.profile.variables.ranged =
+		c.profile.boni.ranged +
+		c.profile.stats.CEL +
+		Math.floor(c.profile.stats.DEX / 10) +
+		levelBonus +
+		c.masteries.ranged.current;
+
+	// PERCEPTION ---------------------------------------------------------------------------
+	c.profile.variables.perception =
+		c.profile.boni.perception +
+		c.profile.stats.INS +
+		Math.floor(c.profile.stats.INS / 10) +
+		levelBonus +
+		c.masteries.perception.current;
+
+	// DISCRETION ---------------------------------------------------------------------------
+
+	c.profile.variables.discretion =
+		c.profile.boni.discretion +
+		c.profile.stats.AGI +
+		Math.floor(c.profile.stats.AGI / 10) +
+		levelBonus +
+		c.specifics.sizeBonus -
+		Number(c.specifics.massive);
+
+	// SPEED ---------------------------------------------------------------------------
+	c.profile.speed = {
+		crawling: Math.floor(
+			c.profile.stats.CEL * 0.5 +
+				c.masteries.movement.current +
+				c.specifics.sizeBonus,
+		),
+
+		walking: Math.floor(c.profile.stats.CEL + c.masteries.movement.current),
+		running: Math.floor(
+			c.profile.stats.CEL * 2 +
+				c.masteries.physique.current +
+				c.specifics.sizeBonus,
+		),
+		obstacle: Math.floor(
+			c.profile.stats.CEL * 0.5 +
+				c.masteries.physique.current -
+				c.specifics.sizeBonus,
+		),
+	};
+
+	// BRAVERY ---------------------------------------------------------------------------
+	c.profile.variables.bravery =
+		c.profile.stats.WIL +
+		c.profile.boni.bravery +
+		c.masteries.esoterism.current;
+	// SPEECH ---------------------------------------------------------------------------
+	c.profile.variables.speech =
+		c.profile.stats.CHA + c.profile.boni.speech + c.masteries.speech.current;
+	// TRADE ---------------------------------------------------------------------------
+	c.profile.variables.trade =
+		c.profile.stats.SOC + c.profile.boni.trade + c.masteries.trading.current;
+	// PERFORMANCE--------------------------------------------------------------------------
+	c.profile.variables.performance =
+		c.profile.stats.CHA +
+		c.profile.boni.performance +
+		c.masteries.performance.current;
+	// INTIMIDATION--------------------------------------------------------------------------
+	c.profile.variables.intimidation =
+		c.profile.stats.CHA +
+		c.profile.boni.intimidation +
+		Math.floor(c.profile.stats.STR / 10);
+	// SURVIVAL --------------------------------------------------------------------------
+	c.profile.variables.survival =
+		c.profile.stats.INS +
+		c.profile.boni.survival +
+		c.masteries.survival.current;
+	// ENIGMS --------------------------------------------------------------------------
+	c.profile.variables.enigms =
+		c.profile.stats.ERU + c.profile.boni.enigms + c.masteries.logic.current;
+	// MAGICLOAD + SPELL BONUS---------------------------------------------------------------
+	c.status.magicLoad.max = Math.floor(c.profile.stats.SEN / 10) + levelBonus;
+	c.profile.variables.magic =
+		c.profile.boni.magic + c.status.magicLoad.max + c.masteries.magic.current;
+
+	//console.log('😎 Character after calculation : ', c);
 	return c;
 };
 
@@ -451,4 +520,52 @@ export const defaultCreature: NewCreature = {
 	scavenge: <CreatureComponent[]>[],
 	attributes: <CreatureAttribute[]>[],
 	actions: <NewAction[]>[],
+};
+
+export const profileReset = {};
+export const specificsReset = {};
+export const equipmentReset = {};
+export const pathReset = {};
+
+export const variablesReset = {
+	initiative: 0,
+	attack: 0,
+	brawl: 0,
+	defense: 0,
+	ranged: 0,
+	perception: 0,
+	discretion: 0,
+	magic: 0,
+	bravery: 0,
+	survival: 0,
+	enigms: 0,
+	speech: 0,
+	trade: 0,
+	performance: 0,
+	intimidation: 0,
+};
+
+export const masteriesReset = {
+	crafting: { current: 0, max: 0 },
+	fighting: { current: 0, max: 0 },
+	defense: { current: 0, max: 0 },
+	detection: { current: 0, max: 0 },
+	discretion: { current: 0, max: 0 },
+	speech: { current: 0, max: 0 },
+	esoterism: { current: 0, max: 0 },
+	logic: { current: 0, max: 0 },
+	brawl: { current: 0, max: 0 },
+	magic: { current: 0, max: 0 },
+	preciseness: { current: 0, max: 0 },
+	movement: { current: 0, max: 0 },
+	trading: { current: 0, max: 0 },
+	perception: { current: 0, max: 0 },
+	performance: { current: 0, max: 0 },
+	persuasion: { current: 0, max: 0 },
+	physique: { current: 0, max: 0 },
+	knowledge: { current: 0, max: 0 },
+	sciences: { current: 0, max: 0 },
+	healing: { current: 0, max: 0 },
+	survival: { current: 0, max: 0 },
+	ranged: { current: 0, max: 0 },
 };

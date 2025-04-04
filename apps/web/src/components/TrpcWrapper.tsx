@@ -10,7 +10,12 @@ export function TrpcWrapper({ children }: { children: React.ReactNode }) {
 	const [trpcClient] = useState(() =>
 		trpc.createClient({
 			links: [
-				loggerLink(),
+				loggerLink({
+					enabled: opts =>
+						(process.env.NODE_ENV === 'development' &&
+							typeof window !== 'undefined') ||
+						(opts.direction === 'down' && opts.result instanceof Error),
+				}),
 				httpBatchLink({
 					url: import.meta.env.VITE_API_URL + '/trpc',
 					transformer: superjson,

@@ -1,5 +1,24 @@
 import { useAuth } from '@/store/authContext';
 import { characterSpecieOptions } from '@/types/characterOptions';
+import {
+	armagnac,
+	barbarian,
+	bourguignon,
+	durhkran,
+	free,
+	grey,
+	halfogre,
+	halfvampire,
+	inclay,
+	moufflian,
+	pipourray,
+	proschöne,
+	republican,
+	royalist,
+	troll,
+	villous,
+} from '@/types/speciesProfile';
+import { masteriesReset, variablesReset } from '@/utils/calculateStats';
 import { trpc } from '@/utils/trpc';
 import { NewCharacter, NewCharacterSchema } from '@api/lib/ZodCharacter';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -36,9 +55,8 @@ const CharacterNewForm = ({ campaigns }: Props) => {
 		mode: 'onChange',
 		resolver: async (data, context, options) => {
 			// you can debug your validation schema here
-			console.log('formData', data);
-			console.log(
-				'validation result',
+			console.dir(
+				'Validation results',
 				await zodResolver(NewCharacterSchema)(data, context, options),
 			);
 			return zodResolver(NewCharacterSchema)(data, context, options);
@@ -49,38 +67,128 @@ const CharacterNewForm = ({ campaigns }: Props) => {
 	useEffect(() => {
 		methods.setValue(
 			'fullname',
-			`${methods.getValues('name')} (${methods.getValues('subspecies') + ' '}${methods.getValues('species')}) - lvl ${methods.getValues('level')}`,
+			`${methods.getValues('bio.name')} (${methods.getValues('bio.subspecies') + ' '}${methods.getValues('bio.species')}) - lvl ${methods.getValues('profile.level')}`,
 		);
-		user?.id && methods.setValue('creator', user?.id);
-		user?.id && methods.setValue('owner', user?.id);
-		methods.setValue('stats', {
-			CEL: 15,
-			AGI: 15,
-			DEX: 15,
-			STR: 15,
-			END: 15,
-			VIT: 15,
-			WIL: 15,
-			INS: 15,
-			SEN: 15,
-			CHA: 15,
-			SOC: 15,
-			ERU: 15,
-		});
-		const levelBonus = Math.floor(methods.getValues('level') / 5);
-		methods.setValue('health.max', 15 + levelBonus + 1);
-		methods.setValue('health.current', 15 + levelBonus + 1);
-		methods.setValue('spirit.max', 15 + levelBonus + 1);
-		methods.setValue('spirit.current', 15 + levelBonus + 1);
-		methods.setValue('weight.max', 7);
-		methods.setValue('weight.current', 0);
-	}, [methods.formState, methods.handleSubmit]);
+		user?.id && methods.setValue('bio.creator', user?.id);
+		user?.id && methods.setValue('bio.owner', user?.id);
+		switch (methods.getValues('bio.subspecies')) {
+			case 'moufflian':
+				methods.setValue('profile.stats', moufflian.profile.statsStarting);
+				methods.setValue(
+					'profile.statsStarting',
+					moufflian.profile.statsStarting,
+				);
+				break;
+			case 'inclay':
+				methods.setValue('profile.stats', inclay.profile.statsStarting);
+				methods.setValue('profile.statsStarting', inclay.profile.statsStarting);
+				break;
+			case 'bourguignon':
+				methods.setValue(
+					'profile.statsStarting',
+					bourguignon.profile.statsStarting,
+				);
+				break;
+			case 'armagnac':
+				methods.setValue(
+					'profile.statsStarting',
+					armagnac.profile.statsStarting,
+				);
+				break;
+			case 'durhkran':
+				methods.setValue(
+					'profile.statsStarting',
+					durhkran.profile.statsStarting,
+				);
+				break;
+			case 'grey':
+				methods.setValue('profile.statsStarting', grey.profile.statsStarting);
+				break;
+			case 'republican':
+				methods.setValue(
+					'profile.statsStarting',
+					republican.profile.statsStarting,
+				);
+				break;
+			case 'royalist':
+				methods.setValue(
+					'profile.statsStarting',
+					royalist.profile.statsStarting,
+				);
+				break;
+			case 'free':
+				methods.setValue('profile.statsStarting', free.profile.statsStarting);
+				break;
+			case 'proschöne':
+				methods.setValue(
+					'profile.statsStarting',
+					proschöne.profile.statsStarting,
+				);
+				break;
+			case 'pipourray':
+				methods.setValue(
+					'profile.statsStarting',
+					pipourray.profile.statsStarting,
+				);
+				break;
+			case 'villous':
+				methods.setValue(
+					'profile.statsStarting',
+					villous.profile.statsStarting,
+				);
+				break;
+			default:
+				break;
+		}
+		switch (methods.getValues('bio.species')) {
+			case 'half-vampire':
+				methods.setValue(
+					'profile.statsStarting',
+					halfvampire.profile.statsStarting,
+				);
+				break;
+			case 'half-ogre':
+				methods.setValue(
+					'profile.statsStarting',
+					halfogre.profile.statsStarting,
+				);
+				break;
+			case 'barbarian':
+				methods.setValue(
+					'profile.statsStarting',
+					barbarian.profile.statsStarting,
+				);
+				break;
+			case 'troll':
+				methods.setValue('profile.statsStarting', troll.profile.statsStarting);
+				break;
+
+			default:
+				break;
+		}
+		methods.setValue('profile.variables', variablesReset);
+		methods.setValue('profile.boni', variablesReset);
+
+		const levelBonus = Math.floor(methods.getValues('profile.level') / 5);
+		methods.setValue('status.health.max', 15 + levelBonus + 1);
+		methods.setValue('status.health.current', 15 + levelBonus + 1);
+		methods.setValue('status.spirit.max', 15 + levelBonus + 1);
+		methods.setValue('status.spirit.current', 15 + levelBonus + 1);
+		methods.setValue('status.weight.max', 7);
+		methods.setValue('status.weight.current', 0);
+		methods.setValue('status.magicLoad.max', 1 + levelBonus);
+		methods.setValue('status.magicLoad.current', 0);
+		methods.setValue('path', {});
+		methods.setValue('masteries', masteriesReset);
+		methods.setValue('specifics', { description: '', background: '' });
+		methods.setValue('equipment', {});
+	}, [methods.formState]);
 
 	const onSubmit = async (data: NewCharacter) => {
 		await createCharacter.mutate(data);
 	};
 
-	const watchSpecie = methods.watch('species');
+	const watchSpecie = methods.watch('bio.species');
 
 	return (
 		<dialog
@@ -93,19 +201,19 @@ const CharacterNewForm = ({ campaigns }: Props) => {
 						onSubmit={methods.handleSubmit(onSubmit)}
 						className='flex w-full flex-col rounded-lg p-4 md:w-3/4'
 					>
-						<Field name='name'>
+						<Field name='bio.name'>
 							<Input
-								name='name'
+								name='bio.name'
 								type='text'
 							/>
 						</Field>
 						<div className='flex flex-row items-center justify-center gap-4'>
 							<Field
-								name='species'
+								name='bio.species'
 								width='third'
 							>
 								<Select
-									name='species'
+									name='bio.species'
 									options={characterSpecieOptions}
 									defaultValue=''
 								/>
@@ -117,12 +225,12 @@ const CharacterNewForm = ({ campaigns }: Props) => {
 								watchSpecie === 'gnome' ||
 								watchSpecie === 'orc') && (
 								<Field
-									name='subspecies'
+									name='bio.subspecies'
 									width='third'
 									label='Sub-Species'
 								>
 									<Select
-										name='subspecies'
+										name='bio.subspecies'
 										defaultValue=''
 										options={
 											watchSpecie === 'human'
@@ -130,11 +238,11 @@ const CharacterNewForm = ({ campaigns }: Props) => {
 												: watchSpecie === 'elf'
 													? ['bourguignon', 'armagnac']
 													: watchSpecie === 'dwarf'
-														? ['durkran', 'grey']
+														? [`durhkran`, `grey`]
 														: watchSpecie === 'gobelin'
 															? ['republican', 'royalist']
 															: watchSpecie === 'gnome'
-																? ['free', 'wild']
+																? ['free', 'proschöne']
 																: watchSpecie === 'orc'
 																	? ['villous', 'pipourray']
 																	: ['']
@@ -143,19 +251,24 @@ const CharacterNewForm = ({ campaigns }: Props) => {
 								</Field>
 							)}
 							<Field
-								name='level'
+								name='profile.level'
 								width='digit'
 							>
-								<InputNumber name='level' />
+								<InputNumber
+									name='profile.level'
+									min='1'
+									step='1'
+									defaultValue='1'
+								/>
 							</Field>
 						</div>
 						<Field
-							name='campaign'
+							name='bio.campaign'
 							width='full'
 							label='active campaign'
 						>
 							<Select
-								name='campaign'
+								name='bio.campaign'
 								options={campaigns}
 								defaultValue=''
 							/>

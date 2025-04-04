@@ -1,10 +1,5 @@
 import { serverErrorHandler } from '@api/lib/utils/errorHandler';
-import {
-	CampaignUpdateSchema,
-	CharacterSchema,
-	ExpUpdateSchema,
-	NewCharacterSchema,
-} from '@api/lib/ZodCharacter';
+import { CharacterSchema, NewCharacterSchema } from '@api/lib/ZodCharacter';
 import { prisma } from '@api/prismaClient';
 import { procedure, router, secureProcedure } from '@api/trpc';
 import { z } from 'zod';
@@ -25,8 +20,7 @@ export const charactersRouter = router({
 		try {
 			return await prisma.character.count({
 				select: {
-					_all: true,
-					name: true, // count all records with name non-null
+					fullname: true,
 				},
 			});
 		} catch (error) {
@@ -77,15 +71,28 @@ export const charactersRouter = router({
 		}
 	}),
 	updateCampaign: secureProcedure
-		.input(CampaignUpdateSchema)
+		.input(z.object({ id: z.string(), campaignId: z.string() }))
 		.mutation(async ({ input }) => {
+			const { id, campaignId } = input;
+
 			try {
+				// Fetch the current bio object first
+				const character = await prisma.character.findUnique({
+					where: { id },
+					select: { bio: true }, // Get existing bio
+				});
+
+				if (!character) throw new Error('Character not found');
+
 				return await prisma.character.update({
-					where: {
-						id: input.id,
-					},
+					where: { id },
 					data: {
-						campaign: input.campaignId,
+						bio: {
+							set: {
+								...character.bio, // Keep all previous fields
+								campaign: campaignId, // Update only campaign
+							},
+						},
 					},
 				});
 			} catch (error) {
@@ -95,13 +102,61 @@ export const charactersRouter = router({
 	updateOwner: secureProcedure
 		.input(z.object({ id: z.string(), userId: z.string() }))
 		.mutation(async ({ input }) => {
+			const { id, userId } = input;
+
 			try {
+				// Fetch the current bio object first
+				const character = await prisma.character.findUnique({
+					where: { id },
+					select: { bio: true }, // Get existing bio
+				});
+
+				if (!character) throw new Error('Character not found');
+
 				return await prisma.character.update({
-					where: {
-						id: input.id,
-					},
+					where: { id },
 					data: {
-						owner: input.userId,
+						bio: {
+							set: {
+								...character.bio, // Keep all previous fields
+								owner: userId, // Update only owner
+							},
+						},
+					},
+				});
+			} catch (error) {
+				serverErrorHandler(error);
+			}
+		}),
+	updateAvatar: secureProcedure
+		.input(
+			z.object({
+				id: z.string(),
+				path: z.string().optional(),
+				url: z.string().optional(),
+			}),
+		)
+		.mutation(async ({ input }) => {
+			const { id, url, path } = input;
+
+			try {
+				// Fetch the current bio object first
+				const character = await prisma.character.findUnique({
+					where: { id },
+					select: { bio: true }, // Get existing bio
+				});
+
+				if (!character) throw new Error('Character not found');
+				const avatarObject = { path: path, url: url };
+				return await prisma.character.update({
+					where: { id },
+					data: {
+						bio: {
+							set: {
+								...character.bio,
+								avatar: avatarObject,
+							},
+						},
 					},
 				});
 			} catch (error) {
@@ -109,16 +164,35 @@ export const charactersRouter = router({
 			}
 		}),
 	updateXp: secureProcedure
-		.input(ExpUpdateSchema)
+		.input(
+			z.object({
+				id: z.string(),
+				experience: z.number().int().optional(),
+				level: z.number().int(),
+			}),
+		)
 		.mutation(async ({ input }) => {
+			const { id, experience, level } = input;
+
 			try {
+				// Fetch the current bio object first
+				const character = await prisma.character.findUnique({
+					where: { id },
+					select: { profile: true }, // Get existing bio
+				});
+
+				if (!character) throw new Error('Character not found');
+
 				return await prisma.character.update({
-					where: {
-						id: input.id,
-					},
+					where: { id },
 					data: {
-						experience: input.experience,
-						level: input.level,
+						profile: {
+							set: {
+								...character.profile, // Keep all previous fields
+								level: level,
+								experience: experience,
+							},
+						},
 					},
 				});
 			} catch (error) {

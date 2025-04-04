@@ -64,7 +64,7 @@ const CampaignNewForm = () => {
 				<SubmitButton
 					isLoading={methods.formState.isSubmitting}
 					color='accent'
-					textColor='stone-800'
+					textColor='background'
 					text='Create'
 				/>
 			</form>

@@ -1,30 +1,32 @@
 {
-  "extends": "@repo/typescript-config/react.json",
-  "compilerOptions": {
-    "target": "ES2020",
-    "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
+	"extends": "@repo/typescript-config/react.json",
+	"compilerOptions": {
+		"target": "ES2020",
+		"useDefineForClassFields": true,
+		"lib": ["ES2020", "DOM", "DOM.Iterable"],
+		"module": "ESNext",
 
-    /* Bundler mode */
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
+		/* Bundler mode */
+		"moduleResolution": "bundler",
+		"allowImportingTsExtensions": true,
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"noEmit": true,
+		"jsx": "react-jsx",
 
-    // Custom settings
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"],
-      "@api/*": ["../api/src/*"]
-    },
+		// Custom settings
+		"baseUrl": ".",
+		"paths": {
+			"@/*": ["./src/*"],
+			"@api/*": ["../api/src/*"]
+		},
 
-    //get rid of this in prod:
-    "declaration": false,
-    "declarationMap": false,
-  },
-  "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+		//get rid of this in prod:
+		"declaration": false,
+		"declarationMap": false
+	},
+
+	"exclude": ["node_modules/**/*"],
+	"include": ["src", "global.d.ts"],
+	"references": [{ "path": "./tsconfig.node.json" }]
 }
