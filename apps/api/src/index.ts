@@ -16,12 +16,12 @@ async function main() {
 
 	// Configure specific origins and options:
 	const origin =
-		process.env.NODE_ENV === 'production'
+		process.env.NODE_ENV === 'production' && process.env.IMAGEKIT_URL_ENDPOINT
 			? [process.env.FRONTEND_URL, process.env.IMAGEKIT_URL_ENDPOINT]
-			: true;
+			: ['http://localhost:3000', process.env.IMAGEKIT_URL_ENDPOINT];
 	app.use(
 		cors({
-			origin: ['http://localhost:3000', 'https://your-frontend.com'],
+			origin: origin,
 			methods: ['GET', 'POST', 'PUT', 'DELETE'],
 			allowedHeaders: ['Content-Type', 'Authorization'],
 			credentials: true, // If you need to handle cookies or authorization headers
