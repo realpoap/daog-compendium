@@ -43,7 +43,13 @@ async function main() {
 				}
 			},
 			methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Added OPTIONS to the allowed methods
-			allowedHeaders: ['Content-Type', 'Authorization'],
+			allowedHeaders: [
+				'Content-Type',
+				'Authorization',
+				'Access-Control-Allow-Methods',
+				'Access-Control-Allow-Origin',
+				'*',
+			],
 			credentials: true,
 		}),
 	);
@@ -60,19 +66,18 @@ async function main() {
 		privateKey: process.env.IMAGEKIT_PRIVATE_KEY || '',
 	});
 
-	// Remove this middleware as the 'cors' middleware already handles OPTIONS requests
 	// app.use((req, res, next) => {
-	//   if (req.method === 'OPTIONS') {
-	//     res.setHeader('Access-Control-Allow-Origin', '*');
-	//     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
-	//     res.setHeader(
-	//       'Access-Control-Allow-Headers',
-	//       'Content-Type,Authorization',
-	//     );
-	//     res.status(204).end(); // respond with no content
-	//   } else {
-	//     next();
-	//   }
+	// 	if (req.method === 'OPTIONS') {
+	// 		res.setHeader('Access-Control-Allow-Origin', '*');
+	// 		res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
+	// 		res.setHeader(
+	// 			'Access-Control-Allow-Headers',
+	// 			'Content-Type,Authorization',
+	// 		);
+	// 		res.status(204).end(); // respond with no content
+	// 	} else {
+	// 		next();
+	// 	}
 	// });
 
 	app.use(
