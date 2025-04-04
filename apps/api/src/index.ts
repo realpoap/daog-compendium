@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import 'dotenv/config';
 import express from 'express';
+import ImageKit from 'imagekit';
 import { createContext } from './trpc';
 
 async function main() {
@@ -13,9 +14,27 @@ async function main() {
 
 	app.use(cookieParser());
 
+	const IMAGEKIT_PRIVATE_KEY = process.env.IMAGEKIT_PRIVATE_KEY;
+	if (!IMAGEKIT_PRIVATE_KEY) {
+		console.warn('ImageKit Private Key is missing');
+	}
+	if (IMAGEKIT_PRIVATE_KEY) console.info('ImageKit Private Key ok');
+
+	const imagekit = new ImageKit({
+		urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT || '',
+		publicKey: process.env.IMAGEKIT_PUBLIC_KEY || '',
+		privateKey: process.env.IMAGEKIT_PRIVATE_KEY || '',
+	});
+
 	const origin =
 		process.env.NODE_ENV === 'production' ? process.env.FRONTEND_URL : true;
 	app.use(cors({ origin, credentials: true }));
+
+	const corsOptions = {
+		origin: process.env.IMAGEKIT_URL_ENDPOINT,
+		optionsSuccessStatus: 200,
+	};
+	if (process.env.IMAGEKIT_URL_ENDPOINT) app.use(cors(corsOptions));
 
 	app.use((req, res, next) => {
 		if (req.method === 'OPTIONS') {
@@ -50,6 +69,29 @@ async function main() {
 	app.get('/healthcheck', (_req, res) => {
 		console.info(`Monitoring health 🩺...`);
 		res.sendStatus(200);
+	});
+
+	app.get('/auth', function (_req, res) {
+		const result = imagekit.getAuthenticationParameters();
+		res.send(result);
+	});
+
+	app.get('/signed-url', (req, res) => {
+		const filePath = req.query.path as string;
+
+		if (!filePath) {
+			return res.status(400).json({ error: 'Missing file path.' });
+		}
+
+		const expireSeconds = 600; // Signed URL expires in 10 minutes
+
+		const url = imagekit.url({
+			path: filePath,
+			signed: true,
+			expireSeconds,
+		});
+
+		res.json({ url });
 	});
 
 	app.get('/', (_req, res) => {

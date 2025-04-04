@@ -23,7 +23,6 @@ const CharactersView = () => {
 	const utils = trpc.useUtils();
 	const { user } = useAuth();
 	const isEditor = user?.role === 'ADMIN' || user?.role === 'EDITOR';
-	const navigate = useNavigate();
 
 	const [users, setUsers] = useState<UserWithoutPass[]>([]);
 	const [campaigns, setCampaigns] = useState<Campaign[]>([]);

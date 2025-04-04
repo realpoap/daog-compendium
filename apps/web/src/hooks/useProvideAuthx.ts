@@ -90,11 +90,11 @@ export const useProvideAuth = () => {
 	const getMe = async () => {
 		//console.log('calling getMe()');
 		if (me.data?.user) {
-			if (logged && !isAuthLoading && user) {
+			if (!logged && !isAuthLoading && user) {
 				if (user.name !== undefined) {
 					toast.success(`Welcome back ${capitalizeFirstLetter(user.name)}`);
 				}
-			} else {
+			} else if (!logged && !user) {
 				//console.log('Calling login with:', user?.name);
 				const currentUser = {
 					email: me.data.user?.email,

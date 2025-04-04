@@ -9,6 +9,7 @@ import { componentsRouter } from './components';
 import { creaturesRouter } from './creatures';
 import { itemsRouter } from './items';
 import { spellsRouter } from './spells';
+import { imagekitRouter } from './imagekit';
 
 export const appRouter = router({
 	users: usersRouter,
@@ -21,6 +22,7 @@ export const appRouter = router({
 	items: itemsRouter,
 	characters: charactersRouter,
 	campaigns: campaignsRouter,
+	imagekit: imagekitRouter,
 });
 
 export type AppRouter = typeof appRouter;

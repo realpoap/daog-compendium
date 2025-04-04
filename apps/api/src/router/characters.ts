@@ -128,7 +128,41 @@ export const charactersRouter = router({
 				serverErrorHandler(error);
 			}
 		}),
+	updateAvatar: secureProcedure
+		.input(
+			z.object({
+				id: z.string(),
+				path: z.string().optional(),
+				url: z.string().optional(),
+			}),
+		)
+		.mutation(async ({ input }) => {
+			const { id, url, path } = input;
 
+			try {
+				// Fetch the current bio object first
+				const character = await prisma.character.findUnique({
+					where: { id },
+					select: { bio: true }, // Get existing bio
+				});
+
+				if (!character) throw new Error('Character not found');
+				const avatarObject = { path: path, url: url };
+				return await prisma.character.update({
+					where: { id },
+					data: {
+						bio: {
+							set: {
+								...character.bio,
+								avatar: avatarObject,
+							},
+						},
+					},
+				});
+			} catch (error) {
+				serverErrorHandler(error);
+			}
+		}),
 	updateXp: secureProcedure
 		.input(
 			z.object({

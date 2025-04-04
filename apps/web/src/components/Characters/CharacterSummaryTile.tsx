@@ -26,6 +26,7 @@ import {
 } from 'rocketicons/gi';
 import { SmallCircleButton } from '../Buttons';
 import { Option } from '../SpellList/SelectFilter';
+import AvatarUpload from './AvatarUpload';
 
 type Props = {
 	char: Character;
@@ -56,6 +57,7 @@ const CharacterSummaryTile = ({
 }: Props) => {
 	const navigate = useNavigate();
 	const [currentExp, setCurrentExp] = useState(char.profile.experience);
+
 	return (
 		<div
 			tabIndex={0}
@@ -72,11 +74,8 @@ const CharacterSummaryTile = ({
 				)}
 			>
 				{/* AVATAR */}
-				<div className='avatar avatar-placeholder flex flex-col items-center justify-center'>
-					<div className='bg-tile font-grenze text-primary size-12 rounded-full'>
-						<span className='text-3xl'>{char.bio.name.charAt(0)}</span>
-					</div>
-				</div>
+				<AvatarUpload char={char} />
+
 				<div className='flex flex-col items-start justify-start md:flex-row'>
 					<div className='flex w-full flex-col items-start'>
 						{/* NAME */}

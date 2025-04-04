@@ -123,7 +123,7 @@ type Bio {
   owner String
   campaign String
   isDead  Boolean  @default(false)
-  avatar  String?
+  avatar  Image?
   name  String
   surname String?
   species String
@@ -132,6 +132,11 @@ type Bio {
   isBoss          Boolean            @default(false)
   isCaster        Boolean  @default(false)
   isPun      Boolean  @default(false)
+}
+
+type Image {
+  path String?
+  url String?
 }
 
 enum gender {

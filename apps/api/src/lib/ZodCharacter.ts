@@ -21,12 +21,18 @@ export const SpellTypeSchema = z.enum([
 	'blood',
 ]);
 
+export const ImageSchema = z.object({
+	path: z.string().nullable().optional(),
+	url: z.string().nullable().optional(),
+});
+export type Image = z.infer<typeof ImageSchema>;
+
 export const BioSchema = z.object({
 	creator: z.string(),
 	owner: z.string(),
 	campaign: z.string(),
 	isDead: z.boolean().optional(),
-	avatar: z.string().optional().nullable(),
+	avatar: ImageSchema.nullable(),
 	name: z.string(),
 	surname: z.string().optional().nullable(),
 	species: z.string(),

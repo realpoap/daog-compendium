@@ -37,6 +37,7 @@ export function App() {
 						</div>
 					)}
 				</Toaster>
+
 				<RouterProvider
 					router={router}
 					basepath='/'
