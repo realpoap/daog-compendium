@@ -30,29 +30,31 @@ async function main() {
 			allowedOrigins.push(process.env.IMAGEKIT_URL_ENDPOINT);
 	}
 
-	app.use(
-		cors({
-			origin: (
-				origin: string | undefined, // Origin can be undefined for same-origin requests
-				callback: (error: Error | null, allow?: boolean) => void,
-			) => {
-				if (!origin || allowedOrigins.includes(origin)) {
-					callback(null, true);
-				} else {
-					callback(new Error(`Not allowed by CORS: ${origin}`), false); // Changed 'true' to 'false' to correctly block
-				}
-			},
-			methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Added OPTIONS to the allowed methods
-			allowedHeaders: [
-				'Content-Type',
-				'Authorization',
-				'Access-Control-Allow-Methods',
-				'Access-Control-Allow-Origin',
-				'*',
-			],
-			credentials: true,
-		}),
-	);
+	app.use(cors());
+
+	// app.use(
+	// 	cors({
+	// 		origin: (
+	// 			origin: string | undefined, // Origin can be undefined for same-origin requests
+	// 			callback: (error: Error | null, allow?: boolean) => void,
+	// 		) => {
+	// 			if (!origin || allowedOrigins.includes(origin)) {
+	// 				callback(null, true);
+	// 			} else {
+	// 				callback(new Error(`Not allowed by CORS: ${origin}`), false); // Changed 'true' to 'false' to correctly block
+	// 			}
+	// 		},
+	// 		methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Added OPTIONS to the allowed methods
+	// 		allowedHeaders: [
+	// 			'Content-Type',
+	// 			'Authorization',
+	// 			'Access-Control-Allow-Methods',
+	// 			'Access-Control-Allow-Origin',
+	// 			'*',
+	// 		],
+	// 		credentials: true,
+	// 	}),
+	// );
 
 	const IMAGEKIT_PRIVATE_KEY = process.env.IMAGEKIT_PRIVATE_KEY;
 	if (!IMAGEKIT_PRIVATE_KEY) {
