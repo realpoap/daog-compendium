@@ -14,6 +14,20 @@ async function main() {
 
 	app.use(cookieParser());
 
+	// Configure specific origins and options:
+	const origin =
+		process.env.NODE_ENV === 'production'
+			? [process.env.FRONTEND_URL, process.env.IMAGEKIT_URL_ENDPOINT]
+			: true;
+	app.use(
+		cors({
+			origin: ['http://localhost:3000', 'https://your-frontend.com'],
+			methods: ['GET', 'POST', 'PUT', 'DELETE'],
+			allowedHeaders: ['Content-Type', 'Authorization'],
+			credentials: true, // If you need to handle cookies or authorization headers
+		}),
+	);
+
 	const IMAGEKIT_PRIVATE_KEY = process.env.IMAGEKIT_PRIVATE_KEY;
 	if (!IMAGEKIT_PRIVATE_KEY) {
 		console.warn('ImageKit Private Key is missing');
@@ -25,16 +39,6 @@ async function main() {
 		publicKey: process.env.IMAGEKIT_PUBLIC_KEY || '',
 		privateKey: process.env.IMAGEKIT_PRIVATE_KEY || '',
 	});
-
-	const origin =
-		process.env.NODE_ENV === 'production' ? process.env.FRONTEND_URL : true;
-	app.use(cors({ origin, credentials: true }));
-
-	const corsOptions = {
-		origin: process.env.IMAGEKIT_URL_ENDPOINT,
-		optionsSuccessStatus: 200,
-	};
-	if (process.env.IMAGEKIT_URL_ENDPOINT) app.use(cors(corsOptions));
 
 	app.use((req, res, next) => {
 		if (req.method === 'OPTIONS') {
