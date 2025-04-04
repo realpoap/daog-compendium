@@ -24,8 +24,10 @@ async function main() {
 		if (allowedOrigins.length === 0) {
 			console.warn('Warning: No allowed origins configured in production.');
 		}
+		allowedOrigins.push('https://daog-compendium.onrender.com');
 	} else {
 		allowedOrigins.push('http://localhost:3000');
+		allowedOrigins.push('http://localhost:5173');
 		if (process.env.IMAGEKIT_URL_ENDPOINT)
 			allowedOrigins.push(process.env.IMAGEKIT_URL_ENDPOINT);
 	}
@@ -68,19 +70,19 @@ async function main() {
 		privateKey: process.env.IMAGEKIT_PRIVATE_KEY || '',
 	});
 
-	app.use((req, res, next) => {
-		if (req.method === 'OPTIONS') {
-			res.setHeader('Access-Control-Allow-Origin', '*');
-			res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
-			res.setHeader(
-				'Access-Control-Allow-Headers',
-				'Content-Type,Authorization',
-			);
-			res.status(204).end(); // respond with no content
-		} else {
-			next();
-		}
-	});
+	// app.use((req, res, next) => {
+	// 	if (req.method === 'OPTIONS') {
+	// 		res.setHeader('Access-Control-Allow-Origin', '*');
+	// 		res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
+	// 		res.setHeader(
+	// 			'Access-Control-Allow-Headers',
+	// 			'Content-Type,Authorization',
+	// 		);
+	// 		res.status(204).end(); // respond with no content
+	// 	} else {
+	// 		next();
+	// 	}
+	// });
 
 	app.use(
 		'/trpc',
@@ -98,10 +100,10 @@ async function main() {
 		}),
 	);
 
-	// app.get('/healthcheck', (_req, res) => {
-	// 	console.info(`Monitoring health 🩺...`);
-	// 	res.sendStatus(200);
-	// });
+	app.get('/healthcheck', (_req, res) => {
+		console.info(`Monitoring health 🩺...`);
+		res.sendStatus(200);
+	});
 
 	app.get('/auth', function (_req, res) {
 		const result = imagekit.getAuthenticationParameters();
@@ -127,10 +129,8 @@ async function main() {
 	});
 
 	app.get('/', (_req, res) => {
-		console.info(
-			`Server is running now ! Front end set as : ${allowedOrigins}`,
-		);
-		res.send(`Server is running now ! Front end set as : ${allowedOrigins}`);
+		console.info(`Server is running now ! Origins set as : ${allowedOrigins}`);
+		res.send(`Server is running now ! Origins set as : ${allowedOrigins}`);
 	});
 
 	app.listen(port, () => {
