@@ -109,23 +109,27 @@ type SmallCircleButtonProps = {
 	onClick: React.MouseEventHandler<HTMLButtonElement>;
 	children?: React.ReactNode;
 	color?: string;
+	disabled?: boolean;
 };
 
 export const SmallCircleButton = ({
 	children,
 	onClick,
 	color,
+	disabled,
 }: SmallCircleButtonProps) => {
 	return (
 		<button
 			className={cn(
-				`btn-xs md:btn-sm btn-circle bg-accent font-cabin text-background shadow-bakground relative z-50 flex cursor-pointer flex-col items-center justify-center self-center shadow-sm transition-all duration-100 before:absolute before:inset-0 before:rounded-[inherit] before:bg-[linear-gradient(45deg,transparent_25%,theme(colors.white/.5)_50%,transparent_75%,transparent_100%)] before:bg-[length:250%_250%,100%_100%] before:bg-[position:200%_0,0_0] before:bg-no-repeat before:[transition:background-position_0s_ease] hover:before:bg-[position:-100%_0,0_0] hover:before:duration-[800ms] active:ring-2 active:ring-stone-200 dark:before:bg-[linear-gradient(45deg,transparent_25%,theme(colors.white)_50%,transparent_75%,transparent_100%)]`,
+				`btn-xs lg:btn-sm btn-circle bg-accent font-cabin text-background shadow-bakground relative z-50 flex cursor-pointer flex-col items-center justify-center self-center shadow-sm transition-all duration-100 before:absolute before:inset-0 before:rounded-[inherit] before:bg-[linear-gradient(45deg,transparent_25%,theme(colors.white/.5)_50%,transparent_75%,transparent_100%)] before:bg-[length:250%_250%,100%_100%] before:bg-[position:200%_0,0_0] before:bg-no-repeat before:[transition:background-position_0s_ease] hover:before:bg-[position:-100%_0,0_0] hover:before:duration-[800ms] active:ring-2 active:ring-stone-200 dark:before:bg-[linear-gradient(45deg,transparent_25%,theme(colors.white)_50%,transparent_75%,transparent_100%)]`,
 				color,
 				{
 					'btn-error': color === 'bg-error',
+					'bg-neutral': disabled,
 				},
 			)}
 			onClick={onClick}
+			disabled={disabled}
 		>
 			{children}
 		</button>

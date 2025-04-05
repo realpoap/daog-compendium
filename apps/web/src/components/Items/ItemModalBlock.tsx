@@ -1,5 +1,6 @@
 import { Item } from '@api/lib/ZodItem';
 import DescBlock from './Blocks/DescBlock';
+import EquipBlock from './Blocks/EquipBlock';
 import NameBlock from './Blocks/NameBlock';
 import PropertiesBlock from './Blocks/PropertiesBlock';
 import ValueBlock from './Blocks/ValueBlock';
@@ -9,7 +10,6 @@ type Props = {
 };
 
 const ItemModalBlock = ({ item }: Props) => {
-	console.log('passed item', item);
 	return (
 		<>
 			<NameBlock item={item} />
@@ -17,8 +17,8 @@ const ItemModalBlock = ({ item }: Props) => {
 			<div className='divider divider-neutral'></div>
 			<PropertiesBlock item={item} />
 			<div className='divider divider-neutral'></div>
-
 			<ValueBlock item={item} />
+			<EquipBlock item={item} />
 		</>
 	);
 };

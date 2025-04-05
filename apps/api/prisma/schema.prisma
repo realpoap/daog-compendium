@@ -29,6 +29,7 @@ model User {
   createdAt DateTime @default(now())
   characters  String[]
   campaigns  String[]
+  inPlayerView Boolean?
 
   @@unique([name, password, email])
 }
@@ -158,9 +159,19 @@ type Specifics {
   height Int?
   bornIn String?
   restBonus Int?
-  dmgBonus Int?
+  dmgBonus DamageBonus?
   speaks Language[]
   massive Boolean @default(false)
+}
+
+type DamageBonus {
+  ranged  Int?  @default(0)
+  fighting  Int?  @default(0)
+  brawling  Int?  @default(0)
+  defense  Int?  @default(0)
+  sneak Int?  @default(0)
+  critical  Int?  @default(0)
+  magical Int?  @default(0)
 }
 
 type Language {
@@ -578,8 +589,8 @@ model Item {
   isFood  Boolean? @default(false)
   //Merchant
   quality         qualityType     @default(common)
-  weight          Float?
-  value           Float?
+  weight          Float? @default(0)
+  value           Float? @default(0)
   valueWeight     Float?
   constraints     StatProfil?
   maxDurability      Int? @default(1)
@@ -590,9 +601,9 @@ model Item {
   rarity  rarity @default(common)
   //Weapon
   usage           String?
-  damages         String?
+  damages         String? 
   inflictType     String[]
-  isCritical  Boolean?
+  isCritical  Boolean? @default(false)
   rangeType rangeType?
   range String?
   weaponType  weaponType?

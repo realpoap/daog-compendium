@@ -15,7 +15,7 @@ function Index() {
 	const { user, isAuthLoading, accessToken } = useAuth();
 	const { isOnline } = useNetworkStatus();
 
-	console.log('check isOnline in index: ', isOnline);
+	//console.log('check isOnline in index: ', isOnline);
 
 	const spellCount = trpc.spells.getTotal.useQuery(undefined, {
 		enabled: isOnline === true,
@@ -136,7 +136,7 @@ function Index() {
 		);
 	}
 
-	if (!user || !accessToken) {
+	if (!accessToken) {
 		return (
 			<div className='h-full'>
 				<div className='width-full font-cabin flex h-fit flex-col items-center justify-center gap-8 md:flex-row'>

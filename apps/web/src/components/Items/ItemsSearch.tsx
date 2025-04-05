@@ -24,8 +24,6 @@ import ItemModal from './ItemModal';
 const ItemsSearch = () => {
 	const getAllItems = trpc.items.getAll.useQuery();
 	const getAllComponents = trpc.components.getAll.useQuery();
-	//const createManyItems = trpc.items.createMany.useMutation();
-	//const createManyComponents = trpc.components.createMany.useMutation();
 
 	const [search, setSearch] = useState('');
 	const [debouncedSearch] = useDebounce(search, 500);
@@ -115,20 +113,6 @@ const ItemsSearch = () => {
 		selectedFood,
 	]);
 
-	// const sendItems = () => {
-	// 	itemsEntries.map(i => {
-	// 		console.log(i);
-	// 		createManyItems.mutate(i);
-	// 	});
-	// };
-
-	// const sendComponents = () => {
-	// 	componentsEntries.map(c => {
-	// 		console.log(c);
-	// 		createManyComponents.mutate(c);
-	// 	});
-	// };
-
 	const openItemModal = (item: Item | Component) => {
 		setSelected(item);
 		if (selected && 'itemType' in selected)
@@ -139,8 +123,16 @@ const ItemsSearch = () => {
 			).showModal();
 	};
 
-	if (!getAllItems.data) return <div>Loading</div>;
-	if (!getAllComponents.data) return <div>Loading</div>;
+	if (!getAllItems.data || !getAllComponents.data)
+		return (
+			<div className='font-grenze mt-10 flex flex-col items-center justify-center gap-2 px-4'>
+				<h3 className='text-4xl'>Collecting resources</h3>
+				<span className='font-cabin text-center italic'>
+					Please wait while we search for the knowledge within the library ...
+				</span>
+				<progress className='progress w-56'></progress>
+			</div>
+		);
 
 	return (
 		<div className='flex flex-col items-center'>
@@ -305,31 +297,6 @@ const ItemsSearch = () => {
 					)}
 				</div>
 			)}
-
-			{/* <div className='hidden'>
-				<button
-					onClick={sendItems}
-					disabled={createManyItems.isPending}
-					className='btn btn-sm m-8'
-				>
-					Import Items
-				</button>
-				{createManyItems.error && (
-					<p>Something went wrong! {createManyItems.error.message}</p>
-				)}
-			</div> */}
-			{/* <div className='hidden'>
-				<button
-					onClick={sendComponents}
-					disabled={createManyComponents.isPending}
-					className='btn btn-sm m-8'
-				>
-					Import Components
-				</button>
-				{createManyComponents.error && (
-					<p>Something went wrong! {createManyComponents.error.message}</p>
-				)}
-			</div> */}
 		</div>
 	);
 };

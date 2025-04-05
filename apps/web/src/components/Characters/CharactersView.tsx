@@ -5,7 +5,6 @@ import { trpc } from '@/utils/trpc';
 import { Campaign } from '@api/lib/ZodCampaign';
 import { Character } from '@api/lib/ZodCharacter';
 import { UserWithoutPass } from '@api/lib/ZodUser';
-import { useNavigate } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { BiX } from 'rocketicons/bi';
@@ -120,6 +119,17 @@ const CharactersView = () => {
 		},
 	});
 
+	const updateUserCharacters = trpc.users.updateCharacterOwnership.useMutation({
+		onSuccess: () => {
+			utils.campaigns.getAll.invalidate();
+			console.log('Campaign deleted !');
+		},
+		onError: error => {
+			toast.error(error.message);
+			throw new Error(error.message);
+		},
+	});
+
 	useEffect(() => {
 		if (getUserList.data) setUsers(getUserList.data);
 		setUserOptions(
@@ -225,16 +235,22 @@ const CharactersView = () => {
 		}
 	};
 	const handleOwnerChange = async (
-		id: string,
-		user: string,
+		charId: string,
+		userId: string,
 		campaign: string,
 	) => {
-		await updateCharOwner.mutate({ id: id, userId: user });
+		await updateCharOwner.mutate({ id: charId, userId: userId });
+		if (user) {
+			await updateUserCharacters.mutate({
+				userId: userId,
+				characterId: charId,
+			});
+		}
 		// update list of players in campaign
 		const campaignTargeted = campaigns.find(c => c.id === campaign);
 		if (campaignTargeted) {
 			const players = campaignTargeted?.players;
-			players?.push(user);
+			players?.push(userId);
 			updateCampPlayers.mutate({ id: campaign, players: players });
 		}
 	};
@@ -293,14 +309,14 @@ const CharactersView = () => {
 				className={cn(
 					'mt-sm transition-full absolute flex h-full w-full flex-col items-center justify-start px-2 duration-300',
 					{
-						'md:left-0 md:w-full': !panelOpen,
-						'md:left-1/3 md:w-2/3': panelOpen,
+						'sm:left-0 sm:w-full': !panelOpen,
+						'sm:left-1/3 sm:w-2/3': panelOpen,
 					},
 				)}
 				onClick={() => setPanelOpen(false)}
 			>
 				<div className='dark:from-background container sticky top-8 z-10 flex h-fit min-h-[25dvh] w-full flex-col items-center bg-gradient-to-b from-stone-100 from-80% pb-8'>
-					<h1 className='font-grenze dark:text-primary text-secondary sticky top-4 z-10 mx-auto mt-4 text-center text-6xl font-bold tracking-wide md:mt-8'>
+					<h1 className='font-grenze dark:text-primary text-secondary xs:mt-8 sticky top-4 z-10 mx-auto mt-4 text-center text-6xl font-bold tracking-wide'>
 						Characters
 						{characters && <TitleCount number={characters.length} />}
 					</h1>
@@ -339,7 +355,7 @@ const CharactersView = () => {
 				</div>
 				<div
 					className={cn(
-						'z-0 mt-8 flex h-full w-full flex-col justify-start transition-all duration-300 md:w-3/4',
+						'xs:w-11/12 z-0 mt-8 flex h-full w-full flex-col justify-start transition-all duration-300 md:w-2/3',
 						{
 							'md:w-full': panelOpen,
 						},
@@ -352,8 +368,8 @@ const CharactersView = () => {
 								className='mb-4 flex flex-col items-center'
 								key={k.id}
 							>
-								<div className='flex w-full flex-col items-center md:flex-row md:justify-between md:gap-4'>
-									<div className='flex w-full flex-col items-start md:flex-row md:items-baseline md:gap-4'>
+								<div className='xs:flex-row xs:justify-between xs:gap-4 flex w-full flex-col items-center'>
+									<div className='xs:flex-row xs:items-baseline xs:gap-4 flex w-full flex-col items-start'>
 										<h4 className='font-grenze text-primary text-2xl tracking-wide'>
 											{k.name}
 										</h4>
@@ -450,14 +466,15 @@ const CharactersView = () => {
 			{/* CAMPAIGNS PANEL -------------------------------------------------------------------------------- */}
 			<div
 				className={cn(
-					'sidebar bg-card fixed bottom-0 left-0 top-12 z-20 w-5/6 px-4 shadow shadow-lg shadow-stone-900 transition-transform duration-500 md:w-1/3',
+					'sidebar bg-card xs:w-1/2 fixed bottom-0 left-0 top-12 z-20 w-5/6 px-4 shadow shadow-lg shadow-stone-900 transition-transform duration-500 sm:w-1/3',
 					{
-						'opacity-0 max-sm:hidden md:-left-1/3': !panelOpen,
-						'visible opacity-100 md:-left-1/3 md:translate-x-full': panelOpen,
+						'opacity-0 max-sm:hidden sm:-left-1/2 sm:-left-1/3': !panelOpen,
+						'xs:-left-1/2 xs:translate-x-full visible opacity-100 sm:-left-1/3':
+							panelOpen,
 					},
 				)}
 			>
-				<h1 className='font-grenze dark:text-primary text-secondary sticky z-10 my-4 flex flex-row justify-between text-center text-2xl font-bold tracking-wide md:mt-8'>
+				<h1 className='font-grenze dark:text-primary text-secondary xs:mt-8 sticky z-10 my-4 flex flex-row justify-between text-center text-2xl font-bold tracking-wide'>
 					Campaigns
 					<button
 						className='font-grenze absolute right-0 top-0 z-50 cursor-pointer self-end'
@@ -501,7 +518,7 @@ const CharactersView = () => {
 									color='bg-error'
 									onClick={() => handleDeleteCampaign(camp.id)}
 								>
-									<FiTrash2 className='dark:icon-background sixe-3 md:icon-sm align-baseline' />
+									<FiTrash2 className='dark:icon-background sixe-3 xs:icon-sm align-baseline' />
 								</SmallCircleButton>
 							)}
 						</li>

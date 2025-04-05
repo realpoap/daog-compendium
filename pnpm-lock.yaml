@@ -268,6 +268,9 @@ importers:
       daisyui:
         specifier: ^5.0.4
         version: 5.0.4
+      dead-simple-console-colors:
+        specifier: ^1.0.11
+        version: 1.0.11
       eslint:
         specifier: ^9.16.0
         version: 9.16.0(jiti@2.4.2)
@@ -3083,6 +3086,9 @@ packages:
   data-view-byte-offset@1.0.0:
     resolution: {integrity: sha512-t/Ygsytq+R995EJ5PZlD4Cu56sWa8InXySaViRzw9apusqsOO2bQP+SbYzAhR0pFKoB+43lYy8rWban9JSuXnA==}
     engines: {node: '>= 0.4'}
+
+  dead-simple-console-colors@1.0.11:
+    resolution: {integrity: sha512-r4vy7PnbU9cSsDZH4xRuUL3goeiR7j2Uwl/6dKNT58XmlwRUZ5ADpiGh1bryLLAPsA2n/xkYUTG1cb+O96E/ow==}
 
   debug@2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}
@@ -9395,6 +9401,8 @@ snapshots:
       call-bind: 1.0.7
       es-errors: 1.3.0
       is-data-view: 1.0.1
+
+  dead-simple-console-colors@1.0.11: {}
 
   debug@2.6.9:
     dependencies:

@@ -43,30 +43,6 @@ export const BioSchema = z.object({
 	isPun: z.boolean().optional(),
 });
 
-export const SpecificsSchema = z.object({
-	size: z
-		.enum(['tiny', 'small', 'average', 'large', 'huge', 'gigantic'], {
-			errorMap: () => ({ message: 'A creature must have a size' }),
-		})
-		.optional(),
-	alignment: z
-		.enum(['saint', 'good', 'neutral', 'bad', 'evil'], {
-			errorMap: () => ({ message: 'Choose an alignment' }),
-		})
-		.optional(),
-	gender: genderSchema.nullable().optional(),
-	sizeBonus: z.number().int().optional(),
-	background: z.string().nullable(),
-	description: z.string().nullable(),
-	age: z.number().int().nullable().optional(),
-	weight: z.number().int().nullable().optional(),
-	height: z.number().int().nullable().optional(),
-	bornIn: z.string().nullable().optional(),
-	restBonus: z.number().int().nullable().optional(),
-	dmgBonus: z.number().int().nullable().optional(),
-	massive: z.boolean().optional(),
-});
-
 export const CarreerSchema = z.object({
 	current: z.string(),
 	master: z.string(),
@@ -183,6 +159,18 @@ export const SpeedSchema = z.object({
 	obstacle: z.number().int(),
 });
 
+export const DamageBonusSchema = z.object({
+	ranged: z.number().int().optional().nullable(),
+	fighting: z.number().int().optional().nullable(),
+	brawling: z.number().int().optional().nullable(),
+	defense: z.number().int().optional().nullable(),
+	sneak: z.number().int().optional().nullable(),
+	critical: z.number().int().optional().nullable(),
+	magical: z.number().int().optional().nullable(),
+});
+
+export type DamageBonus = z.infer<typeof DamageBonusSchema>;
+
 export const VariablesSchema = z.object({
 	initiative: z.number().int(),
 	attack: z.number().int(),
@@ -228,6 +216,30 @@ export const StatusSchema = z.object({
 	health: StatVariableSchema,
 	spirit: StatVariableSchema,
 	magicLoad: StatVariableSchema,
+});
+
+export const SpecificsSchema = z.object({
+	size: z
+		.enum(['tiny', 'small', 'average', 'large', 'huge', 'gigantic'], {
+			errorMap: () => ({ message: 'A creature must have a size' }),
+		})
+		.optional(),
+	alignment: z
+		.enum(['saint', 'good', 'neutral', 'bad', 'evil'], {
+			errorMap: () => ({ message: 'Choose an alignment' }),
+		})
+		.optional(),
+	gender: genderSchema.nullable().optional(),
+	sizeBonus: z.number().int().optional(),
+	background: z.string().nullable(),
+	description: z.string().nullable(),
+	age: z.number().int().nullable().optional(),
+	weight: z.number().int().nullable().optional(),
+	height: z.number().int().nullable().optional(),
+	bornIn: z.string().nullable().optional(),
+	restBonus: z.number().int().nullable().optional(),
+	dmgBonus: DamageBonusSchema.optional().nullable(),
+	massive: z.boolean().optional(),
 });
 
 export const CharacterSchema = z.object({
