@@ -315,12 +315,12 @@ const CharactersView = () => {
 				)}
 				onClick={() => setPanelOpen(false)}
 			>
-				<div className='dark:from-background container sticky top-8 z-10 flex h-fit min-h-[25dvh] w-full flex-col items-center bg-gradient-to-b from-stone-100 from-80% pb-8'>
-					<h1 className='font-grenze dark:text-primary text-secondary xs:mt-8 sticky top-4 z-10 mx-auto mt-4 text-center text-6xl font-bold tracking-wide'>
+				<div className='dark:from-background container sticky top-8 z-10 flex h-fit min-h-[25dvh] w-[100dvw] flex-col items-center bg-gradient-to-b from-stone-100 from-80% pb-8'>
+					<h1 className='font-grenze dark:text-primary text-secondary xs:mt-8 sticky top-4 z-10 mx-auto mt-4 w-full text-center text-6xl font-bold tracking-wide'>
 						Characters
 						{characters && <TitleCount number={characters.length} />}
 					</h1>
-					<div className='iems-center flex flex-col gap-0'>
+					<div className='iems-center flex w-full flex-col gap-0'>
 						<ActionButton
 							color='primary'
 							textColor='background'

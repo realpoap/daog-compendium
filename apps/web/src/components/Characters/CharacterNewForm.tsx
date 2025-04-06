@@ -1,5 +1,3 @@
-import { useAuth } from '@/store/authContext';
-import { characterSpecieOptions } from '@/types/characterOptions';
 import {
 	armagnac,
 	barbarian,
@@ -17,7 +15,9 @@ import {
 	royalist,
 	troll,
 	villous,
-} from '@/types/speciesProfile';
+} from '@/data/speciesProfile';
+import { useAuth } from '@/store/authContext';
+import { characterSpecieOptions } from '@/types/characterOptions';
 import { masteriesReset, variablesReset } from '@/utils/calculateStats';
 import { trpc } from '@/utils/trpc';
 import { NewCharacter, NewCharacterSchema } from '@api/lib/ZodCharacter';

@@ -190,7 +190,6 @@ enum languages {
   giant
   troll
   high_elven @map("high elven")
-  old_dwarvish @map("old dwarven")
   titan
   rosmary
   dead_speech @map("dead speech")
@@ -202,7 +201,7 @@ enum languages {
   thieves_marks @map("thieves' marks")
   forester_symbols @map("forester symbols")
   dwarven_runes @map("dwarven runes")
-  kabbalistic_glyphs @map("cabalistic glyphs")
+  kabbalistic_glyphs @map("kabbalistic glyphs")
 }
 
 type Inventory {
@@ -381,6 +380,7 @@ model Attribute {
   name        String  @unique
   flavor      String?
   description String?
+  value Int? @default(1)
 }
 
 enum HabitatType {

@@ -200,7 +200,7 @@ const MonsterDetails = () => {
 												e.stopPropagation();
 												setEdit(!edit);
 											}}
-											color={'bg-red-500'}
+											color={'bg-error'}
 										>
 											<RiCloseFill className='icon-stone-900' />
 										</SmallCircleButton>

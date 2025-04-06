@@ -1,100 +1,108 @@
 import { cn } from '@/utils/classNames';
-import { SetStateAction } from 'react';
 import { useFormContext } from 'react-hook-form';
 import TagBadge from '../TagBadge';
 
-type Props = {
+type Option = {
+	label: string;
+	value: string;
+};
+
+type Props<T> = {
 	name: string;
-	list: { label: string; value: string; icon?: JSX.Element }[];
-	values: string[];
-	setValues: React.Dispatch<SetStateAction<string[]>>;
+	list: T[];
+	getOptionLabel: (item: T) => string;
+	getOptionValue: (item: T) => string;
+	values: T[];
+	setValues: React.Dispatch<React.SetStateAction<T[]>>;
 	placeholder?: string;
 };
 
-const MultiSelect = ({ name, list, values, setValues, placeholder }: Props) => {
+const MultiSelect = <T extends unknown>({
+	name,
+	list,
+	values,
+	setValues,
+	getOptionLabel,
+	getOptionValue,
+	placeholder = 'Select...',
+}: Props<T>) => {
 	const {
-		register,
 		formState: { errors },
 	} = useFormContext();
 
-	const handleSelect = (option: string) => {
-		const isSelected = values.includes(option);
+	const toggleSelect = (item: T) => {
+		const value = getOptionValue(item);
+		const isSelected = values.some(v => getOptionValue(v) === value);
 		if (isSelected) {
-			setValues(values.filter(v => v !== option));
+			setValues(values.filter(v => getOptionValue(v) !== value));
 		} else {
-			setValues([...values, option]);
+			setValues([...values, item]);
 		}
 	};
 
-	const handleClearAll = () => {
-		setValues([]);
-	};
+	const handleClearAll = () => setValues([]);
 
 	return (
 		<>
-			<div
-				className='dropdown form-control flex h-fit w-full flex-col items-center justify-start'
-				{...register(name)}
-			>
+			<div className='dropdown form-control w-full'>
 				<div
 					tabIndex={0}
 					className={cn(
-						'font-cabin text-neutral flex h-8 min-h-6 w-full cursor-pointer items-center rounded-md border-none px-1 pl-2 text-sm italic hover:bg-stone-700 dark:bg-stone-700',
+						'flex h-8 w-full cursor-pointer items-center rounded-md px-2 text-sm italic hover:bg-stone-700 dark:bg-stone-700',
 						{
-							'select-error': errors[name],
-							'ring-error': errors[name],
-							'ring-2': errors[name],
+							'select-error ring-error ring-2': errors[name],
 						},
 					)}
 				>
-					<div className='group flex h-fit w-full flex-row items-center justify-between'>
-						<span className='self-left flex text-left'>{placeholder}</span>
+					<div className='flex w-full items-center justify-between'>
+						<span>{placeholder}</span>
 						<span
 							onClick={handleClearAll}
-							className='hover:animate-shake text-error hidden cursor-pointer rounded-lg bg-stone-800 p-2 group-hover:flex'
+							className='text-error hover:animate-shake hidden cursor-pointer rounded-lg bg-stone-800 p-2 group-hover:flex'
 						>
 							Clear All
 						</span>
 					</div>
 				</div>
+
 				<ul
 					tabIndex={0}
-					className='menu dropdown-content font-cabin autofill:font-cabin text-md z-10 mt-10 h-36 w-full overflow-x-scroll rounded-md text-stone-500 shadow-sm dark:bg-stone-700 autofill:dark:bg-stone-700 dark:active:bg-stone-700'
+					className='menu dropdown-content z-10 mt-10 h-36 w-full overflow-y-auto rounded-md shadow-sm dark:bg-stone-700'
 				>
-					{list.map(o => (
-						<li
-							key={o.value}
-							onClick={() => handleSelect(o.value)}
-							className={`w-fit cursor-pointer ${
-								values.includes(o.value) ? 'text-primary' : ''
-							}`}
-						>
-							<span>{o.label}</span>
-						</li>
-					))}
+					{list.map(item => {
+						const value = getOptionValue(item);
+						const label = getOptionLabel(item);
+						const isSelected = values.some(v => getOptionValue(v) === value);
+
+						return (
+							<li
+								key={value}
+								onClick={() => toggleSelect(item)}
+								className={cn('w-fit cursor-pointer', {
+									'text-primary': isSelected,
+								})}
+							>
+								<span>{label}</span>
+							</li>
+						);
+					})}
 				</ul>
 			</div>
-			<div>
-				{values.length > 0 && (
-					<div className='mb-2 mt-3 flex flex-wrap gap-2'>
-						{values.map(v => {
-							const selectedOption = list.find(o => o.value === v);
-							return (
-								<TagBadge
-									key={v}
-									text={v}
-									onClick={e => {
-										e.stopPropagation();
-										if (selectedOption) {
-											handleSelect(selectedOption?.value);
-										}
-									}}
-								/>
-							);
-						})}
-					</div>
-				)}
-			</div>
+
+			{values.length > 0 && (
+				<div className='mt-3 flex flex-wrap gap-2'>
+					{values.map(item => (
+						<TagBadge
+							key={getOptionValue(item)}
+							text={getOptionLabel(item)}
+							onClick={e => {
+								e.stopPropagation();
+								toggleSelect(item);
+							}}
+						/>
+					))}
+				</div>
+			)}
 		</>
 	);
 };

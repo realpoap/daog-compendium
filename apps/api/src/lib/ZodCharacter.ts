@@ -4,7 +4,9 @@ import { CreatureComponentSchema } from './ZodComponent';
 import { ActionListSchema } from './ZodCreature';
 import { CreatureItemSchema } from './ZodItem';
 
-export const genderSchema = z.enum(['male', 'female', 'fluid', 'unknown']);
+export const genderSchema = z.enum(['male', 'female', 'fluid', 'unknown'], {
+	errorMap: () => ({ message: 'Choose a gender' }),
+});
 
 export const SpellTypeSchema = z.enum([
 	'mouflette',
@@ -247,7 +249,6 @@ export const CharacterSchema = z.object({
 	fullname: z.string(),
 	createdAt: z.coerce.date().nullable(),
 	updatedAt: z.coerce.date().nullable(),
-	//-------------------------------------------
 	bio: BioSchema,
 	path: PathSchema,
 	status: StatusSchema,
@@ -271,14 +272,14 @@ export const CampaignUpdateSchema = z.object({
 });
 
 export const NewCharacterSchema = z.object({
-	fullname: z.string(),
+	fullname: z.string().optional(),
 	bio: BioSchema,
-	path: PathSchema,
-	status: StatusSchema,
-	masteries: MasteriesSchema,
-	profile: StatisticsSchema,
-	specifics: SpecificsSchema,
-	equipment: InventorySchema,
+	path: PathSchema.optional(),
+	status: StatusSchema.optional(),
+	masteries: MasteriesSchema.optional(),
+	profile: StatisticsSchema.optional(),
+	specifics: SpecificsSchema.optional(),
+	equipment: InventorySchema.optional(),
 });
 
 export type NewCharacter = z.infer<typeof NewCharacterSchema>;
