@@ -45,7 +45,7 @@ const EquipBlock = ({ item }: Props) => {
 	});
 
 	useEffect(() => {
-		getCharacterList.data && setCharacterList(getCharacterList.data);
+		if (getCharacterList.data) setCharacterList(getCharacterList.data);
 	}, [getCharacterList.data]);
 
 	const handleAddItem = (

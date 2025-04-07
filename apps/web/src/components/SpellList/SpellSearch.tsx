@@ -28,7 +28,6 @@ const SpellSearch = () => {
 	const query = trpc.spells.getAll.useQuery(undefined, {
 		enabled: items === undefined,
 	});
-	const [_latestNumber, setLatestNumber] = useState(0);
 	const { user } = useAuth();
 
 	const isEditor = user?.role === 'ADMIN' || user?.role === 'EDITOR';
@@ -59,7 +58,6 @@ const SpellSearch = () => {
 		}
 
 		if (query.data && items !== undefined) {
-			setLatestNumber(Math.max(...items.map(i => i.number)));
 			let filteredSpells: Spell[] = items;
 
 			// if domain selected

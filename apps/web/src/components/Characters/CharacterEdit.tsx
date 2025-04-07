@@ -68,7 +68,7 @@ const CharacterEdit = () => {
 	useEffect(() => {
 		if (character) {
 			const c = calcCharacterStats(methods.getValues());
-			id && methods.setValue('id', id);
+			if (id) methods.setValue('id', id);
 
 			Object.entries(c).forEach(([name, value]) =>
 				methods.setValue(name as keyof Character, value),

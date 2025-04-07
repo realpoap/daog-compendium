@@ -36,11 +36,11 @@ const CharFormStep2 = () => {
 	useEffect(() => {
 		console.log(selectedSub);
 
-		selectedSub === '' &&
+		if (selectedSub === '')
 			setSelectedSpecieData(
 				allSpecies.find(specie => specie.specie === selectedSpecie),
 			);
-		selectedSub !== '' &&
+		if (selectedSub !== '')
 			setSelectedSpecieData(
 				allSpecies.find(specie => specie.sub === selectedSub),
 			);

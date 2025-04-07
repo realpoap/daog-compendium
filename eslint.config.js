@@ -48,7 +48,6 @@ export default [
 			// General JS (these might be redundant as you have js.configs.recommended)
 			'no-unused-vars': 'off',
 			'no-undef': 'off',
-			'no-unused-expressions': 'off',
 
 			// Prettier
 			'prettier/prettier': ['warn', { singleQuote: true }],

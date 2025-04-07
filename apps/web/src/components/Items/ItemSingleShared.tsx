@@ -1,4 +1,3 @@
-import { useAuth } from '@/store/authContext';
 import { trpc } from '@/utils/trpc';
 import { Component } from '@api/lib/ZodComponent';
 import { Item } from '@api/lib/ZodItem';
@@ -27,8 +26,8 @@ const ItemSingleShared = () => {
 
 	// define item object data after query success
 	useEffect(() => {
-		itemById.data && setItem(itemById.data);
-		componentById.data && setComponent(componentById.data);
+		if (itemById.data) setItem(itemById.data);
+		if (componentById.data) setComponent(componentById.data);
 	}, [itemById, item, component]);
 	if (!id) {
 		toast.error('Cannot find item.');

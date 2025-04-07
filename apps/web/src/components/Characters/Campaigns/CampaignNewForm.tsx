@@ -40,8 +40,10 @@ const CampaignNewForm = () => {
 	});
 
 	useEffect(() => {
-		user.user?.id && methods.setValue('creator', user.user?.id);
-		user.user?.id && methods.setValue('dm', user.user?.id);
+		if (user.user?.id) {
+			methods.setValue('creator', user.user?.id);
+			methods.setValue('dm', user.user?.id);
+		}
 	}, [methods.formState]);
 
 	const onSubmit = async (data: NewCampaign) => {

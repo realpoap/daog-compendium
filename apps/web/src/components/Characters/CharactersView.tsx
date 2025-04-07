@@ -182,18 +182,18 @@ const CharactersView = () => {
 	const setAvgCampaignsLevel = () => {
 		if (campaigns.length > 0 && characters) {
 			campaigns.map(campaign => {
-				let charLevels: [number] = [0];
+				const charLevels: [number] = [0];
 				characters
 					.filter(character => character.bio.campaign === campaign.id)
 					.map(c => {
 						charLevels.push(c.profile.level);
-						console.log(charLevels);
-						!campaign.maxLevel || campaign.maxLevel < c.profile.level
-							? (campaign.maxLevel = c.profile.level)
-							: (campaign.maxLevel = campaign.maxLevel);
-						!campaign.minLevel || campaign.minLevel > c.profile.level
-							? (campaign.minLevel = c.profile.level)
-							: (campaign.minLevel = campaign.minLevel);
+						//console.log(charLevels);
+						if (!campaign.maxLevel || campaign.maxLevel < c.profile.level) {
+							campaign.maxLevel = c.profile.level;
+						}
+						if (!campaign.minLevel || campaign.minLevel > c.profile.level) {
+							campaign.minLevel = c.profile.level;
+						}
 					});
 				campaign.charNb = charLevels.length - 1;
 				campaign.avgLevel = Math.ceil(
@@ -202,7 +202,7 @@ const CharactersView = () => {
 					}, 0) / campaign.charNb,
 				);
 
-				console.warn(campaign.name, campaign.charNb, campaign.avgLevel);
+				//console.warn(campaign.name, campaign.charNb, campaign.avgLevel);
 			});
 		}
 	};

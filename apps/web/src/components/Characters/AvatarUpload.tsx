@@ -81,7 +81,7 @@ const AvatarUpload = ({ char }: Props) => {
 
 	useEffect(() => {
 		if (char) {
-			char.bio.avatar?.url != null &&
+			if (char.bio.avatar?.url != null)
 				setImageObject(prev => ({
 					url: char.bio.avatar?.url,
 					path: prev?.path,

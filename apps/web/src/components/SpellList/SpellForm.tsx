@@ -73,7 +73,7 @@ const SpellForm = () => {
 
 	if (highestSpellNumber.isSuccess && highestSpellNumber.data) {
 		newSpellNumber = Number(highestSpellNumber.data?._max?.number) + 1;
-		console.log(newSpellNumber);
+		//console.log(newSpellNumber);
 		methods.setValue('number', newSpellNumber);
 	}
 

@@ -114,7 +114,7 @@ export const FeatSchema = z.object({
 });
 
 export const PathSchema = z.object({
-	magicDomain: z.array(SpellTypeSchema).optional(),
+	magicDomain: z.array(SpellTypeSchema).nullable().optional(),
 	tree: z.string().nullable().optional(),
 	careers: z.string().array().optional(),
 	skills: z.array(SkillSchema).optional(),
@@ -272,14 +272,14 @@ export const CampaignUpdateSchema = z.object({
 });
 
 export const NewCharacterSchema = z.object({
-	fullname: z.string().optional(),
+	fullname: z.string(),
 	bio: BioSchema,
-	path: PathSchema.optional(),
-	status: StatusSchema.optional(),
-	masteries: MasteriesSchema.optional(),
-	profile: StatisticsSchema.optional(),
-	specifics: SpecificsSchema.optional(),
-	equipment: InventorySchema.optional(),
+	path: PathSchema,
+	status: StatusSchema,
+	masteries: MasteriesSchema,
+	profile: StatisticsSchema,
+	specifics: SpecificsSchema,
+	equipment: InventorySchema,
 });
 
 export type NewCharacter = z.infer<typeof NewCharacterSchema>;

@@ -70,8 +70,10 @@ const CharacterNewForm = ({ campaigns }: Props) => {
 			'fullname',
 			`${methods.getValues('bio.name')} (${methods.getValues('bio.subspecies') + ' '}${methods.getValues('bio.species')}) - lvl ${methods.getValues('profile.level')}`,
 		);
-		user?.id && methods.setValue('bio.creator', user?.id);
-		user?.id && methods.setValue('bio.owner', user?.id);
+		if (user?.id) {
+			methods.setValue('bio.creator', user?.id);
+			methods.setValue('bio.owner', user?.id);
+		}
 		switch (methods.getValues('bio.subspecies')) {
 			case 'moufflian':
 				methods.setValue('profile.stats', moufflian.profile.statsStarting);
