@@ -114,7 +114,7 @@ export const FeatSchema = z.object({
 });
 
 export const PathSchema = z.object({
-	magicDomain: z.array(SpellTypeSchema).nullable().optional(),
+	magicDomain: z.array(SpellTypeSchema).optional(),
 	tree: z.string().nullable().optional(),
 	careers: z.string().array().optional(),
 	skills: z.array(SkillSchema).optional(),

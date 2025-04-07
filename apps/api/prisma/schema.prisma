@@ -373,6 +373,7 @@ type CreatureAttribute {
   name        String
   flavor      String?
   description String?
+  value Int?
 }
 
 model Attribute {
