@@ -20,6 +20,7 @@ import { Route as MeLoginImport } from './routes/me/login'
 import { Route as ItemsAddImport } from './routes/items/add'
 import { Route as BestiaryAddImport } from './routes/bestiary/add'
 import { Route as BestiaryIdImport } from './routes/bestiary/$id'
+import { Route as CharactersNewIndexImport } from './routes/characters/new/index'
 import { Route as SpellsEditIdImport } from './routes/spells/edit/$id'
 import { Route as CharactersEditIdImport } from './routes/characters/edit/$id'
 import { Route as BestiaryEditIdImport } from './routes/bestiary/edit/$id'
@@ -109,6 +110,12 @@ const BestiaryAddRoute = BestiaryAddImport.update({
 const BestiaryIdRoute = BestiaryIdImport.update({
   id: '/bestiary/$id',
   path: '/bestiary/$id',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const CharactersNewIndexRoute = CharactersNewIndexImport.update({
+  id: '/characters/new/',
+  path: '/characters/new/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -251,6 +258,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SpellsEditIdImport
       parentRoute: typeof rootRoute
     }
+    '/characters/new/': {
+      id: '/characters/new/'
+      path: '/characters/new'
+      fullPath: '/characters/new'
+      preLoaderRoute: typeof CharactersNewIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/items/$type/$id/edit': {
       id: '/items/$type/$id/edit'
       path: '/items/$type/$id/edit'
@@ -286,6 +300,7 @@ export interface FileRoutesByFullPath {
   '/bestiary/edit/$id': typeof BestiaryEditIdRoute
   '/characters/edit/$id': typeof CharactersEditIdRoute
   '/spells/edit/$id': typeof SpellsEditIdRoute
+  '/characters/new': typeof CharactersNewIndexRoute
   '/items/$type/$id/edit': typeof ItemsTypeIdEditRoute
   '/items/$type/$id/share': typeof ItemsTypeIdShareRoute
 }
@@ -306,6 +321,7 @@ export interface FileRoutesByTo {
   '/bestiary/edit/$id': typeof BestiaryEditIdRoute
   '/characters/edit/$id': typeof CharactersEditIdRoute
   '/spells/edit/$id': typeof SpellsEditIdRoute
+  '/characters/new': typeof CharactersNewIndexRoute
   '/items/$type/$id/edit': typeof ItemsTypeIdEditRoute
   '/items/$type/$id/share': typeof ItemsTypeIdShareRoute
 }
@@ -327,6 +343,7 @@ export interface FileRoutesById {
   '/bestiary/edit/$id': typeof BestiaryEditIdRoute
   '/characters/edit/$id': typeof CharactersEditIdRoute
   '/spells/edit/$id': typeof SpellsEditIdRoute
+  '/characters/new/': typeof CharactersNewIndexRoute
   '/items/$type/$id/edit': typeof ItemsTypeIdEditRoute
   '/items/$type/$id/share': typeof ItemsTypeIdShareRoute
 }
@@ -349,6 +366,7 @@ export interface FileRouteTypes {
     | '/bestiary/edit/$id'
     | '/characters/edit/$id'
     | '/spells/edit/$id'
+    | '/characters/new'
     | '/items/$type/$id/edit'
     | '/items/$type/$id/share'
   fileRoutesByTo: FileRoutesByTo
@@ -368,6 +386,7 @@ export interface FileRouteTypes {
     | '/bestiary/edit/$id'
     | '/characters/edit/$id'
     | '/spells/edit/$id'
+    | '/characters/new'
     | '/items/$type/$id/edit'
     | '/items/$type/$id/share'
   id:
@@ -387,6 +406,7 @@ export interface FileRouteTypes {
     | '/bestiary/edit/$id'
     | '/characters/edit/$id'
     | '/spells/edit/$id'
+    | '/characters/new/'
     | '/items/$type/$id/edit'
     | '/items/$type/$id/share'
   fileRoutesById: FileRoutesById
@@ -408,6 +428,7 @@ export interface RootRouteChildren {
   BestiaryEditIdRoute: typeof BestiaryEditIdRoute
   CharactersEditIdRoute: typeof CharactersEditIdRoute
   SpellsEditIdRoute: typeof SpellsEditIdRoute
+  CharactersNewIndexRoute: typeof CharactersNewIndexRoute
   ItemsTypeIdEditRoute: typeof ItemsTypeIdEditRoute
   ItemsTypeIdShareRoute: typeof ItemsTypeIdShareRoute
 }
@@ -428,6 +449,7 @@ const rootRouteChildren: RootRouteChildren = {
   BestiaryEditIdRoute: BestiaryEditIdRoute,
   CharactersEditIdRoute: CharactersEditIdRoute,
   SpellsEditIdRoute: SpellsEditIdRoute,
+  CharactersNewIndexRoute: CharactersNewIndexRoute,
   ItemsTypeIdEditRoute: ItemsTypeIdEditRoute,
   ItemsTypeIdShareRoute: ItemsTypeIdShareRoute,
 }
@@ -457,6 +479,7 @@ export const routeTree = rootRoute
         "/bestiary/edit/$id",
         "/characters/edit/$id",
         "/spells/edit/$id",
+        "/characters/new/",
         "/items/$type/$id/edit",
         "/items/$type/$id/share"
       ]
@@ -505,6 +528,9 @@ export const routeTree = rootRoute
     },
     "/spells/edit/$id": {
       "filePath": "spells/edit/$id.tsx"
+    },
+    "/characters/new/": {
+      "filePath": "characters/new/index.tsx"
     },
     "/items/$type/$id/edit": {
       "filePath": "items/$type/$id.edit.tsx"

@@ -1,11 +1,12 @@
 import AttributesList from '@/components/Attributes/AttributesList';
+import { ActionButton } from '@/components/Buttons';
 import LoginForm from '@/components/User/LoginForm';
 import RegisterForm from '@/components/User/RegisterForm';
 import useNetworkStatus from '@/hooks/useNetworkStatus';
 import { useAuth } from '@/store/authContext';
 import { capitalizeFirstLetter } from '@/utils/capitalize';
 import { trpc } from '@/utils/trpc';
-import { createLazyFileRoute, Link } from '@tanstack/react-router';
+import { createLazyFileRoute, Link, useNavigate } from '@tanstack/react-router';
 
 export const Route = createLazyFileRoute('/')({
 	component: Index,
@@ -14,8 +15,9 @@ export const Route = createLazyFileRoute('/')({
 function Index() {
 	const { user, isAuthLoading, accessToken } = useAuth();
 	const { isOnline } = useNetworkStatus();
+	const navigate = useNavigate();
 
-	console.log('check isOnline in index: ', isOnline);
+	//console.log('check isOnline in index: ', isOnline);
 
 	const spellCount = trpc.spells.getTotal.useQuery(undefined, {
 		enabled: isOnline === true,
@@ -129,6 +131,17 @@ function Index() {
 						</div>
 					</div>
 				</section>
+				<ActionButton
+					color='accent'
+					textColor='background'
+					onClick={() =>
+						navigate({
+							to: '/characters/new',
+						})
+					}
+				>
+					Create a new character
+				</ActionButton>
 				<section className='flex w-full flex-col items-start justify-start px-4'>
 					<AttributesList />
 				</section>
@@ -136,7 +149,7 @@ function Index() {
 		);
 	}
 
-	if (!user || !accessToken) {
+	if (!accessToken) {
 		return (
 			<div className='h-full'>
 				<div className='width-full font-cabin flex h-fit flex-col items-center justify-center gap-8 md:flex-row'>

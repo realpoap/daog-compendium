@@ -1,5 +1,6 @@
 import { Component } from '@api/lib/ZodComponent';
 import DescBlock from './Blocks/DescBlock';
+import EquipBlock from './Blocks/EquipBlock';
 import NameBlock from './Blocks/NameBlock';
 import ToxicityBlock from './Blocks/ToxicityBlock';
 import ValueBlock from './Blocks/ValueBlock';
@@ -19,6 +20,7 @@ const ComponentModalBlock = ({ item }: Props) => {
 				<div className='divider divider-horizontal divider-neutral'></div>
 				<ValueBlock item={item} />
 			</div>
+			<EquipBlock item={item} />
 		</>
 	);
 };

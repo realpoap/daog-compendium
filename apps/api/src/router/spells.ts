@@ -1,6 +1,6 @@
-import { prisma } from '@api/prismaClient';
 import { serverErrorHandler } from '@api/lib/utils/errorHandler';
 import { ZodNewSpell, ZodSpell } from '@api/lib/ZodSpell';
+import { prisma } from '@api/prismaClient';
 import { procedure, router } from '@api/trpc';
 import { z } from 'zod';
 
@@ -9,7 +9,7 @@ export const spellsRouter = router({
 		try {
 			return await prisma.spell.findMany({
 				orderBy: {
-					updatedAt: 'desc',
+					createdAt: 'desc',
 				},
 			});
 		} catch (error) {

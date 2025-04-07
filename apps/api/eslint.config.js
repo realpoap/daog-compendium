@@ -1,31 +1,57 @@
-import pluginJs from "@eslint/js";
-import pluginReact from "eslint-plugin-react";
-import globals from "globals";
-import tseslint from "typescript-eslint";
+// eslint.config.js
+import js from '@eslint/js';
+import prettier from 'eslint-plugin-prettier';
+import reactPlugin from 'eslint-plugin-react'; // Import the plugin itself
+import globals from 'globals';
+import ts from 'typescript-eslint';
 
-/** @type {import('eslint').Linter.Config[]} */
 export default [
-  { files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"] },
-  { languageOptions: { globals: globals.browser } },
-  pluginJs.configs.recommended,
-  ...tseslint.configs.recommended,
-  {
+  js.configs.recommended,
+  ...ts.configs.recommended,
+  { // Apply the flat config 
+    plugins: {
+      react: reactPlugin,
+    },
     rules: {
-      '@typescript-eslint/no-unused-vars': [
-        'error',
-        {
-          args: 'all',
-          argsIgnorePattern: '^_',
-          caughtErrors: 'all',
-          caughtErrorsIgnorePattern: '^_',
-          destructuredArrayIgnorePattern: '^_',
-          varsIgnorePattern: '^_',
-          ignoreRestSiblings: true,
-        },
-      ],
-      '@typescript-eslint/no-explicit-any': 'warn',
+      ...reactPlugin.configs.recommended.rules,
+      'react/react-in-jsx-scope': 'off', // You can also put React rules here
+    },
+    settings: {
+      react: {
+        version: 'detect', // Or specify your React version
+      },
     },
   },
-  pluginReact.configs.flat.recommended,
+  {
+    files: ['**/*.{ts,tsx,js,jsx}'],
+    languageOptions: {
+      parser: ts.parser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+        project: true,
+      },
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      },
+    },
+    plugins: {
+      prettier: prettier,
+    },
+    rules: {
+      // TypeScript rules
+      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-unused-vars': ["error", { ignoreRestSiblings: true }],
+      '@typescript-eslint/no-explicit-any': 'warn',
+
+      // General JS (these might be redundant as you have js.configs.recommended)
+      'no-unused-vars': 'off',
+      'no-undef': 'off',
+
+      // Prettier
+      'prettier/prettier': ['warn', { singleQuote: true }],
+    },
+  },
 
 ];

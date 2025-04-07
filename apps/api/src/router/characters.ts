@@ -1,5 +1,7 @@
 import { serverErrorHandler } from '@api/lib/utils/errorHandler';
 import { CharacterSchema, NewCharacterSchema } from '@api/lib/ZodCharacter';
+import { CreatureComponentSchema } from '@api/lib/ZodComponent';
+import { CreatureItemSchema } from '@api/lib/ZodItem';
 import { prisma } from '@api/prismaClient';
 import { procedure, router, secureProcedure } from '@api/trpc';
 import { z } from 'zod';
@@ -16,6 +18,25 @@ export const charactersRouter = router({
 			serverErrorHandler(error);
 		}
 	}),
+	getPlayerCharacters: secureProcedure
+		.input(z.string().array().nullable())
+		.query(async ({ input }) => {
+			if (!input || input.length === 0)
+				throw new Error('No characters assigned to user');
+			try {
+				return await prisma.character.findMany({
+					where: {
+						id: { in: input },
+					},
+					select: {
+						fullname: true,
+						id: true,
+					},
+				});
+			} catch (error) {
+				serverErrorHandler(error);
+			}
+		}),
 	getTotal: procedure.query(async () => {
 		try {
 			return await prisma.character.count({
@@ -191,6 +212,62 @@ export const charactersRouter = router({
 								...character.profile, // Keep all previous fields
 								level: level,
 								experience: experience,
+							},
+						},
+					},
+				});
+			} catch (error) {
+				serverErrorHandler(error);
+			}
+		}),
+	updateItems: secureProcedure
+		.input(z.object({ id: z.string(), item: CreatureItemSchema }))
+		.mutation(async ({ input }) => {
+			const { id, item } = input;
+			try {
+				// Fetch the current bio object first
+				const targetCharacter = await prisma.character.findUnique({
+					where: { id },
+					select: { equipment: true }, // Get existing equipment
+				});
+
+				if (!targetCharacter) throw new Error('Character not found');
+
+				return await prisma.character.update({
+					where: { id },
+					data: {
+						equipment: {
+							set: {
+								...targetCharacter.equipment, // Keep all previous fields
+								items: [...targetCharacter.equipment.items, item],
+							},
+						},
+					},
+				});
+			} catch (error) {
+				serverErrorHandler(error);
+			}
+		}),
+	updateComponents: secureProcedure
+		.input(z.object({ id: z.string(), item: CreatureComponentSchema }))
+		.mutation(async ({ input }) => {
+			const { id, item } = input;
+			try {
+				// Fetch the current bio object first
+				const targetCharacter = await prisma.character.findUnique({
+					where: { id },
+					select: { equipment: true }, // Get existing equipment
+				});
+
+				if (!targetCharacter) throw new Error('Character not found');
+
+				return await prisma.character.update({
+					where: { id },
+					data: {
+						equipment: {
+							set: {
+								...targetCharacter.equipment, // Keep all previous fields
+								components: [...targetCharacter.equipment.components, item],
 							},
 						},
 					},

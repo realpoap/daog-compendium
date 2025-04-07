@@ -1,4 +1,3 @@
-import { useAuth } from '@/store/authContext';
 import {
 	creatureAlignmentOptions,
 	creatureHabitatOptions,
@@ -53,7 +52,7 @@ const MonsterEdit = () => {
 
 	useEffect(() => {
 		if (!creatureById.isSuccess) return;
-		methods.reset(creatureById.data as Creature);
+		methods.reset(creatureById.data);
 		setHabitats(creatureById.data.habitat);
 		setDomains(creatureById.data.magicDomain);
 	}, [creatureById.status]);

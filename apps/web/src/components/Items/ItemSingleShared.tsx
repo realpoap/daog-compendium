@@ -12,6 +12,7 @@ const ItemSingleShared = () => {
 	const { id, type } = useParams({ strict: false });
 	const [item, setItem] = useState<Item>();
 	const [component, setComponent] = useState<Component>();
+
 	const navigate = useNavigate();
 
 	const itemById = trpc.items.getById.useQuery(id as string, {
@@ -23,12 +24,10 @@ const ItemSingleShared = () => {
 
 	//Loading -----------------------------------------------------------------
 
-	console.log(type, item);
-
 	// define item object data after query success
 	useEffect(() => {
-		itemById.data && setItem(itemById.data);
-		componentById.data && setComponent(componentById.data);
+		if (itemById.data) setItem(itemById.data);
+		if (componentById.data) setComponent(componentById.data);
 	}, [itemById, item, component]);
 	if (!id) {
 		toast.error('Cannot find item.');
@@ -39,7 +38,7 @@ const ItemSingleShared = () => {
 		<div className='flex w-full flex-col items-center'>
 			<BackButton onClick={() => navigate({ to: `/items` })} />
 			<div className='mt-4 h-fit w-fit'>
-				<div className='dark:bg-card card p-8 shadow shadow-lg'>
+				<div className='dark:bg-card card p-8 shadow shadow-xl'>
 					{type === 'item' && item && <ItemModalBlock item={item} />}
 					{component && <ComponentModalBlock item={component} />}
 				</div>

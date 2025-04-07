@@ -67,6 +67,10 @@ const AvatarUpload = ({ char }: Props) => {
 	);
 	const updateAvatarUrl = trpc.characters.updateAvatar.useMutation({
 		onSuccess: () => {
+			setImageObject(prev => ({
+				path: prev?.path,
+				url: signedUrl.data?.url,
+			}));
 			toast.success('Avatar updated !');
 		},
 		onError: error => {
@@ -77,35 +81,31 @@ const AvatarUpload = ({ char }: Props) => {
 
 	useEffect(() => {
 		if (char) {
-			char.bio.avatar?.url != null &&
+			if (char.bio.avatar?.url != null)
 				setImageObject(prev => ({
 					url: char.bio.avatar?.url,
 					path: prev?.path,
 				}));
-			char.bio.avatar?.url != null &&
-				console.warn('char.bio.avatar.url:', char.bio.avatar?.url);
 		}
 		setImageObject({ path: null, url: null });
-		console.warn('imageObject.url:', imageObject?.url);
+		//console.warn('imageObject.url:', imageObject?.url);
 	}, [char]);
 
 	useEffect(() => {
 		if (!imageObject || !signedUrl.data) return;
 		if (signedUrl.data.url && imageObject.url !== signedUrl.data.url) {
-			console.log('Signed URL:');
-			console.log('signedUrl.data.url:', signedUrl?.data.url);
-			console.log('imageObject.url:', imageObject.url);
+			//console.log('Signed URL:');
+			//console.log('signedUrl.data.url:', signedUrl?.data.url);
+
+			//console.log('imageObject.url:', imageObject.url);
 			if (signedUrl.data.url !== char.bio.avatar?.url) {
 				updateAvatarUrl.mutate({
 					id: char.id,
 					path: imageObject.path as string,
 					url: signedUrl.data?.url as string,
 				});
-				setImageObject(prev => ({
-					path: prev?.path,
-					url: signedUrl.data?.url,
-				}));
-				console.warn('imageObject.url:', imageObject?.url);
+
+				//console.warn('imageObject.url:', imageObject?.url);
 			}
 		}
 	}, [signedUrl.data]);
@@ -144,7 +144,7 @@ const AvatarUpload = ({ char }: Props) => {
 							imageObject != null && (
 								<img
 									src={
-										imageObject.url
+										imageObject.url != null
 											? (imageObject.url as string)
 											: (char.bio.avatar?.url as string)
 									}

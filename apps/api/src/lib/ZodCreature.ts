@@ -37,6 +37,7 @@ export const CreatureAttributeSchema = z.object({
 		.min(4, 'Name must be greater than 3'),
 	flavor: z.string().nullable(),
 	description: z.string().nullable(),
+	value: z.number().int().nullable(),
 });
 
 export type CreatureAttribute = z.infer<typeof CreatureAttributeSchema>;
@@ -48,6 +49,7 @@ export const AttributeSchema = z.object({
 		.min(4, 'Name must be greater than 3'),
 	flavor: z.string().nullable(),
 	description: z.string().nullable(),
+	value: z.number().int().nullable(),
 });
 
 export type Attribute = z.infer<typeof AttributeSchema>;

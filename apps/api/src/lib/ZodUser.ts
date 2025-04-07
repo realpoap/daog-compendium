@@ -12,6 +12,7 @@ export const UserSchema = z.object({
 	createdAt: z.coerce.date(),
 	characters: z.string().array(),
 	campaigns: z.string().array(),
+	inPlayerView: z.boolean().optional().nullable(),
 });
 
 export type User = z.infer<typeof UserSchema>;

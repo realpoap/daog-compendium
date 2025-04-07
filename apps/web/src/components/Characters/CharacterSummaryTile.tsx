@@ -4,7 +4,7 @@ import { Character } from '@api/lib/ZodCharacter';
 import { UserWithoutPass } from '@api/lib/ZodUser';
 import { useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
-import { FiEdit, FiPlusCircle, FiTrash2 } from 'rocketicons/fi';
+import { FiEdit, FiMaximize, FiPlusCircle, FiTrash2 } from 'rocketicons/fi';
 import {
 	GiArmorVest,
 	GiBullseye,
@@ -40,7 +40,11 @@ type Props = {
 		campaign: string,
 		owner: string,
 	) => Promise<void>;
-	updateOwner: (id: string, user: string, campaign: string) => Promise<void>;
+	updateOwner: (
+		charId: string,
+		userId: string,
+		campaign: string,
+	) => Promise<void>;
 	updateXp: (expInput: number, char: Character) => Promise<void>;
 };
 
@@ -76,12 +80,12 @@ const CharacterSummaryTile = ({
 				{/* AVATAR */}
 				<AvatarUpload char={char} />
 
-				<div className='flex flex-col items-start justify-start md:flex-row'>
+				<div className='xs:flex-row flex flex-col items-start justify-start'>
 					<div className='flex w-full flex-col items-start'>
 						{/* NAME */}
 						<div
 							className={cn(
-								'text-primary flex w-full flex-col items-start text-base font-semibold md:flex-row md:items-baseline md:gap-2',
+								'text-primary xs:flex-row xs:items-baseline xs:gap-2 flex w-full flex-col items-start text-base font-semibold',
 							)}
 						>
 							<div className='flex w-fit flex-row items-center justify-start'>
@@ -103,10 +107,23 @@ const CharacterSummaryTile = ({
 									Lvl. {char.profile.level}
 								</div>
 							</div>
+							<div
+								className='hover:scale-120 hover:*:icon-neutral-content z-50 ml-auto flex'
+								onClick={e => {
+									e.stopPropagation();
+									(
+										document.getElementById(
+											`modal-char-${char.id}`,
+										) as HTMLDialogElement
+									).showModal();
+								}}
+							>
+								<FiMaximize className='icon-sm icon-neutral' />
+							</div>
 						</div>
-						<div className='flex w-full flex-col items-start justify-between md:flex-row'>
+						<div className='xs:flex-row flex w-full flex-col items-start justify-between'>
 							{/* EXPERIENCE */}
-							<div className='flex w-full flex-row items-end justify-start gap-2 md:w-1/2'>
+							<div className='xs:w-1/2 flex w-full flex-row items-end justify-start gap-2'>
 								<div className='tooltip tooltip-top'>
 									<div className='tooltip-content shadow-background shadow-lg'>
 										<span className='px-1 py-0 text-xs'>{`Exp: ${char.profile.experience}/${char.profile.level * 100}`}</span>
@@ -147,17 +164,26 @@ const CharacterSummaryTile = ({
 							<div className='flex flex-col'>
 								{/* CAMPAIGN */}
 								<div className='flex w-full flex-col'>
-									{(user?.id === char.bio.owner || user?.role === 'ADMIN') && (
-										<div className='flex w-full flex-row items-start gap-1 md:flex-row md:items-baseline'>
+									<div className='xs:flex-row xs:items-baseline flex w-full flex-row items-start gap-1'>
+										<span className='text-neutral-content w-content text-xs'>
+											Wandering in{' '}
+										</span>
+										{user?.id !== char.bio.owner && user?.role === 'VIEWER' && (
 											<span className='text-neutral-content w-content text-xs'>
-												Wandering in{' '}
+												{campaignOptions &&
+													campaignOptions.find(
+														campaign => campaign.value === char.bio.campaign,
+													)?.label}
 											</span>
-											<div className='flex w-fit flex-row gap-2'>
+										)}
+										<div className='flex w-fit flex-row gap-2'>
+											{(user?.id === char.bio.owner ||
+												user?.role !== 'VIEWER') && (
 												<select
 													aria-placeholder='Assign to campaign'
 													value={char.bio.campaign}
 													disabled={user?.role === 'VIEWER'}
-													className='font-cabin dark:text-primary dark:caret-primary peer-default:dark:text-neutral dark:bg-card w-content min-h-fit rounded-md py-0 text-sm text-xs shadow-sm md:w-fit'
+													className='font-cabin dark:text-primary dark:caret-primary peer-default:dark:text-neutral dark:bg-card w-content xs:w-fit min-h-fit rounded-md py-0 text-sm text-xs shadow-sm'
 													onChange={e =>
 														updateCampaign(
 															char.id,
@@ -182,15 +208,15 @@ const CharacterSummaryTile = ({
 														</option>
 													))}
 												</select>
-											</div>
+											)}
 										</div>
-									)}
+									</div>
 								</div>
 								{/* PLAYER */}
 								<div className='flex w-full flex-col'>
 									{((dm && dm === user?.id.toString()) ||
 										user?.role === 'ADMIN') && (
-										<div className='flex w-full flex-row items-start gap-1 md:flex-row md:items-baseline'>
+										<div className='xs:flex-row xs:items-baseline flex w-full flex-row items-start gap-1'>
 											<span className='text-neutral-content w-content text-xs'>
 												Played by{' '}
 											</span>
@@ -198,7 +224,7 @@ const CharacterSummaryTile = ({
 												<select
 													aria-placeholder='Assign to player'
 													value={capitalizeFirstLetter(char.bio.owner)}
-													className='font-cabin dark:text-primary dark:caret-primary peer-default:dark:text-neutral dark:bg-card w-content min-h-fit rounded-md py-0 text-sm text-xs shadow-sm md:w-fit'
+													className='font-cabin dark:text-primary dark:caret-primary peer-default:dark:text-neutral dark:bg-card w-content xs:w-fit min-h-fit rounded-md py-0 text-sm text-xs shadow-sm'
 													onChange={e =>
 														updateOwner(
 															char.id,
@@ -230,81 +256,182 @@ const CharacterSummaryTile = ({
 							</div>
 						</div>
 					</div>
-					{/* HEALTH */}
-					<div className='hidden w-1/6 items-center justify-center gap-2 md:flex md:flex-col'>
-						<div className='font-cabin text-error flex flex-row'>
-							<GiGlassHeart className='icon-error dark:icon-error icon-base mr-2' />{' '}
-							{char?.status.health?.current}
-						</div>
+				</div>
+				{/* HEALTH */}
 
-						{char.bio.isCaster && (
+				<div className='xs:flex xs:flex-col w-content hidden items-end justify-center gap-2'>
+					{(user?.id === char.bio.owner || user?.role !== 'VIEWER') && (
+						<>
+							<div className='font-cabin text-error flex w-max flex-row'>
+								<GiGlassHeart className='icon-error dark:icon-error icon-base mr-2' />{' '}
+								{char?.status.health?.current}
+							</div>
+
 							<div className='font-cabin text-info flex flex-row'>
 								<GiPotionBall className='icon-info dark:icon-info icon-base mr-2' />{' '}
 								{char?.status.spirit?.current}
 							</div>
-						)}
-					</div>
-					{/* ADMIN */}
-					<div className='hidden flex-row items-end justify-end gap-1 md:flex md:flex-col md:justify-start'>
-						{(user?.role === 'ADMIN' ||
-							char.bio.creator === user?.id ||
-							char.bio.owner === user?.id) && (
-							<SmallCircleButton
-								color='bg-accent'
-								onClick={e => {
-									e.stopPropagation();
-									navigate({
-										to: '/characters/edit/$id',
-										params: { id: `${char?.id}` },
-									});
-								}}
-							>
-								<FiEdit className='icon-background md:icon-sm size-3' />
-							</SmallCircleButton>
-						)}
-						{user?.role === 'ADMIN' && (
-							<SmallCircleButton
-								color='bg-error'
-								onClick={e => {
-									e.stopPropagation();
-									handleDelete(char.id);
-								}}
-							>
-								<FiTrash2 className='delete icon-background md:icon-sm size-3' />
-							</SmallCircleButton>
-						)}
-					</div>
+						</>
+					)}
+				</div>
+				{/* ADMIN */}
+				<div className='xs:flex hidden flex-col items-end justify-center gap-2'>
+					{(user?.role === 'ADMIN' ||
+						char.bio.creator === user?.id ||
+						char.bio.owner === user?.id) && (
+						<SmallCircleButton
+							color='bg-accent'
+							onClick={e => {
+								e.stopPropagation();
+								navigate({
+									to: '/characters/edit/$id',
+									params: { id: `${char?.id}` },
+								});
+							}}
+						>
+							<FiEdit className='icon-background xs:icon-sm size-3' />
+						</SmallCircleButton>
+					)}
+					{user?.role === 'ADMIN' && (
+						<SmallCircleButton
+							color='bg-error'
+							onClick={e => {
+								e.stopPropagation();
+								handleDelete(char.id);
+							}}
+						>
+							<FiTrash2 className='delete icon-background xs:icon-sm size-3' />
+						</SmallCircleButton>
+					)}
 				</div>
 			</li>
+			<dialog
+				id={`modal-char-${char.id}`}
+				className='modal bg-card'
+			>
+				<div className='modal-box bg-card'>
+					<h3 className='text-lg font-bold'>Items</h3>
+					{char.equipment.items?.map(item => (
+						<li key={item.id}>
+							{item.quantity}x {item.name}
+						</li>
+					))}
+					<h3 className='text-lg font-bold'>Components</h3>
+					{char.equipment.components?.map(item => (
+						<li key={item.id}>
+							{item.quantity}x {item.name}
+						</li>
+					))}
+					<p className='text-neutral py-4'>
+						Press ESC key or click the button below to close
+					</p>
+				</div>
+				<form
+					method='dialog'
+					className='modal-backdrop'
+				>
+					<button>close</button>
+				</form>
+			</dialog>
 			<div
-				className={cn('collapse-content hidden grid-cols-5 gap-4 font-bold', {
-					'grayscale-50 opacity-50': char.bio.isDead,
-				})}
+				className={cn(
+					'collapse-content group hidden grid-cols-5 gap-4 font-bold',
+					{
+						'grayscale-50 opacity-50': char.bio.isDead,
+					},
+				)}
 			>
 				{[
-					{ icon: GiThunderSkull, value: char.profile.variables.initiative },
+					{
+						icon: GiThunderSkull,
+						value: char.profile.variables.initiative,
+						name: 'initiative',
+					},
 					// { icon: GiWingfoot, value: char.profile.speed?.running },
-					{ icon: GiBullseye, value: char.profile.variables.ranged },
-					{ icon: GiSwordWound, value: char.profile.variables.attack },
-					{ icon: GiCheckedShield, value: char.profile.variables.defense },
-					{ icon: GiArmorVest, value: char.equipment.armorClass },
-					{ icon: GiSemiClosedEye, value: char.profile.variables.perception },
-					{ icon: GiHood, value: char.profile.variables.discretion },
-					{ icon: GiCampfire, value: char.profile.variables.survival },
-					{ icon: GiMagnifyingGlass, value: char.profile.variables.enigms },
-					{ icon: GiHood, value: char.profile.variables.speech },
-					{ icon: GiSwapBag, value: char.profile.variables.trade },
-					{ icon: GiDominoMask, value: char.profile.variables.performance },
-					{ icon: GiSly, value: char.profile.variables.intimidation },
-					{ icon: GiCursedStar, value: char.profile.variables.magic },
-					{ icon: GiGhost, value: char.profile.variables.bravery },
-				].map(({ icon: Icon, value }, index) => (
+					{
+						icon: GiBullseye,
+						value: char.profile.variables.ranged,
+						name: 'Ranged',
+					},
+					{
+						icon: GiSwordWound,
+						value: char.profile.variables.attack,
+						name: 'Attack',
+					},
+					{
+						icon: GiCheckedShield,
+						value: char.profile.variables.defense,
+						name: 'Defense',
+					},
+					{
+						icon: GiArmorVest,
+						value: char.equipment.armorClass,
+						name: 'Armor Class',
+					},
+					{
+						icon: GiSemiClosedEye,
+						value: char.profile.variables.perception,
+						name: 'Perception',
+					},
+					{
+						icon: GiHood,
+						value: char.profile.variables.discretion,
+						name: 'Discretion',
+					},
+					{
+						icon: GiCampfire,
+						value: char.profile.variables.survival,
+						name: 'Survival',
+					},
+					{
+						icon: GiMagnifyingGlass,
+						value: char.profile.variables.enigms,
+						name: 'Investigation',
+					},
+					{
+						icon: GiHood,
+						value: char.profile.variables.speech,
+						name: 'Speech',
+					},
+					{
+						icon: GiSwapBag,
+						value: char.profile.variables.trade,
+						name: 'Trade',
+					},
+					{
+						icon: GiDominoMask,
+						value: char.profile.variables.performance,
+						name: 'Performance',
+					},
+					{
+						icon: GiSly,
+						value: char.profile.variables.intimidation,
+						name: 'Intimidation',
+					},
+					{
+						icon: GiCursedStar,
+						value: char.profile.variables.magic,
+						name: 'Magic',
+					},
+					{
+						icon: GiGhost,
+						value: char.profile.variables.bravery,
+						name: 'Bravery',
+					},
+				].map(({ icon: Icon, value, name }, index) => (
 					<div
+						className='tooltip'
 						key={index}
-						className='font-cabin bg-neutral flex w-full flex-row items-center justify-center rounded-sm p-1'
 					>
-						<Icon className='icon-background dark:icon-stone-200 mr-1 size-[1rem] flex-shrink-0' />
-						<span>{value}</span>
+						<div className='tooltip-content z-50'>
+							<span className='font-cabin text-normal text-sm'>
+								{capitalizeFirstLetter(name)}
+							</span>
+						</div>
+						<div className='font-cabin bg-tile text-neutral-content flex w-full flex-row items-center justify-center rounded-sm p-1'>
+							<Icon className='icon-background dark:icon-neutral-content mr-1 size-[1rem] flex-shrink-0' />
+							<span>{value}</span>
+						</div>
 					</div>
 				))}
 			</div>

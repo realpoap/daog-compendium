@@ -1,69 +1,58 @@
-import pluginJs from '@eslint/js';
-import prettier from 'eslint-plugin-prettier/recommended';
-import pluginReact from 'eslint-plugin-react';
-
+// eslint.config.js
+import js from '@eslint/js';
+import prettier from 'eslint-plugin-prettier';
+import reactPlugin from 'eslint-plugin-react'; // Import the plugin itself
 import globals from 'globals';
-import tseslint from 'typescript-eslint';
+import ts from 'typescript-eslint';
 
-/** @type {import('eslint').Linter.Config[]} */
 export default [
-	{ files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'] },
-	{
-		"ignorePatterns": [
-			"node_modules/",
-			"**/node_modules/",
-			"/**/node_modules/*",
-			"out/",
-			"dist/",
-			"build/"
-		]
-	},
-	{
-		languageOptions: {
-			globals: globals.browser,
-			parser: '@typescript-eslint/parser',
-			parserOptions: {
-				sourceType: 'module',
+	js.configs.recommended,
+	...ts.configs.recommended,
+	{ // Apply the flat config 
+		plugins: {
+			react: reactPlugin,
+		},
+		rules: {
+			...reactPlugin.configs.recommended.rules,
+			'react/react-in-jsx-scope': 'off', // You can also put React rules here
+		},
+		settings: {
+			react: {
+				version: 'detect', // Or specify your React version
 			},
 		},
 	},
-	pluginJs.configs.recommended,
 	{
+		files: ['**/*.{ts,tsx,js,jsx}'],
+		languageOptions: {
+			parser: ts.parser,
+			parserOptions: {
+				ecmaVersion: 'latest',
+				sourceType: 'module',
+				project: true,
+			},
+			globals: {
+				...globals.browser,
+				...globals.node,
+			},
+		},
+		plugins: {
+			prettier: prettier,
+		},
 		rules: {
+			// TypeScript rules
+			'@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+			'@typescript-eslint/no-unused-vars': ["error", { ignoreRestSiblings: true }],
+			'@typescript-eslint/no-explicit-any': 'warn',
+
+			// General JS (these might be redundant as you have js.configs.recommended)
 			'no-unused-vars': 'off',
 			'no-undef': 'off',
-		},
-	},
-	...tseslint.configs.recommended,
-	{
-		rules: {
-			'@typescript-eslint/no-unused-vars': [
-				'error',
-				{
-					args: 'all',
-					argsIgnorePattern: '^_',
-					caughtErrors: 'all',
-					caughtErrorsIgnorePattern: '^_',
-					destructuredArrayIgnorePattern: '^_',
-					varsIgnorePattern: '^_',
-					ignoreRestSiblings: true,
-				},
-			],
-			'@typescript-eslint/no-explicit-any': 'warn',
-			'prettier/prettier': ['error', { endOfLine: 'auto' }],
-		},
-	},
-	pluginReact.configs.flat.recommended,
-	{
-		rules: {
-			'react/react-in-jsx-scope': 'off',
-		},
-	},
-	// prettier
-	prettier,
-	{
-		rules: {
+			'no-unused-expressions': 'off',
+
+			// Prettier
 			'prettier/prettier': ['warn', { singleQuote: true }],
 		},
 	},
+
 ];
