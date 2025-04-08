@@ -1,8 +1,11 @@
+import TagBadge from '@/components/TagBadge';
+import { characterAttributes } from '@/data/charattributesData';
 import { SpecieDataForm } from '@/data/speciesProfile';
-import { trpc } from '@/utils/trpc';
+import { capitalizeFirstLetter } from '@/utils/capitalize';
 import { Attribute } from '@api/lib/ZodCreature';
 import { useEffect, useMemo, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
+import toast from 'react-hot-toast';
 
 type Props = {
 	selected: SpecieDataForm | undefined;
@@ -18,18 +21,20 @@ const shuffleArray = (array: Attribute[]) => {
 };
 
 const CharFormStep5 = ({ selected }: Props) => {
-	const { setValue } = useFormContext();
-	const { data: attributes, isLoading } = trpc.attributes.getAll.useQuery();
+	const methods = useFormContext();
+
+	const { setValue } = methods;
 	const [selectedAttributes, setSelectedAttributes] = useState<Attribute[]>([]);
 	const [searchTerm, setSearchTerm] = useState('');
 
 	useEffect(() => {
-		setValue('path.feats', selectedAttributes);
+		setValue('path.attributes', selectedAttributes);
+		console.log(methods.getValues());
 	}, [selectedAttributes, setValue]);
 
 	const shuffledAttributes = useMemo(() => {
-		return attributes ? shuffleArray(attributes) : [];
-	}, [attributes]);
+		return characterAttributes ? shuffleArray(characterAttributes) : [];
+	}, [characterAttributes]);
 
 	const filteredAttributes = useMemo(() => {
 		return shuffledAttributes.filter(attr =>
@@ -38,6 +43,14 @@ const CharFormStep5 = ({ selected }: Props) => {
 	}, [shuffledAttributes, searchTerm]);
 
 	const toggleAttribute = (attr: Attribute) => {
+		if (!attr.value) return;
+		if (totalValue + attr.value > 3 || totalValue + attr.value < -3) {
+			toast.error('Your character is already far too unbalanced.');
+			return;
+		}
+		if (selectedAttributes.length > 6) {
+			toast.error(`You know you can't select them all, right ?`);
+		}
 		setSelectedAttributes(prev => {
 			const exists = prev.some(a => a.id === attr.id);
 			return exists ? prev.filter(a => a.id !== attr.id) : [...prev, attr];
@@ -48,15 +61,29 @@ const CharFormStep5 = ({ selected }: Props) => {
 		(sum, attr) => (attr.value ? sum + attr.value : sum),
 		0,
 	);
+
 	const progressColor = totalValue < 0 ? 'range-error' : 'range-accent';
 
-	if (isLoading) return <div>Loading attributes...</div>;
-	if (!attributes) return <div>No attributes found.</div>;
+	if (!characterAttributes) return <div>No attributes found.</div>;
 
 	return (
-		<div className='space-y-6'>
+		<div className='flex flex-col gap-4'>
+			{/* Total Attribute Value Range Bar */}
+			<div className='flex flex-row gap-1'></div>
+			<div>
+				<h3 className='font-grenze text-xl'>Équilibre :</h3>
+				<input
+					type='range'
+					min={-5}
+					max={+5}
+					value={totalValue}
+					readOnly
+					disabled={!selectedAttributes}
+					className={`range h-1 ${progressColor} cursor-default`}
+				/>
+			</div>
 			{/* Search Input */}
-			<fieldset>
+			<fieldset className='flex flex-col gap-4'>
 				<input
 					type='text'
 					placeholder='Type to search...'
@@ -66,68 +93,61 @@ const CharFormStep5 = ({ selected }: Props) => {
 				/>
 
 				{/* Attributes Tag List */}
-				<div className='flex flex-wrap gap-2 rounded-md bg-stone-900 p-2'>
-					{filteredAttributes.map(attr => {
-						const isSelected = selectedAttributes.some(a => a.id === attr.id);
-						return (
-							<div
-								key={attr.id}
-								className={`badge cursor-pointer p-3 ${isSelected ? 'badge-primary' : 'badge-secondary'}`}
-								onClick={() => toggleAttribute(attr)}
-							>
-								{attr.name} ({attr.value && attr.value >= 0 ? '+' : ''}
-								{attr.value})
-							</div>
-						);
-					})}
+				<div className='h-50 flex flex-wrap items-start justify-center gap-2 overflow-scroll rounded-md p-2'>
+					{filteredAttributes
+						.filter(
+							attr =>
+								!selectedAttributes.some(selected => attr.id === selected.id),
+						)
+						.map(attr => {
+							const isSelected = selectedAttributes.some(a => a.id === attr.id);
+							return (
+								<div
+									key={attr.id}
+									className={`badge badge-md cursor-pointer p-3 capitalize ${isSelected ? 'badge-primary' : 'badge-tile border-primary border-1'}`}
+									onClick={() => toggleAttribute(attr)}
+								>
+									{attr.name}
+								</div>
+							);
+						})}
 				</div>
 
 				{/* Selected Attributes Details */}
-				{selectedAttributes.length > 0 && (
+				{selected && (
 					<div className='space-y-3'>
-						<h3 className='text-md font-semibold'>Selected Attributes</h3>
-						<ul className='space-y-2'>
-							{selectedAttributes.map(attr => (
-								<li
-									key={attr.id}
-									className='rounded-md bg-stone-800 p-3 shadow'
+						<h3 className='font-grenze text-xl'>Attributes :</h3>
+						<ul className='flex flex-row flex-wrap gap-1'>
+							{selectedAttributes.length > 0 &&
+								selectedAttributes.map(attr => (
+									<div
+										key={attr.name}
+										className='tooltip'
+									>
+										<span className='tooltip-content'>{attr.effect}</span>
+										<TagBadge
+											text={capitalizeFirstLetter(attr.name)}
+											onClick={() => toggleAttribute(attr)}
+											xl
+										/>
+									</div>
+								))}
+							{selected.path.attributes.map(attr => (
+								<div
+									key={attr.name}
+									className='tooltip'
 								>
-									<p className='font-semibold'>
-										{attr.name} ({attr.value && attr.value >= 0 ? '+' : ''}
-										{attr.value})
-									</p>
-									<p className='text-sm text-stone-400'>{attr.description}</p>
-								</li>
+									<span className='tooltip-content'>{attr.effect}</span>
+									<TagBadge
+										text={capitalizeFirstLetter(attr.name)}
+										button={false}
+										xl
+									/>
+								</div>
 							))}
 						</ul>
 					</div>
 				)}
-
-				{/* Total Attribute Value Range Bar */}
-				<div className='flex flex-row gap-1'>
-					{selected &&
-						selected.path.attributes.map(attr => (
-							<div
-								key={attr.name}
-								className='tooltip'
-							>
-								<span className='tooltip-content'>{attr.effect}</span>
-								<span className='badge badge badge-primary font-bold'>
-									{attr.name}
-								</span>
-							</div>
-						))}
-				</div>
-				<div>
-					<input
-						type='range'
-						min={-100}
-						max={100}
-						value={totalValue}
-						readOnly
-						className={`range h-1 ${progressColor}`}
-					/>
-				</div>
 			</fieldset>
 		</div>
 	);

@@ -29,7 +29,7 @@ const CharacterFormNavigation = () => {
 	});
 
 	return (
-		<div className='card font-cabin text-base-300 flex w-full flex-col items-start p-4 shadow shadow-lg sm:w-3/4 md:w-1/2'>
+		<div className='card font-cabin bg-card text-base-300 flex w-full flex-col items-start p-4 shadow shadow-lg sm:w-3/4 md:w-1/2'>
 			<FormProvider {...methods}>
 				<CharacterFormInner />
 			</FormProvider>

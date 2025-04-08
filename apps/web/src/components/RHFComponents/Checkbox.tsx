@@ -20,7 +20,7 @@ export const Checkbox = ({
 	} = useFormContext();
 
 	return (
-		<div className='form-control flex w-min cursor-pointer flex-row items-center gap-2'>
+		<div className='form-control flex cursor-pointer flex-row items-center gap-2'>
 			<input
 				className={cn(
 					'label checkbox checkbox-sm checkbox-primary cursor-pointer',
@@ -36,7 +36,7 @@ export const Checkbox = ({
 				id={`${id}-checkbox`}
 				disabled={disabled}
 			/>
-			<span className='label-text font-cabin text-primary w-fit text-sm font-bold'>
+			<span className='label-text font-cabin text-primary w-content text-sm font-bold'>
 				{label ?? name}
 			</span>
 		</div>
