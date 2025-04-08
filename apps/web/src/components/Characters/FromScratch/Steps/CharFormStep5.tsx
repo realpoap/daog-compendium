@@ -1,8 +1,12 @@
+import { SpecieDataForm } from '@/data/speciesProfile';
 import { trpc } from '@/utils/trpc';
 import { Attribute } from '@api/lib/ZodCreature';
 import { useEffect, useMemo, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
+type Props = {
+	selected: SpecieDataForm | undefined;
+};
 // Function to shuffle an array using the Fisher-Yates algorithm
 const shuffleArray = (array: Attribute[]) => {
 	const shuffled = [...array];
@@ -13,7 +17,7 @@ const shuffleArray = (array: Attribute[]) => {
 	return shuffled;
 };
 
-const CharFormStep5 = () => {
+const CharFormStep5 = ({ selected }: Props) => {
 	const { setValue } = useFormContext();
 	const { data: attributes, isLoading } = trpc.attributes.getAll.useQuery();
 	const [selectedAttributes, setSelectedAttributes] = useState<Attribute[]>([]);
@@ -100,6 +104,20 @@ const CharFormStep5 = () => {
 				)}
 
 				{/* Total Attribute Value Range Bar */}
+				<div className='flex flex-row gap-1'>
+					{selected &&
+						selected.path.attributes.map(attr => (
+							<div
+								key={attr.name}
+								className='tooltip'
+							>
+								<span className='tooltip-content'>{attr.effect}</span>
+								<span className='badge badge badge-primary font-bold'>
+									{attr.name}
+								</span>
+							</div>
+						))}
+				</div>
 				<div>
 					<input
 						type='range'
@@ -107,7 +125,7 @@ const CharFormStep5 = () => {
 						max={100}
 						value={totalValue}
 						readOnly
-						className={`range ${progressColor}`}
+						className={`range h-1 ${progressColor}`}
 					/>
 				</div>
 			</fieldset>

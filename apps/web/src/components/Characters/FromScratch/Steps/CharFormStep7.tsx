@@ -1,25 +1,36 @@
-import { Field, InputNumber, Select } from '@/components/RHFComponents';
+import {
+	Checkbox,
+	Field,
+	InputNumber,
+	Select,
+} from '@/components/RHFComponents';
+import { SpecieDataForm } from '@/data/speciesProfile';
 import {
 	creatureAlignmentOptions,
 	creatureGenderOptions,
+	creatureSizeOptions,
 } from '@/types/creatureOptions';
 
-const CharFormStep7 = () => {
+type Props = {
+	selected: SpecieDataForm | undefined;
+};
+
+const CharFormStep7 = ({ selected }: Props) => {
 	return (
-		<div>
-			<fieldset>
-				<Field
+		<>
+			<Field
+				name='specifics.gender'
+				width='third'
+				label='gender'
+			>
+				<Select
 					name='specifics.gender'
-					width='third'
-					label='gender'
-				>
-					<Select
-						name='specifics.gender'
-						options={creatureGenderOptions}
-						defaultValue=''
-						required
-					/>
-				</Field>
+					options={creatureGenderOptions}
+					defaultValue=''
+					required
+				/>
+			</Field>
+			<div className='flex w-full flex-col items-center justify-center gap-4 sm:flex-row'>
 				<Field
 					name='specifics.age'
 					width='digit'
@@ -41,19 +52,44 @@ const CharFormStep7 = () => {
 				>
 					<InputNumber name='specifics.height' />
 				</Field>
+			</div>
+			<div className='flex w-full flex-row items-center justify-center gap-2'>
 				<Field
-					name='specifics.alignment'
+					name='specifics.size'
 					width='third'
-					label='alignment'
+					label='size'
 				>
 					<Select
-						name='specifics.alignment'
-						options={creatureAlignmentOptions}
+						name='specifics.size'
+						options={creatureSizeOptions}
 						defaultValue=''
 					/>
 				</Field>
-			</fieldset>
-		</div>
+				<Field
+					name='specifics.massive'
+					width='third'
+					label='shape'
+				>
+					<Checkbox
+						name='specifics.massive'
+						label='massive'
+						disabled
+						checked={selected?.specifics.massive}
+					/>
+				</Field>
+			</div>
+			<Field
+				name='specifics.alignment'
+				width='third'
+				label='alignment'
+			>
+				<Select
+					name='specifics.alignment'
+					options={creatureAlignmentOptions}
+					defaultValue=''
+				/>
+			</Field>
+		</>
 	);
 };
 

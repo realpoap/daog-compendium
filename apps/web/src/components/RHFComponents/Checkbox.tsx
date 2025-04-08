@@ -5,10 +5,14 @@ export const Checkbox = ({
 	name,
 	label,
 	id,
+	disabled,
+	checked,
 }: {
 	name: string;
-	id?: string;
 	label: string;
+	id?: string;
+	disabled?: boolean;
+	checked?: boolean;
 }) => {
 	const {
 		register,
@@ -16,19 +20,23 @@ export const Checkbox = ({
 	} = useFormContext();
 
 	return (
-		<div className='form-control flex cursor-pointer flex-row items-center gap-2 space-x-1'>
+		<div className='form-control flex w-min cursor-pointer flex-row items-center gap-2'>
 			<input
-				className={cn('label checkbox checkbox-primary cursor-pointer', {
-					'select-error': errors[name],
-					'ring-error': errors[name],
-					'ring-2': errors[name],
-				})}
+				className={cn(
+					'label checkbox checkbox-sm checkbox-primary cursor-pointer',
+					{
+						'select-error': errors[name],
+						'ring-error': errors[name],
+						'ring-2': errors[name],
+					},
+				)}
 				type='checkbox'
-				defaultChecked={false}
+				defaultChecked={checked}
 				{...register(name)}
 				id={`${id}-checkbox`}
+				disabled={disabled}
 			/>
-			<span className='label-text font-cabin text-primary text-base font-bold'>
+			<span className='label-text font-cabin text-primary w-fit text-sm font-bold'>
 				{label ?? name}
 			</span>
 		</div>

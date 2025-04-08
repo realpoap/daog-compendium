@@ -71,7 +71,7 @@ const AttributeFormEdit = ({
 
 	const onActionSubmit = (data: Attribute) => {
 		const { id, ...attribute } = data;
-		updateAttribute.mutate(data as Attribute);
+		updateAttribute.mutate(data);
 
 		const prunedAttributesArray = attributes.filter(a => a.name !== data.name);
 		setAttributes([...prunedAttributesArray, attribute]);

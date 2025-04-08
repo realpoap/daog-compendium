@@ -222,6 +222,7 @@ type Path {
   talentTree  String?
   origin Origin?
   actions CreatureAction[]
+  attributes CreatureAttribute[]
   actionList      ActionList?
   attackType  String @default("STR")
   defenseType  String @default("AGI")
@@ -374,6 +375,7 @@ type CreatureAttribute {
   flavor      String?
   description String?
   value Int?
+  effect String?
 }
 
 model Attribute {
@@ -382,6 +384,7 @@ model Attribute {
   flavor      String?
   description String?
   value Int? @default(1)
+  effect String?
 }
 
 enum HabitatType {
