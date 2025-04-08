@@ -82,6 +82,7 @@ const AttributeForm = ({ creatureId, attributes, setAttributes }: Props) => {
 				flavor: searchAttribute?.data.flavor,
 				description: searchAttribute?.data.description,
 				value: searchAttribute?.data.value || 0,
+				effect: searchAttribute?.data.effect,
 			};
 			addAttributeOnCreature.mutate(object as Attribute);
 			const { id, ...attribute } = object;
