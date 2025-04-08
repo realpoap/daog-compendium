@@ -18,6 +18,7 @@ const CharFormStep4 = ({ selected }: Props) => {
 	if (!languageOptions) return;
 	return (
 		<fieldset>
+			{selected && selected.specie}
 			<Field name='specifics.speaks'>
 				<Select
 					name='specific.speaks'
