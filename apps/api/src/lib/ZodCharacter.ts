@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { NewActionSchema } from './ZodAction';
 import { CreatureComponentSchema } from './ZodComponent';
-import { ActionListSchema } from './ZodCreature';
+import { ActionListSchema, CreatureAttributeSchema } from './ZodCreature';
 import { CreatureItemSchema } from './ZodItem';
 
 export const genderSchema = z.enum(['male', 'female', 'fluid', 'unknown'], {
@@ -120,6 +120,7 @@ export const PathSchema = z.object({
 	skills: z.array(SkillSchema).optional(),
 	feats: z.array(FeatSchema).optional(),
 	actions: z.array(NewActionSchema).optional(),
+	attributes: z.array(CreatureAttributeSchema).optional(),
 	attackType: z.string().optional(),
 	defenseType: z.string().optional(),
 	actionList: ActionListSchema.nullable().optional(),

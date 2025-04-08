@@ -14,6 +14,26 @@ export const moufflian = {
 	],
 	description:
 		'Humans were Grandmouffle’s first successful creation. Initially all male, they couldn’t reproduce, prompting the creation of women. Population exploded, causing ecological damage. The Immortals voted to destroy most of them, sparing only the elite. Grandmouffle defied them, saving others behind a protective barrier. These survivors thrived, becoming diverse and inventive. Human society is divided, flawed, yet adaptable and influential.',
+	path: {
+		attributes: [
+			{
+				name: 'Cosmopolitan',
+				effect: '1 additional language (F), 1 additional language (E)',
+				description:
+					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
+			},
+			{
+				name: 'Universal comrade',
+				effect: `Naturally welcomed and accepted, advantage in gossip and trade`,
+				description: `Of all the races, humans are clearly the most able to form bonds with the most obscure individuals. Even proud trolls find these voluble little beings friendly, and let's not even mention the dwarves with whom they are almost blood brothers.`,
+			},
+			{
+				name: 'Jack-of-all-trades',
+				effect: `+5 starting skill points`,
+				description: `Because of their great curiosity and the vagaries of life, humans are a resourceful people. a resourceful people who find many subjects of interest. Every different from one individual to the next.`,
+			},
+		],
+	},
 	specifics: {
 		speaks: [
 			{
@@ -60,6 +80,26 @@ export const inclay = {
 			value: 'moufflian_slang',
 		},
 	],
+	path: {
+		attributes: [
+			{
+				name: 'Cosmopolitan',
+				effect: '1 additional language (F), 1 additional language (E)',
+				description:
+					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
+			},
+			{
+				name: 'Universal comrade',
+				effect: `Naturally welcomed and accepted, advantage in gossip and trade`,
+				description: `Of all the races, humans are clearly the most able to form bonds with the most obscure individuals. Even proud trolls find these voluble little beings friendly, and let's not even mention the dwarves with whom they are almost blood brothers.`,
+			},
+			{
+				name: 'Jack-of-all-trades',
+				effect: `+5 starting skill points`,
+				description: `Because of their great curiosity and the vagaries of life, humans are a resourceful people. a resourceful people who find many subjects of interest. Every different from one individual to the next.`,
+			},
+		],
+	},
 	specifics: {
 		speaks: [
 			{
@@ -120,6 +160,26 @@ export const bourguignon = {
 			},
 		],
 	},
+	path: {
+		attributes: [
+			{
+				name: 'Cosmopolitan',
+				effect: '1 additional language (F), 1 additional language (E)',
+				description:
+					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
+			},
+			{
+				name: 'Universal comrade',
+				effect: `Naturally welcomed and accepted, advantage in gossip and trade`,
+				description: `Of all the races, humans are clearly the most able to form bonds with the most obscure individuals. Even proud trolls find these voluble little beings friendly, and let's not even mention the dwarves with whom they are almost blood brothers.`,
+			},
+			{
+				name: 'Jack-of-all-trades',
+				effect: `+5 starting skill points`,
+				description: `Because of their great curiosity and the vagaries of life, humans are a resourceful people. a resourceful people who find many subjects of interest. Every different from one individual to the next.`,
+			},
+		],
+	},
 	profile: {
 		statsStarting: {
 			CEL: 16,
@@ -165,6 +225,26 @@ export const armagnac = {
 			},
 		],
 	},
+	path: {
+		attributes: [
+			{
+				name: 'Cosmopolitan',
+				effect: '1 additional language (F), 1 additional language (E)',
+				description:
+					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
+			},
+			{
+				name: 'Universal comrade',
+				effect: `Naturally welcomed and accepted, advantage in gossip and trade`,
+				description: `Of all the races, humans are clearly the most able to form bonds with the most obscure individuals. Even proud trolls find these voluble little beings friendly, and let's not even mention the dwarves with whom they are almost blood brothers.`,
+			},
+			{
+				name: 'Jack-of-all-trades',
+				effect: `+5 starting skill points`,
+				description: `Because of their great curiosity and the vagaries of life, humans are a resourceful people. a resourceful people who find many subjects of interest. Every different from one individual to the next.`,
+			},
+		],
+	},
 	profile: {
 		statsStarting: {
 			CEL: 15,
@@ -207,6 +287,26 @@ export const durhkran = {
 			{
 				language: 'common',
 				mastery: '2',
+			},
+		],
+	},
+	path: {
+		attributes: [
+			{
+				name: 'Cosmopolitan',
+				effect: '1 additional language (F), 1 additional language (E)',
+				description:
+					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
+			},
+			{
+				name: 'Universal comrade',
+				effect: `Naturally welcomed and accepted, advantage in gossip and trade`,
+				description: `Of all the races, humans are clearly the most able to form bonds with the most obscure individuals. Even proud trolls find these voluble little beings friendly, and let's not even mention the dwarves with whom they are almost blood brothers.`,
+			},
+			{
+				name: 'Jack-of-all-trades',
+				effect: `+5 starting skill points`,
+				description: `Because of their great curiosity and the vagaries of life, humans are a resourceful people. a resourceful people who find many subjects of interest. Every different from one individual to the next.`,
 			},
 		],
 	},
@@ -258,6 +358,26 @@ export const grey = {
 			},
 		],
 	},
+	path: {
+		attributes: [
+			{
+				name: 'Cosmopolitan',
+				effect: '1 additional language (F), 1 additional language (E)',
+				description:
+					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
+			},
+			{
+				name: 'Universal comrade',
+				effect: `Naturally welcomed and accepted, advantage in gossip and trade`,
+				description: `Of all the races, humans are clearly the most able to form bonds with the most obscure individuals. Even proud trolls find these voluble little beings friendly, and let's not even mention the dwarves with whom they are almost blood brothers.`,
+			},
+			{
+				name: 'Jack-of-all-trades',
+				effect: `+5 starting skill points`,
+				description: `Because of their great curiosity and the vagaries of life, humans are a resourceful people. a resourceful people who find many subjects of interest. Every different from one individual to the next.`,
+			},
+		],
+	},
 	profile: {
 		statsStarting: {
 			CEL: 13,
@@ -301,6 +421,26 @@ export const republican = {
 			{
 				language: 'common',
 				mastery: '2',
+			},
+		],
+	},
+	path: {
+		attributes: [
+			{
+				name: 'Cosmopolitan',
+				effect: '1 additional language (F), 1 additional language (E)',
+				description:
+					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
+			},
+			{
+				name: 'Universal comrade',
+				effect: `Naturally welcomed and accepted, advantage in gossip and trade`,
+				description: `Of all the races, humans are clearly the most able to form bonds with the most obscure individuals. Even proud trolls find these voluble little beings friendly, and let's not even mention the dwarves with whom they are almost blood brothers.`,
+			},
+			{
+				name: 'Jack-of-all-trades',
+				effect: `+5 starting skill points`,
+				description: `Because of their great curiosity and the vagaries of life, humans are a resourceful people. a resourceful people who find many subjects of interest. Every different from one individual to the next.`,
 			},
 		],
 	},
@@ -349,6 +489,26 @@ export const royalist = {
 			},
 		],
 	},
+	path: {
+		attributes: [
+			{
+				name: 'Cosmopolitan',
+				effect: '1 additional language (F), 1 additional language (E)',
+				description:
+					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
+			},
+			{
+				name: 'Universal comrade',
+				effect: `Naturally welcomed and accepted, advantage in gossip and trade`,
+				description: `Of all the races, humans are clearly the most able to form bonds with the most obscure individuals. Even proud trolls find these voluble little beings friendly, and let's not even mention the dwarves with whom they are almost blood brothers.`,
+			},
+			{
+				name: 'Jack-of-all-trades',
+				effect: `+5 starting skill points`,
+				description: `Because of their great curiosity and the vagaries of life, humans are a resourceful people. a resourceful people who find many subjects of interest. Every different from one individual to the next.`,
+			},
+		],
+	},
 	profile: {
 		statsStarting: {
 			CEL: 15,
@@ -391,6 +551,26 @@ export const free = {
 			{
 				language: 'gnomish',
 				mastery: '2',
+			},
+		],
+	},
+	path: {
+		attributes: [
+			{
+				name: 'Cosmopolitan',
+				effect: '1 additional language (F), 1 additional language (E)',
+				description:
+					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
+			},
+			{
+				name: 'Universal comrade',
+				effect: `Naturally welcomed and accepted, advantage in gossip and trade`,
+				description: `Of all the races, humans are clearly the most able to form bonds with the most obscure individuals. Even proud trolls find these voluble little beings friendly, and let's not even mention the dwarves with whom they are almost blood brothers.`,
+			},
+			{
+				name: 'Jack-of-all-trades',
+				effect: `+5 starting skill points`,
+				description: `Because of their great curiosity and the vagaries of life, humans are a resourceful people. a resourceful people who find many subjects of interest. Every different from one individual to the next.`,
 			},
 		],
 	},
@@ -443,6 +623,26 @@ export const proschöne = {
 			},
 		],
 	},
+	path: {
+		attributes: [
+			{
+				name: 'Cosmopolitan',
+				effect: '1 additional language (F), 1 additional language (E)',
+				description:
+					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
+			},
+			{
+				name: 'Universal comrade',
+				effect: `Naturally welcomed and accepted, advantage in gossip and trade`,
+				description: `Of all the races, humans are clearly the most able to form bonds with the most obscure individuals. Even proud trolls find these voluble little beings friendly, and let's not even mention the dwarves with whom they are almost blood brothers.`,
+			},
+			{
+				name: 'Jack-of-all-trades',
+				effect: `+5 starting skill points`,
+				description: `Because of their great curiosity and the vagaries of life, humans are a resourceful people. a resourceful people who find many subjects of interest. Every different from one individual to the next.`,
+			},
+		],
+	},
 	profile: {
 		statsStarting: {
 			CEL: 16,
@@ -490,6 +690,26 @@ export const pipourray = {
 			},
 		],
 	},
+	path: {
+		attributes: [
+			{
+				name: 'Cosmopolitan',
+				effect: '1 additional language (F), 1 additional language (E)',
+				description:
+					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
+			},
+			{
+				name: 'Universal comrade',
+				effect: `Naturally welcomed and accepted, advantage in gossip and trade`,
+				description: `Of all the races, humans are clearly the most able to form bonds with the most obscure individuals. Even proud trolls find these voluble little beings friendly, and let's not even mention the dwarves with whom they are almost blood brothers.`,
+			},
+			{
+				name: 'Jack-of-all-trades',
+				effect: `+5 starting skill points`,
+				description: `Because of their great curiosity and the vagaries of life, humans are a resourceful people. a resourceful people who find many subjects of interest. Every different from one individual to the next.`,
+			},
+		],
+	},
 	profile: {
 		statsStarting: {
 			CEL: 15,
@@ -534,6 +754,26 @@ export const villous = {
 			{
 				language: 'clay',
 				mastery: '2',
+			},
+		],
+	},
+	path: {
+		attributes: [
+			{
+				name: 'Cosmopolitan',
+				effect: '1 additional language (F), 1 additional language (E)',
+				description:
+					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
+			},
+			{
+				name: 'Universal comrade',
+				effect: `Naturally welcomed and accepted, advantage in gossip and trade`,
+				description: `Of all the races, humans are clearly the most able to form bonds with the most obscure individuals. Even proud trolls find these voluble little beings friendly, and let's not even mention the dwarves with whom they are almost blood brothers.`,
+			},
+			{
+				name: 'Jack-of-all-trades',
+				effect: `+5 starting skill points`,
+				description: `Because of their great curiosity and the vagaries of life, humans are a resourceful people. a resourceful people who find many subjects of interest. Every different from one individual to the next.`,
 			},
 		],
 	},
@@ -585,6 +825,26 @@ export const halfvampire = {
 			},
 		],
 	},
+	path: {
+		attributes: [
+			{
+				name: 'Cosmopolitan',
+				effect: '1 additional language (F), 1 additional language (E)',
+				description:
+					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
+			},
+			{
+				name: 'Universal comrade',
+				effect: `Naturally welcomed and accepted, advantage in gossip and trade`,
+				description: `Of all the races, humans are clearly the most able to form bonds with the most obscure individuals. Even proud trolls find these voluble little beings friendly, and let's not even mention the dwarves with whom they are almost blood brothers.`,
+			},
+			{
+				name: 'Jack-of-all-trades',
+				effect: `+5 starting skill points`,
+				description: `Because of their great curiosity and the vagaries of life, humans are a resourceful people. a resourceful people who find many subjects of interest. Every different from one individual to the next.`,
+			},
+		],
+	},
 	profile: {
 		statsStarting: {
 			CEL: 17,
@@ -629,6 +889,26 @@ export const barbarian = {
 			{
 				language: 'giant',
 				mastery: '2',
+			},
+		],
+	},
+	path: {
+		attributes: [
+			{
+				name: 'Cosmopolitan',
+				effect: '1 additional language (F), 1 additional language (E)',
+				description:
+					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
+			},
+			{
+				name: 'Universal comrade',
+				effect: `Naturally welcomed and accepted, advantage in gossip and trade`,
+				description: `Of all the races, humans are clearly the most able to form bonds with the most obscure individuals. Even proud trolls find these voluble little beings friendly, and let's not even mention the dwarves with whom they are almost blood brothers.`,
+			},
+			{
+				name: 'Jack-of-all-trades',
+				effect: `+5 starting skill points`,
+				description: `Because of their great curiosity and the vagaries of life, humans are a resourceful people. a resourceful people who find many subjects of interest. Every different from one individual to the next.`,
 			},
 		],
 	},
@@ -679,6 +959,26 @@ export const halfogre = {
 			},
 		],
 	},
+	path: {
+		attributes: [
+			{
+				name: 'Cosmopolitan',
+				effect: '1 additional language (F), 1 additional language (E)',
+				description:
+					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
+			},
+			{
+				name: 'Universal comrade',
+				effect: `Naturally welcomed and accepted, advantage in gossip and trade`,
+				description: `Of all the races, humans are clearly the most able to form bonds with the most obscure individuals. Even proud trolls find these voluble little beings friendly, and let's not even mention the dwarves with whom they are almost blood brothers.`,
+			},
+			{
+				name: 'Jack-of-all-trades',
+				effect: `+5 starting skill points`,
+				description: `Because of their great curiosity and the vagaries of life, humans are a resourceful people. a resourceful people who find many subjects of interest. Every different from one individual to the next.`,
+			},
+		],
+	},
 	profile: {
 		statsStarting: {
 			CEL: 14,
@@ -725,6 +1025,26 @@ export const troll = {
 			},
 		],
 	},
+	path: {
+		attributes: [
+			{
+				name: 'Cosmopolitan',
+				effect: '1 additional language (F), 1 additional language (E)',
+				description:
+					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
+			},
+			{
+				name: 'Universal comrade',
+				effect: `Naturally welcomed and accepted, advantage in gossip and trade`,
+				description: `Of all the races, humans are clearly the most able to form bonds with the most obscure individuals. Even proud trolls find these voluble little beings friendly, and let's not even mention the dwarves with whom they are almost blood brothers.`,
+			},
+			{
+				name: 'Jack-of-all-trades',
+				effect: `+5 starting skill points`,
+				description: `Because of their great curiosity and the vagaries of life, humans are a resourceful people. a resourceful people who find many subjects of interest. Every different from one individual to the next.`,
+			},
+		],
+	},
 	profile: {
 		statsStarting: {
 			CEL: 16,
@@ -752,6 +1072,16 @@ type Bio = {
 	isCaster: boolean;
 };
 
+type Path = {
+	attributes: Attribute[];
+};
+
+type Attribute = {
+	name: string;
+	effect: string;
+	description: string;
+};
+
 type SpecificSpeak = {
 	language: string;
 	mastery: string;
@@ -760,6 +1090,7 @@ type SpecificSpeak = {
 type Specifics = {
 	size?: string;
 	speaks: SpecificSpeak[];
+	massive?: boolean;
 };
 
 type StatsStarting = {
@@ -788,6 +1119,7 @@ export type SpecieDataForm = {
 	languages: Language[];
 	specifics: Specifics;
 	profile: Profile;
+	path: Path;
 	bio?: Bio;
 	description?: string;
 };
