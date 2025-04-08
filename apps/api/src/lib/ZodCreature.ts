@@ -38,7 +38,7 @@ export const CreatureAttributeSchema = z.object({
 	flavor: z.string().nullable(),
 	description: z.string().nullable(),
 	value: z.number().int().nullable(),
-	effect: z.string().nullable().optional(),
+	effect: z.string().nullable(),
 });
 
 export type CreatureAttribute = z.infer<typeof CreatureAttributeSchema>;
@@ -51,7 +51,7 @@ export const AttributeSchema = z.object({
 	flavor: z.string().nullable(),
 	description: z.string().nullable(),
 	value: z.number().int().nullable(),
-	effect: z.string().nullable().optional(),
+	effect: z.string().nullable(),
 });
 
 export type Attribute = z.infer<typeof AttributeSchema>;
