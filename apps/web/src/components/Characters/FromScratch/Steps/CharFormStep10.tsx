@@ -1,18 +1,21 @@
 import { SmallCircleButton } from '@/components/Buttons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 import SpinningNumber from 'react-spinning-number';
 import { GiDiceFire } from 'rocketicons/gi';
 import { useDebounce } from 'use-debounce';
 
 const CharFormStep10 = () => {
+	const { setValue } = useFormContext();
 	const [rolledDestiny, setRolledDestiny] = useState<number>();
 	const debouncedRoll = useDebounce(rolledDestiny, 500);
+	useEffect(() => {
+		setValue('profile.destiny', rolledDestiny);
+	}, [debouncedRoll]);
 
 	const handleRoll = (dice: number) => {
 		const roll = Math.ceil(Math.random() * dice);
 		setRolledDestiny(roll);
-		console.log(rolledDestiny);
-		console.log(debouncedRoll);
 	};
 
 	return (

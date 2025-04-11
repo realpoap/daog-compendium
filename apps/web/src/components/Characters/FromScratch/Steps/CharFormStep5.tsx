@@ -56,34 +56,56 @@ const CharFormStep5 = ({ selected }: Props) => {
 			return exists ? prev.filter(a => a.id !== attr.id) : [...prev, attr];
 		});
 	};
+	const removeAttribute = (attr: Attribute) => {
+		if (!attr.value) return;
+
+		setSelectedAttributes(prev => {
+			const exists = prev.some(a => a.id === attr.id);
+			return exists ? prev.filter(a => a.id !== attr.id) : [...prev, attr];
+		});
+	};
 
 	const totalValue = selectedAttributes.reduce(
 		(sum, attr) => (attr.value ? sum + attr.value : sum),
 		0,
 	);
 
-	const progressColor = totalValue < 0 ? 'range-error' : 'range-accent';
+	const progressColor =
+		totalValue === 3 || totalValue === -3
+			? 'range-error'
+			: totalValue === 2 || totalValue === -2
+				? 'range-warning'
+				: 'range-accent';
 
 	if (!characterAttributes) return <div>No attributes found.</div>;
 
 	return (
-		<div className='flex flex-col gap-4'>
+		<div className='flex w-full flex-col items-center justify-center gap-4'>
 			{/* Total Attribute Value Range Bar */}
-			<div className='flex flex-row gap-1'></div>
-			<div>
+			<div className='w-full max-w-xs'>
 				<h3 className='font-grenze text-xl'>Équilibre :</h3>
 				<input
 					type='range'
-					min={-5}
-					max={+5}
+					min={-3}
+					max={+3}
 					value={totalValue}
 					readOnly
 					disabled={!selectedAttributes}
-					className={`range h-1 ${progressColor} cursor-default`}
+					className={`range range-xs w-full ${progressColor} cursor-default [--range-thumb:accent]`}
 				/>
+
+				<div className='mt-2 flex justify-between px-2.5 text-xs'>
+					<span>-3</span>
+					<span>-2</span>
+					<span>-1</span>
+					<span>0</span>
+					<span>+1</span>
+					<span>+2</span>
+					<span>+3</span>
+				</div>
 			</div>
 			{/* Search Input */}
-			<fieldset className='flex flex-col gap-4'>
+			<fieldset className='flex flex-col items-center gap-4'>
 				<input
 					type='text'
 					placeholder='Type to search...'
@@ -114,7 +136,7 @@ const CharFormStep5 = ({ selected }: Props) => {
 				</div>
 
 				{/* Selected Attributes Details */}
-				{selected && (
+				{selectedAttributes && (
 					<div className='space-y-3'>
 						<h3 className='font-grenze text-xl'>Attributes :</h3>
 						<ul className='flex flex-row flex-wrap gap-1'>
@@ -127,24 +149,25 @@ const CharFormStep5 = ({ selected }: Props) => {
 										<span className='tooltip-content'>{attr.effect}</span>
 										<TagBadge
 											text={capitalizeFirstLetter(attr.name)}
-											onClick={() => toggleAttribute(attr)}
+											onClick={() => removeAttribute(attr)}
 											xl
 										/>
 									</div>
 								))}
-							{selected.path.attributes.map(attr => (
-								<div
-									key={attr.name}
-									className='tooltip'
-								>
-									<span className='tooltip-content'>{attr.effect}</span>
-									<TagBadge
-										text={capitalizeFirstLetter(attr.name)}
-										button={false}
-										xl
-									/>
-								</div>
-							))}
+							{selected &&
+								selected.path.attributes.map(attr => (
+									<div
+										key={attr.name}
+										className='tooltip'
+									>
+										<span className='tooltip-content'>{attr.effect}</span>
+										<TagBadge
+											text={capitalizeFirstLetter(attr.name)}
+											button={false}
+											xl
+										/>
+									</div>
+								))}
 						</ul>
 					</div>
 				)}

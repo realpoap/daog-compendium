@@ -303,6 +303,7 @@ type Carreer {
 }
 
 type Skill {
+  id  String?
   name  String
   mastery String
   description String?

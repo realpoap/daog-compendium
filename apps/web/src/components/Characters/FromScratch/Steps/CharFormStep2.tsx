@@ -61,8 +61,9 @@ const CharFormStep2 = ({ selected }: Props) => {
 								<span
 									key={specie.sub}
 									onClick={() => {
-										setValue('bio.specie', specie.specie);
-										setValue('bio.subspecie', specie.sub);
+										console.log(specie.specie);
+										setValue('bio.species', specie.specie);
+										setValue('bio.subspecies', specie.sub);
 									}}
 									className={`badge badge border-primary border-1 rounded-box cursor-pointer flex-col text-sm ${selected && selected.specie === specie.specie ? 'badge-primary' : ''}`}
 								>
@@ -80,7 +81,7 @@ const CharFormStep2 = ({ selected }: Props) => {
 							{subsForSelectedSpecie.map(s => (
 								<span
 									key={s.sub}
-									onClick={() => setValue('bio.subspecie', s.sub)}
+									onClick={() => setValue('bio.subspecies', s.sub)}
 									className={`badge badge border-primary border-1 rounded-box cursor-pointer flex-col text-sm ${
 										selected.sub === s.sub ? 'badge-primary' : ''
 									}`}

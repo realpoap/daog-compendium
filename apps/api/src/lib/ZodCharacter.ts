@@ -94,12 +94,15 @@ export const InventorySchema = z.object({
 });
 
 export const SkillSchema = z.object({
+	id: z.string().nullable(),
 	name: z.string({ required_error: 'It shall be named !' }),
 	mastery: z.string(),
 	description: z.string().nullable(),
 	playerLevel: z.number().int().nullable(),
 	playerPoints: z.number().int().nullable(),
 });
+
+export type CharacterSkill = z.infer<typeof SkillSchema>;
 
 export const FeatSchema = z.object({
 	name: z.string(),
@@ -123,6 +126,7 @@ export const PathSchema = z.object({
 	attributes: z.array(CreatureAttributeSchema).optional(),
 	attackType: z.string().optional(),
 	defenseType: z.string().optional(),
+	origin: z.string().optional(),
 	actionList: ActionListSchema.nullable().optional(),
 	skillPoints: z.number().int().optional(),
 });

@@ -38,11 +38,11 @@ export const moufflian = {
 		speaks: [
 			{
 				language: 'common',
-				mastery: '3',
+				mastery: 3,
 			},
 			{
 				language: 'moufflian slang',
-				mastery: '2',
+				mastery: 2,
 			},
 		],
 	}, // TODO: add skill list from skilldatabase (pull object)
@@ -104,11 +104,11 @@ export const inclay = {
 		speaks: [
 			{
 				language: 'clay',
-				mastery: '3',
+				mastery: 3,
 			},
 			{
 				language: 'common',
-				mastery: '2',
+				mastery: 2,
 			},
 		],
 	},
@@ -152,11 +152,11 @@ export const bourguignon = {
 		speaks: [
 			{
 				language: 'elven',
-				mastery: '3',
+				mastery: 3,
 			},
 			{
 				language: 'common',
-				mastery: '2',
+				mastery: 2,
 			},
 		],
 	},
@@ -217,11 +217,11 @@ export const armagnac = {
 		speaks: [
 			{
 				language: 'common',
-				mastery: '3',
+				mastery: 3,
 			},
 			{
 				language: 'elven',
-				mastery: '2',
+				mastery: 2,
 			},
 		],
 	},
@@ -268,7 +268,7 @@ export const durhkran = {
 	specieDifficulty: 'easy',
 	languages: [
 		{
-			label: 'moufflian slanf',
+			label: 'moufflian slang',
 			value: 'moufflian slang',
 		},
 		{
@@ -282,11 +282,11 @@ export const durhkran = {
 		speaks: [
 			{
 				language: 'dwarven',
-				mastery: '3',
+				mastery: 3,
 			},
 			{
 				language: 'common',
-				mastery: '2',
+				mastery: 2,
 			},
 		],
 	},
@@ -350,11 +350,11 @@ export const grey = {
 		speaks: [
 			{
 				language: 'clay',
-				mastery: '3',
+				mastery: 3,
 			},
 			{
 				language: 'dwarven',
-				mastery: '2',
+				mastery: 2,
 			},
 		],
 	},
@@ -416,11 +416,11 @@ export const republican = {
 		speaks: [
 			{
 				language: 'goblin',
-				mastery: '3',
+				mastery: 3,
 			},
 			{
 				language: 'common',
-				mastery: '2',
+				mastery: 2,
 			},
 		],
 	},
@@ -481,11 +481,11 @@ export const royalist = {
 		speaks: [
 			{
 				language: 'goblin',
-				mastery: '3',
+				mastery: 3,
 			},
 			{
 				language: 'clay',
-				mastery: '2',
+				mastery: 2,
 			},
 		],
 	},
@@ -546,11 +546,11 @@ export const free = {
 		speaks: [
 			{
 				language: 'common',
-				mastery: '3',
+				mastery: 3,
 			},
 			{
 				language: 'gnomish',
-				mastery: '2',
+				mastery: 2,
 			},
 		],
 	},
@@ -615,11 +615,11 @@ export const proschöne = {
 		speaks: [
 			{
 				language: 'gnomish',
-				mastery: '3',
+				mastery: 3,
 			},
 			{
 				language: 'common',
-				mastery: '2',
+				mastery: 2,
 			},
 		],
 	},
@@ -682,11 +682,11 @@ export const pipourray = {
 		speaks: [
 			{
 				language: 'common',
-				mastery: '3',
+				mastery: 3,
 			},
 			{
 				language: 'clay',
-				mastery: '2',
+				mastery: 2,
 			},
 		],
 	},
@@ -749,11 +749,11 @@ export const villous = {
 		speaks: [
 			{
 				language: 'common',
-				mastery: '3',
+				mastery: 3,
 			},
 			{
 				language: 'clay',
-				mastery: '2',
+				mastery: 2,
 			},
 		],
 	},
@@ -817,11 +817,11 @@ export const halfvampire = {
 		speaks: [
 			{
 				language: 'common',
-				mastery: '3',
+				mastery: 3,
 			},
 			{
 				language: 'dead speech',
-				mastery: '2',
+				mastery: 2,
 			},
 		],
 	},
@@ -884,11 +884,11 @@ export const barbarian = {
 		speaks: [
 			{
 				language: 'common',
-				mastery: '3',
+				mastery: 3,
 			},
 			{
 				language: 'giant',
-				mastery: '2',
+				mastery: 2,
 			},
 		],
 	},
@@ -951,11 +951,11 @@ export const halfogre = {
 		speaks: [
 			{
 				language: 'common',
-				mastery: '3',
+				mastery: 3,
 			},
 			{
 				language: 'gnomish',
-				mastery: '2',
+				mastery: 2,
 			},
 		],
 	},
@@ -1017,11 +1017,11 @@ export const troll = {
 		speaks: [
 			{
 				language: 'troll',
-				mastery: '3',
+				mastery: 3,
 			},
 			{
 				language: 'common',
-				mastery: '2',
+				mastery: 2,
 			},
 		],
 	},
@@ -1084,12 +1084,12 @@ type Attribute = {
 
 type SpecificSpeak = {
 	language: string;
-	mastery: string;
+	mastery: number;
 };
 
 type Specifics = {
-	size?: string;
 	speaks: SpecificSpeak[];
+	size?: string;
 	massive?: boolean;
 };
 

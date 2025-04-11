@@ -9,12 +9,14 @@ export const Select = ({
 	id,
 	defaultValue,
 	required,
+	disabled,
 }: {
 	name: string;
 	options: Array<SelectOption | string>;
 	id?: string;
 	defaultValue: string;
 	required?: boolean;
+	disabled?: boolean;
 }) => {
 	const {
 		register,
@@ -23,6 +25,7 @@ export const Select = ({
 
 	return (
 		<select
+			disabled={disabled}
 			defaultValue={defaultValue}
 			required={required}
 			className={cn(
