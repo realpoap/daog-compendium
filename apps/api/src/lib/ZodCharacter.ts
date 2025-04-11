@@ -104,6 +104,36 @@ export const SkillSchema = z.object({
 
 export type CharacterSkill = z.infer<typeof SkillSchema>;
 
+export const languagesSchema = z.enum([
+	'common',
+	'moufflian_slang',
+	'clay',
+	'elven',
+	'dwarvish',
+	'gnomish',
+	'goblin',
+	'giant',
+	'troll',
+	'high_elven',
+	'titan',
+	'rosmary',
+	'dead_speech',
+	'fifilanto',
+	'primal',
+	'amphibian',
+	'silvan',
+	'signs',
+	'thieves_marks',
+	'forester_symbols',
+	'dwarven_runes',
+	'kabbalistic_glyphs',
+]);
+
+export const LanguageSchema = z.object({
+	language: languagesSchema,
+	mastery: z.number().int(),
+});
+
 export const FeatSchema = z.object({
 	name: z.string(),
 	mastery: z.string(),
@@ -114,21 +144,6 @@ export const FeatSchema = z.object({
 	rank: z.number().int(),
 	color: z.string(),
 	racial: z.boolean().nullable(),
-});
-
-export const PathSchema = z.object({
-	magicDomain: z.array(SpellTypeSchema).optional(),
-	tree: z.string().nullable().optional(),
-	careers: z.string().array().optional(),
-	skills: z.array(SkillSchema).optional(),
-	feats: z.array(FeatSchema).optional(),
-	actions: z.array(NewActionSchema).optional(),
-	attributes: z.array(CreatureAttributeSchema).optional(),
-	attackType: z.string().optional(),
-	defenseType: z.string().optional(),
-	origin: z.string().optional(),
-	actionList: ActionListSchema.nullable().optional(),
-	skillPoints: z.number().int().optional(),
 });
 
 export const StatProfilSchema = z.object({
@@ -225,6 +240,21 @@ export const StatusSchema = z.object({
 	magicLoad: StatVariableSchema,
 });
 
+export const PathSchema = z.object({
+	magicDomain: z.array(SpellTypeSchema),
+	tree: z.string().nullable().optional(),
+	careers: z.string().array(),
+	skills: z.array(SkillSchema),
+	feats: z.array(FeatSchema),
+	actions: z.array(NewActionSchema),
+	attributes: z.array(CreatureAttributeSchema),
+	attackType: z.string().optional(),
+	defenseType: z.string().optional(),
+	origin: OriginSchema,
+	actionList: ActionListSchema.nullable().optional(),
+	skillPoints: z.number().int().optional(),
+});
+
 export const SpecificsSchema = z.object({
 	size: z
 		.enum(['tiny', 'small', 'average', 'large', 'huge', 'gigantic'], {
@@ -237,6 +267,7 @@ export const SpecificsSchema = z.object({
 		})
 		.optional(),
 	gender: genderSchema.nullable().optional(),
+	speaks: z.array(LanguageSchema),
 	sizeBonus: z.number().int().optional(),
 	background: z.string().nullable(),
 	description: z.string().nullable(),
