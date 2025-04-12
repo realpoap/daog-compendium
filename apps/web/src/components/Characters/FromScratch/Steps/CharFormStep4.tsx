@@ -16,6 +16,7 @@ const CharFormStep4 = ({ selected }: Props) => {
 		setValue('specifics.speaks', []);
 		const value = e.target.value;
 		const object = { language: value, mastery: 1 };
+		console.log(object);
 		setValue('specifics.speaks', [...selectedSpeaks, object]);
 	};
 

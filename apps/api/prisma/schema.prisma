@@ -249,11 +249,11 @@ type Origin {
   name String
   description String?
   type String?
-  profileBonus StatProfil
-  skills Skill[]
-  knowledge String[]
-  equipmentA CreatureItem[]
-  equipmentB CreatureItem[]
+  profileBonus String[]
+  skills String[]
+  knowledges String[]
+  equipmentA String[]
+  equipmentB String[]
 }
 
 //-----------------------------------------------------

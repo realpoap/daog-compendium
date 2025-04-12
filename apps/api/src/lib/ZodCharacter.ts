@@ -165,11 +165,11 @@ export const OriginSchema = z.object({
 	name: z.string(),
 	description: z.string().nullable().optional(),
 	type: z.string().nullable().optional(),
-	knowledge: z.string().array(),
-	profileBonus: StatProfilSchema,
-	skills: z.array(SkillSchema),
-	equipmentA: z.array(CreatureItemSchema).optional(),
-	equipmentB: z.array(CreatureItemSchema).optional(),
+	knowledges: z.string().array(),
+	profileBonus: z.string().array(),
+	skills: z.string().array(),
+	equipmentA: z.string().array().optional(),
+	equipmentB: z.string().array().optional(),
 });
 
 export type Origin = z.infer<typeof OriginSchema>;
