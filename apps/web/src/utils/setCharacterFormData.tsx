@@ -58,7 +58,11 @@ const setupBio = (
 			selectedSpecies.profile.statsStarting,
 		);
 	}
-	methods.setValue('bio.isCaster', speciesMap[selectedKey].bio?.isCaster);
+
+	methods.setValue(
+		'bio.isCaster',
+		speciesMap[selectedKey].bio?.isCaster || false,
+	);
 };
 
 const setupStatus = (methods: UseFormReturn<NewCharacter>) => {
