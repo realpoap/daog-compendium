@@ -241,16 +241,16 @@ export const StatusSchema = z.object({
 });
 
 export const PathSchema = z.object({
-	magicDomain: z.array(SpellTypeSchema),
+	magicDomain: z.array(SpellTypeSchema).optional(),
 	tree: z.string().nullable().optional(),
-	careers: z.string().array(),
-	skills: z.array(SkillSchema),
-	feats: z.array(FeatSchema),
-	actions: z.array(NewActionSchema),
-	attributes: z.array(CreatureAttributeSchema),
+	careers: z.string().array().optional(),
+	skills: z.array(SkillSchema).optional(),
+	feats: z.array(FeatSchema).optional(),
+	actions: z.array(NewActionSchema).optional(),
+	attributes: z.array(CreatureAttributeSchema).optional(),
 	attackType: z.string().optional(),
 	defenseType: z.string().optional(),
-	origin: OriginSchema,
+	origin: OriginSchema.nullable().optional(),
 	actionList: ActionListSchema.nullable().optional(),
 	skillPoints: z.number().int().optional(),
 });
@@ -267,7 +267,7 @@ export const SpecificsSchema = z.object({
 		})
 		.optional(),
 	gender: genderSchema.nullable().optional(),
-	speaks: z.array(LanguageSchema),
+	speaks: z.array(LanguageSchema).optional(),
 	sizeBonus: z.number().int().optional(),
 	background: z.string().nullable(),
 	description: z.string().nullable(),
