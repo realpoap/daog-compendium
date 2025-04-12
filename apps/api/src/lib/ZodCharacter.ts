@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { NewActionSchema } from './ZodAction';
 import { CreatureComponentSchema } from './ZodComponent';
-import { ActionListSchema, CreatureAttributeSchema } from './ZodCreature';
+import { ActionListSchema, AttributeSchema } from './ZodCreature';
 import { CreatureItemSchema } from './ZodItem';
 
 export const genderSchema = z.enum(['male', 'female', 'fluid', 'unknown'], {
@@ -94,7 +94,7 @@ export const InventorySchema = z.object({
 });
 
 export const SkillSchema = z.object({
-	id: z.string().nullable(),
+	id: z.string(),
 	name: z.string({ required_error: 'It shall be named !' }),
 	mastery: z.string(),
 	description: z.string().nullable(),
@@ -129,10 +129,14 @@ export const languagesSchema = z.enum([
 	'kabbalistic_glyphs',
 ]);
 
+export type LanguageList = z.infer<typeof languagesSchema>;
+
 export const LanguageSchema = z.object({
-	language: languagesSchema,
+	language: z.string(),
 	mastery: z.number().int(),
 });
+
+export type SpecificLanguage = z.infer<typeof LanguageSchema>;
 
 export const FeatSchema = z.object({
 	name: z.string(),
@@ -247,7 +251,7 @@ export const PathSchema = z.object({
 	skills: z.array(SkillSchema).optional(),
 	feats: z.array(FeatSchema).optional(),
 	actions: z.array(NewActionSchema).optional(),
-	attributes: z.array(CreatureAttributeSchema).optional(),
+	attributes: z.array(AttributeSchema).optional(),
 	attackType: z.string().optional(),
 	defenseType: z.string().optional(),
 	origin: OriginSchema.nullable().optional(),
@@ -269,8 +273,8 @@ export const SpecificsSchema = z.object({
 	gender: genderSchema.nullable().optional(),
 	speaks: z.array(LanguageSchema).optional(),
 	sizeBonus: z.number().int().optional(),
-	background: z.string().nullable(),
-	description: z.string().nullable(),
+	background: z.string().nullable().optional(),
+	description: z.string().nullable().optional(),
 	age: z.number().int().nullable().optional(),
 	weight: z.number().int().nullable().optional(),
 	height: z.number().int().nullable().optional(),

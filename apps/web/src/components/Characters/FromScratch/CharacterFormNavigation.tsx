@@ -1,17 +1,10 @@
 import { SpecieDataForm, allSpecies } from '@/data/speciesProfile';
 import { useAuth } from '@/store/authContext';
 import { useCharacterForm } from '@/store/characterContext';
-import { defaultValuesCharacter } from '@/types/defaultValuesCharacter';
+import { setObjectSkills } from '@/utils/objectSkills';
 import { setupCompleteCharacterFormValues } from '@/utils/setCharacterFormData';
-import { NewCharacter, NewCharacterSchema } from '@api/lib/ZodCharacter';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
-import {
-	FormProvider,
-	useForm,
-	useFormContext,
-	useWatch,
-} from 'react-hook-form';
+import { FormProvider, useWatch } from 'react-hook-form';
 import CharFormStep1 from './Steps/CharFormStep1';
 import CharFormStep10 from './Steps/CharFormStep10';
 import CharFormStep2 from './Steps/CharFormStep2';
@@ -24,20 +17,7 @@ import CharFormStep8 from './Steps/CharFormStep8';
 import CharFormStep9 from './Steps/CharFormStep9';
 
 const CharacterFormNavigation = () => {
-	const methods = useForm<NewCharacter>({
-		defaultValues: defaultValuesCharacter,
-		mode: 'onChange',
-		resolver: async (data, context, options) => {
-			// you can debug your validation schema here
-			console.log('formData', data);
-			console.log(
-				'validation result',
-				await zodResolver(NewCharacterSchema)(data, context, options),
-			);
-			return zodResolver(NewCharacterSchema)(data, context, options);
-		},
-		shouldFocusError: true,
-	});
+	const { methods } = useCharacterForm();
 
 	return (
 		<div className='card font-cabin bg-card text-base-300 flex w-full flex-col items-start p-4 shadow shadow-lg sm:w-3/4 md:w-1/2'>
@@ -50,31 +30,50 @@ const CharacterFormNavigation = () => {
 
 const CharacterFormInner = () => {
 	const { user } = useAuth();
-	const methods = useFormContext<NewCharacter>();
+	const { methods, currentStep, nextStep, prevStep, formData, setFormData } =
+		useCharacterForm();
 	const { control, handleSubmit } = methods;
-	const { currentStep, setCurrentStep } = useCharacterForm();
 
 	const [selectedSpecieData, setSelectedSpecieData] =
 		useState<SpecieDataForm>();
 	const selectedSub = useWatch({ control, name: 'bio.subspecies' });
 
 	useEffect(() => {
-		if (selectedSub !== '')
-			setSelectedSpecieData(
-				allSpecies.find(specie => specie.sub === selectedSub),
-			);
+		if (selectedSub !== '') {
+			const foundSub = allSpecies.find(specie => specie.sub === selectedSub);
+			if (foundSub) {
+				setSelectedSpecieData(foundSub);
+				const skilllist = foundSub?.path.skills;
+				const languagelist = foundSub?.specifics.speaks;
+				const attributelist = foundSub?.path.attributes;
+				console.log(attributelist);
+				const objectSkills = setObjectSkills(skilllist);
+				const skillPoints = foundSub.specie === 'human' ? 10 : 5;
+				setFormData(prev => ({
+					...prev,
+					path: {
+						...prev.path,
+						skills: objectSkills,
+						skillPoints: skillPoints,
+						attributes: attributelist,
+					},
+					specifics: {
+						...prev.specifics,
+						speaks: languagelist,
+					},
+				}));
+			}
+		}
 	}, [selectedSub]);
 
-	const nextStep = () => {
-		if (currentStep < steps.length - 1) setCurrentStep(prev => prev + 1);
-	};
-	const prevStep = () => {
-		if (currentStep > 0) setCurrentStep(prev => prev - 1);
-	};
+	useEffect(() => {
+		console.log('formData is', formData);
+	}, [formData]);
 
 	const onSubmit = handleSubmit(data => {
 		if (currentStep === steps.length - 1) {
 			// Final step → submit to backend
+			console.log('Final submit:', data);
 			setupCompleteCharacterFormValues(methods, user);
 		} else {
 			console.log('Step valid data:', data);
@@ -97,12 +96,12 @@ const CharacterFormInner = () => {
 		{
 			id: 3,
 			label: 'Languages',
-			component: <CharFormStep4 selected={selectedSpecieData} />,
+			component: <CharFormStep4 />,
 		},
 		{
 			id: 4,
 			label: 'Attributes',
-			component: <CharFormStep5 selected={selectedSpecieData} />,
+			component: <CharFormStep5 />,
 		},
 		{
 			id: 5,

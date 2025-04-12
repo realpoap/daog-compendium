@@ -1,33 +1,27 @@
+import { useCharacterForm } from '@/store/characterContext';
 import { cn } from '@/utils/classNames';
 
-import { useFormContext, useWatch } from 'react-hook-form';
-import { allSpecies, SpecieDataForm } from 'src/data/speciesProfile';
+import { allSpecies } from 'src/data/speciesProfile';
 
-type Props = {
-	selected: SpecieDataForm | undefined;
-};
-
-const CharFormStep4 = ({ selected }: Props) => {
-	const { control, setValue } = useFormContext();
-	const selectedSub = useWatch({ control, name: 'bio.subspecies' });
-	const selectedSpeaks = selected?.specifics.speaks || [];
+const CharFormStep4 = () => {
+	const { methods, formData } = useCharacterForm();
+	const selectedSub = methods.getValues('bio.subspecies');
+	const selectedSpeaks = formData.specifics?.speaks || [];
 
 	const handleLanguageSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-		setValue('specifics.speaks', []);
+		methods.setValue('specifics.speaks', []);
 		const value = e.target.value;
 		const object = { language: value, mastery: 1 };
 		console.log(object);
-		setValue('specifics.speaks', [...selectedSpeaks, object]);
+		methods.setValue('specifics.speaks', [...selectedSpeaks, object]);
 	};
-
 	const selectSpecies = allSpecies.find(specie => specie.sub === selectedSub);
-
 	const languageOptions = selectSpecies?.languages;
 
 	if (!languageOptions) return;
 	return (
 		<fieldset className='w-full sm:w-1/2'>
-			<legend className='fieldset-legend label font-cabin pb-1 text-xs capitalize text-stone-500'>
+			<legend className='fieldset-legend label font-cabin text-neutral-content mb-1 pb-0 text-xs capitalize'>
 				Language
 			</legend>{' '}
 			<select

@@ -3,15 +3,15 @@ export type OriginCharacter = {
 	profileBonus: string[];
 	skills: string[];
 	knowledges: string[];
-	equipmentA: string[];
-	equipmentB: string[];
-	description: string;
+	equipmentA?: string[];
+	equipmentB?: string[];
+	description?: string | null;
 };
 export const origins: OriginCharacter[] = [
 	{
 		name: 'Petty Thug',
 		profileBonus: ['AGI', 'WIL', 'CHA'],
-		skills: ['mockery', 'lockpicking', 'evasion'],
+		skills: ['moquerie-52', 'crochetage-90', 'derobade-29'],
 		knowledges: ['shady districts', 'law', 'thief tools'],
 		equipmentA: ['dagger', 'hood', 'lockpicking tools'],
 		equipmentB: ['club', 'pouch', 'heavy boots'],
@@ -21,7 +21,7 @@ export const origins: OriginCharacter[] = [
 	{
 		name: 'Naive Country Kid',
 		profileBonus: ['INS', 'STR', 'VIT'],
-		skills: ['animal care', 'gossip', 'whistling'],
+		skills: ['soin-des-animaux-171', 'commerage-107', 'sifflements-133'],
 		knowledges: ['fruits and vegetables', 'rural life', 'common animals'],
 		equipmentA: ['bundle', 'straw hat', 'farmer’s knife'],
 		equipmentB: ['travel bag', 'bird whistle', 'walking stick'],
@@ -31,7 +31,7 @@ export const origins: OriginCharacter[] = [
 	{
 		name: 'Raised Wildling',
 		profileBonus: ['AGI', 'INS', 'SEN'],
-		skills: ['fasting', 'animal calls', 'stealth'],
+		skills: ['jeune-177', 'Animal Sounds', 'furtivite-44'],
 		knowledges: ['edible plants', 'animal tracks', 'survivalism'],
 		equipmentA: ['tunic', 'club', 'scarf'],
 		equipmentB: ['loincloth', 'fur vest', 'flint spear'],
@@ -41,7 +41,7 @@ export const origins: OriginCharacter[] = [
 	{
 		name: 'Child Mage',
 		profileBonus: ['SEN', 'WIL', 'INS'],
-		skills: ['pantomime', 'recitation', 'rituals'],
+		skills: ['pantomime-85', 'recitation-70', 'rituels-59'],
 		knowledges: [
 			'types of magic',
 			'common magical monsters',
@@ -55,7 +55,7 @@ export const origins: OriginCharacter[] = [
 	{
 		name: 'Boarding School Student',
 		profileBonus: ['ERU', 'END', 'SOC'],
-		skills: ['recitation', 'filing', 'stealth'],
+		skills: ['recitation-70', 'classement-65', 'furtivite-44'],
 		knowledges: ['school gossip', 'education system', 'etiquette'],
 		equipmentA: ['notebook', 'uniform', 'backpack'],
 		equipmentB: ['school crest pin', 'hidden snack pouch', 'ruler'],
@@ -65,7 +65,7 @@ export const origins: OriginCharacter[] = [
 	{
 		name: 'Juvenile Athlete',
 		profileBonus: ['AGI', 'STR', 'CHA'],
-		skills: ['acrobatics', 'fasting', 'filing'],
+		skills: ['acrobatie-141', 'jeune-177', 'classement-65'],
 		knowledges: ['sports teams', 'competitions', 'body training basics'],
 		equipmentA: ['training gear', 'water flask', 'wristbands'],
 		equipmentB: ['ball', 'protein bar', 'sandals'],
@@ -75,7 +75,7 @@ export const origins: OriginCharacter[] = [
 	{
 		name: 'Hidden Disciple',
 		profileBonus: ['AGI', 'CEL', 'SEN'],
-		skills: ['stealth', 'filing', 'martial arts'],
+		skills: ['furtivite-44', 'classement-65', 'art-martial-99'],
 		knowledges: ['secret societies', 'pressure points', 'inner balance'],
 		equipmentA: ['practice robe', 'rice ball', 'wooden sword'],
 		equipmentB: ['belted tunic', 'hidden dagger', 'meditation stone'],
@@ -85,7 +85,7 @@ export const origins: OriginCharacter[] = [
 	{
 		name: 'Seasonal Greengrocer',
 		profileBonus: ['SOC', 'ERU', 'STR'],
-		skills: ['herbalism', 'mental arithmetic', 'chatter'],
+		skills: ['simples-170', 'calcul-mental-64', 'baratin-46'],
 		knowledges: ['market life', 'seasonal produce', 'haggling techniques'],
 		equipmentA: ['stall apron', 'scales', 'pocket ledger'],
 		equipmentB: ['crate of fruit', 'vendor hat', 'pouch of small coins'],
@@ -95,7 +95,7 @@ export const origins: OriginCharacter[] = [
 	{
 		name: 'Disgraced Noble',
 		profileBonus: ['DEX', 'CHA', 'ERU'],
-		skills: ['etiquette', 'heraldry', 'fencing'],
+		skills: ['etiquette-126', 'heraldique-151', 'escrime-100'],
 		knowledges: ['noble houses', 'court intrigues', 'literature'],
 		equipmentA: ['embroidered shirt', 'family signet ring', 'fencing foil'],
 		equipmentB: ['worn cloak', 'etiquette manual', 'hidden coin purse'],

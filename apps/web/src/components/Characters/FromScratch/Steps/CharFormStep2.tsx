@@ -61,7 +61,7 @@ const CharFormStep2 = ({ selected }: Props) => {
 								<span
 									key={specie.sub}
 									onClick={() => {
-										console.log(specie.specie);
+										console.log(specie.specie, specie.sub);
 										setValue('bio.species', specie.specie);
 										setValue('bio.subspecies', specie.sub);
 									}}

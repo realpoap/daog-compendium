@@ -1,7 +1,7 @@
 import { SkillData, skillsData } from '@/data/skillsData';
+import { useCharacterForm } from '@/store/characterContext';
 import { CharacterSkill } from '@api/lib/ZodCharacter';
 import { useEffect, useRef, useState } from 'react';
-import { useFormContext } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import {
 	FiCheck,
@@ -18,14 +18,20 @@ import {
 type GroupedSkills = {
 	[letter: string]: SkillData[];
 };
+
 const CharFormStep6 = () => {
-	const { setValue } = useFormContext();
+	const { methods, formData } = useCharacterForm();
+
 	const [activeLetterIndex, setActiveLetterIndex] = useState<number>(0);
 	const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
 	const observerRef = useRef<IntersectionObserver | null>(null);
 	const scrollContainerRef = useRef<HTMLDivElement | null>(null);
-	const [selectedSkills, setSelectedSkills] = useState<CharacterSkill[]>([]);
-	const [playerSkillPoints, setPlayerSkillPoints] = useState(5);
+	const [selectedSkills, setSelectedSkills] = useState<CharacterSkill[]>(
+		formData.path?.skills || [],
+	);
+	const [playerSkillPoints, setPlayerSkillPoints] = useState(
+		formData.path?.skillPoints || 0,
+	);
 
 	// Sort skills alphabetically by name
 	const sortedSkills = [...skillsData].sort((a, b) =>
@@ -55,7 +61,7 @@ const CharFormStep6 = () => {
 	};
 
 	useEffect(() => {
-		setValue('path.skills', selectedSkills);
+		methods.setValue('path.skills', selectedSkills);
 	}, [selectedSkills]);
 
 	// Set up intersection observer to track active section
@@ -113,14 +119,17 @@ const CharFormStep6 = () => {
 		}
 	};
 
-	// Handle skill selection
+	const startingSkills = formData.path?.skills;
+
+	// Handle skill selection and add it to the list
 	const handleSkillSelect = (skill: SkillData) => {
+		const isStartingSkill = startingSkills?.find(s => s.id === skill.id);
 		if (playerSkillPoints === 0) {
 			toast.error('No more skill points available');
 			return;
 		}
 		const existingSkill = selectedSkills?.find(s => s.id === skill.id);
-		if (existingSkill) {
+		if (existingSkill && !isStartingSkill) {
 			handleSkillRemove(existingSkill);
 			toast.success('Skill removed, skill points updated');
 			return;
@@ -130,6 +139,7 @@ const CharFormStep6 = () => {
 		setSelectedSkills(prev => [...prev, object]);
 	};
 
+	// remove skill if not a starting skill
 	const handleSkillRemove = (skill: CharacterSkill) => {
 		let points = skill.playerPoints || 0;
 		switch (skill.playerLevel) {
@@ -159,10 +169,28 @@ const CharFormStep6 = () => {
 	// Handle Points change
 	const handlePointsChange = (skill: CharacterSkill, number: number) => {
 		const newRemainingPoints = playerSkillPoints - number;
+		const currentSkillPoints = skill.playerPoints || 0;
+		// prevent going below zero
 		if (newRemainingPoints < 0) {
 			toast.error('No more skill points available');
 			return;
-		} // prevent going below zero
+		}
+		// prevent deleting skills by going bellow level 1
+		if (skill.playerLevel === 1 && skill.playerPoints === 0 && number === -1) {
+			toast.error(`Can't remove starting skill`);
+			return;
+		}
+		const isStartingSkill = startingSkills?.find(s => s.id === skill.id);
+
+		if (
+			isStartingSkill &&
+			isStartingSkill.playerPoints &&
+			isStartingSkill?.playerLevel === skill.playerLevel &&
+			isStartingSkill?.playerPoints >= currentSkillPoints + number
+		) {
+			toast.error(`Can't remove starting skill points`);
+			return;
+		}
 
 		setPlayerSkillPoints(newRemainingPoints);
 

@@ -1,108 +1,60 @@
 import { OriginCharacter, origins } from '@/data/origins'; // Importez les données typées
-import { useCallback, useState } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useCharacterForm } from '@/store/characterContext';
+import { cn } from '@/utils/classNames';
+import { deduplicateSkills, setObjectSkills } from '@/utils/objectSkills';
+import { useState } from 'react';
 
 const CharFormStep3 = () => {
-	const { setValue } = useFormContext();
+	const { setFormData, formData } = useCharacterForm();
 	const [selectedOrigin, setSelectedOrigin] = useState<OriginCharacter | null>(
-		null,
+		formData.path?.origin || null,
 	);
-	const [isListOpen, setIsListOpen] = useState(false);
 
-	const handleOriginSelect = (origin: OriginCharacter) => {
-		setSelectedOrigin(origin);
-		console.log(origin);
-		setValue('path.origin', origin);
-		setIsListOpen(false); // Fermez la liste après la sélection
+	const handleOriginSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		const name = e.target.value;
+		const origin = origins.find(ori => ori.name === name);
+		if (origin) {
+			setSelectedOrigin(origin);
+			const skillList = origin.skills;
+			const objectSkills = setObjectSkills(skillList);
+			const currentSkills = formData.path?.skills;
+			if (currentSkills) objectSkills?.push(...currentSkills);
+			const deduplicatedSkills = deduplicateSkills(objectSkills);
+			setFormData(prev => ({
+				...prev,
+				path: {
+					...prev.path,
+					skills: deduplicatedSkills,
+					origin: origin,
+				},
+			}));
+		}
 	};
-
-	const toggleList = useCallback(() => {
-		setIsListOpen(prev => !prev);
-	}, []);
 
 	return (
 		<div className='relative flex flex-col gap-6'>
 			<fieldset>
-				<label
-					htmlFor='origin'
-					className='block text-sm font-medium'
-				>
-					Choose your origin :
-				</label>
-				<div className='bg-background relative mt-1'>
-					<button
-						type='button'
-						className='bg-card w-full cursor-default rounded-md px-4 py-2 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500'
-						aria-haspopup='listbox'
-						aria-expanded={isListOpen}
-						onClick={toggleList}
-					>
-						{selectedOrigin ? selectedOrigin.name : 'Sélectionnez une origine'}
-						<span className='pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2'>
-							<svg
-								className='h-5 w-5 text-gray-400'
-								viewBox='0 0 20 20'
-								fill='currentColor'
-								aria-hidden='true'
-							>
-								<path
-									fillRule='evenodd'
-									d='M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zM10 17a1 1 0 01-.707-.293l-3-3a1 1 0 011.414-1.414L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-.707.293z'
-									clipRule='evenodd'
-								/>
-							</svg>
-						</span>
-					</button>
-
-					{isListOpen && (
-						<ul
-							className='absolute z-10 mt-1 max-h-48 w-full overflow-auto rounded-md border border-gray-300 bg-white shadow-lg focus:outline-none'
-							tabIndex={-1}
-							role='listbox'
-							aria-labelledby='listbox-label'
-						>
-							{origins.map(origin => (
-								<li
-									key={origin.name}
-									className={`relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900 hover:bg-gray-100 ${
-										selectedOrigin?.name === origin.name
-											? 'bg-indigo-600 text-white'
-											: ''
-									}`}
-									id={`listbox-option-${origin.name.replace(/\s+/g, '-')}`}
-									role='option'
-									aria-selected={selectedOrigin?.name === origin.name}
-									onClick={() => handleOriginSelect(origin)}
-								>
-									<div className='flex items-center'>
-										<span
-											className={`ml-2 block truncate ${selectedOrigin?.name === origin.name ? 'font-semibold' : 'font-normal'}`}
-										>
-											{origin.name}
-										</span>
-									</div>
-
-									{selectedOrigin?.name === origin.name && (
-										<span className='absolute inset-y-0 right-0 flex items-center pr-2'>
-											<svg
-												className='h-5 w-5 text-white'
-												viewBox='0 0 20 20'
-												fill='currentColor'
-												aria-hidden='true'
-											>
-												<path
-													fillRule='evenodd'
-													d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z'
-													clipRule='evenodd'
-												/>
-											</svg>
-										</span>
-									)}
-								</li>
-							))}
-						</ul>
+				<legend className='fieldset-legend label font-cabin text-neutral-content mb-1 pb-0 text-xs capitalize'>
+					Origin
+				</legend>{' '}
+				<select
+					defaultValue={'Pick an origin'}
+					className={cn(
+						'select select-bordered font-cabin text-error text-md text-secondary caret-secondary focus:border-secondary focus:ring-secondary dark:text-primary dark:caret-primary dark:focus:border-primary dark:focus:ring-primary peer-default:dark:text-neutral h-8 min-h-6 w-full rounded-md px-2 py-0 shadow-sm focus:outline-none focus:ring-1 dark:bg-stone-700',
 					)}
-				</div>
+					onChange={e => handleOriginSelect(e)}
+				>
+					{' '}
+					<option disabled={true}>Pick an origin</option>
+					{origins.map(option => (
+						<option
+							key={`${option.name}-choice`}
+							value={option.name}
+						>
+							{option.name}
+						</option>
+					))}
+				</select>
 			</fieldset>
 
 			{selectedOrigin && (
@@ -119,16 +71,16 @@ const CharFormStep3 = () => {
 						</div>
 
 						<div>
-							<strong>Connaissances :</strong>{' '}
+							<strong>Knowledges :</strong>{' '}
 							{selectedOrigin.knowledges.join(', ')}
 						</div>
 						<div>
-							<strong>Équipement A :</strong>{' '}
-							{selectedOrigin.equipmentA.join(', ')}
+							<strong>Equipment A :</strong>{' '}
+							{selectedOrigin.equipmentA?.join(', ')}
 						</div>
 						<div>
-							<strong>Équipement B :</strong>{' '}
-							{selectedOrigin.equipmentB.join(', ')}
+							<strong>Equipment B :</strong>{' '}
+							{selectedOrigin.equipmentB?.join(', ')}
 						</div>
 					</div>
 				</div>

@@ -1,3 +1,5 @@
+import { SpecificLanguage } from '@api/lib/ZodCharacter';
+
 export const moufflian = {
 	specie: 'human',
 	sub: 'moufflian',
@@ -14,23 +16,36 @@ export const moufflian = {
 	],
 	description:
 		'Humans were Grandmouffle’s first successful creation. Initially all male, they couldn’t reproduce, prompting the creation of women. Population exploded, causing ecological damage. The Immortals voted to destroy most of them, sparing only the elite. Grandmouffle defied them, saving others behind a protective barrier. These survivors thrived, becoming diverse and inventive. Human society is divided, flawed, yet adaptable and influential.',
+	bio: {
+		isCaster: false,
+	},
 	path: {
+		skills: ['baratin-46', 'commerce-108', 'lecture-ecriture-153'],
 		attributes: [
 			{
 				name: 'Cosmopolitan',
 				effect: '1 additional language (F), 1 additional language (E)',
 				description:
 					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
+				value: 0,
+				flavor: '',
+				id: 'cosmopolite-3',
 			},
 			{
 				name: 'Universal comrade',
 				effect: `Naturally welcomed and accepted, advantage in gossip and trade`,
 				description: `Of all the races, humans are clearly the most able to form bonds with the most obscure individuals. Even proud trolls find these voluble little beings friendly, and let's not even mention the dwarves with whom they are almost blood brothers.`,
+				value: 0,
+				flavor: '',
+				id: 'camarade-universel-2',
 			},
 			{
 				name: 'Jack-of-all-trades',
 				effect: `+5 starting skill points`,
 				description: `Because of their great curiosity and the vagaries of life, humans are a resourceful people. a resourceful people who find many subjects of interest. Every different from one individual to the next.`,
+				value: 0,
+				flavor: '',
+				id: 'touche-a-tout-1',
 			},
 		],
 	},
@@ -41,7 +56,7 @@ export const moufflian = {
 				mastery: 3,
 			},
 			{
-				language: 'moufflian slang',
+				language: 'moufflian_slang',
 				mastery: 2,
 			},
 		],
@@ -70,6 +85,9 @@ export const inclay = {
 	specieDifficulty: 'easy',
 	description:
 		'Early Peacefull Lands colonists, Inclays sought refuge from barbarians and goblins in the chaotic yet temperate weather from the Eastern territories. They coexisted with early Moisi forces while building their colonial and maritime empire. Their ambivalent stance in the Moisi Wars was seen as betrayal from the alliance. Taciturn and stoic, English humans are often distrusted due to their Moisi proximity and detachment from Vieux-Mouffle concerns.',
+	bio: {
+		isCaster: false,
+	},
 	languages: [
 		{
 			label: 'goblin',
@@ -81,22 +99,31 @@ export const inclay = {
 		},
 	],
 	path: {
+		skills: ['duperie-125', 'politesse-132', 'etiquette-126'],
 		attributes: [
 			{
-				name: 'Cosmopolitan',
-				effect: '1 additional language (F), 1 additional language (E)',
-				description:
-					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
+				name: 'Incredible Composure',
+				effect: 'Can only be surprised by a fiasco, -2 to initiative.',
+				description: `In the worst situations, inclay humans remain eerily calm. Whether it's due to their scheming culture or the odd nature of the Claylands, they can keep a straight face no matter what.`,
+				value: 0,
+				flavor: '',
+				id: 'flegme-incroyable-21',
 			},
 			{
-				name: 'Universal comrade',
-				effect: `Naturally welcomed and accepted, advantage in gossip and trade`,
-				description: `Of all the races, humans are clearly the most able to form bonds with the most obscure individuals. Even proud trolls find these voluble little beings friendly, and let's not even mention the dwarves with whom they are almost blood brothers.`,
+				name: 'Strange Humor',
+				effect: `Roll two dice for humor and performance checks, keep the best—unless it's a fiasco.`,
+				description: `En-Glaise humans have developed a subtle and strange sense of humor, baffling to other races. Their sharp tongue often hits the mark, causing laughter—unless it gets too cryptic.`,
+				value: 0,
+				flavor: '',
+				id: 'humour-etrange-20',
 			},
 			{
 				name: 'Jack-of-all-trades',
 				effect: `+5 starting skill points`,
 				description: `Because of their great curiosity and the vagaries of life, humans are a resourceful people. a resourceful people who find many subjects of interest. Every different from one individual to the next.`,
+				value: 0,
+				flavor: '',
+				id: 'touche-a-tout-1',
 			},
 		],
 	},
@@ -161,22 +188,38 @@ export const bourguignon = {
 		],
 	},
 	path: {
+		skills: [
+			'botanique-150',
+			'escalade-143',
+			'politesse-132',
+			'soin-des-animaux-171',
+		],
 		attributes: [
 			{
-				name: 'Cosmopolitan',
-				effect: '1 additional language (F), 1 additional language (E)',
+				name: 'Magical Defiance',
+				effect:
+					'+1 advantage die against enchantments, charms, and curses targeting them solely',
 				description:
-					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
+					'The ancient rites and customs of the Sylvan Elves grant them natural resistance to curses. Their heightened senses are trained from childhood to detect and resist magical manipulation.',
+				value: 0,
+				flavor: '',
+				id: 'defiance-magique-19',
 			},
 			{
-				name: 'Universal comrade',
-				effect: `Naturally welcomed and accepted, advantage in gossip and trade`,
-				description: `Of all the races, humans are clearly the most able to form bonds with the most obscure individuals. Even proud trolls find these voluble little beings friendly, and let's not even mention the dwarves with whom they are almost blood brothers.`,
+				name: 'Structured Upbringing',
+				effect: ` Choose one: +1 CHA and skill "bows" or +1 ERU and skill "letters"`,
+				description: `The caste-based Bourguignon society lets elves choose the path of soldier or scholar early in life, shaping future leaders from childhood.`,
+				value: 0,
+				flavor: '',
+				id: 'enseignement-cloisonne-18',
 			},
 			{
-				name: 'Jack-of-all-trades',
-				effect: `+5 starting skill points`,
-				description: `Because of their great curiosity and the vagaries of life, humans are a resourceful people. a resourceful people who find many subjects of interest. Every different from one individual to the next.`,
+				name: 'Magic Sensitivity',
+				effect: `Can cast spells without magical training.`,
+				description: `Elves’ long lifespans and forested homelands make them natural conduits for magical energy. From youth, their minds are shaped to sense and identify magic around them.`,
+				value: 0,
+				flavor: '',
+				id: 'sensibilite-magique-11',
 			},
 		],
 	},
@@ -203,8 +246,8 @@ export const armagnac = {
 	specieDifficulty: 'normal',
 	languages: [
 		{
-			label: 'dwarven',
-			value: 'dwarven',
+			label: 'dwarvish',
+			value: 'dwarvish',
 		},
 		{
 			label: `thieves' marks`,
@@ -213,6 +256,9 @@ export const armagnac = {
 	],
 	description:
 		'These are the dissident elves who abandoned the forests after the Grande Confusion, leading to a major civil war. They rejected their traditional ways, trading bows for firearms and other weapons. Their hair became dyed in unnatural colors, and they forsook traditional elven plants for stronger, less reputable substances. Considered a separate people, they are viewed as brothers by humans and receive some sympathy from dwarves. They live among other races in Vieux-Mouffle and Peacefull Landes cities, often marginalized and seen as potentially dangerous rebels by Bourguignon elves and many citizens.',
+	bio: {
+		isCaster: false,
+	},
 	specifics: {
 		speaks: [
 			{
@@ -226,22 +272,39 @@ export const armagnac = {
 		],
 	},
 	path: {
+		skills: [
+			'bagarre-74',
+			'fouille-34',
+			'meditation-117',
+			'legislation-68',
+			'furtivite-44',
+		],
 		attributes: [
 			{
-				name: 'Cosmopolitan',
-				effect: '1 additional language (F), 1 additional language (E)',
+				name: 'Wanderer',
+				effect:
+					'Always recovers at least as if from a short rest, even with little sleep or poor conditions; +1 remission.',
 				description:
-					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
+					'Elves who left their forests to live in cities have become refugees constantly on the move. Their grace faded, replaced by hardened endurance built on the road.',
+				value: 0,
+				flavor: '',
+				id: 'baroudeur-17',
 			},
 			{
-				name: 'Universal comrade',
-				effect: `Naturally welcomed and accepted, advantage in gossip and trade`,
-				description: `Of all the races, humans are clearly the most able to form bonds with the most obscure individuals. Even proud trolls find these voluble little beings friendly, and let's not even mention the dwarves with whom they are almost blood brothers.`,
+				name: 'Desensitized',
+				effect: `Drugs and enchantments affect them less; advantage on END and SEN rolls.`,
+				description: `Armagnac elves abuse herbs, drugs, and alcohol—shaming their lineage and ruining their longevity. However, their heightened senses remain, now dulled to toxins.`,
+				value: 0,
+				flavor: '',
+				id: 'desensibilisation-16',
 			},
 			{
-				name: 'Jack-of-all-trades',
-				effect: `+5 starting skill points`,
-				description: `Because of their great curiosity and the vagaries of life, humans are a resourceful people. a resourceful people who find many subjects of interest. Every different from one individual to the next.`,
+				name: 'Ill-Reputed',
+				effect: `Advantage on gossip and bargaining rolls; but are accused first by guards or onlookers.`,
+				description: `Though common folk enjoy their simplicity, Armagnacs are viewed with suspicion by lawkeepers, often accused of brewing rebellion in the shadows.`,
+				value: 0,
+				flavor: '',
+				id: 'mal-fame-15',
 			},
 		],
 	},
@@ -277,11 +340,14 @@ export const durhkran = {
 		},
 	],
 	description: `Grandmouffle's second attempt at creation, dwarves are short, powerfully built beings born from a less refined but sturdier material than the "effeminate" elves. After the Great Confusion, they settled in mountains, becoming skilled in forging and brewing beer. A tragic split occurred over the prized Granitos biscuits, denied to some turbulent young dwarves. Corrupted by Chaos with promises of endless Granitos, these became the Grey Dwarves, leading to a devastating civil war that remains a painful memory in Durhkran society.`,
+	bio: {
+		isCaster: false,
+	},
 	specifics: {
 		size: 'small',
 		speaks: [
 			{
-				language: 'dwarven',
+				language: 'dwarvish',
 				mastery: 3,
 			},
 			{
@@ -291,22 +357,38 @@ export const durhkran = {
 		],
 	},
 	path: {
+		skills: [
+			'histoire-legendes-152',
+			'bras-de-fer-77',
+			'estimation-109',
+			'chant-122',
+			'fermentation-8',
+		],
 		attributes: [
 			{
-				name: 'Cosmopolitan',
-				effect: '1 additional language (F), 1 additional language (E)',
-				description:
-					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
+				name: 'Proud People',
+				effect:
+					'Can reroll sincerity checks once; disadvantage on deception and persuasion.',
+				description: `A dwarf's honor is tied to their word and ancestry. They never lie and have learned to spot betrayal—especially from Grey Dwarves who sneak into their cities`,
+				value: 0,
+				flavor: '',
+				id: 'peuple-fier-14',
 			},
 			{
-				name: 'Universal comrade',
-				effect: `Naturally welcomed and accepted, advantage in gossip and trade`,
-				description: `Of all the races, humans are clearly the most able to form bonds with the most obscure individuals. Even proud trolls find these voluble little beings friendly, and let's not even mention the dwarves with whom they are almost blood brothers.`,
+				name: 'Hard-Headed',
+				effect: `Advantage against stunning blows; helmets count as weightless.`,
+				description: `Born with iron-rich bones, dwarves have famously durable skulls. Trained since childhood to wear helmets heavier than themselves, they rarely suffer knockouts.`,
+				value: 0,
+				flavor: '',
+				id: 'crane-dure-13',
 			},
 			{
-				name: 'Jack-of-all-trades',
-				effect: `+5 starting skill points`,
-				description: `Because of their great curiosity and the vagaries of life, humans are a resourceful people. a resourceful people who find many subjects of interest. Every different from one individual to the next.`,
+				name: 'Hereditary Tolerance',
+				effect: `Alcohol has reduced effect; advantage on inebriation rolls.`,
+				description: `Durhkran dwarves drink for every minor occasion (even “it's been a while”). Over time, they’ve developed legendary alcohol resistance—tea vendors weep.`,
+				value: 0,
+				flavor: '',
+				id: 'tolerance-hereditaire-10',
 			},
 		],
 	},
@@ -353,28 +435,45 @@ export const grey = {
 				mastery: 3,
 			},
 			{
-				language: 'dwarven',
+				language: 'dwarvish',
 				mastery: 2,
 			},
 		],
 	},
 	path: {
+		skills: [
+			'conserves-4',
+			'intimidation-136',
+			'geologie-159',
+			'deguisement-40',
+			'blagues-120',
+		],
 		attributes: [
 			{
-				name: 'Cosmopolitan',
-				effect: '1 additional language (F), 1 additional language (E)',
+				name: 'Underground Life',
+				effect:
+					'See equally in dim and bright light; advantage on perception and navigation rolls underground.',
 				description:
-					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
+					'Living in the deepest tunnels, Grey Dwarves developed heightened light sensitivity and a keen instinct for lurking dangers.',
+				value: 0,
+				flavor: '',
+				id: 'vie-souterraine-4',
 			},
 			{
-				name: 'Universal comrade',
-				effect: `Naturally welcomed and accepted, advantage in gossip and trade`,
-				description: `Of all the races, humans are clearly the most able to form bonds with the most obscure individuals. Even proud trolls find these voluble little beings friendly, and let's not even mention the dwarves with whom they are almost blood brothers.`,
+				name: 'Magic-Sensitive',
+				effect: `Can cast spells without formal magical training.`,
+				description: `Grey Dwarves, having few hobbies, tuned into magic and even the whispers of the Moisi. They sense arcane forces hidden in mountain stone.`,
+				value: 0,
+				flavor: '',
+				id: 'sensibilite-magique-11',
 			},
 			{
-				name: 'Jack-of-all-trades',
+				name: 'Unshakable',
 				effect: `+5 starting skill points`,
-				description: `Because of their great curiosity and the vagaries of life, humans are a resourceful people. a resourceful people who find many subjects of interest. Every different from one individual to the next.`,
+				description: `Denied sweets and legendary Granitos, Grey Dwarves go into sugar-frenzies when tempted. Their untrained stomachs grant them a burst of power… followed by a crash.`,
+				value: 0,
+				flavor: '',
+				id: 'inebranlable-12',
 			},
 		],
 	},
@@ -411,6 +510,9 @@ export const republican = {
 	],
 	description:
 		'These enlightened goblins replaced their monarchy with a democracy that’s slow but proud. The Gobeline Republic is governed by a national assembly of brilliant (and old) politicians, ensuring security, equality and economic supremacy over the other cultures. Although extremely bureaucratic, the numerous laws are rarely enforced but beautifully displayed in glass cases. Republican goblins are good companions, except when splitting bills or clarifying legal points, as their national motto suggests: “Better to debate than decide”',
+	bio: {
+		isCaster: false,
+	},
 	size: 'small',
 	specifics: {
 		speaks: [
@@ -425,22 +527,38 @@ export const republican = {
 		],
 	},
 	path: {
+		skills: [
+			'estimation-109',
+			'commerce-108',
+			'lecture-ecriture-153',
+			'legislation-68',
+			'politesse-132',
+		],
 		attributes: [
 			{
-				name: 'Cosmopolitan',
-				effect: '1 additional language (F), 1 additional language (E)',
+				name: 'Skilled Negotiator',
+				effect: 'Advantage on persuasion and trade rolls.',
 				description:
-					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
+					'Republican goblins have built a thriving society and quickly became expert traders. Their mastery of treaties and market rates is legendary.',
+				value: 0,
+				flavor: '',
+				id: 'fin-negociateur-7',
 			},
 			{
-				name: 'Universal comrade',
-				effect: `Naturally welcomed and accepted, advantage in gossip and trade`,
-				description: `Of all the races, humans are clearly the most able to form bonds with the most obscure individuals. Even proud trolls find these voluble little beings friendly, and let's not even mention the dwarves with whom they are almost blood brothers.`,
+				name: 'Cartesian Schooling',
+				effect: `+1 knowledge and +1 in knowledge mastery; disadvantage on performance and artistic rolls.`,
+				description: `Their education is Enlightenment-based and laser-focused on logic, leaving little room for creativity.`,
+				value: 0,
+				flavor: '',
+				id: 'enseignement-cartesien-8',
 			},
 			{
-				name: 'Jack-of-all-trades',
-				effect: `+5 starting skill points`,
-				description: `Because of their great curiosity and the vagaries of life, humans are a resourceful people. a resourceful people who find many subjects of interest. Every different from one individual to the next.`,
+				name: 'Bureaucratic Mind',
+				effect: `May reroll a failed logic roll, but loses 1 SOC for the day (stackable).`,
+				description: `Only citizens of the Republic can withstand its infernal paperwork. Trained to overcome cerebral torture.`,
+				value: 0,
+				flavor: '',
+				id: 'procedurier-9',
 			},
 		],
 	},
@@ -476,6 +594,9 @@ export const royalist = {
 		},
 	],
 	description: `These goblins, with brownish or even black skin, remain loyal to the royal lineage in the depths. They don't maintain their nails, possessing sharp claws for underground movement. They view the surface-dwelling Republican goblins as separatists who stole their ancestral lands. Resentful of the Republic's rise, they attempted violent protests. Now, their current king, Injur Tuverha, seeks to reclaim their surface territory through the Republic's own legal system, with royalist supporters attempting to gain influence within Republican society. They are seen as less refined but also more ferocious than their republican counterparts.`,
+	bio: {
+		isCaster: false,
+	},
 	specifics: {
 		size: 'small',
 		speaks: [
@@ -490,22 +611,39 @@ export const royalist = {
 		],
 	},
 	path: {
+		skills: [
+			'veille-118',
+			'fouille-34',
+			'jeune-177',
+			'rapine-96',
+			'mendicite-110',
+		],
 		attributes: [
 			{
-				name: 'Cosmopolitan',
-				effect: '1 additional language (F), 1 additional language (E)',
+				name: 'Underground Life',
+				effect:
+					'See in dim light as if it were daylight; advantage on underground navigation and perception.',
 				description:
-					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
+					'Used to tight tunnels, royalist goblins developed acute vision in darkness.',
+				value: 0,
+				flavor: '',
+				id: 'vie-souterraine-4',
 			},
 			{
-				name: 'Universal comrade',
-				effect: `Naturally welcomed and accepted, advantage in gossip and trade`,
-				description: `Of all the races, humans are clearly the most able to form bonds with the most obscure individuals. Even proud trolls find these voluble little beings friendly, and let's not even mention the dwarves with whom they are almost blood brothers.`,
+				name: 'Sharp Priorities',
+				effect: `+1 survival; advantage on evasion, disadvantage on fear.`,
+				description: `Always on alert, they sleep with one eye open and are great at bolting when danger comes.`,
+				value: 0,
+				flavor: '',
+				id: 'sens-des-priorites-5',
 			},
 			{
-				name: 'Jack-of-all-trades',
-				effect: `+5 starting skill points`,
-				description: `Because of their great curiosity and the vagaries of life, humans are a resourceful people. a resourceful people who find many subjects of interest. Every different from one individual to the next.`,
+				name: 'Carrion eaters',
+				effect: `Can reroll a failed END test if not a fiasco, can consume rotten food`,
+				description: `Carrion eater description`,
+				value: 0,
+				flavor: '',
+				id: 'charognards-6',
 			},
 		],
 	},
@@ -541,6 +679,9 @@ export const free = {
 		},
 	],
 	description: `Gnomes are small, agile artisans with easygoing and bubbly attitudes. Their hairy feet aid their swiftness, matching their bold nature. Believed to be favored by Grandmouffle, their sudden appearance in Boute's pastures is debated. Some link them to Grandmouffle, others to a magical accident involving the local spapareille fern, which caused the first settlers to shrink and become the energetic, joyful gnomes.`,
+	bio: {
+		isCaster: false,
+	},
 	specifics: {
 		size: 'small',
 		speaks: [
@@ -555,22 +696,38 @@ export const free = {
 		],
 	},
 	path: {
+		skills: [
+			'veille-118',
+			'fouille-34',
+			'jeune-177',
+			'rapine-96',
+			'mendicite-110',
+		],
 		attributes: [
 			{
 				name: 'Cosmopolitan',
 				effect: '1 additional language (F), 1 additional language (E)',
 				description:
 					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
+				value: 0,
+				flavor: '',
+				id: 'cosmopolite-3',
 			},
 			{
 				name: 'Universal comrade',
 				effect: `Naturally welcomed and accepted, advantage in gossip and trade`,
 				description: `Of all the races, humans are clearly the most able to form bonds with the most obscure individuals. Even proud trolls find these voluble little beings friendly, and let's not even mention the dwarves with whom they are almost blood brothers.`,
+				value: 0,
+				flavor: '',
+				id: 'camarade-universel-2',
 			},
 			{
 				name: 'Jack-of-all-trades',
 				effect: `+5 starting skill points`,
 				description: `Because of their great curiosity and the vagaries of life, humans are a resourceful people. a resourceful people who find many subjects of interest. Every different from one individual to the next.`,
+				value: 0,
+				flavor: '',
+				id: 'touche-a-tout-1',
 			},
 		],
 	},
@@ -624,22 +781,38 @@ export const proschöne = {
 		],
 	},
 	path: {
+		skills: [
+			'veille-118',
+			'fouille-34',
+			'jeune-177',
+			'rapine-96',
+			'mendicite-110',
+		],
 		attributes: [
 			{
 				name: 'Cosmopolitan',
 				effect: '1 additional language (F), 1 additional language (E)',
 				description:
 					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
+				value: 0,
+				flavor: '',
+				id: 'cosmopolite-3',
 			},
 			{
 				name: 'Universal comrade',
 				effect: `Naturally welcomed and accepted, advantage in gossip and trade`,
 				description: `Of all the races, humans are clearly the most able to form bonds with the most obscure individuals. Even proud trolls find these voluble little beings friendly, and let's not even mention the dwarves with whom they are almost blood brothers.`,
+				value: 0,
+				flavor: '',
+				id: 'camarade-universel-2',
 			},
 			{
 				name: 'Jack-of-all-trades',
 				effect: `+5 starting skill points`,
 				description: `Because of their great curiosity and the vagaries of life, humans are a resourceful people. a resourceful people who find many subjects of interest. Every different from one individual to the next.`,
+				value: 0,
+				flavor: '',
+				id: 'touche-a-tout-1',
 			},
 		],
 	},
@@ -676,6 +849,9 @@ export const pipourray = {
 	],
 	description:
 		'Result of a schism among velus orcs during the Guerre du Moisi. Exposed to peace, they formed a truce, angering Grand Moisi and creating the scattered Pipoura tribe. Unlike their kin, they integrated well into human/Armagnac society, embracing freedom in refugee camps/squats. They value peace, nature, thriving in crafts/poetry. While not focused on combat, they retain inherent strength. Rarely armed, they adorn their hair with flowers/vines. Their culture shifted from war to harmony.',
+	bio: {
+		isCaster: false,
+	},
 	specifics: {
 		size: 'average',
 		massive: true,
@@ -691,22 +867,38 @@ export const pipourray = {
 		],
 	},
 	path: {
+		skills: [
+			'veille-118',
+			'fouille-34',
+			'jeune-177',
+			'rapine-96',
+			'mendicite-110',
+		],
 		attributes: [
 			{
 				name: 'Cosmopolitan',
 				effect: '1 additional language (F), 1 additional language (E)',
 				description:
 					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
+				value: 0,
+				flavor: '',
+				id: 'cosmopolite-3',
 			},
 			{
 				name: 'Universal comrade',
 				effect: `Naturally welcomed and accepted, advantage in gossip and trade`,
 				description: `Of all the races, humans are clearly the most able to form bonds with the most obscure individuals. Even proud trolls find these voluble little beings friendly, and let's not even mention the dwarves with whom they are almost blood brothers.`,
+				value: 0,
+				flavor: '',
+				id: 'camarade-universel-2',
 			},
 			{
 				name: 'Jack-of-all-trades',
 				effect: `+5 starting skill points`,
 				description: `Because of their great curiosity and the vagaries of life, humans are a resourceful people. a resourceful people who find many subjects of interest. Every different from one individual to the next.`,
+				value: 0,
+				flavor: '',
+				id: 'touche-a-tout-1',
 			},
 		],
 	},
@@ -743,6 +935,9 @@ export const villous = {
 	],
 	description:
 		'Large, muscular, confident orcs with greenish skin adapted to jungles/deserts. Powerful limbs, claws, tusked jaws. Favor practical attire, warriors wear armor. Created by Grand Moisi, they became a dominant, warlike force east of Peacefull Landes. Initially few, their strength devastated early skirmishes in the Guerre du Moisi. Impatience and battle-lust drove them. Trench warfare and calming substances led to a shift, resulting in a peace treaty and the emergence of the pacifist Pipoura. Their hierarchical society values strength, with a supreme general under Grand Moisi. Warrior culture supported by simple rites and shamanic practices using euphoric substances for control.',
+	bio: {
+		isCaster: false,
+	},
 	specifics: {
 		size: 'average',
 		massive: true,
@@ -758,22 +953,38 @@ export const villous = {
 		],
 	},
 	path: {
+		skills: [
+			'veille-118',
+			'fouille-34',
+			'jeune-177',
+			'rapine-96',
+			'mendicite-110',
+		],
 		attributes: [
 			{
 				name: 'Cosmopolitan',
 				effect: '1 additional language (F), 1 additional language (E)',
 				description:
 					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
+				value: 0,
+				flavor: '',
+				id: 'cosmopolite-3',
 			},
 			{
 				name: 'Universal comrade',
 				effect: `Naturally welcomed and accepted, advantage in gossip and trade`,
 				description: `Of all the races, humans are clearly the most able to form bonds with the most obscure individuals. Even proud trolls find these voluble little beings friendly, and let's not even mention the dwarves with whom they are almost blood brothers.`,
+				value: 0,
+				flavor: '',
+				id: 'camarade-universel-2',
 			},
 			{
 				name: 'Jack-of-all-trades',
 				effect: `+5 starting skill points`,
 				description: `Because of their great curiosity and the vagaries of life, humans are a resourceful people. a resourceful people who find many subjects of interest. Every different from one individual to the next.`,
+				value: 0,
+				flavor: '',
+				id: 'touche-a-tout-1',
 			},
 		],
 	},
@@ -826,22 +1037,38 @@ export const halfvampire = {
 		],
 	},
 	path: {
+		skills: [
+			'veille-118',
+			'fouille-34',
+			'jeune-177',
+			'rapine-96',
+			'mendicite-110',
+		],
 		attributes: [
 			{
 				name: 'Cosmopolitan',
 				effect: '1 additional language (F), 1 additional language (E)',
 				description:
 					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
+				value: 0,
+				flavor: '',
+				id: 'cosmopolite-3',
 			},
 			{
 				name: 'Universal comrade',
 				effect: `Naturally welcomed and accepted, advantage in gossip and trade`,
 				description: `Of all the races, humans are clearly the most able to form bonds with the most obscure individuals. Even proud trolls find these voluble little beings friendly, and let's not even mention the dwarves with whom they are almost blood brothers.`,
+				value: 0,
+				flavor: '',
+				id: 'camarade-universel-2',
 			},
 			{
 				name: 'Jack-of-all-trades',
 				effect: `+5 starting skill points`,
 				description: `Because of their great curiosity and the vagaries of life, humans are a resourceful people. a resourceful people who find many subjects of interest. Every different from one individual to the next.`,
+				value: 0,
+				flavor: '',
+				id: 'touche-a-tout-1',
 			},
 		],
 	},
@@ -878,6 +1105,9 @@ export const barbarian = {
 	],
 	description:
 		'Towering brutes from frozen lands, barbarians live in tight-knit clans ruled by pride and the “spirit of the belly,” to whom daily food is offered. Shirtless for honor, they love to fight, feast, and hunt. Once isolated, they joined the war against the Grand Moisi, led by Colonel Christophe. Now, each clan seeks glory in the yearly Royal Battle, armed with enchanted gear and a thirst for brawling.',
+	bio: {
+		isCaster: false,
+	},
 	specifics: {
 		size: 'average',
 		massive: true,
@@ -893,22 +1123,38 @@ export const barbarian = {
 		],
 	},
 	path: {
+		skills: [
+			'veille-118',
+			'fouille-34',
+			'jeune-177',
+			'rapine-96',
+			'mendicite-110',
+		],
 		attributes: [
 			{
 				name: 'Cosmopolitan',
 				effect: '1 additional language (F), 1 additional language (E)',
 				description:
 					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
+				value: 0,
+				flavor: '',
+				id: 'cosmopolite-3',
 			},
 			{
 				name: 'Universal comrade',
 				effect: `Naturally welcomed and accepted, advantage in gossip and trade`,
 				description: `Of all the races, humans are clearly the most able to form bonds with the most obscure individuals. Even proud trolls find these voluble little beings friendly, and let's not even mention the dwarves with whom they are almost blood brothers.`,
+				value: 0,
+				flavor: '',
+				id: 'camarade-universel-2',
 			},
 			{
 				name: 'Jack-of-all-trades',
 				effect: `+5 starting skill points`,
 				description: `Because of their great curiosity and the vagaries of life, humans are a resourceful people. a resourceful people who find many subjects of interest. Every different from one individual to the next.`,
+				value: 0,
+				flavor: '',
+				id: 'touche-a-tout-1',
 			},
 		],
 	},
@@ -945,6 +1191,9 @@ export const halfogre = {
 	],
 	description:
 		'Half-ogres appear as walking piles of belongings, but beneath their gear are big-hearted individuals. Descended from giants, they possess impressive size and strength, often simply called "ogres." Their sturdy frames support their bulky limbs and round bellies, making them the largest civilized beings. They carry all their possessions and adorn themselves with numerous trinkets and jewelry. Their most striking feature is their simple, honest smile that softens their rugged faces.',
+	bio: {
+		isCaster: false,
+	},
 	specifics: {
 		size: 'large',
 		massive: true,
@@ -960,22 +1209,38 @@ export const halfogre = {
 		],
 	},
 	path: {
+		skills: [
+			'veille-118',
+			'fouille-34',
+			'jeune-177',
+			'rapine-96',
+			'mendicite-110',
+		],
 		attributes: [
 			{
 				name: 'Cosmopolitan',
 				effect: '1 additional language (F), 1 additional language (E)',
 				description:
 					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
+				value: 0,
+				flavor: '',
+				id: 'cosmopolite-3',
 			},
 			{
 				name: 'Universal comrade',
 				effect: `Naturally welcomed and accepted, advantage in gossip and trade`,
 				description: `Of all the races, humans are clearly the most able to form bonds with the most obscure individuals. Even proud trolls find these voluble little beings friendly, and let's not even mention the dwarves with whom they are almost blood brothers.`,
+				value: 0,
+				flavor: '',
+				id: 'camarade-universel-2',
 			},
 			{
 				name: 'Jack-of-all-trades',
 				effect: `+5 starting skill points`,
 				description: `Because of their great curiosity and the vagaries of life, humans are a resourceful people. a resourceful people who find many subjects of interest. Every different from one individual to the next.`,
+				value: 0,
+				flavor: '',
+				id: 'touche-a-tout-1',
 			},
 		],
 	},
@@ -1012,6 +1277,9 @@ export const troll = {
 	],
 	description:
 		'Trolls are a simple people with cryptic traditions, adorning their slender bodies with bone jewelry, ritualistic paintings, and scarifications. Prominent tusks symbolize spiritual elevation, not physical prowess. Their coarse hair is often braided or styled with pigmented grease. Though sometimes mistaken for the forest-dwelling drolles due to the greenish hue of Peacefull Landes trolls, they are a proud and civilized race. Their origins are linked to the Grand Bazaar, surprisingly, given their pacifistic nature and vigilance over their territories.',
+	bio: {
+		isCaster: false,
+	},
 	specifics: {
 		size: 'average',
 		speaks: [
@@ -1026,22 +1294,38 @@ export const troll = {
 		],
 	},
 	path: {
+		skills: [
+			'veille-118',
+			'fouille-34',
+			'jeune-177',
+			'rapine-96',
+			'mendicite-110',
+		],
 		attributes: [
 			{
 				name: 'Cosmopolitan',
 				effect: '1 additional language (F), 1 additional language (E)',
 				description:
 					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
+				value: 0,
+				flavor: '',
+				id: 'cosmopolite-3',
 			},
 			{
 				name: 'Universal comrade',
 				effect: `Naturally welcomed and accepted, advantage in gossip and trade`,
 				description: `Of all the races, humans are clearly the most able to form bonds with the most obscure individuals. Even proud trolls find these voluble little beings friendly, and let's not even mention the dwarves with whom they are almost blood brothers.`,
+				value: 0,
+				flavor: '',
+				id: 'camarade-universel-2',
 			},
 			{
 				name: 'Jack-of-all-trades',
 				effect: `+5 starting skill points`,
 				description: `Because of their great curiosity and the vagaries of life, humans are a resourceful people. a resourceful people who find many subjects of interest. Every different from one individual to the next.`,
+				value: 0,
+				flavor: '',
+				id: 'touche-a-tout-1',
 			},
 		],
 	},
@@ -1063,6 +1347,8 @@ export const troll = {
 	},
 };
 
+// TYPES
+
 type Language = {
 	label: string;
 	value: string;
@@ -1073,6 +1359,7 @@ type Bio = {
 };
 
 type Path = {
+	skills: string[];
 	attributes: Attribute[];
 };
 
@@ -1080,15 +1367,13 @@ type Attribute = {
 	name: string;
 	effect: string;
 	description: string;
-};
-
-type SpecificSpeak = {
-	language: string;
-	mastery: number;
+	flavor?: string | null;
+	id?: string;
+	value?: number | null;
 };
 
 type Specifics = {
-	speaks: SpecificSpeak[];
+	speaks: SpecificLanguage[];
 	size?: string;
 	massive?: boolean;
 };

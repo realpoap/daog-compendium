@@ -1,15 +1,11 @@
 import TagBadge from '@/components/TagBadge';
 import { characterAttributes } from '@/data/charattributesData';
-import { SpecieDataForm } from '@/data/speciesProfile';
+import { useCharacterForm } from '@/store/characterContext';
 import { capitalizeFirstLetter } from '@/utils/capitalize';
 import { Attribute } from '@api/lib/ZodCreature';
 import { useEffect, useMemo, useState } from 'react';
-import { useFormContext } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
-type Props = {
-	selected: SpecieDataForm | undefined;
-};
 // Function to shuffle an array using the Fisher-Yates algorithm
 const shuffleArray = (array: Attribute[]) => {
 	const shuffled = [...array];
@@ -20,17 +16,67 @@ const shuffleArray = (array: Attribute[]) => {
 	return shuffled;
 };
 
-const CharFormStep5 = ({ selected }: Props) => {
-	const methods = useFormContext();
-
-	const { setValue } = methods;
-	const [selectedAttributes, setSelectedAttributes] = useState<Attribute[]>([]);
+const CharFormStep5 = () => {
+	const { methods, formData } = useCharacterForm();
 	const [searchTerm, setSearchTerm] = useState('');
+	const [selectedAttributes, setSelectedAttributes] = useState<Attribute[]>([]);
+	const startingAttributes = formData.path?.attributes || [];
 
+	// On component mount, just set the selectedAttributes without updating the form
 	useEffect(() => {
-		setValue('path.attributes', selectedAttributes);
-		console.log(methods.getValues());
-	}, [selectedAttributes, setValue]);
+		const allAttrs = methods.getValues('path.attributes') || [];
+		const foundAttr = allAttrs.filter(
+			attr => !startingAttributes.some(start => start.id === attr.id),
+		);
+		console.log('Initial foundAttr', foundAttr);
+		setSelectedAttributes(foundAttr);
+	}, []);
+
+	// Unified function to update both state and form when attributes change
+	const updateAttributesAndForm = (newSelectedAttributes: Attribute[]) => {
+		// Update the form with combined attributes
+		const attributeList = [...startingAttributes, ...newSelectedAttributes];
+		methods.setValue('path.attributes', attributeList);
+
+		// Update the state
+		setSelectedAttributes(newSelectedAttributes);
+	};
+
+	// Modify toggleAttribute to use the unified update function
+	const toggleAttribute = (attr: Attribute) => {
+		if (!attr.value) return;
+		if (totalValue + attr.value > 3 || totalValue + attr.value < -3) {
+			toast.error('Your character is already far too unbalanced.');
+			return;
+		}
+		if (selectedAttributes.length > 6) {
+			toast.error(`You know you can't select them all, right ?`);
+			return;
+		}
+
+		// Calculate new selected attributes
+		const exists = selectedAttributes.some(a => a.id === attr.id);
+		const newSelected = exists
+			? selectedAttributes.filter(a => a.id !== attr.id)
+			: [...selectedAttributes, attr];
+
+		// Update both state and form
+		updateAttributesAndForm(newSelected);
+	};
+
+	// Modify removeAttribute to use the unified update function
+	const removeAttribute = (attr: Attribute) => {
+		if (!attr.value) return;
+
+		// Calculate new selected attributes
+		const exists = selectedAttributes.some(a => a.id === attr.id);
+		const newSelected = exists
+			? selectedAttributes.filter(a => a.id !== attr.id)
+			: [...selectedAttributes, attr];
+
+		// Update both state and form
+		updateAttributesAndForm(newSelected);
+	};
 
 	const shuffledAttributes = useMemo(() => {
 		return characterAttributes ? shuffleArray(characterAttributes) : [];
@@ -41,29 +87,6 @@ const CharFormStep5 = ({ selected }: Props) => {
 			attr.name.toLowerCase().includes(searchTerm.toLowerCase()),
 		);
 	}, [shuffledAttributes, searchTerm]);
-
-	const toggleAttribute = (attr: Attribute) => {
-		if (!attr.value) return;
-		if (totalValue + attr.value > 3 || totalValue + attr.value < -3) {
-			toast.error('Your character is already far too unbalanced.');
-			return;
-		}
-		if (selectedAttributes.length > 6) {
-			toast.error(`You know you can't select them all, right ?`);
-		}
-		setSelectedAttributes(prev => {
-			const exists = prev.some(a => a.id === attr.id);
-			return exists ? prev.filter(a => a.id !== attr.id) : [...prev, attr];
-		});
-	};
-	const removeAttribute = (attr: Attribute) => {
-		if (!attr.value) return;
-
-		setSelectedAttributes(prev => {
-			const exists = prev.some(a => a.id === attr.id);
-			return exists ? prev.filter(a => a.id !== attr.id) : [...prev, attr];
-		});
-	};
 
 	const totalValue = selectedAttributes.reduce(
 		(sum, attr) => (attr.value ? sum + attr.value : sum),
@@ -154,8 +177,8 @@ const CharFormStep5 = ({ selected }: Props) => {
 										/>
 									</div>
 								))}
-							{selected &&
-								selected.path.attributes.map(attr => (
+							{startingAttributes &&
+								startingAttributes.map(attr => (
 									<div
 										key={attr.name}
 										className='tooltip'

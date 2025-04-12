@@ -234,7 +234,7 @@ export const skillsData: SkillData[] = [
 	},
 	{
 		id: 'derobade-29',
-		name: 'Slipping Away',
+		name: 'Evasion',
 		stat: 'agi',
 		mastery: 'defense',
 		description:
@@ -242,7 +242,7 @@ export const skillsData: SkillData[] = [
 	},
 	{
 		id: 'esquive-30',
-		name: 'Evasion',
+		name: 'Dodge',
 		stat: 'agi',
 		mastery: 'defense',
 		description:
@@ -514,7 +514,7 @@ export const skillsData: SkillData[] = [
 	},
 	{
 		id: 'calcul-mental-64',
-		name: 'Mental Calculation',
+		name: 'Arithmetic',
 		stat: 'éru',
 		mastery: 'logic',
 		description:
@@ -522,7 +522,7 @@ export const skillsData: SkillData[] = [
 	},
 	{
 		id: 'classement-65',
-		name: 'Classification',
+		name: 'Ranking',
 		stat: 'éru',
 		mastery: 'logic',
 		description:
@@ -863,7 +863,7 @@ export const skillsData: SkillData[] = [
 	},
 	{
 		id: 'commerce-108',
-		name: 'Commerce',
+		name: 'Trade',
 		stat: 'soc',
 		mastery: 'trading',
 		description: 'The activity of buying and selling goods or services.',
@@ -1212,7 +1212,7 @@ export const skillsData: SkillData[] = [
 	},
 	{
 		id: 'lecture-ecriture-153',
-		name: 'Reading & Writing',
+		name: 'Letters',
 		stat: 'éru',
 		mastery: 'knowledge',
 		description:
