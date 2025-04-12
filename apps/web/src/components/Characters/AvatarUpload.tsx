@@ -131,9 +131,12 @@ const AvatarUpload = ({ char }: Props) => {
 		>
 			<div className='z-50 flex w-full items-center justify-center'>
 				<div className='avatar avatar-placeholder group flex flex-col items-center justify-center'>
-					<div className='bg-tile font-grenze text-primary size-16 rounded-full shadow shadow-sm'>
+					<div className='shadow-primary bg-tile font-grenze text-primary mask mask-hexagon size-16 shadow-sm'>
 						{ikUploadRefTest && char.bio.avatar?.url == null ? (
-							<button onClick={() => ikUploadRefTest.current?.click()}>
+							<button
+								className=''
+								onClick={() => ikUploadRefTest.current?.click()}
+							>
 								<span className='text-3xl group-hover:hidden'>
 									{char.bio.name.charAt(0)}
 								</span>

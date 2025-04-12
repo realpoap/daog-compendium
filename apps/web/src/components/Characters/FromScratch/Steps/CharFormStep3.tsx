@@ -9,14 +9,11 @@ const CharFormStep3 = () => {
 	);
 	const [isListOpen, setIsListOpen] = useState(false);
 
-	const handleOriginSelect = useCallback(
-		(origin: OriginCharacter) => {
-			setSelectedOrigin(origin);
-			setValue('path.origin', origin.name); // Enregistrez le nom de l'origine dans le formulaire
-			setIsListOpen(false); // Fermez la liste après la sélection
-		},
-		[setValue],
-	);
+	const handleOriginSelect = (origin: OriginCharacter) => {
+		setSelectedOrigin(origin);
+		setValue('path.origin', origin.name); // Enregistrez le nom de l'origine dans le formulaire
+		setIsListOpen(false); // Fermez la liste après la sélection
+	};
 
 	const toggleList = useCallback(() => {
 		setIsListOpen(prev => !prev);

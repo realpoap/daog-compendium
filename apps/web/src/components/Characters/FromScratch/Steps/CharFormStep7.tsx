@@ -1,21 +1,14 @@
-import {
-	Checkbox,
-	Field,
-	InputNumber,
-	Select,
-} from '@/components/RHFComponents';
-import { SpecieDataForm } from '@/data/speciesProfile';
+import { Field, InputNumber, Select } from '@/components/RHFComponents';
 import {
 	creatureAlignmentOptions,
 	creatureGenderOptions,
-	creatureSizeOptions,
 } from '@/types/creatureOptions';
 
-type Props = {
-	selected: SpecieDataForm | undefined;
-};
+// type Props = {
+// 	selected: SpecieDataForm | undefined;
+// };
 
-const CharFormStep7 = ({ selected }: Props) => {
+const CharFormStep7 = () => {
 	return (
 		<>
 			<Field
@@ -53,7 +46,7 @@ const CharFormStep7 = ({ selected }: Props) => {
 					<InputNumber name='specifics.height' />
 				</Field>
 			</div>
-			<div className='flex w-full flex-row items-center justify-center gap-2'>
+			{/* <div className='flex w-full flex-row items-center justify-center gap-2'>
 				<Field
 					name='specifics.size'
 					width='third'
@@ -63,6 +56,7 @@ const CharFormStep7 = ({ selected }: Props) => {
 						name='specifics.size'
 						options={creatureSizeOptions}
 						defaultValue=''
+						disabled
 					/>
 				</Field>
 				<Field
@@ -77,7 +71,7 @@ const CharFormStep7 = ({ selected }: Props) => {
 						checked={selected?.specifics.massive}
 					/>
 				</Field>
-			</div>
+			</div> */}
 			<Field
 				name='specifics.alignment'
 				width='third'

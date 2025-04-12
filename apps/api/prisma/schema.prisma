@@ -220,7 +220,7 @@ type Path {
   skills  Skill[]
   feats Feat[]
   talentTree  String?
-  origin Origin?
+  origin Origin? 
   actions CreatureAction[]
   attributes CreatureAttribute[]
   actionList      ActionList?
@@ -303,6 +303,7 @@ type Carreer {
 }
 
 type Skill {
+  id  String?
   name  String
   mastery String
   description String?

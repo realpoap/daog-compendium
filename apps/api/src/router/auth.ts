@@ -5,8 +5,8 @@ import {
 	registerHandler,
 } from '@api/controllers/auth-controller';
 import { getMeHandler } from '@api/controllers/user-controller';
-import { prisma } from '@api/prismaClient';
 import { ZodLogin, ZodUser } from '@api/lib/ZodUser';
+import { prisma } from '@api/prismaClient';
 import { procedure, router } from '@api/trpc';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';

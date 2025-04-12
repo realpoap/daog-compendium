@@ -44,15 +44,14 @@ const CharacterFormInner = () => {
 
 	const [selectedSpecieData, setSelectedSpecieData] =
 		useState<SpecieDataForm>();
-	const selectedSpecie = useWatch({ control, name: 'bio.specie' });
-	const selectedSub = useWatch({ control, name: 'bio.subspecie' });
+	const selectedSub = useWatch({ control, name: 'bio.subspecies' });
 
 	useEffect(() => {
 		if (selectedSub !== '')
 			setSelectedSpecieData(
 				allSpecies.find(specie => specie.sub === selectedSub),
 			);
-	}, [selectedSub, selectedSpecie]);
+	}, [selectedSub]);
 
 	const nextStep = () => {
 		if (currentStep < steps.length - 1) setCurrentStep(prev => prev + 1);
@@ -66,6 +65,7 @@ const CharacterFormInner = () => {
 			// Final step → submit to backend
 			console.log('Submit character:', data);
 		} else {
+			console.log('Step valid data:', data);
 			nextStep();
 		}
 	});
@@ -95,12 +95,12 @@ const CharacterFormInner = () => {
 		{
 			id: 5,
 			label: 'Skills',
-			component: <CharFormStep6 selected={selectedSpecieData} />,
+			component: <CharFormStep6 />,
 		},
 		{
 			id: 6,
 			label: 'Features',
-			component: <CharFormStep7 selected={selectedSpecieData} />,
+			component: <CharFormStep7 />,
 		},
 		{ id: 7, label: 'Background', component: <CharFormStep8 /> },
 		{ id: 8, label: 'Talent & Feats', component: <CharFormStep9 /> },
