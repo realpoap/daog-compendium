@@ -1,6 +1,8 @@
 import { SpecieDataForm, allSpecies } from '@/data/speciesProfile';
+import { useAuth } from '@/store/authContext';
 import { useCharacterForm } from '@/store/characterContext';
 import { defaultValuesCharacter } from '@/types/defaultValuesCharacter';
+import { setupCompleteCharacterFormValues } from '@/utils/setCharacterFormData';
 import { NewCharacter, NewCharacterSchema } from '@api/lib/ZodCharacter';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
@@ -23,8 +25,17 @@ import CharFormStep9 from './Steps/CharFormStep9';
 
 const CharacterFormNavigation = () => {
 	const methods = useForm<NewCharacter>({
-		resolver: zodResolver(NewCharacterSchema),
 		defaultValues: defaultValuesCharacter,
+		mode: 'onChange',
+		resolver: async (data, context, options) => {
+			// you can debug your validation schema here
+			console.log('formData', data);
+			console.log(
+				'validation result',
+				await zodResolver(NewCharacterSchema)(data, context, options),
+			);
+			return zodResolver(NewCharacterSchema)(data, context, options);
+		},
 		shouldFocusError: true,
 	});
 
@@ -38,7 +49,8 @@ const CharacterFormNavigation = () => {
 };
 
 const CharacterFormInner = () => {
-	const methods = useFormContext();
+	const { user } = useAuth();
+	const methods = useFormContext<NewCharacter>();
 	const { control, handleSubmit } = methods;
 	const { currentStep, setCurrentStep } = useCharacterForm();
 
@@ -63,7 +75,7 @@ const CharacterFormInner = () => {
 	const onSubmit = handleSubmit(data => {
 		if (currentStep === steps.length - 1) {
 			// Final step → submit to backend
-			console.log('Submit character:', data);
+			setupCompleteCharacterFormValues(methods, user);
 		} else {
 			console.log('Step valid data:', data);
 			nextStep();

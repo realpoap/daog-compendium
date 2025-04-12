@@ -11,7 +11,8 @@ const CharFormStep3 = () => {
 
 	const handleOriginSelect = (origin: OriginCharacter) => {
 		setSelectedOrigin(origin);
-		setValue('path.origin', origin.name); // Enregistrez le nom de l'origine dans le formulaire
+		console.log(origin);
+		setValue('path.origin', origin);
 		setIsListOpen(false); // Fermez la liste après la sélection
 	};
 
@@ -105,23 +106,18 @@ const CharFormStep3 = () => {
 			</fieldset>
 
 			{selectedOrigin && (
-				<div className='font-cabin rounded-md border p-4 shadow-sm'>
-					<h3 className='mb-2 text-lg font-semibold'>{selectedOrigin.name}</h3>
-					<p className='mb-2'>{selectedOrigin.description}</p>
-					<div className='grid grid-cols-2 gap-2 text-sm'>
+				<div className='font-cabin bg-tile flex flex-col rounded-lg p-4 shadow-sm'>
+					<h3 className='text-lg font-semibold'>{selectedOrigin.name}</h3>
+					<p className='text-sm italic'>{selectedOrigin.description}</p>
+					<div className='flex flex-col text-sm'>
 						<div>
-							<strong>Bonus de stats :</strong>{' '}
-							{selectedOrigin.statBonus.join(', ')}
+							<strong>Profile bonus :</strong>{' '}
+							{selectedOrigin.profileBonus.join(', ')}
 						</div>
 						<div>
-							<strong>Compétence 1 :</strong> {selectedOrigin.skill1}
+							<strong>Skills :</strong> {selectedOrigin.skills.join(', ')}
 						</div>
-						<div>
-							<strong>Compétence 2 :</strong> {selectedOrigin.skill2}
-						</div>
-						<div>
-							<strong>Compétence 3 :</strong> {selectedOrigin.skill3}
-						</div>
+
 						<div>
 							<strong>Connaissances :</strong>{' '}
 							{selectedOrigin.knowledges.join(', ')}

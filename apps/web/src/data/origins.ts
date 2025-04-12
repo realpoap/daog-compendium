@@ -1,9 +1,7 @@
 export type OriginCharacter = {
 	name: string;
-	statBonus: string[];
-	skill1: string;
-	skill2: string;
-	skill3: string;
+	profileBonus: string[];
+	skills: string[];
 	knowledges: string[];
 	equipmentA: string[];
 	equipmentB: string[];
@@ -12,10 +10,8 @@ export type OriginCharacter = {
 export const origins: OriginCharacter[] = [
 	{
 		name: 'Petty Thug',
-		statBonus: ['AGI', 'WIL', 'CHA'],
-		skill1: 'mockery',
-		skill2: 'lockpicking',
-		skill3: 'evasion',
+		profileBonus: ['AGI', 'WIL', 'CHA'],
+		skills: ['mockery', 'lockpicking', 'evasion'],
 		knowledges: ['shady districts', 'law', 'thief tools'],
 		equipmentA: ['dagger', 'hood', 'lockpicking tools'],
 		equipmentB: ['club', 'pouch', 'heavy boots'],
@@ -24,10 +20,8 @@ export const origins: OriginCharacter[] = [
 	},
 	{
 		name: 'Naive Country Kid',
-		statBonus: ['INS', 'STR', 'VIT'],
-		skill1: 'animal care',
-		skill2: 'gossip',
-		skill3: 'whistling',
+		profileBonus: ['INS', 'STR', 'VIT'],
+		skills: ['animal care', 'gossip', 'whistling'],
 		knowledges: ['fruits and vegetables', 'rural life', 'common animals'],
 		equipmentA: ['bundle', 'straw hat', 'farmer’s knife'],
 		equipmentB: ['travel bag', 'bird whistle', 'walking stick'],
@@ -36,10 +30,8 @@ export const origins: OriginCharacter[] = [
 	},
 	{
 		name: 'Raised Wildling',
-		statBonus: ['AGI', 'INS', 'SEN'],
-		skill1: 'fasting',
-		skill2: 'animal calls',
-		skill3: 'stealth',
+		profileBonus: ['AGI', 'INS', 'SEN'],
+		skills: ['fasting', 'animal calls', 'stealth'],
 		knowledges: ['edible plants', 'animal tracks', 'survivalism'],
 		equipmentA: ['tunic', 'club', 'scarf'],
 		equipmentB: ['loincloth', 'fur vest', 'flint spear'],
@@ -48,10 +40,8 @@ export const origins: OriginCharacter[] = [
 	},
 	{
 		name: 'Child Mage',
-		statBonus: ['SEN', 'WIL', 'INS'],
-		skill1: 'pantomime',
-		skill2: 'recitation',
-		skill3: 'rituals',
+		profileBonus: ['SEN', 'WIL', 'INS'],
+		skills: ['pantomime', 'recitation', 'rituals'],
 		knowledges: [
 			'types of magic',
 			'common magical monsters',
@@ -64,10 +54,8 @@ export const origins: OriginCharacter[] = [
 	},
 	{
 		name: 'Boarding School Student',
-		statBonus: ['ERU', 'END', 'SOC'],
-		skill1: 'recitation',
-		skill2: 'filing',
-		skill3: 'stealth',
+		profileBonus: ['ERU', 'END', 'SOC'],
+		skills: ['recitation', 'filing', 'stealth'],
 		knowledges: ['school gossip', 'education system', 'etiquette'],
 		equipmentA: ['notebook', 'uniform', 'backpack'],
 		equipmentB: ['school crest pin', 'hidden snack pouch', 'ruler'],
@@ -76,10 +64,8 @@ export const origins: OriginCharacter[] = [
 	},
 	{
 		name: 'Juvenile Athlete',
-		statBonus: ['AGI', 'STR', 'CHA'],
-		skill1: 'acrobatics',
-		skill2: 'fasting',
-		skill3: 'filing',
+		profileBonus: ['AGI', 'STR', 'CHA'],
+		skills: ['acrobatics', 'fasting', 'filing'],
 		knowledges: ['sports teams', 'competitions', 'body training basics'],
 		equipmentA: ['training gear', 'water flask', 'wristbands'],
 		equipmentB: ['ball', 'protein bar', 'sandals'],
@@ -88,10 +74,8 @@ export const origins: OriginCharacter[] = [
 	},
 	{
 		name: 'Hidden Disciple',
-		statBonus: ['AGI', 'CEL', 'SEN'],
-		skill1: 'stealth',
-		skill2: 'filing',
-		skill3: 'martial arts',
+		profileBonus: ['AGI', 'CEL', 'SEN'],
+		skills: ['stealth', 'filing', 'martial arts'],
 		knowledges: ['secret societies', 'pressure points', 'inner balance'],
 		equipmentA: ['practice robe', 'rice ball', 'wooden sword'],
 		equipmentB: ['belted tunic', 'hidden dagger', 'meditation stone'],
@@ -100,10 +84,8 @@ export const origins: OriginCharacter[] = [
 	},
 	{
 		name: 'Seasonal Greengrocer',
-		statBonus: ['SOC', 'ERU', 'STR'],
-		skill1: 'herbalism',
-		skill2: 'mental arithmetic',
-		skill3: 'chatter',
+		profileBonus: ['SOC', 'ERU', 'STR'],
+		skills: ['herbalism', 'mental arithmetic', 'chatter'],
 		knowledges: ['market life', 'seasonal produce', 'haggling techniques'],
 		equipmentA: ['stall apron', 'scales', 'pocket ledger'],
 		equipmentB: ['crate of fruit', 'vendor hat', 'pouch of small coins'],
@@ -112,10 +94,8 @@ export const origins: OriginCharacter[] = [
 	},
 	{
 		name: 'Disgraced Noble',
-		statBonus: ['DEX', 'CHA', 'ERU'],
-		skill1: 'etiquette',
-		skill2: 'heraldry',
-		skill3: 'fencing',
+		profileBonus: ['DEX', 'CHA', 'ERU'],
+		skills: ['etiquette', 'heraldry', 'fencing'],
 		knowledges: ['noble houses', 'court intrigues', 'literature'],
 		equipmentA: ['embroidered shirt', 'family signet ring', 'fencing foil'],
 		equipmentB: ['worn cloak', 'etiquette manual', 'hidden coin purse'],

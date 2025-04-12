@@ -45,7 +45,7 @@ export const moufflian = {
 				mastery: 2,
 			},
 		],
-	}, // TODO: add skill list from skilldatabase (pull object)
+	},
 	profile: {
 		statsStarting: {
 			CEL: 15,
@@ -269,7 +269,7 @@ export const durhkran = {
 	languages: [
 		{
 			label: 'moufflian slang',
-			value: 'moufflian slang',
+			value: 'moufflian_slang',
 		},
 		{
 			label: 'dwarven runes',
@@ -1122,6 +1122,25 @@ export type SpecieDataForm = {
 	path: Path;
 	bio?: Bio;
 	description?: string;
+};
+
+export const speciesMap: Record<string, SpecieDataForm> = {
+	moufflian,
+	inclay,
+	bourguignon,
+	armagnac,
+	durhkran,
+	grey,
+	republican,
+	royalist,
+	free,
+	proschöne,
+	pipourray,
+	villous,
+	'half-vampire': halfvampire,
+	'half-ogre': halfogre,
+	barbarian,
+	troll,
 };
 
 export const allSpecies = [
