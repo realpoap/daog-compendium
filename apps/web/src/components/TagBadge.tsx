@@ -20,7 +20,7 @@ const TagBadge = ({ onClick, index, text, xl, button = true }: Props) => {
 						'hover:animate-shake hover:bg-background hover:text-error cursor-pointer transition-all duration-75 hover:shadow-black':
 							button,
 						'h-6 text-[0.9rem]': xl,
-						glass: !button,
+						'glass cursor-default opacity-70': !button,
 					},
 				)}
 				onClick={onClick}
