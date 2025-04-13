@@ -3,8 +3,10 @@ import { useAuth } from '@/store/authContext';
 import { useCharacterForm } from '@/store/characterContext';
 import { setObjectSkills } from '@/utils/objectSkills';
 import { setupCompleteCharacterFormValues } from '@/utils/setCharacterFormData';
+import { trpc } from '@/utils/trpc';
 import { useEffect, useState } from 'react';
 import { FormProvider, useWatch } from 'react-hook-form';
+import toast from 'react-hot-toast';
 import CharFormStep1 from './Steps/CharFormStep1';
 import CharFormStep10 from './Steps/CharFormStep10';
 import CharFormStep2 from './Steps/CharFormStep2';
@@ -33,6 +35,20 @@ const CharacterFormInner = () => {
 	const { methods, currentStep, nextStep, prevStep, formData, setFormData } =
 		useCharacterForm();
 	const { control, handleSubmit } = methods;
+
+	const createCharacter = trpc.characters.create.useMutation({
+		onSuccess: () => {
+			//methods.reset();
+
+			toast.success('Character created !');
+		},
+		onError: error => {
+			if (error.data?.code === 'UNAUTHORIZED') {
+				toast.error('You must be logged in');
+			} else toast.error('Something bad happened...');
+			throw new Error(error.message);
+		},
+	});
 
 	const [selectedSpecieData, setSelectedSpecieData] =
 		useState<SpecieDataForm>();
@@ -76,7 +92,8 @@ const CharacterFormInner = () => {
 		if (currentStep === steps.length - 1) {
 			// Final step → submit to backend
 			console.log('Final submit:', data);
-			setupCompleteCharacterFormValues(methods, user);
+			const complete = setupCompleteCharacterFormValues(methods, user);
+			createCharacter.mutate(complete);
 		} else {
 			console.log('Step valid data:', data);
 			nextStep();

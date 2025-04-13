@@ -1,6 +1,6 @@
 import { HabitatTypeType, SpellTypeType } from '@api/lib/zod-prisma';
 import { NewAction } from '@api/lib/ZodAction';
-import { Character } from '@api/lib/ZodCharacter';
+import { Character, NewCharacter } from '@api/lib/ZodCharacter';
 import { CreatureComponent } from '@api/lib/ZodComponent';
 import { Creature, CreatureAttribute, NewCreature } from '@api/lib/ZodCreature';
 import { CreatureItem } from '@api/lib/ZodItem';
@@ -228,7 +228,7 @@ const calcModifiersBonus = (creature: Creature | NewCreature) => {
 	return calCreature;
 };
 
-export const calcCharacterStats = (c: Character) => {
+export const calcCharacterStats = (c: Character | NewCharacter) => {
 	if (!c.profile.statsStarting) {
 		c.profile.statsStarting = {
 			CEL: 15,
@@ -245,7 +245,20 @@ export const calcCharacterStats = (c: Character) => {
 			ERU: 15,
 		};
 	}
-	if (!c.profile.stats) c.profile.stats = c.profile.statsStarting;
+	if (!c.profile.stats) {
+		c.profile.stats = { ...c.profile.statsStarting };
+	} else {
+		for (const key in c.profile.statsStarting) {
+			const statKey = key as keyof typeof c.profile.statsStarting;
+			if (
+				c.profile.stats[statKey] === null ||
+				c.profile.stats[statKey] === undefined
+			) {
+				c.profile.stats[statKey] = c.profile.statsStarting[statKey];
+			}
+		}
+	}
+
 	if (!c.status.weight) {
 		c.status.weight = {
 			current: 0,

@@ -1,3 +1,4 @@
+import { defaultValuesCharacter } from '@/types/defaultValuesCharacter';
 import { NewCharacter, NewCharacterSchema } from '@api/lib/ZodCharacter';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
@@ -32,7 +33,7 @@ export const CharacterFormContextProvider = ({
 	const [formData, setFormData] = useState<Partial<NewCharacter>>({});
 
 	const methods = useForm<NewCharacter>({
-		//defaultValues: defaultValuesCharacter,
+		defaultValues: defaultValuesCharacter,
 		mode: 'onChange',
 		shouldFocusError: true,
 		resolver: async (data, context, options) => {

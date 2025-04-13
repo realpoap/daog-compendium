@@ -1039,7 +1039,7 @@ export const halfvampire = {
 				mastery: 3,
 			},
 			{
-				language: 'dead speech' as LanguageEnum,
+				language: 'dead_speech' as LanguageEnum,
 				mastery: 2,
 			},
 		],
