@@ -94,7 +94,7 @@ export const InventorySchema = z.object({
 });
 
 export const SkillSchema = z.object({
-	id: z.string().nullable(),
+	id: z.string(),
 	name: z.string({ required_error: 'It shall be named !' }),
 	mastery: z.string(),
 	description: z.string().nullable(),
@@ -103,6 +103,31 @@ export const SkillSchema = z.object({
 });
 
 export type CharacterSkill = z.infer<typeof SkillSchema>;
+
+export enum LanguageEnum {
+	common = 'common',
+	moufflian_slang = 'moufflian_slang',
+	clay = 'clay',
+	elven = 'elven',
+	dwarvish = 'dwarvish',
+	gnomish = 'gnomish',
+	goblin = 'goblin',
+	giant = 'giant',
+	troll = 'troll',
+	high_elven = 'high_elven',
+	titan = 'titan',
+	rosmary = 'rosmary',
+	dead_speech = 'dead_speech',
+	fifilanto = 'fifilanto',
+	primal = 'primal',
+	amphibian = 'amphibian',
+	silvan = 'silvan',
+	signs = 'signs',
+	thieves_marks = 'thieves_marks',
+	forester_symbols = 'forester_symbols',
+	dwarven_runes = 'dwarven_runes',
+	kabbalistic_glyphs = 'kabbalistic_glyphs',
+}
 
 export const languagesSchema = z.enum([
 	'common',
@@ -129,10 +154,14 @@ export const languagesSchema = z.enum([
 	'kabbalistic_glyphs',
 ]);
 
+export type LanguageList = z.infer<typeof languagesSchema>;
+
 export const LanguageSchema = z.object({
 	language: languagesSchema,
 	mastery: z.number().int(),
 });
+
+export type SpecificLanguage = z.infer<typeof LanguageSchema>;
 
 export const FeatSchema = z.object({
 	name: z.string(),

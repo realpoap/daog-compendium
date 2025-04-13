@@ -151,14 +151,14 @@ type Specifics {
   size            CreatureSize @default(average)
   sizeBonus Int @default(0)
   alignment       Alignment @default(neutral)
-  background          String?
+  background          String? 
   description     String?
-  age Int?
+  age Int? @default(0)
   gender gender?
-  weight Int?
-  height Int?
+  weight Int? @default(0)
+  height Int? @default(0)
   bornIn String?
-  restBonus Int?
+  restBonus Int? @default(0)
   dmgBonus DamageBonus?
   speaks Language[]
   massive Boolean @default(false)
@@ -303,7 +303,7 @@ type Carreer {
 }
 
 type Skill {
-  id  String?
+  id  String
   name  String
   mastery String
   description String?

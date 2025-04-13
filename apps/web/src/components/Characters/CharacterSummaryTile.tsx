@@ -129,7 +129,7 @@ const CharacterSummaryTile = ({
 										<span className='px-1 py-0 text-xs'>{`Exp: ${char.profile.experience}/${char.profile.level * 100}`}</span>
 									</div>
 									<progress
-										className='progress progress-primary h-[0.1rem] transition-all duration-1000 [&::-moz-progress-bar]:transition-all [&::-webkit-progress-value]:transition-all'
+										className='progress progress-primary h-1 transition-all duration-1000 [&::-moz-progress-bar]:transition-all [&::-webkit-progress-value]:transition-all'
 										value={currentExp}
 										max={char.profile.level * 100}
 									></progress>

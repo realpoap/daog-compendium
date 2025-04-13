@@ -29,6 +29,8 @@ export const setupCompleteCharacterFormValues = (
 	setupBio(methods, user);
 	setupStatus(methods);
 	methods.setValue('masteries', masteriesReset);
+
+	return methods.getValues();
 };
 
 const setupBio = (
@@ -50,19 +52,17 @@ const setupBio = (
 		methods.setValue('bio.owner', user.id);
 	}
 
-	const selectedKey = subspecies || species;
-	const selectedSpecies = speciesMap[selectedKey];
-	if (selectedSpecies) {
-		methods.setValue(
-			'profile.statsStarting',
-			selectedSpecies.profile.statsStarting,
-		);
+	if (subspecies) {
+		const selectedKey = subspecies;
+		const selectedSpecies = speciesMap[selectedKey];
+		if (selectedSpecies) {
+			methods.setValue(
+				'profile.statsStarting',
+				selectedSpecies.profile.statsStarting,
+			);
+		}
+		methods.setValue('bio.isCaster', selectedSpecies.bio?.isCaster || false);
 	}
-
-	methods.setValue(
-		'bio.isCaster',
-		speciesMap[selectedKey].bio?.isCaster || false,
-	);
 };
 
 const setupStatus = (methods: UseFormReturn<NewCharacter>) => {
@@ -76,4 +76,6 @@ const setupStatus = (methods: UseFormReturn<NewCharacter>) => {
 	methods.setValue('status.weight.current', 0);
 	methods.setValue('status.magicLoad.max', 1 + levelBonus);
 	methods.setValue('status.magicLoad.current', 0);
+
+	methods.setValue('path.actionList.limited', levelBonus);
 };
