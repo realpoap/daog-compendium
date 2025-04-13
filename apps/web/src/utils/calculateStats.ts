@@ -1,6 +1,6 @@
 import { HabitatTypeType, SpellTypeType } from '@api/lib/zod-prisma';
 import { NewAction } from '@api/lib/ZodAction';
-import { Character, NewCharacter } from '@api/lib/ZodCharacter';
+import { Character } from '@api/lib/ZodCharacter';
 import { CreatureComponent } from '@api/lib/ZodComponent';
 import { Creature, CreatureAttribute, NewCreature } from '@api/lib/ZodCreature';
 import { CreatureItem } from '@api/lib/ZodItem';
@@ -228,7 +228,7 @@ const calcModifiersBonus = (creature: Creature | NewCreature) => {
 	return calCreature;
 };
 
-export const calcCharacterStats = (c: Character | NewCharacter) => {
+export const calcCharacterStats = (c: Character) => {
 	if (!c.profile.statsStarting) {
 		c.profile.statsStarting = {
 			CEL: 15,

@@ -1,9 +1,5 @@
 import { speciesMap } from '@/data/speciesProfile'; // Move your statsMap there
-import {
-	calcCharacterStats,
-	masteriesReset,
-	variablesReset,
-} from '@/utils/calculateStats';
+import { masteriesReset, variablesReset } from '@/utils/calculateStats';
 import { NewCharacter } from '@api/lib/ZodCharacter';
 import { UserWithoutPass } from '@api/lib/ZodUser';
 import { UseFormReturn } from 'react-hook-form';
@@ -33,9 +29,6 @@ export const setupCompleteCharacterFormValues = (
 	setupBio(methods, user);
 	setupStatus(methods);
 	methods.setValue('masteries', masteriesReset);
-
-	const calcCharacter = calcCharacterStats(methods.getValues());
-	methods.reset(calcCharacter);
 
 	return methods.getValues();
 };
