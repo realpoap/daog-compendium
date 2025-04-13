@@ -60,6 +60,8 @@ const CharacterFormInner = () => {
 					specifics: {
 						...prev.specifics,
 						speaks: languagelist,
+						description: '',
+						background: '',
 					},
 				}));
 			}

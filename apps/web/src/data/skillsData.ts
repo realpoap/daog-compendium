@@ -1407,7 +1407,7 @@ export const skillsData: SkillData[] = [
 	},
 	{
 		id: 'orientation-178',
-		name: 'Navigation (Survival)',
+		name: 'Exploration',
 		stat: 'éru',
 		mastery: 'survival',
 		description:

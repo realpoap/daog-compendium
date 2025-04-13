@@ -1,7 +1,7 @@
 import { useCharacterForm } from '@/store/characterContext';
 import { cn } from '@/utils/classNames';
 
-import { allSpecies } from 'src/data/speciesProfile';
+import { allSpecies, LanguageEnum } from 'src/data/speciesProfile';
 
 const CharFormStep4 = () => {
 	const { methods, formData } = useCharacterForm();
@@ -11,7 +11,7 @@ const CharFormStep4 = () => {
 	const handleLanguageSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		methods.setValue('specifics.speaks', []);
 		const value = e.target.value;
-		const object = { language: value, mastery: 1 };
+		const object = { language: value as LanguageEnum, mastery: 1 };
 		console.log(object);
 		methods.setValue('specifics.speaks', [...selectedSpeaks, object]);
 	};

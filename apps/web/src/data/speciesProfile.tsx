@@ -1,4 +1,4 @@
-import { SpecificLanguage } from '@api/lib/ZodCharacter';
+import { LanguageList, SpecificLanguage } from '@api/lib/ZodCharacter';
 
 export const moufflian = {
 	specie: 'human',
@@ -7,11 +7,11 @@ export const moufflian = {
 	languages: [
 		{
 			label: 'gnomish',
-			value: 'gnomish',
+			value: 'gnomish' as LanguageEnum,
 		},
 		{
 			label: 'dwarvish',
-			value: 'dwarvish',
+			value: 'dwarvish' as LanguageEnum,
 		},
 	],
 	description:
@@ -52,11 +52,11 @@ export const moufflian = {
 	specifics: {
 		speaks: [
 			{
-				language: 'common',
+				language: 'common' as LanguageEnum,
 				mastery: 3,
 			},
 			{
-				language: 'moufflian_slang',
+				language: 'moufflian_slang' as LanguageEnum,
 				mastery: 2,
 			},
 		],
@@ -91,11 +91,11 @@ export const inclay = {
 	languages: [
 		{
 			label: 'goblin',
-			value: 'goblin',
+			value: 'goblin' as LanguageEnum,
 		},
 		{
 			label: 'moufflian slang',
-			value: 'moufflian_slang',
+			value: 'moufflian_slang' as LanguageEnum,
 		},
 	],
 	path: {
@@ -130,11 +130,11 @@ export const inclay = {
 	specifics: {
 		speaks: [
 			{
-				language: 'clay',
+				language: 'clay' as LanguageEnum,
 				mastery: 3,
 			},
 			{
-				language: 'common',
+				language: 'common' as LanguageEnum,
 				mastery: 2,
 			},
 		],
@@ -163,11 +163,11 @@ export const bourguignon = {
 	languages: [
 		{
 			label: 'high-elven',
-			value: 'high_elven',
+			value: 'high_elven' as LanguageEnum,
 		},
 		{
 			label: 'fifilanto',
-			value: 'fifilanto',
+			value: 'fifilanto' as LanguageEnum,
 		},
 	],
 	description:
@@ -178,11 +178,11 @@ export const bourguignon = {
 	specifics: {
 		speaks: [
 			{
-				language: 'elven',
+				language: 'elven' as LanguageEnum,
 				mastery: 3,
 			},
 			{
-				language: 'common',
+				language: 'common' as LanguageEnum,
 				mastery: 2,
 			},
 		],
@@ -247,11 +247,11 @@ export const armagnac = {
 	languages: [
 		{
 			label: 'dwarvish',
-			value: 'dwarvish',
+			value: 'dwarvish' as LanguageEnum,
 		},
 		{
 			label: `thieves' marks`,
-			value: 'thieves_marks',
+			value: 'thieves_marks' as LanguageEnum,
 		},
 	],
 	description:
@@ -262,11 +262,11 @@ export const armagnac = {
 	specifics: {
 		speaks: [
 			{
-				language: 'common',
+				language: 'common' as LanguageEnum,
 				mastery: 3,
 			},
 			{
-				language: 'elven',
+				language: 'elven' as LanguageEnum,
 				mastery: 2,
 			},
 		],
@@ -332,11 +332,11 @@ export const durhkran = {
 	languages: [
 		{
 			label: 'moufflian slang',
-			value: 'moufflian_slang',
+			value: 'moufflian_slang' as LanguageEnum,
 		},
 		{
 			label: 'dwarven runes',
-			value: 'dwarven_runes',
+			value: 'dwarven_runes' as LanguageEnum,
 		},
 	],
 	description: `Grandmouffle's second attempt at creation, dwarves are short, powerfully built beings born from a less refined but sturdier material than the "effeminate" elves. After the Great Confusion, they settled in mountains, becoming skilled in forging and brewing beer. A tragic split occurred over the prized Granitos biscuits, denied to some turbulent young dwarves. Corrupted by Chaos with promises of endless Granitos, these became the Grey Dwarves, leading to a devastating civil war that remains a painful memory in Durhkran society.`,
@@ -347,11 +347,11 @@ export const durhkran = {
 		size: 'small',
 		speaks: [
 			{
-				language: 'dwarvish',
+				language: 'dwarvish' as LanguageEnum,
 				mastery: 3,
 			},
 			{
-				language: 'common',
+				language: 'common' as LanguageEnum,
 				mastery: 2,
 			},
 		],
@@ -416,11 +416,11 @@ export const grey = {
 	languages: [
 		{
 			label: 'goblin',
-			value: 'goblin',
+			value: 'goblin' as LanguageEnum,
 		},
 		{
 			label: 'kabbalistic glyphs',
-			value: 'kabbalistic_glyphs',
+			value: 'kabbalistic_glyphs' as LanguageEnum,
 		},
 	],
 	description: `These are the dwarves who succumbed to Chaos after being denied Granitos biscuits as children. Promised endless amounts of the treat, they turned against their Durhkran brethren, causing a terrible civil war. This schism deeply scarred dwarven society, and the event is a sensitive topic. Grey Dwarves are now associated with Chaos and are the traditional enemies of the Durhkran dwarves, representing a dark chapter in their history stemming from a childhood grievance amplified by dark forces.`,
@@ -431,11 +431,11 @@ export const grey = {
 		size: 'small',
 		speaks: [
 			{
-				language: 'clay',
+				language: 'clay' as LanguageEnum,
 				mastery: 3,
 			},
 			{
-				language: 'dwarvish',
+				language: 'dwarvish' as LanguageEnum,
 				mastery: 2,
 			},
 		],
@@ -501,11 +501,11 @@ export const republican = {
 	languages: [
 		{
 			label: 'gnomish',
-			value: 'gnomish',
+			value: 'gnomish' as LanguageEnum,
 		},
 		{
 			label: 'clay',
-			value: 'clay',
+			value: 'clay' as LanguageEnum,
 		},
 	],
 	description:
@@ -517,11 +517,11 @@ export const republican = {
 	specifics: {
 		speaks: [
 			{
-				language: 'goblin',
+				language: 'goblin' as LanguageEnum,
 				mastery: 3,
 			},
 			{
-				language: 'common',
+				language: 'common' as LanguageEnum,
 				mastery: 2,
 			},
 		],
@@ -586,11 +586,11 @@ export const royalist = {
 	languages: [
 		{
 			label: 'dwarven runes',
-			value: 'dwarven_runes',
+			value: 'dwarven_runes' as LanguageEnum,
 		},
 		{
 			label: 'dead speech',
-			value: 'dead_speech',
+			value: 'dead_speech' as LanguageEnum,
 		},
 	],
 	description: `These goblins, with brownish or even black skin, remain loyal to the royal lineage in the depths. They don't maintain their nails, possessing sharp claws for underground movement. They view the surface-dwelling Republican goblins as separatists who stole their ancestral lands. Resentful of the Republic's rise, they attempted violent protests. Now, their current king, Injur Tuverha, seeks to reclaim their surface territory through the Republic's own legal system, with royalist supporters attempting to gain influence within Republican society. They are seen as less refined but also more ferocious than their republican counterparts.`,
@@ -601,11 +601,11 @@ export const royalist = {
 		size: 'small',
 		speaks: [
 			{
-				language: 'goblin',
+				language: 'goblin' as LanguageEnum,
 				mastery: 3,
 			},
 			{
-				language: 'clay',
+				language: 'clay' as LanguageEnum,
 				mastery: 2,
 			},
 		],
@@ -671,11 +671,11 @@ export const free = {
 	languages: [
 		{
 			label: 'dwarvish',
-			value: 'dwarvish',
+			value: 'dwarvish' as LanguageEnum,
 		},
 		{
 			label: 'goblin',
-			value: 'goblin',
+			value: 'goblin' as LanguageEnum,
 		},
 	],
 	description: `Gnomes are small, agile artisans with easygoing and bubbly attitudes. Their hairy feet aid their swiftness, matching their bold nature. Believed to be favored by Grandmouffle, their sudden appearance in Boute's pastures is debated. Some link them to Grandmouffle, others to a magical accident involving the local spapareille fern, which caused the first settlers to shrink and become the energetic, joyful gnomes.`,
@@ -686,48 +686,51 @@ export const free = {
 		size: 'small',
 		speaks: [
 			{
-				language: 'common',
+				language: 'common' as LanguageEnum,
 				mastery: 3,
 			},
 			{
-				language: 'gnomish',
+				language: 'gnomish' as LanguageEnum,
 				mastery: 2,
 			},
 		],
 	},
 	path: {
 		skills: [
-			'veille-118',
-			'fouille-34',
-			'jeune-177',
-			'rapine-96',
-			'mendicite-110',
+			'cuisine-175',
+			'calcul-mental-64',
+			'commerce-108',
+			'jeux-72',
+			'commerage-107',
 		],
 		attributes: [
 			{
-				name: 'Cosmopolitan',
-				effect: '1 additional language (F), 1 additional language (E)',
+				name: 'Tireless Chatterbox',
+				effect:
+					'No fatigue penalties with one short rest per day, +1 carry capacity, disadvantage on stealth when accompanied',
 				description:
-					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
+					'Traveling with a gnome means endless conversation. Their joy in meeting strangers and telling stories makes them forget their tiredness—but not their volume.',
 				value: 0,
 				flavor: '',
-				id: 'cosmopolite-3',
+				id: 'babillard-infatigable-31',
 			},
 			{
-				name: 'Universal comrade',
-				effect: `Naturally welcomed and accepted, advantage in gossip and trade`,
-				description: `Of all the races, humans are clearly the most able to form bonds with the most obscure individuals. Even proud trolls find these voluble little beings friendly, and let's not even mention the dwarves with whom they are almost blood brothers.`,
+				name: 'Blessed Luck',
+				effect: 'Critical successes grant a luck roll',
+				description:
+					'Even gnomes admit it: they’re outrageously lucky. Whether it’s divine blessing or lingering Spapareille magic, they always seem to bounce back from disaster.',
 				value: 0,
 				flavor: '',
-				id: 'camarade-universel-2',
+				id: 'vernis-32',
 			},
 			{
-				name: 'Jack-of-all-trades',
-				effect: `+5 starting skill points`,
-				description: `Because of their great curiosity and the vagaries of life, humans are a resourceful people. a resourceful people who find many subjects of interest. Every different from one individual to the next.`,
+				name: 'Crafting Heritage',
+				effect: 'Start with one artisan trade at rank 1 and the matching skill',
+				description:
+					'Though hyperactive, gnomes channel their energy into long-standing artisanal traditions. From a young age, they master trades that rival even the finest Mouffian craftsmen.',
 				value: 0,
 				flavor: '',
-				id: 'touche-a-tout-1',
+				id: 'famille-artisans-33',
 			},
 		],
 	},
@@ -755,11 +758,11 @@ export const proschöne = {
 	languages: [
 		{
 			label: 'fifilanto',
-			value: 'fifilanto',
+			value: 'fifilanto' as LanguageEnum,
 		},
 		{
 			label: 'primal',
-			value: 'primal',
+			value: 'primal' as LanguageEnum,
 		},
 	],
 	description:
@@ -771,48 +774,54 @@ export const proschöne = {
 		size: 'small',
 		speaks: [
 			{
-				language: 'gnomish',
+				language: 'gnomish' as LanguageEnum,
 				mastery: 3,
 			},
 			{
-				language: 'common',
+				language: 'common' as LanguageEnum,
 				mastery: 2,
 			},
 		],
 	},
 	path: {
 		skills: [
-			'veille-118',
-			'fouille-34',
-			'jeune-177',
-			'rapine-96',
-			'mendicite-110',
+			'astrologie-55',
+			'contes-48',
+			'cueillette-181',
+			'duperie-125',
+			'cris-d-animaux-115',
 		],
+
 		attributes: [
 			{
-				name: 'Cosmopolitan',
-				effect: '1 additional language (F), 1 additional language (E)',
+				name: 'Tiny Form',
+				effect:
+					'Can use 1 SEN and an action to shrink to Tiny size, gaining advantage on stealth',
 				description:
-					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
+					'Thanks to an odd biological trait or perhaps ancient magic, Proschöne gnomes can compress their bodies down to something the size of a teapot. Great for hiding. Less great for reaching shelves.',
 				value: 0,
 				flavor: '',
-				id: 'cosmopolite-3',
+				id: 'minuscule-34',
 			},
 			{
-				name: 'Universal comrade',
-				effect: `Naturally welcomed and accepted, advantage in gossip and trade`,
-				description: `Of all the races, humans are clearly the most able to form bonds with the most obscure individuals. Even proud trolls find these voluble little beings friendly, and let's not even mention the dwarves with whom they are almost blood brothers.`,
+				name: 'Forest Bond',
+				effect:
+					'+1d4 HP and SEN when resting in a forest or in contact with a lively tree',
+				description:
+					'Proschöne gnomes draw strength from trees, moss, and birdsong. Just touching bark seems to energize them, and a nap beneath leaves restores more than rest.',
 				value: 0,
 				flavor: '',
-				id: 'camarade-universel-2',
+				id: 'connexion-forestiere-35',
 			},
 			{
-				name: 'Jack-of-all-trades',
-				effect: `+5 starting skill points`,
-				description: `Because of their great curiosity and the vagaries of life, humans are a resourceful people. a resourceful people who find many subjects of interest. Every different from one individual to the next.`,
+				name: 'Deceptive Mind',
+				effect:
+					'Advantage on CHA rolls, enemies have disadvantage on SEN rolls to resist your charms and enchantments',
+				description:
+					'Mischievous to their core, Proschöne gnomes twist words and enchantments like storytellers weave tales. It’s hard to know when to trust them—and harder to resist their charm.',
 				value: 0,
 				flavor: '',
-				id: 'touche-a-tout-1',
+				id: 'esprit-trompeur-36',
 			},
 		],
 	},
@@ -840,11 +849,11 @@ export const pipourray = {
 	languages: [
 		{
 			label: 'kabbalistic glyphs',
-			value: 'kabbalistic_glyphs',
+			value: 'kabbalistic_glyphs' as LanguageEnum,
 		},
 		{
 			label: 'elven',
-			value: 'elven',
+			value: 'elven' as LanguageEnum,
 		},
 	],
 	description:
@@ -857,48 +866,46 @@ export const pipourray = {
 		massive: true,
 		speaks: [
 			{
-				language: 'common',
+				language: 'common' as LanguageEnum,
 				mastery: 3,
 			},
 			{
-				language: 'clay',
+				language: 'clay' as LanguageEnum,
 				mastery: 2,
 			},
 		],
 	},
 	path: {
-		skills: [
-			'veille-118',
-			'fouille-34',
-			'jeune-177',
-			'rapine-96',
-			'mendicite-110',
-		],
+		skills: ['cuisine-175', 'chant-122', 'dressage-49', 'simples-170'],
 		attributes: [
 			{
-				name: 'Cosmopolitan',
-				effect: '1 additional language (F), 1 additional language (E)',
+				name: 'Pacifist',
+				effect:
+					'Uses force only in self-defense, may reroll persuasion or eloquence once per day',
 				description:
-					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
+					'The Pipoura have abandoned weapons and warfare in pursuit of a peaceful life. Though this pursuit is often tested, they believe in the power of words over violence—at least for a while.',
 				value: 0,
 				flavor: '',
-				id: 'cosmopolite-3',
+				id: 'pacifiste-22',
 			},
 			{
-				name: 'Universal comrade',
-				effect: `Naturally welcomed and accepted, advantage in gossip and trade`,
-				description: `Of all the races, humans are clearly the most able to form bonds with the most obscure individuals. Even proud trolls find these voluble little beings friendly, and let's not even mention the dwarves with whom they are almost blood brothers.`,
+				name: 'Natural Harmony',
+				effect:
+					'+1 remission in rural areas, advantage on animal handling and nature rolls',
+				description:
+					'Pipoura tribes often settle in shaded glades and forest clearings, where they reconnect with their wild orcish roots. Their nomadic society passes down rural knowledge as sacred tradition.',
 				value: 0,
 				flavor: '',
-				id: 'camarade-universel-2',
+				id: 'harmonie-naturelle-23',
 			},
 			{
-				name: 'Jack-of-all-trades',
-				effect: `+5 starting skill points`,
-				description: `Because of their great curiosity and the vagaries of life, humans are a resourceful people. a resourceful people who find many subjects of interest. Every different from one individual to the next.`,
+				name: 'Artistic Passion',
+				effect: '+2 Art skill, +1 performance',
+				description:
+					'Pipoura orcs cultivate wonder and beauty within their camps, believing that music and song are the best remedies for violent instincts. Their culture thrives on creativity and expression.',
 				value: 0,
 				flavor: '',
-				id: 'touche-a-tout-1',
+				id: 'passion-artistique-24',
 			},
 		],
 	},
@@ -926,11 +933,11 @@ export const villous = {
 	languages: [
 		{
 			label: 'common',
-			value: 'common',
+			value: 'common' as LanguageEnum,
 		},
 		{
 			label: 'dead speech',
-			value: 'dead_speech',
+			value: 'dead_speech' as LanguageEnum,
 		},
 	],
 	description:
@@ -943,48 +950,49 @@ export const villous = {
 		massive: true,
 		speaks: [
 			{
-				language: 'common',
+				language: 'common' as LanguageEnum,
 				mastery: 3,
 			},
 			{
-				language: 'clay',
+				language: 'clay' as LanguageEnum,
 				mastery: 2,
 			},
 		],
 	},
 	path: {
 		skills: [
-			'veille-118',
-			'fouille-34',
+			'bras-de-fer-77',
+			'intimidation-136',
 			'jeune-177',
-			'rapine-96',
-			'mendicite-110',
+			'rafistolage-14',
 		],
 		attributes: [
 			{
-				name: 'Cosmopolitan',
-				effect: '1 additional language (F), 1 additional language (E)',
+				name: 'Hot-Blooded',
+				effect: 'On failed SOC check, must resort to force with advantage',
 				description:
-					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
+					'Unaccustomed to lengthy negotiation, warrior orcs often turn to raw strength when words fail. A flexed chest and a stomped ground usually get the message across.',
 				value: 0,
 				flavor: '',
-				id: 'cosmopolite-3',
+				id: 'fougueux-25',
 			},
 			{
-				name: 'Universal comrade',
-				effect: `Naturally welcomed and accepted, advantage in gossip and trade`,
-				description: `Of all the races, humans are clearly the most able to form bonds with the most obscure individuals. Even proud trolls find these voluble little beings friendly, and let's not even mention the dwarves with whom they are almost blood brothers.`,
+				name: 'Martial Training',
+				effect: '+1 melee weapon skill, +1 strength',
+				description:
+					'Born for war, Velus orc tribes train their youth from a young age to fight. Whether with fists or clubs, every orc knows how to answer a call to arms.',
 				value: 0,
 				flavor: '',
-				id: 'camarade-universel-2',
+				id: 'entrainement-martial-26',
 			},
 			{
-				name: 'Jack-of-all-trades',
-				effect: `+5 starting skill points`,
-				description: `Because of their great curiosity and the vagaries of life, humans are a resourceful people. a resourceful people who find many subjects of interest. Every different from one individual to the next.`,
+				name: 'Resilient',
+				effect: 'Once per day, on falling to 0 HP, roll END to stay at 1 HP',
+				description:
+					'Velus orcs are known for their legendary toughness. Their powerful metabolism and will to fight keep them standing long after others would fall.',
 				value: 0,
 				flavor: '',
-				id: 'touche-a-tout-1',
+				id: 'resilient-27',
 			},
 		],
 	},
@@ -1012,11 +1020,11 @@ export const halfvampire = {
 	languages: [
 		{
 			label: 'moufflian slang',
-			value: 'moufflian_slang',
+			value: 'moufflian_slang' as LanguageEnum,
 		},
 		{
 			label: 'clay',
-			value: 'clay',
+			value: 'clay' as LanguageEnum,
 		},
 	],
 	description: `Resembling vampires, half-vampires have slightly elongated canines, pale skin, and are prone to sunburn. They often conceal their strength and features. A suppressed rage surfaces when blood-deprived, leading to intense gazes at small animals. Born from pregnant women turned vampire, they are less powerful than their undead sires but possess notable strength and speed. They cannot transmit vampirism by a bite but reproduce naturally. Forced into solitary lives due to their need for blood, they are scattered, with a concentration in Vieux-Mouffle's Naibreux County, inspiring local legends.`,
@@ -1027,48 +1035,53 @@ export const halfvampire = {
 		size: 'average',
 		speaks: [
 			{
-				language: 'common',
+				language: 'common' as LanguageEnum,
 				mastery: 3,
 			},
 			{
-				language: 'dead speech',
+				language: 'dead speech' as LanguageEnum,
 				mastery: 2,
 			},
 		],
 	},
 	path: {
 		skills: [
-			'veille-118',
-			'fouille-34',
-			'jeune-177',
-			'rapine-96',
-			'mendicite-110',
+			'equilibre-41',
+			'heraldique-151',
+			'grimage-127',
+			'sincerite-111',
+			'furtivite-44',
 		],
+
 		attributes: [
 			{
-				name: 'Cosmopolitan',
-				effect: '1 additional language (F), 1 additional language (E)',
+				name: 'Night Vision',
+				effect:
+					'Can see in total darkness up to 15 meters; advantage on perception at night',
 				description:
-					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
+					'Thanks to their undead ancestry, Half-Vampires see clearly in the dark. Whether lurking or watching, their gaze pierces the shadows better than most mortals.',
 				value: 0,
 				flavor: '',
-				id: 'cosmopolite-3',
+				id: 'vision-nocturne-43',
 			},
 			{
-				name: 'Universal comrade',
-				effect: `Naturally welcomed and accepted, advantage in gossip and trade`,
-				description: `Of all the races, humans are clearly the most able to form bonds with the most obscure individuals. Even proud trolls find these voluble little beings friendly, and let's not even mention the dwarves with whom they are almost blood brothers.`,
+				name: 'Blood Recovery',
+				effect:
+					'Can only heal through blood; cures poison with meat or blood during short rest rolls. Health potions also work.',
+				description:
+					'Half-Vampires digest food like normal folk, but only blood truly mends their wounds. A quiet nibble or fresh prey is the key to their survival and restoration.',
 				value: 0,
 				flavor: '',
-				id: 'camarade-universel-2',
+				id: 'regain-sang-44',
 			},
 			{
-				name: 'Jack-of-all-trades',
-				effect: `+5 starting skill points`,
-				description: `Because of their great curiosity and the vagaries of life, humans are a resourceful people. a resourceful people who find many subjects of interest. Every different from one individual to the next.`,
+				name: 'Magical Sensitivity',
+				effect: 'Can cast spells and detect magic without training',
+				description:
+					'Magic runs thick in their cursed lineage. With no formal schooling, Half-Vampires sense magical winds and manipulate them as if guided by instinct alone.',
 				value: 0,
 				flavor: '',
-				id: 'touche-a-tout-1',
+				id: 'sensible-magie-45',
 			},
 		],
 	},
@@ -1096,11 +1109,11 @@ export const barbarian = {
 	languages: [
 		{
 			label: 'clay',
-			value: 'clay',
+			value: 'clay' as LanguageEnum,
 		},
 		{
 			label: 'forester symbols',
-			value: 'forester_symbols',
+			value: 'forester_symbols' as LanguageEnum,
 		},
 	],
 	description:
@@ -1113,48 +1126,46 @@ export const barbarian = {
 		massive: true,
 		speaks: [
 			{
-				language: 'common',
+				language: 'common' as LanguageEnum,
 				mastery: 3,
 			},
 			{
-				language: 'giant',
+				language: 'giant' as LanguageEnum,
 				mastery: 2,
 			},
 		],
 	},
 	path: {
-		skills: [
-			'veille-118',
-			'fouille-34',
-			'jeune-177',
-			'rapine-96',
-			'mendicite-110',
-		],
+		skills: ['bagarre-74', 'lutte-79', 'chasse-173', 'massage-166'],
 		attributes: [
 			{
-				name: 'Cosmopolitan',
-				effect: '1 additional language (F), 1 additional language (E)',
+				name: 'Long-Range Hunter',
+				effect: 'May reroll athletics checks, +1 strength',
 				description:
-					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
+					'Barbarian hunters travel long distances in search of big game. From a young age, they’re trained to move fast, carry gear, and endure exhaustion without complaint.',
 				value: 0,
 				flavor: '',
-				id: 'cosmopolite-3',
+				id: 'chasseur-distance-28',
 			},
 			{
-				name: 'Universal comrade',
-				effect: `Naturally welcomed and accepted, advantage in gossip and trade`,
-				description: `Of all the races, humans are clearly the most able to form bonds with the most obscure individuals. Even proud trolls find these voluble little beings friendly, and let's not even mention the dwarves with whom they are almost blood brothers.`,
+				name: 'Harsh Life',
+				effect:
+					'+1 remission, less affected by cold, snow, rain, or wind (advantage on END rolls)',
+				description:
+					'Barbarian life in the Peaceful Lands is shaped by harsh weather. Over time, their bodies adapted to storms, frost, and raw nature. Even rest feels deeper for them.',
 				value: 0,
 				flavor: '',
-				id: 'camarade-universel-2',
+				id: 'vie-rude-29',
 			},
 			{
-				name: 'Jack-of-all-trades',
-				effect: `+5 starting skill points`,
-				description: `Because of their great curiosity and the vagaries of life, humans are a resourceful people. a resourceful people who find many subjects of interest. Every different from one individual to the next.`,
+				name: 'Warrior Tradition',
+				effect:
+					'+1 weapon skill; advantage on melee combat rolls after each solo kill; 2x disadvantage if wearing chest armor',
+				description:
+					'For barbarians, fighting is sacred. Wearing chest armor is dishonorable. But when blood flows, their love for battle shines—often terrifying allies and enemies alike.',
 				value: 0,
 				flavor: '',
-				id: 'touche-a-tout-1',
+				id: 'tradition-guerriere-30',
 			},
 		],
 	},
@@ -1182,11 +1193,11 @@ export const halfogre = {
 	languages: [
 		{
 			label: 'signs',
-			value: 'signs',
+			value: 'signs' as LanguageEnum,
 		},
 		{
 			label: 'giant',
-			value: 'giant',
+			value: 'giant' as LanguageEnum,
 		},
 	],
 	description:
@@ -1199,48 +1210,52 @@ export const halfogre = {
 		massive: true,
 		speaks: [
 			{
-				language: 'common',
+				language: 'common' as LanguageEnum,
 				mastery: 3,
 			},
 			{
-				language: 'gnomish',
+				language: 'gnomish' as LanguageEnum,
 				mastery: 2,
 			},
 		],
 	},
 	path: {
 		skills: [
-			'veille-118',
-			'fouille-34',
-			'jeune-177',
-			'rapine-96',
-			'mendicite-110',
+			'orientation-178',
+			'commerce-108',
+			'lutte-79',
+			'estimation-109',
+			'soin-des-animaux-171',
 		],
+
 		attributes: [
 			{
-				name: 'Cosmopolitan',
-				effect: '1 additional language (F), 1 additional language (E)',
+				name: 'Wandering Trader',
+				effect: 'Trades instead of selling, +1 strength',
 				description:
-					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
+					'With enormous backpacks full of oddities, Half-Ogres prefer bartering over traditional currency. Their collections may contain hidden gems—or total junk.',
 				value: 0,
 				flavor: '',
-				id: 'cosmopolite-3',
+				id: 'troqueur-ambulant-37',
 			},
 			{
-				name: 'Universal comrade',
-				effect: `Naturally welcomed and accepted, advantage in gossip and trade`,
-				description: `Of all the races, humans are clearly the most able to form bonds with the most obscure individuals. Even proud trolls find these voluble little beings friendly, and let's not even mention the dwarves with whom they are almost blood brothers.`,
+				name: 'Simple-Minded',
+				effect:
+					'Disadvantage on logic and knowledge rolls, resistant to magical mind effects',
+				description:
+					'Slow thinkers but hard to control, Half-Ogres confuse sorcerers simply by not having minds worth dominating. They rarely get the point—but they’re hard to hex.',
 				value: 0,
 				flavor: '',
-				id: 'camarade-universel-2',
+				id: 'faible-esprit-38',
 			},
 			{
-				name: 'Jack-of-all-trades',
-				effect: `+5 starting skill points`,
-				description: `Because of their great curiosity and the vagaries of life, humans are a resourceful people. a resourceful people who find many subjects of interest. Every different from one individual to the next.`,
+				name: 'Long-Haul Traveler',
+				effect: 'Roll 2 dice when resting, keep the best; +1 remission',
+				description:
+					'Half-Ogres are tireless walkers, often sleeping with their back to their bag and a cow in tow. They recover well even after long treks or awkward naps.',
 				value: 0,
 				flavor: '',
-				id: 'touche-a-tout-1',
+				id: 'grand-voyageur-39',
 			},
 		],
 	},
@@ -1268,11 +1283,11 @@ export const troll = {
 	languages: [
 		{
 			label: 'clay',
-			value: 'clay',
+			value: 'clay' as LanguageEnum,
 		},
 		{
 			label: 'primal',
-			value: 'primal',
+			value: 'primal' as LanguageEnum,
 		},
 	],
 	description:
@@ -1284,48 +1299,51 @@ export const troll = {
 		size: 'average',
 		speaks: [
 			{
-				language: 'troll',
+				language: 'troll' as LanguageEnum,
 				mastery: 3,
 			},
 			{
-				language: 'common',
+				language: 'common' as LanguageEnum,
 				mastery: 2,
 			},
 		],
 	},
 	path: {
 		skills: [
-			'veille-118',
-			'fouille-34',
-			'jeune-177',
-			'rapine-96',
-			'mendicite-110',
+			'cris-d-animaux-115',
+			'lecture-ecriture-153',
+			'soin-des-animaux-171',
+			'vents-magiques-119',
 		],
 		attributes: [
 			{
-				name: 'Cosmopolitan',
-				effect: '1 additional language (F), 1 additional language (E)',
+				name: 'Prodigy',
+				effect:
+					'Can do an ERU test at the end of an adventure to gain 1 additionnal Skill Point',
 				description:
-					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
+					'Trolls were accidentally gifted with remarkable intellect by the Moisi. Their thirst for knowledge makes them rapid learners, devouring skills like they would a wild boar.',
 				value: 0,
 				flavor: '',
-				id: 'cosmopolite-3',
+				id: 'prodige-40',
 			},
 			{
-				name: 'Universal comrade',
-				effect: `Naturally welcomed and accepted, advantage in gossip and trade`,
-				description: `Of all the races, humans are clearly the most able to form bonds with the most obscure individuals. Even proud trolls find these voluble little beings friendly, and let's not even mention the dwarves with whom they are almost blood brothers.`,
+				name: 'Tech-Averse',
+				effect:
+					'Avoids goblin and gnome technology; advantage on survival rolls',
+				description:
+					'Descendants of ancient troll nations scorn machines. Deep-rooted traditions forbid the use of goblin and gnome tech, which they see as invasive and unnatural.',
 				value: 0,
 				flavor: '',
-				id: 'camarade-universel-2',
+				id: 'decroissant-41',
 			},
 			{
-				name: 'Jack-of-all-trades',
-				effect: `+5 starting skill points`,
-				description: `Because of their great curiosity and the vagaries of life, humans are a resourceful people. a resourceful people who find many subjects of interest. Every different from one individual to the next.`,
+				name: 'Natural Hunter',
+				effect: '+1 survival skill, +1 stealth, +1 ranged',
+				description:
+					'From treetop jungles to cliffside canyons, trolls are skilled hunters. Capable of going days without supplies, they move silently and strike accurately in the wild.',
 				value: 0,
 				flavor: '',
-				id: 'touche-a-tout-1',
+				id: 'chasseur-naturel-42',
 			},
 		],
 	},
@@ -1351,7 +1369,7 @@ export const troll = {
 
 type Language = {
 	label: string;
-	value: string;
+	value: LanguageList;
 };
 
 type Bio = {
@@ -1368,7 +1386,7 @@ type Attribute = {
 	effect: string;
 	description: string;
 	flavor?: string | null;
-	id?: string;
+	id: string;
 	value?: number | null;
 };
 
@@ -1427,6 +1445,30 @@ export const speciesMap: Record<string, SpecieDataForm> = {
 	barbarian,
 	troll,
 };
+
+export type LanguageEnum =
+	| 'common'
+	| 'moufflian_slang'
+	| 'clay'
+	| 'elven'
+	| 'dwarvish'
+	| 'gnomish'
+	| 'goblin'
+	| 'giant'
+	| 'troll'
+	| 'high_elven'
+	| 'titan'
+	| 'rosmary'
+	| 'dead_speech'
+	| 'fifilanto'
+	| 'primal'
+	| 'amphibian'
+	| 'silvan'
+	| 'signs'
+	| 'thieves_marks'
+	| 'forester_symbols'
+	| 'dwarven_runes'
+	| 'kabbalistic_glyphs';
 
 export const allSpecies = [
 	moufflian,

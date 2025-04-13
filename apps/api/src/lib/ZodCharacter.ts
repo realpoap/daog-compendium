@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { NewActionSchema } from './ZodAction';
 import { CreatureComponentSchema } from './ZodComponent';
-import { ActionListSchema, AttributeSchema } from './ZodCreature';
+import { ActionListSchema, CreatureAttributeSchema } from './ZodCreature';
 import { CreatureItemSchema } from './ZodItem';
 
 export const genderSchema = z.enum(['male', 'female', 'fluid', 'unknown'], {
@@ -104,6 +104,31 @@ export const SkillSchema = z.object({
 
 export type CharacterSkill = z.infer<typeof SkillSchema>;
 
+export enum LanguageEnum {
+	common = 'common',
+	moufflian_slang = 'moufflian_slang',
+	clay = 'clay',
+	elven = 'elven',
+	dwarvish = 'dwarvish',
+	gnomish = 'gnomish',
+	goblin = 'goblin',
+	giant = 'giant',
+	troll = 'troll',
+	high_elven = 'high_elven',
+	titan = 'titan',
+	rosmary = 'rosmary',
+	dead_speech = 'dead_speech',
+	fifilanto = 'fifilanto',
+	primal = 'primal',
+	amphibian = 'amphibian',
+	silvan = 'silvan',
+	signs = 'signs',
+	thieves_marks = 'thieves_marks',
+	forester_symbols = 'forester_symbols',
+	dwarven_runes = 'dwarven_runes',
+	kabbalistic_glyphs = 'kabbalistic_glyphs',
+}
+
 export const languagesSchema = z.enum([
 	'common',
 	'moufflian_slang',
@@ -132,7 +157,7 @@ export const languagesSchema = z.enum([
 export type LanguageList = z.infer<typeof languagesSchema>;
 
 export const LanguageSchema = z.object({
-	language: z.string(),
+	language: languagesSchema,
 	mastery: z.number().int(),
 });
 
@@ -251,7 +276,7 @@ export const PathSchema = z.object({
 	skills: z.array(SkillSchema).optional(),
 	feats: z.array(FeatSchema).optional(),
 	actions: z.array(NewActionSchema).optional(),
-	attributes: z.array(AttributeSchema).optional(),
+	attributes: z.array(CreatureAttributeSchema).optional(),
 	attackType: z.string().optional(),
 	defenseType: z.string().optional(),
 	origin: OriginSchema.nullable().optional(),
@@ -273,8 +298,8 @@ export const SpecificsSchema = z.object({
 	gender: genderSchema.nullable().optional(),
 	speaks: z.array(LanguageSchema).optional(),
 	sizeBonus: z.number().int().optional(),
-	background: z.string().nullable().optional(),
-	description: z.string().nullable().optional(),
+	background: z.string().nullable(),
+	description: z.string().nullable(),
 	age: z.number().int().nullable().optional(),
 	weight: z.number().int().nullable().optional(),
 	height: z.number().int().nullable().optional(),

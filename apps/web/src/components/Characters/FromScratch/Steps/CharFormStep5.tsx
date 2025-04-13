@@ -2,7 +2,7 @@ import TagBadge from '@/components/TagBadge';
 import { characterAttributes } from '@/data/charattributesData';
 import { useCharacterForm } from '@/store/characterContext';
 import { capitalizeFirstLetter } from '@/utils/capitalize';
-import { Attribute } from '@api/lib/ZodCreature';
+import { Attribute, CreatureAttribute } from '@api/lib/ZodCreature';
 import { useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 
@@ -19,21 +19,25 @@ const shuffleArray = (array: Attribute[]) => {
 const CharFormStep5 = () => {
 	const { methods, formData } = useCharacterForm();
 	const [searchTerm, setSearchTerm] = useState('');
-	const [selectedAttributes, setSelectedAttributes] = useState<Attribute[]>([]);
+	const [selectedAttributes, setSelectedAttributes] = useState<
+		CreatureAttribute[]
+	>([]);
 	const startingAttributes = formData.path?.attributes || [];
 
 	// On component mount, just set the selectedAttributes without updating the form
 	useEffect(() => {
 		const allAttrs = methods.getValues('path.attributes') || [];
 		const foundAttr = allAttrs.filter(
-			attr => !startingAttributes.some(start => start.id === attr.id),
+			attr => !startingAttributes.some(start => start.name === attr.name),
 		);
 		console.log('Initial foundAttr', foundAttr);
 		setSelectedAttributes(foundAttr);
 	}, []);
 
 	// Unified function to update both state and form when attributes change
-	const updateAttributesAndForm = (newSelectedAttributes: Attribute[]) => {
+	const updateAttributesAndForm = (
+		newSelectedAttributes: CreatureAttribute[],
+	) => {
 		// Update the form with combined attributes
 		const attributeList = [...startingAttributes, ...newSelectedAttributes];
 		methods.setValue('path.attributes', attributeList);
@@ -55,9 +59,9 @@ const CharFormStep5 = () => {
 		}
 
 		// Calculate new selected attributes
-		const exists = selectedAttributes.some(a => a.id === attr.id);
+		const exists = selectedAttributes.some(a => a.name === attr.name);
 		const newSelected = exists
-			? selectedAttributes.filter(a => a.id !== attr.id)
+			? selectedAttributes.filter(a => a.name !== attr.name)
 			: [...selectedAttributes, attr];
 
 		// Update both state and form
@@ -65,13 +69,13 @@ const CharFormStep5 = () => {
 	};
 
 	// Modify removeAttribute to use the unified update function
-	const removeAttribute = (attr: Attribute) => {
+	const removeAttribute = (attr: CreatureAttribute) => {
 		if (!attr.value) return;
 
 		// Calculate new selected attributes
-		const exists = selectedAttributes.some(a => a.id === attr.id);
+		const exists = selectedAttributes.some(a => a.name === attr.name);
 		const newSelected = exists
-			? selectedAttributes.filter(a => a.id !== attr.id)
+			? selectedAttributes.filter(a => a.name !== attr.name)
 			: [...selectedAttributes, attr];
 
 		// Update both state and form
@@ -142,10 +146,14 @@ const CharFormStep5 = () => {
 					{filteredAttributes
 						.filter(
 							attr =>
-								!selectedAttributes.some(selected => attr.id === selected.id),
+								!selectedAttributes.some(
+									selected => attr.name === selected.name,
+								),
 						)
 						.map(attr => {
-							const isSelected = selectedAttributes.some(a => a.id === attr.id);
+							const isSelected = selectedAttributes.some(
+								a => a.name === attr.name,
+							);
 							return (
 								<div
 									key={attr.id}
