@@ -12,6 +12,15 @@ const CharFormStep1 = () => {
 					type='text'
 				/>
 			</Field>
+			<Field
+				name='bio.surname'
+				label='Nickname'
+			>
+				<Input
+					name='bio.surname'
+					type='text'
+				/>
+			</Field>
 
 			<Field
 				name='bio.isPun'

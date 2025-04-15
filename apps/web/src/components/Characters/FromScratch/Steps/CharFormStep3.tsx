@@ -58,8 +58,10 @@ const CharFormStep3 = () => {
 			</fieldset>
 
 			{selectedOrigin && (
-				<div className='font-cabin bg-tile flex flex-col rounded-lg p-4 shadow-sm'>
-					<h3 className='text-lg font-semibold'>{selectedOrigin.name}</h3>
+				<div className='font-cabin bg-tile flex flex-col gap-2 rounded-lg p-4 shadow-sm'>
+					<h3 className='font-grenze mb-2 text-3xl font-bold'>
+						{selectedOrigin.name}
+					</h3>
 					<p className='text-sm italic'>{selectedOrigin.description}</p>
 					<div className='flex flex-col text-sm'>
 						<div>

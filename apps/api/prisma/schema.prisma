@@ -177,6 +177,7 @@ type DamageBonus {
 type Language {
   language languages
   mastery Int @default(1)
+  label String?
 }
 
 enum languages {
