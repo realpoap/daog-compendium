@@ -1,8 +1,8 @@
 import SelectFilter from '@/components/SpellList/SelectFilter';
 import { allSpecies, SpecieDataForm } from '@/data/speciesProfile';
+import { useCharacterForm } from '@/store/characterContext';
 import { capitalizeFirstLetter } from '@/utils/capitalize';
 import { useState } from 'react';
-import { useFormContext } from 'react-hook-form';
 
 const difficulties = [
 	{ value: 'easy', label: 'easy' },
@@ -21,7 +21,7 @@ type Props = {
 };
 
 const CharFormStep2 = ({ selected }: Props) => {
-	const { setValue } = useFormContext();
+	const { methods } = useCharacterForm();
 	const [selectedDifficulty, setSelectedDifficulty] = useState<Option[]>([]);
 
 	const selectedDiffValues = selectedDifficulty.map(d => d.value);
@@ -62,8 +62,8 @@ const CharFormStep2 = ({ selected }: Props) => {
 									key={specie.sub}
 									onClick={() => {
 										console.log(specie.specie, specie.sub);
-										setValue('bio.species', specie.specie);
-										setValue('bio.subspecies', specie.sub);
+										methods.setValue('bio.species', specie.specie);
+										methods.setValue('bio.subspecies', specie.sub);
 									}}
 									className={`badge badge border-primary border-1 rounded-box cursor-pointer flex-col text-sm ${selected && selected.specie === specie.specie ? 'badge-primary' : ''}`}
 								>
@@ -81,7 +81,7 @@ const CharFormStep2 = ({ selected }: Props) => {
 							{subsForSelectedSpecie.map(s => (
 								<span
 									key={s.sub}
-									onClick={() => setValue('bio.subspecies', s.sub)}
+									onClick={() => methods.setValue('bio.subspecies', s.sub)}
 									className={`badge badge border-primary border-1 rounded-box cursor-pointer flex-col text-sm ${
 										selected.sub === s.sub ? 'badge-primary' : ''
 									}`}

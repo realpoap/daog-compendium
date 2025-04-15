@@ -2085,4 +2085,15 @@ export const characterAttributes: Attribute[] = [
 		description: 'This character is crude and lacks social etiquette.',
 		id: 'vulgaire-148',
 	},
+	{
+		name: 'Scholar',
+		value: 1,
+		effect: 'Learned the basics of an old language through books',
+		statModifier: null,
+		masteries: null,
+		flavor: '',
+		description:
+			'This spent a lot of time in libraries and read oddly written fantasy books',
+		id: 'scholar-149',
+	},
 ];

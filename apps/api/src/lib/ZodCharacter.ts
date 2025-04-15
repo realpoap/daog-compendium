@@ -159,6 +159,7 @@ export type LanguageList = z.infer<typeof languagesSchema>;
 export const LanguageSchema = z.object({
 	language: languagesSchema,
 	mastery: z.number().int(),
+	label: z.string().nullable(),
 });
 
 export type SpecificLanguage = z.infer<typeof LanguageSchema>;

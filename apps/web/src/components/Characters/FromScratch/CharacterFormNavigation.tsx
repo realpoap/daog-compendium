@@ -9,6 +9,8 @@ import { FormProvider, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import CharFormStep1 from './Steps/CharFormStep1';
 import CharFormStep10 from './Steps/CharFormStep10';
+import CharFormStep11 from './Steps/CharFormStep11';
+import CharFormStep12 from './Steps/CharFormStep12';
 import CharFormStep2 from './Steps/CharFormStep2';
 import CharFormStep3 from './Steps/CharFormStep3';
 import CharFormStep4 from './Steps/CharFormStep4';
@@ -62,7 +64,6 @@ const CharacterFormInner = () => {
 				const skilllist = foundSub?.path.skills;
 				const languagelist = foundSub?.specifics.speaks;
 				const attributelist = foundSub?.path.attributes;
-				console.log(attributelist);
 				const objectSkills = setObjectSkills(skilllist);
 				const skillPoints = foundSub.specie === 'human' ? 10 : 5;
 				setFormData(prev => ({
@@ -111,30 +112,32 @@ const CharacterFormInner = () => {
 			label: 'Species',
 			component: <CharFormStep2 selected={selectedSpecieData} />,
 		},
-		{ id: 2, label: 'Origins', component: <CharFormStep3 /> },
 		{
-			id: 3,
-			label: 'Languages',
-			component: <CharFormStep4 />,
-		},
-		{
-			id: 4,
+			id: 2,
 			label: 'Attributes',
 			component: <CharFormStep5 />,
+		},
+		{ id: 3, label: 'Origins', component: <CharFormStep3 /> },
+		{
+			id: 4,
+			label: 'Specificities',
+			component: <CharFormStep4 />,
 		},
 		{
 			id: 5,
 			label: 'Skills',
 			component: <CharFormStep6 />,
 		},
+		{ id: 6, label: 'Careers', component: <CharFormStep10 /> },
+		{ id: 7, label: 'Talent & Feats', component: <CharFormStep9 /> },
+		{ id: 8, label: 'Magic', component: <CharFormStep11 /> },
 		{
-			id: 6,
+			id: 9,
 			label: 'Features',
 			component: <CharFormStep7 />,
 		},
-		{ id: 7, label: 'Background', component: <CharFormStep8 /> },
-		{ id: 8, label: 'Talent & Feats', component: <CharFormStep9 /> },
-		{ id: 9, label: 'Destiny', component: <CharFormStep10 /> },
+		{ id: 10, label: 'Background', component: <CharFormStep8 /> },
+		{ id: 11, label: 'Destiny', component: <CharFormStep12 /> },
 	];
 
 	return (
@@ -143,9 +146,10 @@ const CharacterFormInner = () => {
 			className='w-full'
 		>
 			{/* Progress Bar */}
-			<div>
+
+			<div className='font-grenze'>
 				<span>
-					{currentStep + 1}/10 {': '}
+					{currentStep + 1}/12 {': '}
 				</span>
 				<span>{steps[currentStep].label}</span>
 			</div>

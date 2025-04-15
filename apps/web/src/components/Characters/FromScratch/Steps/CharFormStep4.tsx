@@ -1,48 +1,119 @@
 import { useCharacterForm } from '@/store/characterContext';
-import { cn } from '@/utils/classNames';
 
-import { allSpecies, LanguageEnum } from 'src/data/speciesProfile';
+import {
+	languageOptions,
+	obscureLanguageOptions,
+	spokenLanguageOptions,
+} from '@/types/characterOptions';
+import { LanguageEnum, SpecificLanguage } from '@api/lib/ZodCharacter';
+import { useEffect, useMemo, useState } from 'react';
+import { allSpecies } from 'src/data/speciesProfile';
+import AdditionalLanguage from './StepsComponents/AdditionalLanguage';
+
+type LanguageOption = { label: string; value: LanguageEnum | string };
 
 const CharFormStep4 = () => {
 	const { methods, formData } = useCharacterForm();
 	const selectedSub = methods.getValues('bio.subspecies');
-	const selectedSpeaks = formData.specifics?.speaks || [];
+	//const [specificities, setSpecificities] = useState({});
+	const [prunedList, setPrunedList] =
+		useState<LanguageOption[]>(languageOptions);
+	const [currentSpeaks, setCurrentSpeaks] = useState<SpecificLanguage[]>(
+		formData.specifics?.speaks ?? [],
+	);
 
-	const handleLanguageSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-		methods.setValue('specifics.speaks', []);
-		const value = e.target.value;
-		const object = { language: value as LanguageEnum, mastery: 1 };
-		console.log(object);
-		methods.setValue('specifics.speaks', [...selectedSpeaks, object]);
-	};
-	const selectSpecies = allSpecies.find(specie => specie.sub === selectedSub);
-	const languageOptions = selectSpecies?.languages;
+	//const [skillChoices, setSkillChoices] = useState<CharacterSkill[]>([]);
+	// Avoid calling setValue directly in render
+	useEffect(() => {
+		methods.setValue('specifics.speaks', formData.specifics?.speaks || []);
+	}, [methods]);
+
+	useEffect(() => {
+		if (!currentSpeaks) return;
+		const selectedLanguages = new Set(currentSpeaks.map(lang => lang.language));
+
+		// Filter the language options, removing already selected languages
+
+		const filtered = languageOptions.filter(
+			speak => !selectedLanguages.has(speak.value as LanguageEnum),
+		);
+		setPrunedList(filtered);
+	}, [currentSpeaks]);
+
+	// Memoize species data
+	const selectSpecies = useMemo(
+		() => allSpecies.find(specie => specie.sub === selectedSub),
+		[selectedSub],
+	);
+	const speciesLanguageOptions = useMemo(
+		() => selectSpecies?.languages || [],
+		[selectSpecies],
+	);
+
+	// Species specificities assessment
+	// switch (selectedSub) {
+	// 	case 'pipourray':
+	// 		setSpecificities({ number: 2, mastery: 'art' });
+	// 		break;
+
+	// 	default:
+	// 		break;
+	// }
 
 	if (!languageOptions) return;
 	return (
-		<fieldset className='w-full sm:w-1/2'>
-			<legend className='fieldset-legend label font-cabin text-neutral-content mb-1 pb-0 text-xs capitalize'>
-				Language
-			</legend>{' '}
-			<select
-				defaultValue='Pick a language'
-				className={cn(
-					'select select-bordered font-cabin text-error text-md text-secondary caret-secondary focus:border-secondary focus:ring-secondary dark:text-primary dark:caret-primary dark:focus:border-primary dark:focus:ring-primary peer-default:dark:text-neutral h-8 min-h-6 w-full rounded-md px-2 py-0 shadow-sm focus:outline-none focus:ring-1 dark:bg-stone-700',
-				)}
-				onChange={e => handleLanguageSelect(e)}
-			>
-				{' '}
-				<option disabled={true}>Pick a language</option>
-				{languageOptions.map(option => (
-					<option
-						key={`${option.value}-choice`}
-						value={option.value}
-					>
-						{option.label}
-					</option>
-				))}
-			</select>
-		</fieldset>
+		<>
+			<fieldset className='w-full items-center'>
+				<legend>Languages</legend>
+				<div className='flex w-full flex-col gap-4 sm:flex-row'>
+					{speciesLanguageOptions && (
+						<AdditionalLanguage
+							title='Species language'
+							mastery={1}
+							list={speciesLanguageOptions}
+							label='tertiary'
+							currentSpeaks={currentSpeaks}
+							setCurrentSpeaks={setCurrentSpeaks}
+						/>
+					)}
+					{selectedSub === 'moufflian' ||
+						(methods
+							.getValues('path.attributes')
+							?.find(attr => attr.name === 'Polyglot') && (
+							<AdditionalLanguage
+								title='+ Spoken language'
+								mastery={1}
+								list={prunedList.filter(speak =>
+									spokenLanguageOptions.some(s => s.value === speak.value),
+								)}
+								label='spoken'
+								currentSpeaks={currentSpeaks}
+								setCurrentSpeaks={setCurrentSpeaks}
+							/>
+						))}
+					{methods
+						.getValues('path.attributes')
+						?.find(attr => attr.name === 'Scholar') && (
+						<AdditionalLanguage
+							title='+ Scholared language'
+							mastery={1}
+							list={prunedList.filter(speak =>
+								obscureLanguageOptions.some(s => s.value === speak.value),
+							)}
+							label='scholar'
+							currentSpeaks={currentSpeaks}
+							setCurrentSpeaks={setCurrentSpeaks}
+						/>
+					)}
+				</div>
+			</fieldset>
+
+			<fieldset className='w-full sm:w-1/2'>
+				<label className='fieldset-legend label font-cabin text-neutral-content mb-1 pb-0 text-xs capitalize'>
+					Species skill
+				</label>{' '}
+			</fieldset>
+		</>
 	);
 };
 

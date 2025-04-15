@@ -54,10 +54,12 @@ export const moufflian = {
 			{
 				language: 'common' as LanguageEnum,
 				mastery: 3,
+				label: 'species',
 			},
 			{
 				language: 'moufflian_slang' as LanguageEnum,
 				mastery: 2,
+				label: 'species',
 			},
 		],
 	},
@@ -132,10 +134,12 @@ export const inclay = {
 			{
 				language: 'clay' as LanguageEnum,
 				mastery: 3,
+				label: 'species',
 			},
 			{
 				language: 'common' as LanguageEnum,
 				mastery: 2,
+				label: 'species',
 			},
 		],
 	},
@@ -180,10 +184,12 @@ export const bourguignon = {
 			{
 				language: 'elven' as LanguageEnum,
 				mastery: 3,
+				label: 'species',
 			},
 			{
 				language: 'common' as LanguageEnum,
 				mastery: 2,
+				label: 'species',
 			},
 		],
 	},
@@ -264,10 +270,12 @@ export const armagnac = {
 			{
 				language: 'common' as LanguageEnum,
 				mastery: 3,
+				label: 'species',
 			},
 			{
 				language: 'elven' as LanguageEnum,
 				mastery: 2,
+				label: 'species',
 			},
 		],
 	},
@@ -349,10 +357,12 @@ export const durhkran = {
 			{
 				language: 'dwarvish' as LanguageEnum,
 				mastery: 3,
+				label: 'species',
 			},
 			{
 				language: 'common' as LanguageEnum,
 				mastery: 2,
+				label: 'species',
 			},
 		],
 	},
@@ -433,10 +443,12 @@ export const grey = {
 			{
 				language: 'clay' as LanguageEnum,
 				mastery: 3,
+				label: 'species',
 			},
 			{
 				language: 'dwarvish' as LanguageEnum,
 				mastery: 2,
+				label: 'species',
 			},
 		],
 	},
@@ -519,10 +531,12 @@ export const republican = {
 			{
 				language: 'goblin' as LanguageEnum,
 				mastery: 3,
+				label: 'species',
 			},
 			{
 				language: 'common' as LanguageEnum,
 				mastery: 2,
+				label: 'species',
 			},
 		],
 	},
@@ -603,10 +617,12 @@ export const royalist = {
 			{
 				language: 'goblin' as LanguageEnum,
 				mastery: 3,
+				label: 'species',
 			},
 			{
 				language: 'clay' as LanguageEnum,
 				mastery: 2,
+				label: 'species',
 			},
 		],
 	},
@@ -688,10 +704,12 @@ export const free = {
 			{
 				language: 'common' as LanguageEnum,
 				mastery: 3,
+				label: 'species',
 			},
 			{
 				language: 'gnomish' as LanguageEnum,
 				mastery: 2,
+				label: 'species',
 			},
 		],
 	},
@@ -776,10 +794,12 @@ export const proschöne = {
 			{
 				language: 'gnomish' as LanguageEnum,
 				mastery: 3,
+				label: 'species',
 			},
 			{
 				language: 'common' as LanguageEnum,
 				mastery: 2,
+				label: 'species',
 			},
 		],
 	},
@@ -868,10 +888,12 @@ export const pipourray = {
 			{
 				language: 'common' as LanguageEnum,
 				mastery: 3,
+				label: 'species',
 			},
 			{
 				language: 'clay' as LanguageEnum,
 				mastery: 2,
+				label: 'species',
 			},
 		],
 	},
@@ -952,10 +974,12 @@ export const villous = {
 			{
 				language: 'common' as LanguageEnum,
 				mastery: 3,
+				label: 'species',
 			},
 			{
 				language: 'clay' as LanguageEnum,
 				mastery: 2,
+				label: 'species',
 			},
 		],
 	},
@@ -1037,10 +1061,12 @@ export const halfvampire = {
 			{
 				language: 'common' as LanguageEnum,
 				mastery: 3,
+				label: 'species',
 			},
 			{
 				language: 'dead_speech' as LanguageEnum,
 				mastery: 2,
+				label: 'species',
 			},
 		],
 	},
@@ -1128,10 +1154,12 @@ export const barbarian = {
 			{
 				language: 'common' as LanguageEnum,
 				mastery: 3,
+				label: 'species',
 			},
 			{
 				language: 'giant' as LanguageEnum,
 				mastery: 2,
+				label: 'species',
 			},
 		],
 	},
@@ -1212,10 +1240,12 @@ export const halfogre = {
 			{
 				language: 'common' as LanguageEnum,
 				mastery: 3,
+				label: 'species',
 			},
 			{
 				language: 'gnomish' as LanguageEnum,
 				mastery: 2,
+				label: 'species',
 			},
 		],
 	},
@@ -1301,10 +1331,12 @@ export const troll = {
 			{
 				language: 'troll' as LanguageEnum,
 				mastery: 3,
+				label: 'species',
 			},
 			{
 				language: 'common' as LanguageEnum,
 				mastery: 2,
+				label: 'species',
 			},
 		],
 	},
