@@ -50,6 +50,8 @@ const CharFormStep4 = () => {
 		[selectSpecies],
 	);
 
+	console.warn(selectedSub);
+
 	// Species specificities assessment
 	// switch (selectedSub) {
 	// 	case 'pipourray':
@@ -76,26 +78,38 @@ const CharFormStep4 = () => {
 							setCurrentSpeaks={setCurrentSpeaks}
 						/>
 					)}
-					{selectedSub === 'moufflian' ||
-						(methods
-							.getValues('path.attributes')
-							?.find(attr => attr.name === 'Polyglot') && (
-							<AdditionalLanguage
-								title='+ Spoken language'
-								mastery={1}
-								list={prunedList.filter(speak =>
-									spokenLanguageOptions.some(s => s.value === speak.value),
-								)}
-								label='spoken'
-								currentSpeaks={currentSpeaks}
-								setCurrentSpeaks={setCurrentSpeaks}
-							/>
-						))}
+					{selectedSub === 'moufflian' && (
+						<AdditionalLanguage
+							title='Cosmopolite language'
+							mastery={1}
+							list={prunedList.filter(speak =>
+								spokenLanguageOptions.some(s => s.value === speak.value),
+							)}
+							label='moufflian'
+							currentSpeaks={currentSpeaks}
+							setCurrentSpeaks={setCurrentSpeaks}
+						/>
+					)}
+
+					{methods
+						.getValues('path.attributes')
+						?.find(attr => attr.name === 'Polyglot') && (
+						<AdditionalLanguage
+							title='+ Spoken language'
+							mastery={1}
+							list={prunedList.filter(speak =>
+								spokenLanguageOptions.some(s => s.value === speak.value),
+							)}
+							label='spoken'
+							currentSpeaks={currentSpeaks}
+							setCurrentSpeaks={setCurrentSpeaks}
+						/>
+					)}
 					{methods
 						.getValues('path.attributes')
 						?.find(attr => attr.name === 'Scholar') && (
 						<AdditionalLanguage
-							title='+ Scholared language'
+							title='+ Scholar language'
 							mastery={1}
 							list={prunedList.filter(speak =>
 								obscureLanguageOptions.some(s => s.value === speak.value),
@@ -109,9 +123,7 @@ const CharFormStep4 = () => {
 			</fieldset>
 
 			<fieldset className='w-full sm:w-1/2'>
-				<label className='fieldset-legend label font-cabin text-neutral-content mb-1 pb-0 text-xs capitalize'>
-					Species skill
-				</label>{' '}
+				<label className='fieldset-legend label font-cabin text-neutral-content mb-1 pb-0 text-xs capitalize'></label>{' '}
 			</fieldset>
 		</>
 	);
