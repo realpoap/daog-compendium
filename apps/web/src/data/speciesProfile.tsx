@@ -1168,7 +1168,7 @@ export const barbarian = {
 		attributes: [
 			{
 				name: 'Long-Range Hunter',
-				effect: 'May reroll athletics checks, +1 strength',
+				effect: 'May reroll athletics checks, +1 physique',
 				description:
 					'Barbarian hunters travel long distances in search of big game. From a young age, they’re trained to move fast, carry gear, and endure exhaustion without complaint.',
 				value: 0,
