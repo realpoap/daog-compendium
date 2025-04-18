@@ -16,13 +16,14 @@ import {
 import { cn } from '@/utils/classNames';
 import { trpc } from '@/utils/trpc';
 import { NewComponent, NewComponentSchema } from '@api/lib/ZodComponent';
-import { NewItem, NewItemSchema } from '@api/lib/ZodItem';
+import { ItemSchema, NewItem, NewItemSchema } from '@api/lib/ZodItem';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { RiAddLine } from 'rocketicons/ri';
+import { z } from 'zod';
 import { SmallCircleButton, SubmitButton } from '../Buttons';
 import Collapsible from '../Collapsible';
 import {
@@ -101,39 +102,160 @@ const NewItemPage = () => {
 		shouldFocusError: true,
 	});
 
-	useEffect(() => {
-		//UPDATE NAME ARRAY
-		if (nameArray[0] !== null || nameArray[0] !== undefined) {
-			methods.setValue('name', nameArray);
-		} else {
-			methods.setValue('name', nameArray);
-		}
-		if (methods.getValues('isCritical') === undefined)
-			methods.setValue('isCritical', false);
-		const searchNameEdit = `${methods.getValues('name')[0]} - ${methods.getValues('materialType')} (${methods.getValues('quality')})}`;
-		methods.setValue('searchName', searchNameEdit);
-		//UPDATE INFLICT TYPES
-		methods.setValue('inflictType', inflictTypes);
-		//UPDATE RESIST TYPES
-		methods.setValue('resistType', resistTypes);
-		//DURABILITY
-		methods.setValue('durability', methods.getValues('maxDurability'));
-	}, [methods.formState, inflictTypes, resistTypes]);
+	// useEffect(() => {
+	// 	//UPDATE NAME ARRAY
+	// 	if (nameArray[0] !== null || nameArray[0] !== undefined) {
+	// 		methods.setValue('name', nameArray);
+	// 	} else {
+	// 		methods.setValue('name', []);
+	// 	}
+	// 	const name = nameArray[0] || [];
+
+	// 	if (methods.getValues('isCritical') === undefined)
+	// 		methods.setValue('isCritical', false);
+	// 	const searchNameEdit = `${name} - ${methods.getValues('materialType')} (${methods.getValues('quality')})}`;
+	// 	methods.setValue('searchName', searchNameEdit);
+	// 	//UPDATE INFLICT TYPES
+	// 	methods.setValue('inflictType', inflictTypes);
+	// 	//UPDATE RESIST TYPES
+	// 	methods.setValue('resistType', resistTypes);
+	// 	//DURABILITY
+	// 	const durability = methods.getValues('maxDurability') || 1;
+	// 	methods.setValue('durability', durability);
+	// 	methods.setValue('maxDurability', durability);
+	// 	methods.setValue('damages', methods.getValues('damages') || null);
+	// 	methods.setValue('protection', methods.getValues('protection') || null);
+	// 	methods.setValue('armorClass', methods.getValues('armorClass') || null);
+	// 	methods.setValue('range', methods.getValues('range') || null);
+	// 	methods.setValue('rangeType', methods.getValues('rangeType') || null);
+	// 	methods.setValue('weaponType', methods.getValues('weaponType') || null);
+	// 	methods.setValue('usage', methods.getValues('usage') || null);
+	// }, [methods.formState.isValidating, inflictTypes, resistTypes]);
 
 	useEffect(() => {
-		//UPDATE NAME ARRAY
-		if (nameArray[0] !== null) {
-			methods2.setValue('name', nameArray);
+		const schemaKeys = Object.keys(ItemSchema.shape) as (keyof NewItem)[];
+		const values = methods.getValues();
+
+		schemaKeys.forEach(key => {
+			const currentValue = values[key];
+
+			if (key === 'constraints') {
+				// If constraints is undefined or null, initialize all stats to 0
+				if (!currentValue) {
+					const zeroStats = {
+						CEL: 0,
+						AGI: 0,
+						DEX: 0,
+						STR: 0,
+						END: 0,
+						VIT: 0,
+						WIL: 0,
+						INS: 0,
+						SEN: 0,
+						CHA: 0,
+						SOC: 0,
+						ERU: 0,
+					};
+					methods.setValue('constraints', zeroStats);
+				}
+				return;
+			}
+
+			// Set undefined fields to null or an appropriate default
+			if (currentValue === undefined) {
+				if (ItemSchema.shape[key] instanceof z.ZodArray) {
+					methods.setValue(key, []); // For arrays
+				} else if (ItemSchema.shape[key] instanceof z.ZodBoolean) {
+					methods.setValue(key, false); // For booleans
+				} else {
+					methods.setValue(key, null); // For other types
+				}
+			}
+		});
+
+		// Special handling for name field (as array of strings)
+		if (nameArray[0] !== null && nameArray[0] !== undefined) {
+			methods.setValue('name', nameArray);
+		} else {
+			methods.setValue('name', []);
 		}
-		console.log(methods2.getValues('habitat'));
-		console.log(methods2.getValues('toxicity'));
-		if (methods2.getValues('toxicity') === undefined)
-			methods2.setValue('toxicity', '');
-		const searchNameEdit = `${methods2.getValues('name')[0]} - ${methods2.getValues('componentType')} (${methods2.getValues('rarity')})`;
+
+		// Set default isCritical explicitly if needed
+		if (methods.getValues('isCritical') === undefined) {
+			methods.setValue('isCritical', false);
+		}
+
+		// Build and set searchName
+		const name = nameArray[0] || '';
+		const materialType = methods.getValues('materialType') ?? '';
+		const quality = methods.getValues('quality') ?? '';
+		const searchNameEdit = `${name}-${materialType}(${quality})`;
+		methods.setValue('searchName', searchNameEdit);
+
+		// TODO: Update inflictType logic
+	}, [methods, nameArray]);
+
+	useEffect(() => {
+		const schema = NewComponentSchema.shape;
+		const values = methods2.getValues();
+
+		for (const key in schema) {
+			const field = key as keyof typeof schema;
+			const currentValue = values[field];
+
+			// Skip defined fields
+			if (currentValue !== undefined) continue;
+
+			const shape = schema[field];
+
+			if (shape instanceof z.ZodArray) {
+				methods2.setValue(field, []);
+			} else if (shape instanceof z.ZodBoolean) {
+				methods2.setValue(field, false);
+			} else if (shape instanceof z.ZodNullable) {
+				methods2.setValue(field, null);
+			} else if (shape instanceof z.ZodString) {
+				methods2.setValue(field, '');
+			} else if (shape instanceof z.ZodNumber) {
+				methods2.setValue(field, 0);
+			} else {
+				// Fallback for unknown types
+				methods2.setValue(field, null);
+			}
+		}
+
+		// Set name array
+		if (nameArray[0] !== null && nameArray[0] !== undefined) {
+			methods2.setValue('name', nameArray);
+		} else {
+			methods2.setValue('name', ['']);
+		}
+
+		// Set searchName
+		const name = nameArray[0] || '';
+		const componentType = methods2.getValues('componentType') ?? '';
+		const rarity = methods2.getValues('rarity') ?? '';
+		const searchNameEdit = `${name} - ${componentType} (${rarity})`;
 		methods2.setValue('searchName', searchNameEdit);
-		//UPDATE INFLICT TYPES
-		//methods2.setValue('habitat', habitatTypes);
-	}, [methods2.formState, habitatTypes]);
+	}, [methods2.formState, nameArray]);
+
+	// useEffect(() => {
+	// 	//UPDATE NAME ARRAY
+	// 	if (nameArray[0] !== null || nameArray[0] !== undefined) {
+	// 		methods.setValue('name', nameArray);
+	// 	} else {
+	// 		methods.setValue('name', []);
+	// 	}
+	// 	const name = nameArray[0] || [];
+
+	// 	if (methods2.getValues('toxicity') === undefined)
+	// 		methods2.setValue('toxicity', '');
+
+	// 	const searchNameEdit = `${name} - ${methods2.getValues('componentType')} (${methods2.getValues('rarity')})`;
+	// 	methods2.setValue('searchName', searchNameEdit);
+	// 	//UPDATE INFLICT TYPES
+	// 	//methods2.setValue('habitat', habitatTypes);
+	// }, [methods2.formState, habitatTypes]);
 
 	const onItemSubmit = async (data: NewItem) => {
 		if (radioType === 'item') await createItem.mutate(data as NewItem);
