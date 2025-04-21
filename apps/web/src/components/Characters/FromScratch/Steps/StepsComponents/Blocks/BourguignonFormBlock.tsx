@@ -81,12 +81,11 @@ const BourguignonFormBlock = () => {
 	};
 	return (
 		<fieldset className='w-full sm:w-1/2'>
-			<label className='fieldset-legend label font-cabin text-neutral-content mb-1 pb-0 text-xs capitalize'>
-				Specificities
-			</label>{' '}
 			{selectedSub === 'bourguignon' && (
 				<fieldset className='flex flex-col'>
-					<label>Enseignement cloisonné</label>
+					<label className='fieldset-legend label font-cabin text-neutral-content mb-1 pb-0 text-xs capitalize'>
+						Specificities
+					</label>{' '}
 					<div className='flex flex-row gap-4'>
 						<label className={cn('checked:text-primary text-base-content')}>
 							<input
