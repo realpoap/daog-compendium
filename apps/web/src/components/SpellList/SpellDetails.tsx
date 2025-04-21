@@ -70,7 +70,7 @@ const SpellDetails = () => {
 				<div className='mt-2 flex items-center justify-center'>
 					<div
 						className={cn(
-							'*:icon-stone-500 hover:*:icon-primary hover:border-primary hover:animate-wiggle *:shadow-background flex size-12 items-center justify-center overflow-clip rounded-full border-2 border-stone-500 *:drop-shadow-lg',
+							'*:icon-neutral-content hover:*:icon-primary hover:border-primary hover:animate-wiggle *:shadow-background border-neutral-content flex size-12 items-center justify-center overflow-clip rounded-full border-2 *:drop-shadow-lg',
 							{
 								'*:icon-4xl *:mr-2': spell?.type === 'mouflette',
 								'*:icon-4xl *:-mt-2': spell?.type === 'blood',

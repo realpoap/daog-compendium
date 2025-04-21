@@ -306,6 +306,7 @@ export const SpecificsSchema = z.object({
 	height: z.number().int().nullable().optional(),
 	bornIn: z.string().nullable().optional(),
 	restBonus: z.number().int().nullable().optional(),
+	meditationBonus: z.number().int().nullable().optional(),
 	dmgBonus: DamageBonusSchema.optional().nullable(),
 	massive: z.boolean().optional(),
 });

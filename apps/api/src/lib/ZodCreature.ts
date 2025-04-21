@@ -34,7 +34,7 @@ export type ActionList = z.infer<typeof ActionListSchema>;
 export const CreatureAttributeSchema = z.object({
 	name: z
 		.string({ required_error: 'Name is required' })
-		.min(4, 'Name must be greater than 3'),
+		.min(3, 'Name must be greater than 3'),
 	flavor: z.string().nullable(),
 	description: z.string().nullable(),
 	value: z.number().int().nullable(),
