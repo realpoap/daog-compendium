@@ -53,7 +53,6 @@ model Character {
   profile Statistics
   specifics Specifics
   equipment Inventory
-
 }
 
 type Masteries {
@@ -159,6 +158,7 @@ type Specifics {
   height Int? @default(0)
   bornIn String?
   restBonus Int? @default(0)
+  meditationBonus Int? @default(0)
   dmgBonus DamageBonus?
   speaks Language[]
   massive Boolean @default(false)
@@ -533,6 +533,7 @@ model Spell {
   heal        String?
   effects     String?
   range       String?
+  rangeType rangeType?
   duration    String?
   target      String?
   components  String?

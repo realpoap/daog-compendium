@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { rangeTypeSchema } from './ZodItem';
 
 export const SpellTypeSchema = z.enum([
 	'mouflette',
@@ -90,6 +91,7 @@ export const ZodNewSpell = z.object({
 	heal: z.string().nullable(),
 	effects: z.string().nullable(),
 	range: z.string().nullable(),
+	rangeType: rangeTypeSchema.nullable(),
 	duration: z.string().nullable(),
 	target: z.string().nullable(),
 	components: z.string().nullable(),

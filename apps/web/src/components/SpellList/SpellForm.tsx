@@ -1,3 +1,4 @@
+import { rangeType } from '@/types/itemOptions';
 import {
 	actionOptions,
 	castingOptions,
@@ -47,7 +48,7 @@ const SpellForm = () => {
 			toast.success('Spell created !');
 			methods.reset();
 			navigate({
-				to: '/spells/$id',
+				to: '/spells',
 				params: { id: `${data.id}` },
 			});
 		},
@@ -99,7 +100,7 @@ const SpellForm = () => {
 							type='text'
 						/>
 					</Field>
-					<Collapsible title='add glaise name'>
+					<Collapsible title='details'>
 						{' '}
 						<Field
 							name='titleGlaise'
@@ -108,6 +109,17 @@ const SpellForm = () => {
 							<Input
 								name='titleGlaise'
 								type='text'
+							/>
+						</Field>
+						<Field
+							name='number'
+							label='Number'
+						>
+							<InputNumber
+								name='number'
+								min='1'
+								step='1'
+								max={newSpellNumber + 1}
 							/>
 						</Field>
 					</Collapsible>
@@ -160,6 +172,17 @@ const SpellForm = () => {
 								defaultValue='default'
 							/>
 						</Field>
+						<Field
+							name='rangeType'
+							width='small'
+							label='range'
+						>
+							<Select
+								name='rangeType'
+								options={rangeType}
+								defaultValue='visible'
+							/>
+						</Field>
 					</div>
 
 					{/* NUMBERS ------------------------------------------------ */}
@@ -168,19 +191,37 @@ const SpellForm = () => {
 							name='level'
 							width='small'
 						>
-							<InputNumber name='level' />
+							<InputNumber
+								name='level'
+								step='1'
+								min='1'
+								defaultValue='1'
+								max={5}
+							/>
 						</Field>
 						<Field
 							name='cost'
 							width='small'
 						>
-							<InputNumber name='cost' />
+							<InputNumber
+								name='cost'
+								step='1'
+								min='1'
+								defaultValue='1'
+								max={12}
+							/>
 						</Field>
 						<Field
 							name='difficulty'
 							width='small'
 						>
-							<InputNumber name='difficulty' />
+							<InputNumber
+								name='difficulty'
+								step='1'
+								min='1'
+								defaultValue='15'
+								max={50}
+							/>
 						</Field>
 					</div>
 

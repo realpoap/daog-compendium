@@ -898,7 +898,13 @@ export const pipourray = {
 		],
 	},
 	path: {
-		skills: ['cuisine-175', 'chant-122', 'dressage-49', 'simples-170'],
+		skills: [
+			'cuisine-175',
+			'chant-122',
+			'dressage-49',
+			'simples-170',
+			'baton-20',
+		],
 		attributes: [
 			{
 				name: 'Pacifist',
@@ -922,7 +928,7 @@ export const pipourray = {
 			},
 			{
 				name: 'Artistic Passion',
-				effect: '+2 Art skill, +1 performance',
+				effect: '+1 Crafting skill, +1 performance',
 				description:
 					'Pipoura orcs cultivate wonder and beauty within their camps, believing that music and song are the best remedies for violent instincts. Their culture thrives on creativity and expression.',
 				value: 0,

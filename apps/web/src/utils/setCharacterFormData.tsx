@@ -28,6 +28,7 @@ export const setupCompleteCharacterFormValues = (
 	methods.setValue('profile.level', 1);
 	setupBio(methods, user);
 	setupStatus(methods);
+	setupSpecieBonus(methods);
 	methods.setValue('masteries', masteriesReset);
 
 	return methods.getValues();
@@ -78,4 +79,27 @@ const setupStatus = (methods: UseFormReturn<NewCharacter>) => {
 	methods.setValue('status.magicLoad.current', 0);
 
 	methods.setValue('path.actionList.limited', levelBonus);
+};
+
+const setupSpecieBonus = (methods: UseFormReturn<NewCharacter>) => {
+	const species = methods.getValues('bio.subspecies');
+	let newInit: number = Number(
+		methods.getValues('profile.variables.initiative'),
+	);
+	let newKnowledge: number = Number(
+		methods.getValues('masteries.knowledge.current'),
+	);
+	switch (species) {
+		case 'inclay':
+			newInit = newInit - 2;
+			methods.setValue('profile.variables.initiative', newInit);
+			break;
+		case 'republican':
+			newKnowledge = newKnowledge + 1;
+			methods.setValue('masteries.knowledge.current', newKnowledge);
+			break;
+
+		default:
+			break;
+	}
 };

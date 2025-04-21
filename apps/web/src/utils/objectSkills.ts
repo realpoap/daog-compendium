@@ -5,7 +5,7 @@ import { CharacterSkill } from '@api/lib/ZodCharacter';
 export const setObjectSkills = (skilllist: Array<string>) => {
 	const objectSkills: CharacterSkill[] = []; // reset skill object
 	skilllist.map(skill => {
-		const foundSkill = skillsData.find(data => data.id === skill); // get the skill from the skil list based on the id on species
+		const foundSkill = skillsData.find(data => data.id === skill); // get the skill from the skill list based on the id on species
 		// recreate CharacterSkill object
 		if (foundSkill) {
 			const foundCharSkill = {
