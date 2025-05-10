@@ -21,8 +21,8 @@ const CharFormStep9 = () => {
 	);
 
 	useEffect(() => {
-		if (formData.profile?.statsStarting) {
-			setOriginalProfile(formData.profile?.statsStarting);
+		if (methods.getValues('profile.statsStarting')) {
+			setOriginalProfile(methods.getValues('profile.statsStarting'));
 		}
 	}, []);
 

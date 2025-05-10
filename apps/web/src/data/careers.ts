@@ -64,7 +64,7 @@ export const careersData: Career[] = [
 			{
 				name: 'Pilferer',
 				gain: '1d12',
-				bonus: 'MOU',
+				bonus: 'CEL',
 				skill: 'rapine-96',
 			},
 			{
@@ -223,7 +223,7 @@ export const careersData: Career[] = [
 			{
 				name: 'Scout',
 				gain: '4d3',
-				bonus: 'MOU',
+				bonus: 'CEL',
 				skill: 'furtivite-44',
 			},
 			{
@@ -274,7 +274,7 @@ export const careersData: Career[] = [
 			{
 				name: 'Whaler',
 				gain: '1d6',
-				bonus: 'COU',
+				bonus: 'WIL',
 				skill: 'navigation-114',
 			},
 		],
@@ -289,7 +289,7 @@ export const careersData: Career[] = [
 			{
 				name: 'Pillager',
 				gain: '1d6',
-				bonus: 'MOU',
+				bonus: 'CEL',
 				skill: 'fouille-34',
 			},
 			{
@@ -421,7 +421,7 @@ export const careersData: Career[] = [
 			{
 				name: 'Exhumer',
 				gain: '2d10',
-				bonus: 'COU',
+				bonus: 'WIL',
 				skill: 'veille-118',
 			},
 			{
@@ -487,7 +487,7 @@ export const careersData: Career[] = [
 			{
 				name: 'First Aider',
 				gain: '3d3',
-				bonus: 'COU',
+				bonus: 'WIL',
 				skill: 'premiers-soins-169',
 			},
 			{
@@ -751,7 +751,7 @@ export const careersData: Career[] = [
 			{
 				name: 'Grave Digger',
 				gain: '2d3',
-				bonus: 'COU',
+				bonus: 'WIL',
 				skill: 'geologie-159',
 			},
 			{
@@ -763,7 +763,7 @@ export const careersData: Career[] = [
 			{
 				name: 'Undertaker',
 				gain: '2d3',
-				bonus: 'COU',
+				bonus: 'WIL',
 				skill: 'conserves-4',
 			},
 			{
@@ -982,7 +982,7 @@ export const careersData: Career[] = [
 			{
 				name: 'Disciple',
 				gain: '0',
-				bonus: 'COU',
+				bonus: 'WIL',
 				skill: 'baratin-46',
 			},
 			{
@@ -1180,7 +1180,7 @@ export const careersData: Career[] = [
 			{
 				name: 'Assistant',
 				gain: '2d3',
-				bonus: 'COU',
+				bonus: 'WIL',
 				skill: 'decoupe-91',
 			},
 			{
@@ -1246,7 +1246,7 @@ export const careersData: Career[] = [
 			{
 				name: 'Lamplighter',
 				gain: '0.5',
-				bonus: 'COU',
+				bonus: 'WIL',
 				skill: 'escalade-143',
 			},
 			{
@@ -1264,7 +1264,7 @@ export const careersData: Career[] = [
 			{
 				name: 'Militiaman',
 				gain: '0.5',
-				bonus: 'MOU',
+				bonus: 'CEL',
 				skill: 'course-105',
 			},
 		],
@@ -1312,7 +1312,7 @@ export const careersData: Career[] = [
 			{
 				name: 'Penitent',
 				gain: '3d3',
-				bonus: 'VIE',
+				bonus: 'VIT',
 				skill: 'jeune-177',
 			},
 			{
@@ -1324,7 +1324,7 @@ export const careersData: Career[] = [
 			{
 				name: 'Hospitaller',
 				gain: '3d3',
-				bonus: 'COU',
+				bonus: 'WIL',
 				skill: 'masse-25',
 			},
 			{
@@ -1390,7 +1390,7 @@ export const careersData: Career[] = [
 			{
 				name: 'Tracker',
 				gain: '1d3',
-				bonus: 'MOU',
+				bonus: 'CEL',
 				skill: 'pistage-180',
 			},
 			{
@@ -1522,13 +1522,13 @@ export const careersData: Career[] = [
 			{
 				name: 'Exorcist',
 				gain: '2d4',
-				bonus: 'COU',
+				bonus: 'WIL',
 				skill: 'spiritisme-60',
 			},
 			{
 				name: 'Witch Hunter',
 				gain: '2d4',
-				bonus: 'COU',
+				bonus: 'WIL',
 				skill: 'enquete-33',
 			},
 		],
@@ -1681,7 +1681,7 @@ export const careersData: Career[] = [
 			{
 				name: 'Sewer Jack',
 				gain: '2d4',
-				bonus: 'COU',
+				bonus: 'WIL',
 				skill: 'orientation-178',
 			},
 			{
@@ -1693,7 +1693,7 @@ export const careersData: Career[] = [
 			{
 				name: 'Slayer',
 				gain: '2d4',
-				bonus: 'COU',
+				bonus: 'WIL',
 				skill: 'pistage-180',
 			},
 		],
@@ -1753,7 +1753,7 @@ export const careersData: Career[] = [
 			{
 				name: 'Buccaneer',
 				gain: '2d3',
-				bonus: 'COU',
+				bonus: 'WIL',
 				skill: 'intimidation-136',
 			},
 			{
@@ -1840,7 +1840,7 @@ export const careersData: Career[] = [
 			{
 				name: 'Aspirant',
 				gain: '0.5',
-				bonus: 'COU',
+				bonus: 'WIL',
 				skill: 'vents-magiques-119',
 			},
 			{
@@ -1858,7 +1858,7 @@ export const careersData: Career[] = [
 			{
 				name: 'Bonze',
 				gain: '0.5',
-				bonus: 'COU',
+				bonus: 'WIL',
 				skill: 'meditation-117',
 			},
 		],
@@ -1879,7 +1879,7 @@ export const careersData: Career[] = [
 			{
 				name: 'Artificer',
 				gain: '2d6',
-				bonus: 'COU',
+				bonus: 'WIL',
 				skill: 'explosifs-7',
 			},
 			{

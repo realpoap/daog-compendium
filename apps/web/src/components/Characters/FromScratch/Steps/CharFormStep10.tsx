@@ -1,9 +1,11 @@
 import { Career, careersData } from '@/data/careers';
 import { useCharacterForm } from '@/store/characterContext';
+import { deduplicateSkills, setObjectSkills } from '@/utils/objectSkills';
+import { StatProfil } from '@api/lib/ZodCreature';
 import { ChangeEvent, useEffect, useState } from 'react';
 
 const CharFormStep10 = () => {
-	const { methods } = useCharacterForm();
+	const { methods, formData } = useCharacterForm();
 	const originalCareerName = methods.getValues('path.careers') || null;
 
 	const originalCareer: Career | null = originalCareerName
@@ -20,8 +22,17 @@ const CharFormStep10 = () => {
 	useEffect(() => {
 		if (!selectedCareer) return;
 		console.log('selected career:', selectedCareer.name);
-
-		methods.setValue('path.careers', [selectedCareer.ranks[0].name]);
+		const startingRank = selectedCareer.ranks[0];
+		const profile = formData.profile?.statsStarting;
+		if (profile) {
+			const updatedProfile = {
+				...profile,
+				[startingRank.bonus as keyof StatProfil]:
+					(profile[startingRank.bonus as keyof StatProfil] ?? 0) + 1,
+			};
+			methods.setValue('profile.statsStarting', updatedProfile);
+		}
+		methods.setValue('path.careers', [startingRank.name]);
 	}, [selectedCareer]);
 
 	const handleCareerTypeSelect = (e: ChangeEvent<HTMLInputElement>) => {
@@ -36,6 +47,12 @@ const CharFormStep10 = () => {
 		const career = careersData.find(c => c.id === id);
 		if (career) {
 			setSelectedCareer(career);
+			const skillList = career.ranks[0].skill;
+			const objectSkills = setObjectSkills([skillList]);
+			const currentSkills = formData.path?.skills;
+			if (currentSkills) objectSkills?.push(...currentSkills);
+			const deduplicatedSkills = deduplicateSkills(objectSkills);
+			methods.setValue('path.skills', deduplicatedSkills);
 		}
 	};
 
@@ -125,6 +142,7 @@ const CharFormStep10 = () => {
 											{i + 1}
 										</span>
 										<h4>{r.name}</h4>
+										<span className='text-xs'>+1 {r.bonus}</span>
 									</div>
 								))}
 							</div>
