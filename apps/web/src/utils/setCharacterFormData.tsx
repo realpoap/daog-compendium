@@ -29,6 +29,7 @@ export const setupCompleteCharacterFormValues = (
 	setupBio(methods, user);
 	setupStatus(methods);
 	setupSpecieBonus(methods);
+	setupActions(methods);
 	methods.setValue('masteries', masteriesReset);
 
 	return methods.getValues();
@@ -56,12 +57,7 @@ const setupBio = (
 	if (subspecies) {
 		const selectedKey = subspecies;
 		const selectedSpecies = speciesMap[selectedKey];
-		if (selectedSpecies) {
-			methods.setValue(
-				'profile.statsStarting',
-				selectedSpecies.profile.statsStarting,
-			);
-		}
+
 		methods.setValue('bio.isCaster', selectedSpecies.bio?.isCaster || false);
 	}
 };
@@ -102,4 +98,12 @@ const setupSpecieBonus = (methods: UseFormReturn<NewCharacter>) => {
 		default:
 			break;
 	}
+};
+
+const setupActions = (methods: UseFormReturn<NewCharacter>) => {
+	const cel = Math.floor(methods.getValues('profile.statsStarting.CEL') / 10);
+	methods.setValue('path.actionList.free', 1);
+	methods.setValue('path.actionList.travel', 2);
+	methods.setValue('path.actionList.epic', 0);
+	methods.setValue('path.actionList.main', cel < 1 ? 1 : cel);
 };

@@ -1,9 +1,10 @@
-import { SpecieDataForm, allSpecies } from '@/data/speciesProfile';
+import { SpecieDataForm, allSpecies, speciesMap } from '@/data/speciesProfile';
 import { useAuth } from '@/store/authContext';
 import { useCharacterForm } from '@/store/characterContext';
 import { setObjectSkills } from '@/utils/objectSkills';
 import { setupCompleteCharacterFormValues } from '@/utils/setCharacterFormData';
 import { trpc } from '@/utils/trpc';
+import { useNavigate } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 import { FormProvider, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -33,6 +34,7 @@ const CharacterFormNavigation = () => {
 };
 
 const CharacterFormInner = () => {
+	const navigate = useNavigate();
 	const { user } = useAuth();
 	const { methods, currentStep, nextStep, prevStep, formData, setFormData } =
 		useCharacterForm();
@@ -40,9 +42,11 @@ const CharacterFormInner = () => {
 
 	const createCharacter = trpc.characters.create.useMutation({
 		onSuccess: () => {
-			//methods.reset();
-
 			toast.success('Character created !');
+			methods.reset();
+			navigate({
+				to: '/characters',
+			});
 		},
 		onError: error => {
 			if (error.data?.code === 'UNAUTHORIZED') {
@@ -64,6 +68,7 @@ const CharacterFormInner = () => {
 				const skilllist = foundSub?.path.skills;
 				const languagelist = foundSub?.specifics.speaks;
 				const attributelist = foundSub?.path.attributes;
+				const selectedSpecies = speciesMap[foundSub.sub];
 				const objectSkills = setObjectSkills(skilllist);
 				const skillPoints = foundSub.specie === 'human' ? 10 : 5;
 				setFormData(prev => ({
@@ -80,6 +85,11 @@ const CharacterFormInner = () => {
 						description: '',
 						background: '',
 					},
+					profile: {
+						...prev.profile,
+						level: 1,
+						statsStarting: selectedSpecies.profile.statsStarting,
+					},
 				}));
 			}
 		}
@@ -92,8 +102,8 @@ const CharacterFormInner = () => {
 	const onSubmit = handleSubmit(data => {
 		if (currentStep === steps.length - 1) {
 			// Final step → submit to backend
-			console.log('Final submit:', data);
 			const complete = setupCompleteCharacterFormValues(methods, user);
+			console.log('Final submit:', complete);
 			createCharacter.mutate(complete);
 		} else {
 			console.log('Step valid data:', data);
