@@ -1251,19 +1251,19 @@ export const careersData: Career[] = [
 			},
 			{
 				name: 'Watchman',
-				gain: 3,
+				gain: '0.5',
 				bonus: 'INS',
 				skill: 'veille-118',
 			},
 			{
 				name: 'Guard',
-				gain: 3,
+				gain: '0.5',
 				bonus: 'SOC',
 				skill: 'intimidation-136',
 			},
 			{
 				name: 'Militiaman',
-				gain: 3,
+				gain: '0.5',
 				bonus: 'MOU',
 				skill: 'course-105',
 			},
@@ -1839,25 +1839,25 @@ export const careersData: Career[] = [
 		ranks: [
 			{
 				name: 'Aspirant',
-				gain: 1,
+				gain: '0.5',
 				bonus: 'COU',
 				skill: 'vents-magiques-119',
 			},
 			{
 				name: 'Monk',
-				gain: 1,
+				gain: '0.5',
 				bonus: 'ERU',
 				skill: 'simples-170',
 			},
 			{
 				name: 'Pugilist',
-				gain: 1,
+				gain: '0.5',
 				bonus: 'END',
 				skill: 'art-martial-99',
 			},
 			{
 				name: 'Bonze',
-				gain: 1,
+				gain: '0.5',
 				bonus: 'COU',
 				skill: 'meditation-117',
 			},
