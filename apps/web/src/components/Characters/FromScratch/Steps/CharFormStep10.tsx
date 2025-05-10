@@ -4,11 +4,23 @@ import { ChangeEvent, useEffect, useState } from 'react';
 
 const CharFormStep10 = () => {
 	const { methods } = useCharacterForm();
-	const [selectedCareer, setSelectedCareer] = useState<Career | null>();
+	const originalCareerName = methods.getValues('path.careers') || null;
+
+	const originalCareer: Career | null = originalCareerName
+		? careersData.find(career =>
+				career.ranks.some(rank => rank.name.includes(originalCareerName[0])),
+			) || null
+		: null;
+
+	const [selectedCareer, setSelectedCareer] = useState<Career | null>(
+		originalCareer || null,
+	);
 	const [selectedCareerType, setSelectedCareerType] = useState<string | null>();
 
 	useEffect(() => {
 		if (!selectedCareer) return;
+		console.log('selected career:', selectedCareer.name);
+
 		methods.setValue('path.careers', [selectedCareer.ranks[0].name]);
 	}, [selectedCareer]);
 
@@ -22,7 +34,9 @@ const CharFormStep10 = () => {
 	};
 	const handleCareerSelect = (id: number) => {
 		const career = careersData.find(c => c.id === id);
-		setSelectedCareer(career);
+		if (career) {
+			setSelectedCareer(career);
+		}
 	};
 
 	return (
@@ -77,7 +91,7 @@ const CharFormStep10 = () => {
 					/>
 				</div>
 				<div className='flex w-full flex-col gap-4 sm:flex-row'>
-					<div className='h-50 w-1/2 overflow-y-scroll rounded-sm shadow'>
+					<div className='h-50 flex w-1/2 flex-col gap-1 overflow-y-scroll rounded-sm shadow'>
 						{careersData
 							.filter(c => {
 								if (selectedCareerType) {
@@ -91,7 +105,7 @@ const CharFormStep10 = () => {
 								<div
 									key={`${option.name}-choice`}
 									onClick={() => handleCareerSelect(option.id)}
-									className='hover:text-primary cursor-pointer rounded-sm pl-2'
+									className={`hover:text-primary bg-card hover:bg-tile cursor-pointer rounded-sm pl-2 ${selectedCareer && selectedCareer.id === option.id ? 'text-accent' : 'text-neutral-content'} `}
 								>
 									{option.name}
 								</div>
