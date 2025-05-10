@@ -1875,7 +1875,7 @@ export const characterAttributes: Attribute[] = [
 	{
 		name: 'Sense of Direction',
 		value: 1,
-		effect: 'Good at navigation.',
+		effect: 'Good at finding its ways.',
 		statModifier: null,
 		masteries: [
 			{ amount: '+1', target: 'movement' },

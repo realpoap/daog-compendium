@@ -87,8 +87,10 @@ const CharFormStep5 = () => {
 	}, [characterAttributes]);
 
 	const filteredAttributes = useMemo(() => {
-		return shuffledAttributes.filter(attr =>
-			attr.name.toLowerCase().includes(searchTerm.toLowerCase()),
+		return shuffledAttributes.filter(
+			attr =>
+				attr.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+				attr.id.toLowerCase().includes(searchTerm.toLowerCase()),
 		);
 	}, [shuffledAttributes, searchTerm]);
 
@@ -109,7 +111,7 @@ const CharFormStep5 = () => {
 	return (
 		<div className='flex w-full flex-col items-center justify-center gap-4'>
 			{/* Total Attribute Value Range Bar */}
-			<div className='w-full max-w-xs'>
+			<div className='h-fit w-full max-w-xs'>
 				<h3 className='font-grenze text-xl'>Équilibre :</h3>
 				<input
 					type='range'
@@ -157,7 +159,8 @@ const CharFormStep5 = () => {
 							return (
 								<div
 									key={attr.id}
-									className={`badge badge-md cursor-pointer p-3 capitalize ${isSelected ? 'badge-primary' : 'badge-tile border-primary border-1'}`}
+									className={`badge badge-md cursor-pointer capitalize ${isSelected ? 'badge-primary' : 'badge-tile border-primary border-1 sm:tooltip'}`}
+									data-tip={attr.description}
 									onClick={() => toggleAttribute(attr)}
 								>
 									{attr.name}

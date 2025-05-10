@@ -26,6 +26,7 @@ import {
 } from 'rocketicons/gi';
 import { SmallCircleButton } from '../Buttons';
 import { Option } from '../SpellList/SelectFilter';
+import TagBadge from '../TagBadge';
 import AvatarUpload from './AvatarUpload';
 
 type Props = {
@@ -310,28 +311,68 @@ const CharacterSummaryTile = ({
 				className='modal bg-card'
 			>
 				<div className='modal-box bg-card'>
-					<h3 className='text-lg font-bold'>Items</h3>
-					{char.equipment.items?.map(item => (
-						<li key={item.id}>
-							{item.quantity}x {item.name}
-						</li>
-					))}
-					<h3 className='text-lg font-bold'>Components</h3>
-					{char.equipment.components?.map(item => (
-						<li key={item.id}>
-							{item.quantity}x {item.name}
-						</li>
-					))}
-					<p className='text-neutral py-4'>
-						Press ESC key or click the button below to close
-					</p>
+					<h3 className='text-lg font-bold'>Attributes</h3>
+					<div className='space-x-1'>
+						{char.path?.attributes?.map(att => (
+							<TagBadge
+								key={att.name}
+								text={att.name}
+								tooltip={att.description ?? ''}
+								button={false}
+							/>
+						))}
+					</div>
+					<h3 className='text-lg font-bold'>Skills</h3>
+					<div className='overflow-x-auto'>
+						<table className='table-xs table'>
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>Lvl</th>
+									<th>Points</th>
+									<th>Mastery</th>
+								</tr>
+							</thead>
+							<tbody>
+								{char.path?.skills?.map(skill => (
+									<tr
+										key={skill.id}
+										className='hover:bg-neutral'
+									>
+										<th>{skill.name}</th>
+										<th>{skill.playerLevel}</th>
+										<th>
+											{skill.playerPoints}/{(skill.playerLevel ?? 0) + 1}
+										</th>
+										<th>{skill.mastery}</th>
+									</tr>
+								))}
+							</tbody>
+						</table>
+
+						<h3 className='text-lg font-bold'>Items</h3>
+						{char.equipment.items?.map(item => (
+							<li key={item.id}>
+								{item.quantity}x {item.name}
+							</li>
+						))}
+						<h3 className='text-lg font-bold'>Components</h3>
+						{char.equipment.components?.map(item => (
+							<li key={item.id}>
+								{item.quantity}x {item.name}
+							</li>
+						))}
+						<p className='text-neutral py-4'>
+							Press ESC key or click the button below to close
+						</p>
+					</div>
+					<form
+						method='dialog'
+						className='modal-backdrop'
+					>
+						<button>close</button>
+					</form>
 				</div>
-				<form
-					method='dialog'
-					className='modal-backdrop'
-				>
-					<button>close</button>
-				</form>
 			</dialog>
 			<div
 				className={cn(
