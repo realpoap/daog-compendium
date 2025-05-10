@@ -250,8 +250,8 @@ export const StatisticsSchema = z.object({
 	stats: StatProfilSchema.nullable().optional(),
 	statsStarting: StatProfilSchema,
 	speed: SpeedSchema.nullable().optional(),
-	variables: VariablesSchema.optional(),
-	boni: VariablesSchema.optional(),
+	variables: VariablesSchema,
+	boni: VariablesSchema,
 });
 
 export const StatusSchema = z.object({

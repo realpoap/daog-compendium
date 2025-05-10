@@ -1,6 +1,7 @@
 import { SpecieDataForm, allSpecies, speciesMap } from '@/data/speciesProfile';
 import { useAuth } from '@/store/authContext';
 import { useCharacterForm } from '@/store/characterContext';
+import { variablesReset } from '@/utils/calculateStats';
 import { setObjectSkills } from '@/utils/objectSkills';
 import { setupCompleteCharacterFormValues } from '@/utils/setCharacterFormData';
 import { trpc } from '@/utils/trpc';
@@ -89,6 +90,8 @@ const CharacterFormInner = () => {
 						...prev.profile,
 						level: 1,
 						statsStarting: selectedSpecies.profile.statsStarting,
+						variables: variablesReset,
+						boni: variablesReset,
 					},
 				}));
 			}
