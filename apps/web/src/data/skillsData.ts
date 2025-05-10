@@ -1505,4 +1505,19 @@ export const skillsData: SkillData[] = [
 		mastery: 'ranged',
 		description: 'The ability to accurately shoot while riding a mount.',
 	},
+	{
+		id: 'drogues-191',
+		name: 'Drugs',
+		stat: 'eru',
+		mastery: 'knowledge',
+		description:
+			'The ability to create and raffine drugs from natural and magical components.',
+	},
+	{
+		id: 'grimaces-192',
+		name: 'Gurning',
+		stat: 'cha',
+		mastery: 'performance',
+		description: 'The ability of making grotesque faces',
+	},
 ];

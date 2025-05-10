@@ -1,0 +1,366 @@
+[
+	{
+		"name": "Spark",
+		"description": "A flicker of flame erupts from your fingertip, capable of igniting small, flammable materials like dry tinder or paper. It can also provide a brief, dim light source. While not directly harmful to creatures, the sudden appearance of the spark can be startling. The heat produced is minimal and dissipates quickly. This is a fundamental manipulation of elemental fire, requiring only a small amount of focus to manifest.",
+		"level": 1,
+		"cost": 1,
+		"difficulty": 15
+	},
+	{
+		"name": "Combustion Touch",
+		"description": "Upon a successful touch, you cause a burst of intense heat to erupt from the target's body or an object. This sudden combustion can ignite flammable materials and cause significant burning damage to living creatures. The effect is immediate and violent. This spell requires close proximity to the target and a direct transfer of fiery energy, making it risky but potentially devastating in close quarters.",
+		"level": 2,
+		"cost": 4,
+		"difficulty": 28
+	},
+	{
+		"name": "Wall of Embers",
+		"description": "You conjure a shimmering, waist-high wall of intensely hot embers. The wall is stationary and provides a barrier that deals minor burning damage to creatures passing through it. It also emits significant heat, making the area around it uncomfortable. This spell offers battlefield control and can deter movement or funnel enemies. Maintaining the stable wall of heat requires a sustained magical effort.",
+		"level": 2,
+		"cost": 5,
+		"difficulty": 30
+	},
+	{
+		"name": "Lingering Flame",
+		"description": "You cast a small ball of fire that sticks to a target upon impact. This flame burns for a short duration, dealing consistent, minor fire damage over time. It can also ignite flammable materials the target comes into contact with. This spell is designed to apply persistent damage and can be particularly effective against slower-moving targets. The magical energy sustains the flame even after initial contact.",
+		"level": 2,
+		"cost": 4,
+		"difficulty": 27
+	},
+	{
+		"name": "Fire Dart Volley",
+		"description": "You unleash a rapid-fire series of three small, fiery darts at one or more targets within short range. Each dart deals a small amount of burning damage upon impact. The speed and number of projectiles make it harder to evade. This spell offers a multi-hit offensive option, allowing for targeting multiple weak enemies or focusing damage on a single foe. Maintaining the rapid succession of accurate fire projectiles demands precise magical control.",
+		"level": 2,
+		"cost": 5,
+		"difficulty": 32
+	},
+	{
+		"name": "Flame Lash",
+		"description": "A whip of pure flame erupts from your hand, allowing you to strike targets at medium range. The lash deals burning damage and can potentially knock smaller creatures prone. You can flick and control the fiery tendril with practiced ease. This spell offers both reach and a degree of control over the fiery energy, allowing for tactical strikes and battlefield manipulation.",
+		"level": 3,
+		"cost": 6,
+		"difficulty": 35
+	},
+	{
+		"name": "Fireball (Small)",
+		"description": "You conjure a small but potent sphere of fire and hurl it at a target location. Upon impact, it explodes in a small burst of flame, dealing moderate fire damage to creatures within the area. The heat is intense and can ignite flammable materials. This is a classic offensive fire spell, offering area-of-effect damage. Focusing the raw magical energy into a stable, explosive projectile requires significant concentration.",
+		"level": 3,
+		"cost": 7,
+		"difficulty": 38
+	},
+	{
+		"name": "Infernal Grasp",
+		"description": "Shadowy flames erupt from the ground in a small area, attempting to grapple and burn creatures within. Affected targets take fire damage each turn and have their movement speed significantly reduced while within the fiery grasp. This spell offers both damage and battlefield control, hindering enemy movement and dealing persistent damage. Anchoring the shadowy flames to the ground and maintaining their grappling effect requires a strong connection to the elemental plane of fire.",
+		"level": 3,
+		"cost": 8,
+		"difficulty": 40
+	},
+	{
+		"name": "Blazing Trail",
+		"description": "As you move, you leave a trail of intense flames behind you. These flames persist for a short duration, dealing burning damage to any creature that enters or starts its turn within them. This spell is useful for creating dangerous zones, escaping enemies, or controlling chokepoints. Maintaining the continuous stream of stable flames requires a constant flow of magical energy synchronized with your movement.",
+		"level": 3,
+		"cost": 7,
+		"difficulty": 37
+	},
+	{
+		"name": "Ring of Fire",
+		"description": "A circular wall of roaring flames erupts around you or a target location. The ring is waist-high and prevents non-fire-resistant creatures from easily passing through. It also deals moderate burning damage to those who touch it. This spell offers strong battlefield control and can isolate targets or protect an area. Conjuring and maintaining the stable, circular barrier of intense flame demands significant magical power.",
+		"level": 4,
+		"cost": 9,
+		"difficulty": 42
+	},
+	{
+		"name": "Scorching Column",
+		"description": "A towering pillar of pure, white-hot flame erupts from the ground at a target location. Creatures caught within the column take significant fire damage. The column persists for a brief moment, bathing the area in intense heat and light. This spell delivers focused, high damage to a specific area. Channeling such a large and intense burst of fire requires a considerable amount of magical energy and precise control.",
+		"level": 4,
+		"cost": 10,
+		"difficulty": 45
+	},
+	{
+		"name": "Meteoric Flare",
+		"description": "You conjure a blazing orb of fire that streaks down from the sky (though indoors, it manifests from above). Upon impact, it explodes in a large radius, dealing significant fire damage and potentially knocking creatures prone from the force. The impact leaves behind a patch of burning ground for a short time. This spell offers high area-of-effect damage and some battlefield control. Summoning and directing such a large and destructive fiery projectile requires substantial magical power and focus.",
+		"level": 5,
+		"cost": 12,
+		"difficulty": 50
+	},
+	{
+		"name": "Inferno",
+		"description": "You unleash a devastating wave of all-consuming fire that spreads outwards from you in a large cone. The flames are incredibly intense, dealing massive burning damage and igniting everything flammable in their path. The heat is so extreme it can melt metal. This is a spell of immense destructive power, capable of clearing large areas. Unleashing and controlling such a vast and intense conflagration demands exceptional magical mastery.",
+		"level": 5,
+		"cost": 11,
+		"difficulty": 48
+	},
+	{
+		"name": "Phoenix Spirit",
+		"description": "You briefly summon the essence of a phoenix, manifesting as aLarge, fiery aura around yourself. While active, you gain significant resistance to fire damage, and any creature that strikes you in melee takes burning damage. The aura lasts for a short duration. This spell focuses on defensive and reactive fire magic, offering protection and punishing close-range attackers. Drawing upon the resilient spirit of the phoenix requires a deep connection to the element of fire and a strong will.",
+		"level": 4,
+		"cost": 9,
+		"difficulty": 43
+	},
+	{
+		"name": "Volcanic Eruption (Localized)",
+		"description": "You cause the ground in a medium-sized area to crack open, spewing forth molten rock and superheated gases. Creatures within the area take significant fire damage each round and the terrain becomes difficult to traverse due to the lava flows and fissures. The eruption lasts for a short duration. This spell offers both immediate and persistent area denial and damage. Manipulating the earth to such a violent and fiery effect requires considerable geological and elemental magical knowledge.",
+		"level": 5,
+		"cost": 10,
+		"difficulty": 47
+	},
+	{
+		"name": "Fingertip Flare",
+		"description": "A momentary burst of bright flame erupts from your fingertip, enough to briefly blind a single target if they are looking directly at it. The heat is negligible and dissipates instantly. This spell focuses on visual disruption rather than direct damage, offering a tactical advantage in specific situations. The precise timing and intensity of the flare require a delicate magical touch.",
+		"level": 1,
+		"cost": 1,
+		"difficulty": 17
+	},
+	{
+		"name": "Warmth",
+		"description": "You emanate a gentle heat in a small radius around yourself, enough to ward off mild chills and make the immediate environment slightly more comfortable. This effect is passive and requires minimal concentration to maintain. This spell is purely utilitarian, focused on comfort and environmental manipulation on a small scale. It represents a subtle and sustained control over thermal energy.",
+		"level": 1,
+		"cost": 1,
+		"difficulty": 15
+	},
+	{
+		"name": "Gust of Ash",
+		"description": "You conjure a sudden, irritating gust of hot ash and direct it towards a single target's face. This can cause coughing, stinging eyes, and minor irritation, potentially disrupting their actions. The ash itself is not significantly damaging. This spell focuses on sensory impairment and tactical disruption. Controlling the direction and intensity of the ashen gust requires a focused exhalation of magical energy.",
+		"level": 1,
+		"cost": 2,
+		"difficulty": 19
+	},
+	{
+		"name": "Singe",
+		"description": "You unleash a quick, focused burst of heat in a short line, capable of singeing hair, fur, or the edges of fabric. It deals minimal direct damage but can be used for minor cosmetic effects or to create a burning smell. This spell demonstrates a more directional control over heat energy, allowing for a precise, albeit weak, thermal effect.",
+		"level": 1,
+		"cost": 2,
+		"difficulty": 18
+	},
+	{
+		"name": "Dancing Lights (Fire)",
+		"description": "You create up to four small, dancing orbs of fire that shed dim light in a small radius. You can move these orbs slowly within a moderate range. Unlike a Flickering Flame, these orbs can be directed independently. This spell offers greater flexibility in illumination and visual distraction. Maintaining control over multiple independent fire orbs requires a more complex magical focus.",
+		"level": 1,
+		"cost": 2,
+		"difficulty": 20
+	},
+	{
+		"name": "Heat Shimmer",
+		"description": "You cause the air in a small area to shimmer intensely with heat, distorting vision within. This can provide a minor form of concealment or make it harder for ranged attacks to target creatures within the affected zone. The heat itself is not harmful. This spell focuses on visual distortion and battlefield manipulation. Creating and sustaining the localized heat shimmer requires a subtle manipulation of thermal energy.",
+		"level": 1,
+		"cost": 2,
+		"difficulty": 21
+	},
+	{
+		"name": "Smoldering Touch",
+		"description": "Upon a successful touch, you cause an object to begin smoldering slowly. This can create smoke and eventually lead to a small fire if the object is flammable. It deals no initial damage to creatures. This spell is more about environmental manipulation and potential indirect effects. Initiating and sustaining the smoldering effect requires a focused transfer of low-level thermal energy.",
+		"level": 1,
+		"cost": 2,
+		"difficulty": 23
+	},
+	{
+		"name": "Blazing Hands (Single Strike)",
+		"description": "Your hands become wreathed in flickering flames for a brief moment. A successful unarmed strike during this time deals additional burning damage. The flames are concentrated around your hands and dissipate quickly after the attack. This spell enhances your melee capabilities with a burst of fiery energy. Channeling the flames into your hands for a precise strike requires focused timing.",
+		"level": 1,
+		"cost": 3,
+		"difficulty": 24
+	},
+	{
+		"name": "Ember Spray",
+		"description": "You exhale a cone of hot embers towards your enemies. The embers deal minor burning damage and can cause slight irritation to the eyes and throat. The effect is short-ranged but can affect multiple targets. This spell offers a close-range, multi-target offensive option. Projecting and controlling the spread of the hot embers requires a forceful exhalation of magical energy.",
+		"level": 2,
+		"cost": 4,
+		"difficulty": 26
+	},
+	{
+		"name": "Heat Metal (Small Object)",
+		"description": "You cause a small metal object you can see to become intensely hot. If a creature is holding or wearing the object, they take burning damage. The heat lasts for a short duration. This spell offers a targeted way to inflict fire damage, particularly effective against armored opponents. Focusing the heat into a specific metal object requires a precise magical connection.",
+		"level": 2,
+		"cost": 4,
+		"difficulty": 29
+	},
+	{
+		"name": "Scorching Weapon",
+		"description": "You imbue a weapon you are holding with fiery energy for a short duration. The weapon deals additional burning damage on successful hits and may shed dim light. This spell enhances your weapon attacks with elemental fire. Channeling and maintaining the fiery enchantment on the weapon requires a sustained magical flow.",
+		"level": 2,
+		"cost": 5,
+		"difficulty": 31
+	},
+	{
+		"name": "Wall of Smoke and Embers",
+		"description": "You conjure a billowing wall of thick, choking smoke laced with hot embers. The smoke heavily obscures vision and the embers deal minor burning damage to creatures passing through. This spell offers both battlefield control and visual obstruction. Creating the dense smoke and embedding it with hot embers requires a complex manipulation of air and fire elements.",
+		"level": 2,
+		"cost": 5,
+		"difficulty": 33
+	},
+	{
+		"name": "Fire Shroud",
+		"description": "A swirling aura of protective flames surrounds you for a short duration. While active, you gain a minor resistance to fire damage, and enemies entering your space take a small amount of burning damage. This spell offers personal protection and a deterrent to close-quarters attackers. Maintaining the stable, protective aura of flames requires a focused magical resonance.",
+		"level": 2,
+		"cost": 5,
+		"difficulty": 30
+	},
+	{
+		"name": "Blazing Aura",
+		"description": "You emanate a more intense heat in a small radius than the Warmth spell. This heat can cause discomfort to nearby creatures and may even ignite very dry, fragile materials after prolonged exposure. It is not immediately damaging but creates a hostile thermal environment. This spell represents a more potent and sustained manipulation of ambient heat.",
+		"level": 2,
+		"cost": 3,
+		"difficulty": 28
+	},
+	{
+		"name": "Combustion (Small Object)",
+		"description": "You cause a small, non-magical object you touch to burst into flames. The fire spreads quickly to adjacent flammable materials. This spell is focused on creating sudden fires for various purposes. Initiating the rapid combustion requires a direct and focused transfer of significant thermal energy.",
+		"level": 2,
+		"cost": 4,
+		"difficulty": 32
+	},
+	{
+		"name": "Fire Bolt",
+		"description": "You unleash a focused bolt of fire that streaks towards a single target. Upon impact, it explodes in a small burst of flame, dealing moderate fire damage. This is a more direct and potent single-target fire attack than Scorching Ray. Focusing and launching the concentrated bolt of fire requires a stable magical projection.",
+		"level": 2,
+		"cost": 4,
+		"difficulty": 29
+	},
+	{
+		"name": "Heat Sink",
+		"description": "You draw heat from a small area, making it noticeably colder for a short duration. This can be used to counteract minor heat effects or create a brief uncomfortable chill. This spell represents the inverse of heat manipulation, demonstrating control over thermal energy removal.",
+		"level": 2,
+		"cost": 3,
+		"difficulty": 27
+	},
+	{
+		"name": "Fire Trail (Burst)",
+		"description": "Instead of a continuous trail, you create a series of small, short-lived bursts of flame along your path as you move for a brief duration. These bursts can deal minor burning damage to creatures caught in them. This spell offers a more intermittent and damaging form of fiery movement. Synchronizing the bursts of flame with your movement requires precise magical timing.",
+		"level": 3,
+		"cost": 6,
+		"difficulty": 36
+	},
+	{
+		"name": "Fireball (Focused)",
+		"description": "You conjure a fireball that, instead of a wide explosion, detonates in a more focused but intense burst at the target location, dealing higher damage in a smaller radius. This offers a more precise offensive option. Focusing the explosive energy into a tighter area requires a more refined magical control.",
+		"level": 3,
+		"cost": 7,
+		"difficulty": 39
+	},
+	{
+		"name": "Molten Orb",
+		"description": "You hurl a slow-moving orb of molten rock that leaves behind a patch of burning ground upon impact. The orb itself deals moderate fire and bludgeoning damage. This spell offers a combination of immediate impact damage and lingering area denial. Conjuring and directing the heavy, molten orb requires a strong magical influence.",
+		"level": 3,
+		"cost": 7,
+		"difficulty": 37
+	},
+	{
+		"name": "Pillar of Flame",
+		"description": "A vertical column of roaring flames erupts at a target location, dealing moderate fire damage to creatures caught within. Unlike Scorching Column, this pillar is wider and persists for a short duration, dealing damage each round. This spell offers sustained area denial and damage. Anchoring and maintaining the stable pillar of flame requires a focused magical conduit.",
+		"level": 3,
+		"cost": 8,
+		"difficulty": 41
+	},
+	{
+		"name": "Ring of Embers (Moving)",
+		"description": "You conjure a ring of hot embers that can be moved and directed after its creation. The ring deals minor burning damage to creatures it passes over. This spell offers mobile battlefield control and can be used to herd or damage enemies. Maintaining control over the moving ring of embers requires a sustained magical direction.",
+		"level": 3,
+		"cost": 7,
+		"difficulty": 38
+	},
+	{
+		"name": "Blazing Barrier",
+		"description": "You create a shimmering wall of intense heat that deals moderate burning damage to creatures attempting to pass through it. Unlike Wall of Embers, this barrier is more solid and offers better obstruction. Maintaining the more substantial and hotter barrier requires a greater magical investment.",
+		"level": 3,
+		"cost": 6,
+		"difficulty": 35
+	},
+	{
+		"name": "Controlled Burn",
+		"description": "You ignite a specific area of flammable material within range, causing it to burn intensely but without spreading uncontrollably. This can be used to create localized hazards or destroy specific objects. This spell requires precise control over the ignition and containment of the flames.",
+		"level": 3,
+		"cost": 5,
+		"difficulty": 34
+	},
+	{
+		"name": "Fire Snake",
+		"description": "A sinuous serpent of flame erupts from your hand and can be directed to strike targets at medium range. The snake deals burning damage and can constrict smaller creatures, reducing their movement. Controlling the fiery serpent's movement and constriction requires a fluid magical manipulation.",
+		"level": 4,
+		"cost": 9,
+		"difficulty": 44
+	},
+	{
+		"name": "Firestorm (Narrow)",
+		"description": "You conjure a line of intense fire that streaks across the battlefield, dealing significant burning damage to creatures caught in its path. The line is long but narrow. This spell offers directional area-of-effect damage. Shaping and directing the focused line of fire requires a strong magical channeling.",
+		"level": 4,
+		"cost": 10,
+		"difficulty": 46
+	},
+	{
+		"name": "Immolating Gaze",
+		"description": "For a short duration, your gaze becomes imbued with intense heat. A creature meeting your gaze must make a saving throw or take significant burning damage. This spell requires direct line of sight and offers a more direct and focused form of fire damage. Channeling intense heat through your eyes requires a potent magical focus.",
+		"level": 4,
+		"cost": 8,
+		"difficulty": 42
+	},
+	{
+		"name": "Lava Burst",
+		"description": "You cause a localized eruption of molten lava at a target location. The burst deals high fire and bludgeoning damage in a small area, and the ground remains difficult terrain for a short time. This spell offers a more violent and persistent form of fiery area denial. Conjuring and controlling the eruption of molten lava requires a strong connection to the earth and fire elements.",
+		"level": 4,
+		"cost": 10,
+		"difficulty": 45
+	},
+	{
+		"name": "Phoenix Feathers",
+		"description": "You conjure several flaming feathers that shoot out and strike multiple targets within medium range. Each feather deals moderate burning damage. This spell offers a multi-target, medium-range offensive option. Conjuring and directing the accurate flight of multiple flaming feathers requires precise magical control.",
+		"level": 4,
+		"cost": 9,
+		"difficulty": 43
+	},
+	{
+		"name": "Blazing Speed",
+		"description": "For a short duration, you become wreathed in harmless flames that propel you forward with incredible speed. Your movement speed is significantly increased, and you leave a faint trail of harmless sparks. This spell focuses on enhancing mobility through fire magic. Channeling the propulsive flames around yourself requires a unique application of fiery energy.",
+		"level": 4,
+		"cost": 8,
+		"difficulty": 40
+	},
+	{
+		"name": "Consume",
+		"description": "You unleash a focused beam of intense fire that, if it hits a flammable object, causes it to be rapidly consumed by flames. Against creatures, it deals significant burning damage as the fire clings to them. This spell offers both object destruction and potent single-target damage. Maintaining the intense, consuming beam requires a strong and focused magical projection.",
+		"level": 4,
+		"cost": 9,
+		"difficulty": 44
+	},
+	{
+		"name": "Firestorm (Wide)",
+		"description": "Similar to the narrow firestorm, but this spell conjures a wider wave of intense fire, affecting a larger area but potentially with slightly less intensity. This offers a broader area-of-effect damage option. Shaping and directing the wider wave of fire requires a different form of magical channeling.",
+		"level": 5,
+		"cost": 11,
+		"difficulty": 49
+	},
+	{
+		"name": "Meteor Swarm (Small)",
+		"description": "You call down a small cluster of three flaming meteors that strike different locations within a large area. Each meteor deals significant fire and bludgeoning damage upon impact and leaves behind a small patch of burning ground. This spell offers multi-point area-of-effect damage. Summoning and directing multiple smaller meteors requires complex magical coordination.",
+		"level": 5,
+		"cost": 12,
+		"difficulty": 52
+	},
+	{
+		"name": "Nova Burst",
+		"description": "You unleash a sudden, expanding sphere of intense fire around yourself. Creatures within the radius take massive burning damage, and the force of the expansion can knock smaller creatures prone. This spell offers powerful close-range area-of-effect damage. Unleashing the rapidly expanding sphere of fire requires a sudden and potent release of magical energy.",
+		"level": 5,
+		"cost": 11,
+		"difficulty": 50
+	},
+	{
+		"name": "Phoenix Dive",
+		"description": "You transform briefly into a streak of pure flame and fly rapidly to a target location within medium range, dealing significant burning damage to creatures you pass through. Upon arrival, you reform. This spell offers both high mobility and damaging transit. Temporarily transforming into and controlling a form of pure flame requires advanced magical transmutation.",
+		"level": 5,
+		"cost": 10,
+		"difficulty": 48
+	},
+	{
+		"name": "Volcanic Pillar",
+		"description": "A massive column of molten rock erupts from the ground at a target location, reaching high into the air. Creatures caught within take extreme fire and bludgeoning damage and may be knocked upwards. The pillar persists briefly, shedding intense heat. This spell offers a large-scale, high-damage area effect. Summoning and controlling such a massive geological and fiery event demands exceptional magical power.",
+		"level": 5,
+		"cost": 12,
+		"difficulty": 53
+	},
+	{
+		"name": "Ash Storm",
+		"description": "You conjure a swirling vortex of hot ash and cinders that engulfs a large area. The storm heavily obscures vision, deals minor burning damage each round, and causes persistent coughing and irritation. This spell offers widespread battlefield control and sensory impairment. Creating and sustaining a large-scale storm of hot ash requires complex atmospheric and elemental manipulation.",
+		"level": 4,
+		"cost": 9,
+		"difficulty": 45
+	}
+]

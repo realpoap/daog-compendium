@@ -101,6 +101,7 @@ const CharFormStep4 = () => {
 							</option>
 							{skillsData
 								.filter(skill => skill.mastery === specificities)
+								.filter(skill => skill.id !== selectedSkillId)
 								.map(skill => (
 									<option
 										key={skill.id}
@@ -117,17 +118,20 @@ const CharFormStep4 = () => {
 
 			{needsSkills && (
 				<div className='w-full transition-all duration-300'>
-					{formData.path?.skills?.map(skill => (
-						<div
-							key={skill.id}
-							className='flex items-center justify-between rounded border-b p-2 hover:bg-stone-800'
-						>
-							<span className='text-base font-semibold'>{skill.name}</span>
-							<span className='badge badge-accent'>
-								{skill.playerPoints} pts
-							</span>
-						</div>
-					))}
+					<h3>Starting Skills</h3>
+					{formData.path?.skills
+						?.sort((a, b) => a.name.localeCompare(b.name))
+						.map(skill => (
+							<div
+								key={skill.id}
+								className='flex items-center justify-between rounded border-b p-2 hover:bg-stone-800'
+							>
+								<span className='text-base font-semibold'>{skill.name}</span>
+								<span className='badge badge-accent'>
+									{skill.playerPoints} pts
+								</span>
+							</div>
+						))}
 				</div>
 			)}
 		</>

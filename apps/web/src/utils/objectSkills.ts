@@ -35,3 +35,9 @@ export const deduplicateSkills = (skills: CharacterSkill[]) => {
 
 	return Array.from(skillMap.values());
 };
+
+export const getSkillNames = (skills: string[]): string[] => {
+	return skills
+		.map(s => skillsData.find(skill => skill.id === s)?.name)
+		.filter((name): name is string => !!name); //filters out undefined
+};

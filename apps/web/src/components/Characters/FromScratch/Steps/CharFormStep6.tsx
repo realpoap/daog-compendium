@@ -11,10 +11,6 @@ import {
 	FiUserPlus,
 } from 'rocketicons/fi';
 
-// type Props = {
-// 	selected: SpecieDataForm | undefined;
-// };
-
 type GroupedSkills = {
 	[letter: string]: SkillData[];
 };

@@ -1,11 +1,18 @@
+import TagBadge from '@/components/TagBadge';
 import { OriginCharacter, origins } from '@/data/origins'; // Importez les données typées
 import { useCharacterForm } from '@/store/characterContext';
 import { cn } from '@/utils/classNames';
-import { deduplicateSkills, setObjectSkills } from '@/utils/objectSkills';
+import {
+	deduplicateSkills,
+	getSkillNames,
+	setObjectSkills,
+} from '@/utils/objectSkills';
+import { StatProfil } from '@api/lib/ZodCreature';
 import { useState } from 'react';
+import { TbSwitchHorizontal } from 'rocketicons/tb';
 
 const CharFormStep3 = () => {
-	const { setFormData, formData } = useCharacterForm();
+	const { methods, setFormData, formData } = useCharacterForm();
 	const [selectedOrigin, setSelectedOrigin] = useState<OriginCharacter | null>(
 		formData.path?.origin || null,
 	);
@@ -28,7 +35,30 @@ const CharFormStep3 = () => {
 					origin: origin,
 				},
 			}));
+
+			//profile bonus
+			const bonus = origin.profileBonus;
+			const profile = formData.profile?.statsStarting ?? ({} as StatProfil);
+			const updatedProfile: StatProfil = { ...profile };
+
+			(Object.keys(profile) as (keyof StatProfil)[]).map(stat => {
+				bonus.map(bon => {
+					if (stat === bon) {
+						updatedProfile[stat] = (profile[stat] ?? 0) + 1;
+
+						console.log(stat, profile[stat], '+1 =', updatedProfile[stat]);
+					}
+				});
+			});
+			// update statsstarting
+			methods.setValue('profile.statsStarting', updatedProfile);
 		}
+	};
+
+	const [selectedSet, setSelectedSet] = useState<'A' | 'B'>('A');
+
+	const toggleEquipment = () => {
+		setSelectedSet(prev => (prev === 'A' ? 'B' : 'A'));
 	};
 
 	return (
@@ -63,26 +93,93 @@ const CharFormStep3 = () => {
 						{selectedOrigin.name}
 					</h3>
 					<p className='text-sm italic'>{selectedOrigin.description}</p>
-					<div className='flex flex-col text-sm'>
-						<div>
+					<div className='flex flex-col gap-2 text-sm'>
+						<div className=''>
 							<strong>Profile bonus :</strong>{' '}
-							{selectedOrigin.profileBonus.join(', ')}
+							<div className='flex flex-row gap-2'>
+								{selectedOrigin.profileBonus.map(bon => (
+									<TagBadge
+										key={`bonus-${bon}`}
+										text={bon}
+										button={false}
+									/>
+								))}
+							</div>
 						</div>
-						<div>
-							<strong>Skills :</strong> {selectedOrigin.skills.join(', ')}
-						</div>
+						<div className='flex w-full flex-row gap-4'>
+							<div className='flex-1'>
+								<strong>Skills :</strong>{' '}
+								<ul className='ml-2'>
+									{getSkillNames(selectedOrigin.skills).map(s => (
+										<li
+											className='lowercase'
+											key={`skill-li-${s}`}
+										>
+											- {s}
+										</li>
+									))}
+								</ul>
+							</div>
 
-						<div>
-							<strong>Knowledges :</strong>{' '}
-							{selectedOrigin.knowledges.join(', ')}
+							<div className='flex-1'>
+								<strong>Knowledges :</strong>{' '}
+								<ul className='ml-2'>
+									{selectedOrigin.knowledges.map(s => (
+										<li
+											className='lowercase'
+											key={`know-li-${s}`}
+										>
+											- {s}
+										</li>
+									))}
+								</ul>
+							</div>
 						</div>
-						<div>
+						{/* <div>
 							<strong>Equipment A :</strong>{' '}
 							{selectedOrigin.equipmentA?.join(', ')}
 						</div>
 						<div>
 							<strong>Equipment B :</strong>{' '}
 							{selectedOrigin.equipmentB?.join(', ')}
+						</div> */}
+						<div className='flex w-full flex-col items-start justify-center gap-4 sm:flex-row'>
+							{/* Equipment A */}
+							<div
+								className={cn(
+									'card border-base-300 w-1/2 rounded-lg border p-4 shadow-md',
+									selectedSet === 'A'
+										? 'bg-primary text-primary-content'
+										: 'bg-base-200',
+								)}
+								onClick={toggleEquipment}
+							>
+								<h4 className='mb-2 font-bold'>Equipment A</h4>
+								<p className='text-sm'>
+									{selectedOrigin.equipmentA?.join(', ')}
+								</p>
+							</div>
+
+							{/* Toggle Button */}
+							<div className='flex items-center justify-center'>
+								<TbSwitchHorizontal className='icon-neutral-content icon-base rotate-90 sm:rotate-0' />
+							</div>
+
+							{/* Equipment B */}
+							<div
+								className={cn(
+									'card border-base-300 w-1/2 rounded-lg border p-4 shadow-md',
+									selectedSet === 'B'
+										? 'bg-primary text-primary-content'
+										: 'bg-base-200',
+								)}
+								onClick={toggleEquipment}
+							>
+								<h4 className='mb-2 font-bold'>Equipment B</h4>
+								<p className='text-sm'>
+									{selectedOrigin.equipmentB?.join(', ')}
+								</p>
+							</div>
 						</div>
 					</div>
 				</div>

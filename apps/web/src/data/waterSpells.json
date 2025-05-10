@@ -1,0 +1,289 @@
+[
+	{
+		"name": "Water Spout",
+		"description": "A small jet of water erupts from your hand, capable of extinguishing small flames or lightly dousing a single target. The force is minimal and causes no direct harm. This is a fundamental manipulation of elemental water, requiring only a small amount of focus to manifest. It's a basic utility spell with limited direct impact.",
+		"level": 1,
+		"cost": 1,
+		"difficulty": 15
+	},
+	{
+		"name": "Drench",
+		"description": "You cause a small area around a target to become instantly wet. This can extinguish small fires, make surfaces slippery, or lightly soak a single creature, potentially hindering movement slightly. The amount of water is not significant. This spell focuses on environmental manipulation on a small scale, using the basic property of water to saturate.",
+		"level": 1,
+		"cost": 1,
+		"difficulty": 16
+	},
+	{
+		"name": "Water Orb",
+		"description": "You conjure a small sphere of water and hurl it at a single target within short range. Upon impact, the orb bursts, causing a minor splash. While not directly damaging, the sudden impact can be momentarily disorienting. The amount of water is small and dissipates quickly. This spell is a basic projectile attack with minimal direct harm.",
+		"level": 1,
+		"cost": 2,
+		"difficulty": 17
+	},
+	{
+		"name": "Mist Cloud (Small)",
+		"description": "A small cloud of light mist appears in a nearby area, lightly obscuring vision within. The mist dissipates quickly. This spell focuses on creating a minor visual impediment for a short duration. Controlling the formation and location of the small mist cloud requires a gentle manipulation of moisture in the air.",
+		"level": 1,
+		"cost": 2,
+		"difficulty": 18
+	},
+	{
+		"name": "Cleanse",
+		"description": "You channel water magic to purify a small amount of liquid or a single small object, removing minor impurities or poisons. This spell has no offensive capabilities and is purely utilitarian. The process requires focused concentration on the object or liquid being cleansed.",
+		"level": 1,
+		"cost": 2,
+		"difficulty": 20
+	},
+	{
+		"name": "Slick",
+		"description": "You cause a small patch of ground to become instantly slippery with a thin layer of water. This can make it difficult for creatures to maintain their footing in the affected area, potentially causing them to fall prone. The effect is localized and temporary. This spell focuses on battlefield control through manipulating surface friction.",
+		"level": 1,
+		"cost": 2,
+		"difficulty": 19
+	},
+	{
+		"name": "Sense Water",
+		"description": "You briefly gain an awareness of the direction and approximate distance to the nearest significant source of water within a moderate range. This spell provides information and has no direct effect on the environment or creatures. It relies on a subtle attunement to the presence of elemental water.",
+		"level": 1,
+		"cost": 1,
+		"difficulty": 22
+	},
+	{
+		"name": "Water Lash (Small)",
+		"description": "A thin tendril of water extends from your hand, capable of delivering a stinging lash to a target within short range. The force is enough to cause a minor distraction or interrupt a delicate action. This spell offers a non-lethal form of attack or control. Shaping and directing the focused water tendril requires a degree of precision.",
+		"level": 1,
+		"cost": 3,
+		"difficulty": 21
+	},
+	{
+		"name": "Hydrate",
+		"description": "You conjure a small amount of fresh, potable water in your hand, enough to quench a minor thirst. This spell is purely utilitarian and has no offensive capabilities. It relies on drawing moisture from the surrounding environment or a subtle conjuration of elemental water.",
+		"level": 1,
+		"cost": 1,
+		"difficulty": 23
+	},
+	{
+		"name": "Water Jet",
+		"description": "You unleash a more forceful jet of water than a Water Spout, capable of extinguishing larger flames or pushing a small, unsecured object. Against creatures, it can cause a minor impact and momentarily disrupt their focus. This spell offers a slightly more potent form of water manipulation.",
+		"level": 2,
+		"cost": 3,
+		"difficulty": 24
+	},
+	{
+		"name": "Mist Cloud (Medium)",
+		"description": "A larger cloud of mist appears in a target area, significantly obscuring vision within. The mist persists for a moderate duration. This spell offers better visual obstruction than the small mist cloud, affecting a larger area. Maintaining the larger mist cloud requires a more sustained magical effort.",
+		"level": 2,
+		"cost": 4,
+		"difficulty": 26
+	},
+	{
+		"name": "Water Shield (Small)",
+		"description": "A small disc of swirling water appears before you, offering a minor amount of protection against incoming ranged attacks. The shield dissipates quickly after absorbing a hit or after a short duration. This spell provides temporary personal defense. Forming and maintaining the protective water disc requires a focused magical projection.",
+		"level": 2,
+		"cost": 4,
+		"difficulty": 27
+	},
+	{
+		"name": "Condense",
+		"description": "You rapidly cool the air in a small area, causing moisture to condense into a light drizzle or a thin layer of frost on surfaces. This can make surfaces slippery or lightly chill creatures in the area. This spell focuses on environmental manipulation through temperature change.",
+		"level": 2,
+		"cost": 3,
+		"difficulty": 25
+	},
+	{
+		"name": "Water Pulse",
+		"description": "You release a short-range pulse of water that can knock small creatures prone or push them back a short distance. It deals minimal direct damage but focuses on kinetic force. This spell offers a close-range control option. Generating and releasing the concussive water pulse requires a focused burst of magical energy.",
+		"level": 2,
+		"cost": 4,
+		"difficulty": 28
+	},
+	{
+		"name": "Soothing Waters",
+		"description": "You conjure a small stream of cool, clean water that flows over a wounded creature you touch, providing minor healing and alleviating minor burns or irritations. This spell focuses on restorative properties of water magic. Channeling the healing waters requires a gentle and focused magical touch.",
+		"level": 2,
+		"cost": 3,
+		"difficulty": 29
+	},
+	{
+		"name": "Water Whip",
+		"description": "A more substantial whip of water extends from your hand, capable of striking targets at medium range. The whip deals bludgeoning damage and can potentially pull smaller creatures a short distance. This spell offers both reach and a degree of control over the watery force.",
+		"level": 3,
+		"cost": 6,
+		"difficulty": 32
+	},
+	{
+		"name": "Geyser (Small)",
+		"description": "A small but forceful jet of water erupts from the ground at a target location, knocking prone smaller creatures caught in its blast and dealing minor bludgeoning damage. The geyser lasts for a brief moment. This spell offers localized battlefield control and a small amount of damage.",
+		"level": 3,
+		"cost": 6,
+		"difficulty": 33
+	},
+	{
+		"name": "Water Sphere",
+		"description": "You conjure a large sphere of water that you can propel towards a target. Upon impact, it bursts in a significant splash, potentially drenching multiple creatures and dealing minor bludgeoning damage. The sheer volume of water can hinder movement in the immediate area. This spell offers area-of-effect drenching and minor impact.",
+		"level": 3,
+		"cost": 7,
+		"difficulty": 35
+	},
+	{
+		"name": "Mist Wall",
+		"description": "You conjure a stationary wall of thick mist that heavily obscures vision through it. The wall persists for a moderate duration, creating a significant visual barrier. This spell focuses on battlefield control through creating a large area of concealment.",
+		"level": 3,
+		"cost": 5,
+		"difficulty": 31
+	},
+	{
+		"name": "Freezing Touch",
+		"description": "Upon a successful touch, you cause a localized area of intense cold to spread through the target, potentially slowing their movement and dealing a small amount of cold damage. This spell focuses on hindering and slightly damaging through cold. The precise transfer of freezing energy requires a direct physical connection.",
+		"level": 3,
+		"cost": 6,
+		"difficulty": 34
+	},
+	{
+		"name": "Water Shield (Medium)",
+		"description": "A larger disc of swirling water appears before you, offering a better amount of protection against incoming ranged attacks. The shield can absorb more damage than the small version. Forming and maintaining the larger protective water disc requires a more significant magical projection.",
+		"level": 3,
+		"cost": 5,
+		"difficulty": 30
+	},
+	{
+		"name": "Undertow",
+		"description": "In an area containing significant water (even a large puddle), you create a powerful undertow that can pull smaller creatures a short distance and potentially knock them prone. This spell focuses on battlefield control in aquatic or waterlogged environments.",
+		"level": 3,
+		"cost": 7,
+		"difficulty": 36
+	},
+	{
+		"name": "Ice Shard",
+		"description": "You conjure a sharp shard of ice and hurl it at a single target. Upon impact, the shard deals piercing and a small amount of cold damage. This spell offers a more direct damaging option using the frozen form of water.",
+		"level": 2,
+		"cost": 4,
+		"difficulty": 30
+	},
+	{
+		"name": "Water Form (Brief)",
+		"description": "For a very short duration, you can transform your body into a fluid state, allowing you to slip through small cracks or openings. You are vulnerable in this form and cannot attack. This spell offers a temporary means of infiltration or escape. Briefly shifting your physical form into water requires a significant magical transmutation.",
+		"level": 3,
+		"cost": 7,
+		"difficulty": 38
+	},
+	{
+		"name": "Healing Rain (Small)",
+		"description": "You conjure a localized shower of gentle rain that heals a small amount of damage to creatures within the area over a short duration. This spell focuses on area healing through water magic. Creating and sustaining the localized healing rain requires a focused and nurturing magical effect.",
+		"level": 3,
+		"cost": 5,
+		"difficulty": 32
+	},
+	{
+		"name": "Water Wall",
+		"description": "You conjure a solid wall of water that can block movement and line of sight. The wall persists for a moderate duration. This spell offers significant battlefield control and obstruction. Creating and maintaining a substantial barrier of water requires a strong magical cohesion.",
+		"level": 4,
+		"cost": 8,
+		"difficulty": 39
+	},
+	{
+		"name": "Geyser (Large)",
+		"description": "A large and powerful jet of water erupts from the ground at a target location, dealing moderate bludgeoning damage and knocking larger creatures prone. The geyser persists for a longer duration than the small version. This spell offers more potent localized battlefield control and damage.",
+		"level": 4,
+		"cost": 8,
+		"difficulty": 40
+	},
+	{
+		"name": "Tidal Wave (Small)",
+		"description": "You conjure a small but fast-moving wave of water that crashes over a target area, dealing moderate bludgeoning damage and potentially sweeping smaller creatures along with it. The wave dissipates quickly. This spell offers directional area-of-effect damage and movement control.",
+		"level": 4,
+		"cost": 9,
+		"difficulty": 42
+	},
+	{
+		"name": "Ice Spike",
+		"description": "You conjure a large, sharp spike of ice that shoots towards a single target, dealing significant piercing and cold damage. This is a more potent single-target damage spell using ice. Forming and launching the large ice spike requires a focused freezing and propulsion of water magic.",
+		"level": 3,
+		"cost": 7,
+		"difficulty": 37
+	},
+	{
+		"name": "Water Prison",
+		"description": "You conjure a sphere of solid water around a target creature, trapping them inside. The creature can still breathe but cannot easily move or attack. The prison lasts for a short duration or until broken. This spell offers a powerful form of single-target control. Forming and maintaining the solid water sphere requires a strong magical containment.",
+		"level": 4,
+		"cost": 9,
+		"difficulty": 44
+	},
+	{
+		"name": "Healing Rain (Large)",
+		"description": "You conjure a widespread shower of gentle rain that heals a moderate amount of damage to creatures within the area over a longer duration. This spell offers more potent and prolonged area healing through water magic.",
+		"level": 4,
+		"cost": 7,
+		"difficulty": 35
+	},
+	{
+		"name": "Blizzard (Localized)",
+		"description": "You create a localized storm of freezing wind and ice shards in a medium-sized area. The blizzard heavily obscures vision, deals minor cold and piercing damage each round, and makes the area difficult terrain. This spell offers area denial and damage through extreme cold and ice.",
+		"level": 4,
+		"cost": 8,
+		"difficulty": 41
+	},
+	{
+		"name": "Water Elemental (Minor)",
+		"description": "You briefly summon a small, weak water elemental that can fight for you for a short duration. The elemental has limited offensive capabilities but can provide assistance or distraction. This spell involves a temporary summoning of an elemental being.",
+		"level": 4,
+		"cost": 10,
+		"difficulty": 46
+	},
+	{
+		"name": "Crushing Wave",
+		"description": "You conjure a large, powerful wave of water that crashes down on a target area, dealing significant bludgeoning damage and potentially knocking larger creatures prone. The wave has considerable force. This spell offers high area-of-effect damage and strong movement control.",
+		"level": 5,
+		"cost": 11,
+		"difficulty": 48
+	},
+	{
+		"name": "Tidal Surge",
+		"description": "You create a massive surge of water that rushes forward in a line, dealing extreme bludgeoning damage and sweeping away smaller creatures in its path. The surge has immense force and can significantly alter the terrain. This spell offers potent directional damage and movement control.",
+		"level": 5,
+		"cost": 12,
+		"difficulty": 50
+	},
+	{
+		"name": "Blizzard (Large)",
+		"description": "You conjure a widespread and intense storm of freezing wind and large ice shards over a large area. The blizzard heavily obscures vision, deals moderate cold and piercing damage each round, makes the area difficult terrain, and has a chance to freeze creatures solid. This spell offers large-scale area denial and significant damage through extreme cold and ice.",
+		"level": 5,
+		"cost": 10,
+		"difficulty": 47
+	},
+	{
+		"name": "Ice Storm",
+		"description": "You summon a barrage of large chunks of ice that rain down on a target area, dealing significant bludgeoning and cold damage upon impact. The area becomes difficult terrain due to the scattered ice. This spell offers direct, widespread damage through falling ice.",
+		"level": 5,
+		"cost": 11,
+		"difficulty": 49
+	},
+	{
+		"name": "Water Elemental (Major)",
+		"description": "You summon a large and powerful water elemental that can fight for you for a moderate duration. The elemental has significant offensive and defensive capabilities. This spell involves a more potent and longer-lasting summoning of an elemental being.",
+		"level": 5,
+		"cost": 12,
+		"difficulty": 52
+	},
+	{
+		"name": "Absolute Zero (Localized)",
+		"description": "You focus intense cold magic on a small area, attempting to bring the temperature to absolute zero. Creatures caught in the area take significant cold damage and are severely slowed, with a chance of being frozen solid. This spell represents extreme manipulation of cold energy.",
+		"level": 5,
+		"cost": 11,
+		"difficulty": 51
+	},
+	{
+		"name": "Ice Cage",
+		"description": "You conjure a cage of thick ice around a target creature, completely immobilizing them. The cage is resilient but can be broken with effort. The creature can still breathe but is entirely restrained. This spell offers a powerful form of single-target incapacitation through solid ice.",
+		"level": 4,
+		"cost": 9,
+		"difficulty": 43
+	},
+	{
+		"name": "Frostbite",
+		"description": "You focus intense cold energy through your touch, causing severe frostbite to a limb or extremity of a target creature. This deals significant cold damage and can potentially cripple the affected limb, hindering movement or attack. This spell requires direct physical contact for a debilitating cold effect.",
+		"level": 4,
+		"cost": 8,
+		"difficulty": 41
+	}
+]
