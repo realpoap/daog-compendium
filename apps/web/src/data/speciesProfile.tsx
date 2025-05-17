@@ -24,7 +24,7 @@ export const moufflian = {
 		attributes: [
 			{
 				name: 'Cosmopolitan',
-				effect: '1 additional language (F), 1 additional language (E)',
+				effect: '1 additional language (E)',
 				description:
 					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
 				value: 0,
@@ -957,7 +957,7 @@ export const pipourray = {
 export const villous = {
 	specie: 'orc',
 	sub: 'villous',
-	specieDifficulty: 'tough',
+	specieDifficulty: 'normal',
 	languages: [
 		{
 			label: 'common',
@@ -1137,7 +1137,7 @@ export const halfvampire = {
 export const barbarian = {
 	specie: 'barbarian',
 	sub: 'barbarian',
-	specieDifficulty: 'normal',
+	specieDifficulty: 'tough',
 	languages: [
 		{
 			label: 'clay',

@@ -61,7 +61,7 @@ const CharacterSummaryTile = ({
 	userOptions,
 }: Props) => {
 	const navigate = useNavigate();
-	const [currentExp, setCurrentExp] = useState(char.profile.experience);
+	const [currentExp, setCurrentExp] = useState(char.profile.experience ?? 0);
 
 	return (
 		<div
@@ -127,10 +127,10 @@ const CharacterSummaryTile = ({
 							<div className='xs:w-1/2 flex w-full flex-row items-end justify-start gap-2'>
 								<div className='tooltip tooltip-top'>
 									<div className='tooltip-content shadow-background shadow-lg'>
-										<span className='px-1 py-0 text-xs'>{`Exp: ${char.profile.experience}/${char.profile.level * 100}`}</span>
+										<span className='px-1 py-0 text-xs'>{`Exp: ${currentExp}/${char.profile.level * 100}`}</span>
 									</div>
 									<progress
-										className='progress progress-primary h-1 transition-all duration-1000 [&::-moz-progress-bar]:transition-all [&::-webkit-progress-value]:transition-all'
+										className='progress progress-primary h-1 after:[animation-duration:5s]'
 										value={currentExp}
 										max={char.profile.level * 100}
 									></progress>
@@ -150,10 +150,8 @@ const CharacterSummaryTile = ({
 												const input = document.querySelector(
 													`#exp-${char.id}`,
 												) as HTMLInputElement;
-												console.log(input.value);
-												setCurrentExp(
-													prev => prev && prev + input.valueAsNumber,
-												);
+
+												setCurrentExp(currentExp + input.valueAsNumber);
 												updateXp(input.valueAsNumber, char);
 											}}
 										>

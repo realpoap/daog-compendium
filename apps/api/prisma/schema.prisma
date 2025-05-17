@@ -91,6 +91,7 @@ type Statistics {
   speed Speed?
   variables Variables
   boni Variables
+  advantages Variables
 }
 
 type Speed {
@@ -111,11 +112,20 @@ type Variables {
   magic      Int @default(0)
   bravery Int @default(0)
 	survival Int @default(0)
-	enigms Int @default(0)
+	logic Int @default(0)
 	speech Int @default(0)
-	trade Int @default(0)
+	trading Int @default(0)
+	crafting Int @default(0)
 	performance Int @default(0)
 	intimidation Int @default(0)
+	persuasion Int @default(0)
+	knowledge Int @default(0)
+	physique Int @default(0)
+	sciences Int @default(0)
+  detection Int @default(0)
+esoterism Int @default(0)
+movement Int @default(0)
+healing Int @default(0)
 }
 
 type Bio {
