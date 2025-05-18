@@ -78,10 +78,11 @@ const CharFormStep4 = () => {
 	return (
 		<>
 			<LanguagesFormBlock />
-			<h3 className=''>Specificities</h3>
+
 			{selectedSub === 'bourguignon' && <BourguignonFormBlock />}
 			{needsSkills && (
 				<fieldset className='w-full items-center'>
+					<h3 className=''>Specificities</h3>
 					<label className='fieldset-legend label font-cabin text-neutral-content mb-1 pb-0 text-xs capitalize'>
 						Species skill choice
 					</label>{' '}

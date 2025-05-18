@@ -1,3 +1,4 @@
+import { variablesReset } from '@/utils/calculateStats';
 import { NewCharacter } from '@api/lib/ZodCharacter'; // adjust as needed
 
 export const defaultValuesCharacter: Partial<NewCharacter> = {
@@ -82,40 +83,9 @@ export const defaultValuesCharacter: Partial<NewCharacter> = {
 			running: 0,
 			obstacle: 0,
 		},
-		variables: {
-			initiative: 0,
-			attack: 0,
-			brawl: 0,
-			defense: 0,
-			ranged: 0,
-			perception: 0,
-			discretion: 0,
-			magic: 0,
-			bravery: 0,
-			survival: 0,
-			enigms: 0,
-			speech: 0,
-			trade: 0,
-			performance: 0,
-			intimidation: 0,
-		},
-		boni: {
-			initiative: 0,
-			attack: 0,
-			brawl: 0,
-			defense: 0,
-			ranged: 0,
-			perception: 0,
-			discretion: 0,
-			magic: 0,
-			bravery: 0,
-			survival: 0,
-			enigms: 0,
-			speech: 0,
-			trade: 0,
-			performance: 0,
-			intimidation: 0,
-		},
+		variables: variablesReset,
+		boni: variablesReset,
+		advantages: variablesReset,
 	},
 	status: {
 		weightBonus: 0,

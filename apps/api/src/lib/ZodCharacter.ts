@@ -35,8 +35,16 @@ export const BioSchema = z.object({
 	campaign: z.string(),
 	isDead: z.boolean().optional(),
 	avatar: ImageSchema.nullable().optional(),
-	name: z.string(),
-	surname: z.string().optional().nullable(),
+	name: z
+		.string()
+		.regex(/\b[^\d\W]+\b/g, 'Name should not contain numbers')
+		.min(5, 'Name must be at least 5 characters long'),
+	surname: z
+		.string()
+		.regex(/\b[^\d\W]+\b/g, 'Name should not contain numbers')
+		.min(5, 'Name must be at least 5 characters long')
+		.optional()
+		.nullable(),
 	species: z.string(),
 	subspecies: z.string().optional().nullable(),
 	fighterType: z.string().optional().nullable(),
@@ -234,11 +242,21 @@ export const VariablesSchema = z.object({
 	magic: z.number().int(),
 	bravery: z.number().int(),
 	survival: z.number().int(),
-	enigms: z.number().int(),
+	logic: z.number().int(),
 	speech: z.number().int(),
-	trade: z.number().int(),
+	trading: z.number().int(),
 	performance: z.number().int(),
+	preciseness: z.number().int(),
 	intimidation: z.number().int(),
+	persuasion: z.number().int(),
+	knowledge: z.number().int(),
+	sciences: z.number().int(),
+	physique: z.number().int(),
+	crafting: z.number().int(),
+	detection: z.number().int(),
+	esoterism: z.number().int(),
+	movement: z.number().int(),
+	healing: z.number().int(),
 });
 
 export const StatisticsSchema = z.object({
@@ -252,6 +270,7 @@ export const StatisticsSchema = z.object({
 	speed: SpeedSchema.nullable().optional(),
 	variables: VariablesSchema,
 	boni: VariablesSchema,
+	advantages: VariablesSchema,
 });
 
 export const StatusSchema = z.object({

@@ -1,12 +1,10 @@
-import { SpecieDataForm, allSpecies, speciesMap } from '@/data/speciesProfile';
 import { useAuth } from '@/store/authContext';
 import { useCharacterForm } from '@/store/characterContext';
-import { variablesReset } from '@/utils/calculateStats';
-import { setObjectSkills } from '@/utils/objectSkills';
 import { setupCompleteCharacterFormValues } from '@/utils/setCharacterFormData';
 import { trpc } from '@/utils/trpc';
+import { StatProfil } from '@api/lib/ZodCreature';
 import { useNavigate } from '@tanstack/react-router';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { FormProvider, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import CharFormStep1 from './Steps/CharFormStep1';
@@ -37,9 +35,8 @@ const CharacterFormNavigation = () => {
 const CharacterFormInner = () => {
 	const navigate = useNavigate();
 	const { user } = useAuth();
-	const { methods, currentStep, nextStep, prevStep, formData, setFormData } =
-		useCharacterForm();
-	const { control, handleSubmit } = methods;
+	const { methods, currentStep, nextStep, prevStep } = useCharacterForm();
+	const { handleSubmit } = methods;
 
 	const createCharacter = trpc.characters.create.useMutation({
 		onSuccess: () => {
@@ -57,56 +54,16 @@ const CharacterFormInner = () => {
 		},
 	});
 
-	const [selectedSpecieData, setSelectedSpecieData] =
-		useState<SpecieDataForm>();
-	const selectedSub = useWatch({ control, name: 'bio.subspecies' });
+	const [destinyClicked, setDestinyClicked] = useState(false);
 
-	useEffect(() => {
-		if (selectedSub !== '') {
-			const foundSub = allSpecies.find(specie => specie.sub === selectedSub);
-			if (foundSub) {
-				setSelectedSpecieData(foundSub);
-				const skilllist = foundSub?.path.skills;
-				const languagelist = foundSub?.specifics.speaks;
-				const attributelist = foundSub?.path.attributes;
-				const selectedSpecies = speciesMap[foundSub.sub];
-				const objectSkills = setObjectSkills(skilllist);
-				const skillPoints = foundSub.specie === 'human' ? 10 : 5;
-				setFormData(prev => ({
-					...prev,
-					path: {
-						...prev.path,
-						skills: objectSkills,
-						skillPoints: skillPoints,
-						attributes: attributelist,
-					},
-					specifics: {
-						...prev.specifics,
-						speaks: languagelist,
-						description: '',
-						background: '',
-					},
-					profile: {
-						...prev.profile,
-						level: 1,
-						statsStarting: selectedSpecies.profile.statsStarting,
-						variables: variablesReset,
-						boni: variablesReset,
-					},
-				}));
-			}
-		}
-	}, [selectedSub]);
-
-	useEffect(() => {
-		console.log('formData is', formData);
-	}, [formData]);
+	const profile: StatProfil = useWatch({ name: 'profile.statsStarting' });
+	const variables = useWatch({ name: 'profile.variables' });
 
 	const onSubmit = handleSubmit(data => {
 		if (currentStep === steps.length - 1) {
 			// Final step → submit to backend
 			const complete = setupCompleteCharacterFormValues(methods, user);
-			console.log('Final submit:', complete);
+			//console.log('Final submit:', complete);
 			createCharacter.mutate(complete);
 		} else {
 			console.log('Step valid data:', data);
@@ -123,7 +80,7 @@ const CharacterFormInner = () => {
 		{
 			id: 1,
 			label: 'Species',
-			component: <CharFormStep2 selected={selectedSpecieData} />,
+			component: <CharFormStep2 />,
 		},
 		{
 			id: 2,
@@ -150,7 +107,16 @@ const CharacterFormInner = () => {
 			component: <CharFormStep7 />,
 		},
 		{ id: 10, label: 'Background', component: <CharFormStep8 /> },
-		{ id: 11, label: 'Destiny', component: <CharFormStep12 /> },
+		{
+			id: 11,
+			label: 'Destiny',
+			component: (
+				<CharFormStep12
+					clicked={destinyClicked}
+					setClicked={setDestinyClicked}
+				/>
+			),
+		},
 	];
 
 	return (
@@ -165,6 +131,30 @@ const CharacterFormInner = () => {
 					{currentStep + 1}/12 {': '}
 				</span>
 				<span>{steps[currentStep].label}</span>
+			</div>
+			<div className='font-cabin text-neutral-content flex flex-row gap-1 text-[0.7rem]'>
+				{profile &&
+					Object.keys(profile).map(stat => (
+						<div
+							key={stat}
+							className='flex flex-row'
+						>
+							<span>{stat}:</span>
+							<span>{profile[stat as keyof StatProfil]}</span>
+						</div>
+					))}
+			</div>
+			<div className='font-cabin text-neutral-content flex h-20 flex-col flex-wrap gap-1 text-[0.7rem]'>
+				{variables &&
+					Object.keys(variables).map(variable => (
+						<div
+							key={variable}
+							className='flex flex-row'
+						>
+							<span>{variable}:</span>
+							<span>{variables[variable]}</span>
+						</div>
+					))}
 			</div>
 			{/* Step content */}
 			<div className='flex w-full flex-col items-center'>

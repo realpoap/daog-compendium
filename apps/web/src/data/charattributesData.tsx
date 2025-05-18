@@ -8,14 +8,20 @@ type Mastery = {
 	amount: string;
 	target: string;
 };
+type Advantage = {
+	amount: string;
+	target: string;
+	opponent?: boolean;
+};
 
 type Attribute = {
 	id: string;
 	name: string;
 	value: number;
 	effect: string;
-	statModifier: StatModifier[] | StatModifier | null;
-	masteries: Mastery[] | Mastery | null;
+	statModifier: StatModifier | null;
+	masteries: Mastery[] | null;
+	advantages?: Advantage[];
 	flavor: string;
 	description: string;
 };
@@ -83,13 +89,19 @@ export const characterAttributes: Attribute[] = [
 	},
 	{
 		name: 'friendly',
-		value: 1,
+		value: 0,
 		effect: 'People are generally more willing to help this character.',
 		statModifier: null,
-		masteries: {
-			amount: '+2',
-			target: 'speech',
-		},
+		masteries: [
+			{
+				amount: '-1',
+				target: 'intimidation',
+			},
+			{
+				amount: '+1',
+				target: 'persuasion',
+			},
+		],
 		flavor: 'a beautiful, sympathetic soul who is rarely refused anything',
 		description:
 			'This character has a friendly and approachable demeanor, making it easier to gain the favor of others.',
@@ -110,13 +122,16 @@ export const characterAttributes: Attribute[] = [
 	},
 	{
 		name: 'amputee',
-		value: -1,
+		value: -2,
 		effect: 'Reduced physical dexterity or agility.',
 		statModifier: {
 			amount: '-2',
-			stat: 'DEX',
+			stat: 'AGI',
 		},
-		masteries: null,
+		masteries: [
+			{ amount: '-1', target: 'preciseness' },
+			{ amount: '+1', target: 'physique' },
+		],
 		flavor:
 			"something is missing from the character, but I can't quite put my finger on it...",
 		description:
@@ -128,10 +143,12 @@ export const characterAttributes: Attribute[] = [
 		value: 1,
 		effect: 'Possesses a calm and open demeanor.',
 		statModifier: null,
-		masteries: {
-			amount: '+2',
-			target: 'esoterism',
-		},
+		masteries: [
+			{
+				amount: '+2',
+				target: 'esoterism',
+			},
+		],
 		flavor: 'a personality and energies open to the outside',
 		description:
 			'This character has a peaceful and serene nature, with an open and receptive attitude.',
@@ -142,10 +159,12 @@ export const characterAttributes: Attribute[] = [
 		value: 1,
 		effect: 'Dedicated and patient in their work.',
 		statModifier: null,
-		masteries: {
-			amount: '+2',
-			target: 'crafting',
-		},
+		masteries: [
+			{
+				amount: '+2',
+				target: 'crafting',
+			},
+		],
 		flavor: 'length and patience of time when creating pieces',
 		description:
 			'This character is diligent and takes their time when crafting items, resulting in high-quality work.',
@@ -154,15 +173,25 @@ export const characterAttributes: Attribute[] = [
 	{
 		name: 'ascetic',
 		value: 0,
-		effect: 'Socially withdrawn but knowledgeable in esoteric matters.',
+		effect: 'Socially withdrawn but knowledgeable in rural matters.',
 		statModifier: {
 			amount: '-2',
-			stat: 'speech',
+			stat: 'SOC',
 		},
-		masteries: {
-			amount: '+2',
-			target: 'esoterism',
-		},
+		masteries: [
+			{
+				amount: '+2',
+				target: 'bravery',
+			},
+			{
+				amount: '+1',
+				target: 'crafting',
+			},
+			{
+				amount: '+1',
+				target: 'survival',
+			},
+		],
 		flavor: 'a long solitary life leaves time to occupy oneself',
 		description:
 			'This character has spent a long time in solitude, leading to a detachment from social interaction but a deeper understanding of esoteric knowledge.',
@@ -174,7 +203,7 @@ export const characterAttributes: Attribute[] = [
 		effect: 'Experiences difficulty integrating into social groups.',
 		statModifier: {
 			amount: '-1',
-			stat: 'speech',
+			stat: 'SOC',
 		},
 		masteries: null,
 		flavor: 'difficulties integrating',
@@ -219,10 +248,12 @@ export const characterAttributes: Attribute[] = [
 		value: -1,
 		effect: 'Reluctant to spend money, especially on others.',
 		statModifier: null,
-		masteries: {
-			amount: '-2',
-			target: 'trading',
-		},
+		masteries: [
+			{
+				amount: '-2',
+				target: 'trading',
+			},
+		],
 		flavor:
 			'seeks to conserve their money, will not spend on someone else and very little on themselves',
 		description:
@@ -232,26 +263,34 @@ export const characterAttributes: Attribute[] = [
 	{
 		name: 'oaf',
 		value: -1,
-		effect: 'Clumsy and uncoordinated movements.',
-		statModifier: {
-			amount: '-1',
-			stat: 'movement',
-		},
-		masteries: null,
-		flavor: 'always the same one we expect',
+		effect: 'Slow and uncoordinated movements.',
+		statModifier: null,
+		masteries: [
+			{
+				amount: '-2',
+				target: 'movement',
+			},
+		],
+		flavor: `It's always the same one we wait on`,
 		description:
-			'This character is awkward and tends to stumble or make clumsy movements.',
+			'This character is awkward and tends to stumble or make slow movements.',
 		id: 'balourd-15',
 	},
 	{
 		name: 'handsome',
 		value: 1,
 		effect: 'Physically attractive.',
-		statModifier: {
-			amount: '+1',
-			stat: 'persuasion',
-		},
-		masteries: null,
+		statModifier: null,
+		masteries: [
+			{
+				amount: '+1',
+				target: 'persuasion',
+			},
+			{
+				amount: '+1',
+				target: 'bravery',
+			},
+		],
 		flavor: 'yet another handsome hero',
 		description: 'This character possesses striking good looks.',
 		id: 'beau-16',
@@ -261,10 +300,12 @@ export const characterAttributes: Attribute[] = [
 		value: -1,
 		effect: 'Difficulty speaking fluently.',
 		statModifier: null,
-		masteries: {
-			amount: '-2',
-			target: 'speech',
-		},
+		masteries: [
+			{
+				amount: '-2',
+				target: 'speech',
+			},
+		],
 		flavor: 'h-h-hard to s-s-speak',
 		description:
 			'This character has a speech impediment that causes them to stutter.',
@@ -274,16 +315,7 @@ export const characterAttributes: Attribute[] = [
 		name: 'warlike',
 		value: -1,
 		effect: 'Prefers fighting over discussions.',
-		statModifier: [
-			{
-				amount: '-1',
-				stat: 'trading',
-			},
-			{
-				amount: '+1',
-				stat: 'fighting',
-			},
-		],
+		statModifier: null,
 		masteries: [
 			{
 				amount: '-1',
@@ -301,9 +333,9 @@ export const characterAttributes: Attribute[] = [
 	},
 	{
 		name: 'accepted',
-		value: 1,
+		value: 2,
 		effect: 'Generally accepted and trusted by the community.',
-		statModifier: null,
+		statModifier: { amount: '+1', stat: 'SOC' },
 		masteries: [
 			{
 				amount: '+1',
@@ -324,10 +356,12 @@ export const characterAttributes: Attribute[] = [
 		value: 1,
 		effect: 'Naturally inclined to help and care for others.',
 		statModifier: null,
-		masteries: {
-			amount: '+2',
-			target: 'healing',
-		},
+		masteries: [
+			{
+				amount: '+2',
+				target: 'healing',
+			},
+		],
 		flavor: 'a caring face and fairy fingers',
 		description:
 			'This character is kind-hearted and has a natural desire to assist and heal those in need.',
@@ -335,14 +369,16 @@ export const characterAttributes: Attribute[] = [
 	},
 	{
 		name: 'old injury',
-		value: -1,
-		effect: 'Reduced maximum health.',
+		value: -2,
+		effect: 'Reduced physique and health',
 		statModifier: {
 			amount: '-1',
-			stat: 'physique',
-			dice: 'd3',
+			stat: 'VIT',
 		},
-		masteries: null,
+		masteries: [
+			{ amount: '-1', target: 'initiative' },
+			{ amount: '-1', target: 'physique' },
+		],
 		flavor: 'a painful wound affects daily life',
 		description:
 			'This character suffers from a permanent injury that reduces their overall vitality.',
@@ -351,7 +387,7 @@ export const characterAttributes: Attribute[] = [
 	{
 		name: 'deep wound',
 		value: -1,
-		effect: 'Takes additional damage from critical hits.',
+		effect: 'Takes 1 additional damage from critical hits.',
 		statModifier: null,
 		masteries: null,
 		flavor: 'blows resonate more strongly in their bones',
@@ -362,12 +398,9 @@ export const characterAttributes: Attribute[] = [
 	{
 		name: 'good metabolism',
 		value: 1,
-		effect: 'Recovers from ailments more easily.',
+		effect: 'Recovers from ailments more easily. +1 rest bonus', //TODO: implement restBonus
 		statModifier: null,
-		masteries: {
-			amount: '+2',
-			target: 'healing',
-		},
+		masteries: null,
 		flavor: 'these antibodies are heroes in their own right!',
 		description:
 			'This character has a strong constitution and recovers from illnesses and negative effects quickly.',
@@ -436,7 +469,7 @@ export const characterAttributes: Attribute[] = [
 			},
 			{
 				amount: '+1',
-				target: 'performance',
+				target: 'initiative',
 			},
 		],
 		flavor: "it's like they're in the matrix",
@@ -467,12 +500,16 @@ export const characterAttributes: Attribute[] = [
 	{
 		name: 'burned',
 		value: -1,
-		effect: 'Fear of fire (disadvantage on fear saving throws).',
-		statModifier: {
-			amount: '-1',
-			stat: 'persuasion',
-		},
-		masteries: null,
+		effect:
+			'Fear of fire (disadvantage on fear saving throws when fire is near).',
+		statModifier: { amount: '-1', stat: 'WIL' },
+		masteries: [
+			{
+				amount: '+1',
+				target: 'persuasion',
+			},
+		],
+		advantages: [{ amount: '-1', target: 'fire' }],
 		flavor: 'the mysterious trace of a dark past, or a kitchen accident',
 		description:
 			'This character bears a burn scar that has left them with a debilitating fear of fire.',
@@ -483,10 +520,12 @@ export const characterAttributes: Attribute[] = [
 		value: 1,
 		effect: 'Intimidating presence.',
 		statModifier: null,
-		masteries: {
-			amount: '+2',
-			target: 'persuasion',
-		},
+		masteries: [
+			{
+				amount: '+2',
+				target: 'intimidation',
+			},
+		],
 		flavor: 'big biceps are sometimes more useful than beautiful phrasing',
 		description:
 			'This character possesses a physically imposing build that can be used to intimidate others.',
@@ -497,10 +536,12 @@ export const characterAttributes: Attribute[] = [
 		value: -1,
 		effect: 'Makes it difficult to move stealthily.',
 		statModifier: null,
-		masteries: {
-			amount: '-2',
-			target: 'discretion',
-		},
+		masteries: [
+			{
+				amount: '-2',
+				target: 'discretion',
+			},
+		],
 		flavor: 'just shut up!',
 		description:
 			'This character is naturally loud and struggles to be quiet, making stealth difficult.',
@@ -509,9 +550,11 @@ export const characterAttributes: Attribute[] = [
 	{
 		name: 'calm',
 		value: 2,
-		effect: 'Resistant to stress and maintains composure easily.',
+		effect:
+			'Resistant to stress and maintains composure easily. Cancel first disadvantage in stressful situations.',
 		statModifier: null,
 		masteries: null,
+		advantages: [{ amount: '+1', target: 'willpower' }],
 		flavor: 'appreciates silence and relaxed environments',
 		description:
 			'This character has a naturally calm disposition and finds peace in quiet surroundings.',
@@ -522,10 +565,12 @@ export const characterAttributes: Attribute[] = [
 		value: -1,
 		effect: 'Skeptical of the supernatural.',
 		statModifier: null,
-		masteries: {
-			amount: '-2',
-			target: 'esoterism',
-		},
+		masteries: [
+			{
+				amount: '-2',
+				target: 'esoterism',
+			},
+		],
 		flavor: 'their mind is a little closed to the supernatural',
 		description:
 			'This character has a rational and logical mind, making them resistant to believing in the supernatural.',
@@ -534,12 +579,9 @@ export const characterAttributes: Attribute[] = [
 	{
 		name: 'nightmare',
 		value: -1,
-		effect: 'Experiences restless nights and may be fatigued.',
+		effect: 'Experiences restless nights and may be fatigued. Has a rest malus', //TODO: implement
 		statModifier: null,
-		masteries: {
-			amount: '-2',
-			target: 'healing',
-		},
+		masteries: null,
 		flavor: "has difficulty getting good nights' sleep",
 		description:
 			'This character is plagued by recurring nightmares, making it hard for them to rest properly.',
@@ -553,7 +595,7 @@ export const characterAttributes: Attribute[] = [
 		masteries: [
 			{
 				amount: '+1',
-				target: 'fighting',
+				target: 'brawl',
 			},
 			{
 				amount: '+1',
@@ -566,7 +608,7 @@ export const characterAttributes: Attribute[] = [
 		id: 'chamailleur-35',
 	},
 	{
-		name: 'lucky',
+		name: 'lucky', //TODO: implement luck
 		value: 2,
 		effect:
 			'Once per day/session, can reroll a die roll concerning them, must keep the second result.',
@@ -592,11 +634,13 @@ export const characterAttributes: Attribute[] = [
 		name: 'pesty',
 		value: -1,
 		effect: 'Annoys and irritates people compulsively.',
-		statModifier: {
-			amount: '-2',
-			stat: 'speech',
-		},
-		masteries: null,
+		statModifier: null,
+		masteries: [
+			{
+				amount: '-2',
+				target: 'speech',
+			},
+		],
 		flavor: 'drives people to their breaking point, compulsively',
 		description:
 			"This character has an irritating personality and tends to push people's buttons.",
@@ -625,7 +669,7 @@ export const characterAttributes: Attribute[] = [
 	},
 	{
 		name: 'city dweller',
-		value: 1,
+		value: 0,
 		effect: 'Familiar with urban environments but less so with the wilderness.',
 		statModifier: null,
 		masteries: [
@@ -648,10 +692,12 @@ export const characterAttributes: Attribute[] = [
 		value: 1,
 		effect: 'Excellent at discerning truthfulness.',
 		statModifier: null,
-		masteries: {
-			amount: '+2',
-			target: 'perception',
-		},
+		masteries: [
+			{
+				amount: '+2',
+				target: 'perception',
+			},
+		],
 		flavor: "you can't fool them!",
 		description:
 			'This character has a keen intuition and can easily see through lies and deception.',
@@ -662,10 +708,12 @@ export const characterAttributes: Attribute[] = [
 		value: -1,
 		effect: 'Threats are not taken seriously.',
 		statModifier: null,
-		masteries: {
-			amount: '-2',
-			target: 'persuasion',
-		},
+		masteries: [
+			{
+				amount: '-2',
+				target: 'persuasion',
+			},
+		],
 		flavor: 'no one takes this threat seriously',
 		description:
 			'This character lacks the presence or credibility to make their threats believable.',
@@ -676,10 +724,12 @@ export const characterAttributes: Attribute[] = [
 		value: 1,
 		effect: 'Skilled in trade and negotiation.',
 		statModifier: null,
-		masteries: {
-			amount: '+2',
-			target: 'trading',
-		},
+		masteries: [
+			{
+				amount: '+2',
+				target: 'trading',
+			},
+		],
 		flavor: 'good at business',
 		description:
 			'This character has a natural talent for buying, selling, and striking deals.',
@@ -699,17 +749,19 @@ export const characterAttributes: Attribute[] = [
 	},
 	{
 		name: 'coquettish',
-		value: -1,
+		value: 0,
 		effect:
 			'Highly concerned with their appearance, potentially at the expense of practicality.',
 		statModifier: {
 			amount: '+1',
 			stat: 'CHA',
 		},
-		masteries: {
-			amount: '-2',
-			target: 'survival',
-		},
+		masteries: [
+			{
+				amount: '-2',
+				target: 'survival',
+			},
+		],
 		flavor: 'pays very close attention to their appearance',
 		description:
 			'This character is vain and spends a significant amount of time and effort on their looks.',
@@ -719,14 +771,17 @@ export const characterAttributes: Attribute[] = [
 		name: 'gullible',
 		value: -1,
 		effect: 'Easily deceived or manipulated.',
-		statModifier: {
-			amount: '-1',
-			stat: 'persuasion',
-		},
-		masteries: {
-			amount: '-1',
-			target: 'trading',
-		},
+		statModifier: null,
+		masteries: [
+			{
+				amount: '-1',
+				target: 'trading',
+			},
+			{
+				amount: '-1',
+				target: 'persuasion',
+			},
+		],
 		flavor: 'a somewhat problematic naivety',
 		description:
 			'This character is trusting to a fault and tends to believe what others tell them.',
@@ -766,7 +821,7 @@ export const characterAttributes: Attribute[] = [
 	},
 	{
 		name: 'insane',
-		value: -3,
+		value: -2,
 		effect:
 			'Unable to follow conversations, may scream, shout, laugh without reason, and tell incoherent stories.',
 		statModifier: null,
@@ -793,10 +848,16 @@ export const characterAttributes: Attribute[] = [
 		value: -1,
 		effect: 'Sensitive to violence, blood, and blows.',
 		statModifier: null,
-		masteries: {
-			amount: '-1',
-			target: 'defense',
-		},
+		masteries: [
+			{
+				amount: '-1',
+				target: 'defense',
+			},
+			{
+				amount: '-1',
+				target: 'bravery',
+			},
+		],
 		flavor: 'sensitive to violence, blood, blows',
 		description:
 			'This character is squeamish and easily disturbed by scenes of violence or injury.',
@@ -805,7 +866,7 @@ export const characterAttributes: Attribute[] = [
 	{
 		name: 'frightening',
 		value: 3,
-		effect: 'Opponents must make a panic saving throw.',
+		effect: 'Opponents must make a panic saving throw on sight.',
 		statModifier: null,
 		masteries: null,
 		flavor: 'obligatory panic test for their opponents',
@@ -818,10 +879,12 @@ export const characterAttributes: Attribute[] = [
 		value: 1,
 		effect: 'Skilled in persuasive speaking.',
 		statModifier: null,
-		masteries: {
-			amount: '+2',
-			target: 'speech',
-		},
+		masteries: [
+			{
+				amount: '+2',
+				target: 'speech',
+			},
+		],
 		flavor: 'words are sometimes stronger than steel',
 		description:
 			'This character is articulate and has a talent for using words to influence others.',
@@ -831,11 +894,13 @@ export const characterAttributes: Attribute[] = [
 		name: 'tough',
 		value: 1,
 		effect: 'High stamina and resilience.',
-		statModifier: {
-			amount: '+1',
-			stat: 'physique',
-		},
-		masteries: null,
+		statModifier: null,
+		masteries: [
+			{
+				amount: '+2',
+				target: 'physique',
+			},
+		],
 		flavor: 'of strong constitution, this fellow can go the distance!',
 		description:
 			'This character has a robust physique and can withstand significant physical exertion.',
@@ -846,10 +911,12 @@ export const characterAttributes: Attribute[] = [
 		value: 1,
 		effect: 'Full of energy and vitality.',
 		statModifier: null,
-		masteries: {
-			amount: '+2',
-			target: 'physique',
-		},
+		masteries: [
+			{
+				amount: '+2',
+				target: 'physique',
+			},
+		],
 		flavor: 'energetic',
 		description:
 			'This character possesses a high level of energy and enthusiasm.',
@@ -860,12 +927,15 @@ export const characterAttributes: Attribute[] = [
 		value: 1,
 		effect: 'Advantage on jump and balance checks.',
 		statModifier: null,
-		masteries: {
-			amount: '+1',
-			target: 'movement',
-		},
+		masteries: [
+			{
+				amount: '+1',
+				target: 'performance',
+			},
+		],
+		advantages: [{ amount: '+1', target: 'acrobatics' }],
 		flavor:
-			'a true feline when it comes to climbing trees or the tops of buildings',
+			'A true feline when it comes to climbing trees or the tops of buildings',
 		description:
 			'This character has excellent balance and agility, making them adept at climbing and maintaining their footing.',
 		id: 'equilibre-56',
@@ -876,7 +946,7 @@ export const characterAttributes: Attribute[] = [
 		effect: 'Knowledgeable and well-read.',
 		statModifier: {
 			amount: '+1',
-			stat: 'logic',
+			stat: 'ERU',
 		},
 		masteries: null,
 		flavor: 'who said spending time with your nose in books was a bad thing?',
@@ -889,10 +959,12 @@ export const characterAttributes: Attribute[] = [
 		value: 1,
 		effect: 'Possesses a wide range of general knowledge.',
 		statModifier: null,
-		masteries: {
-			amount: '+2',
-			target: 'knowledge',
-		},
+		masteries: [
+			{
+				amount: '+2',
+				target: 'knowledge',
+			},
+		],
 		flavor: 'know-it-all',
 		description:
 			'This character believes they know everything and often shares their knowledge (solicited or not).',
@@ -904,7 +976,7 @@ export const characterAttributes: Attribute[] = [
 		effect: 'Lacks physical strength.',
 		statModifier: {
 			amount: '-1',
-			stat: 'physique',
+			stat: 'STR',
 		},
 		masteries: null,
 		flavor: 'some people would do well to get some exercise',
@@ -926,12 +998,11 @@ export const characterAttributes: Attribute[] = [
 	{
 		name: 'phlegmatic',
 		value: -1,
-		effect: 'Slow to react and not easily moved emotionally.',
-		statModifier: {
-			amount: '-1',
-			stat: 'speech',
-		},
-		masteries: null,
+		effect:
+			'Slow to react and not easily moved emotionally. Has disadvantage on Initiative rolls',
+		statModifier: null,
+		masteries: [{ amount: '-1', target: 'persuasion' }],
+		advantages: [{ amount: '-1', target: 'initiative' }],
 		flavor: 'an unwavering nonchalance',
 		description:
 			'This character is calm and unexcitable, often reacting slowly to events.',
@@ -943,7 +1014,7 @@ export const characterAttributes: Attribute[] = [
 		effect: 'Possesses significant physical strength.',
 		statModifier: {
 			amount: '+1',
-			stat: 'physique',
+			stat: 'STR',
 		},
 		masteries: null,
 		flavor: 'what fine biceps!',
@@ -953,13 +1024,13 @@ export const characterAttributes: Attribute[] = [
 	},
 	{
 		name: 'fragile',
-		value: -1,
+		value: -2,
 		effect: 'Susceptible to illness and injury.',
-		statModifier: null,
+		statModifier: { amount: '-1', stat: 'END' },
 		masteries: [
 			{
 				amount: '-1',
-				target: 'healing',
+				target: 'physique',
 			},
 			{
 				amount: '-1',
@@ -979,10 +1050,12 @@ export const characterAttributes: Attribute[] = [
 			amount: '+1',
 			stat: 'CHA',
 		},
-		masteries: {
-			amount: '+2',
-			target: 'physique',
-		},
+		masteries: [
+			{
+				amount: '+2',
+				target: 'physique',
+			},
+		],
 		flavor: 'tobacco is taboo',
 		description: 'This character has a habit of smoking tobacco.',
 		id: 'fumeur-64',
@@ -993,8 +1066,7 @@ export const characterAttributes: Attribute[] = [
 		effect: 'Increased vitality.',
 		statModifier: {
 			amount: '+1',
-			stat: 'VIE',
-			dice: 'd3',
+			stat: 'VIT',
 		},
 		masteries: null,
 		flavor: 'a handsome baby!',
@@ -1004,19 +1076,27 @@ export const characterAttributes: Attribute[] = [
 	},
 	{
 		name: 'genius',
-		value: 1,
+		value: 0,
 		effect: 'Exceptional intellect but socially awkward.',
-		statModifier: [
+		statModifier: null,
+		masteries: [
 			{
-				amount: '+3',
-				stat: 'logic',
+				amount: '+2',
+				target: 'logic',
+			},
+			{
+				amount: '+1',
+				target: 'sciences',
 			},
 			{
 				amount: '-2',
-				stat: 'speech',
+				target: 'speech',
+			},
+			{
+				amount: '-1',
+				target: 'intimidation',
 			},
 		],
-		masteries: null,
 		flavor: 'genius',
 		description:
 			'This character possesses remarkable intelligence but struggles with social interactions.',
@@ -1026,7 +1106,7 @@ export const characterAttributes: Attribute[] = [
 		name: 'Long destiny',
 		value: 2,
 		effect:
-			'+1 Fate Point, +level*10 experience points when using a Fate Point in action.',
+			'+1 Fate Point, +level*10 experience points when using a Fate Point in action.', //TODO: implement
 		statModifier: null,
 		masteries: null,
 		flavor: 'seems less likely to die in bad situations',
@@ -1074,13 +1154,19 @@ export const characterAttributes: Attribute[] = [
 	},
 	{
 		name: 'proud',
-		value: -1,
+		value: -2,
 		effect: 'Condescending and dismissive of others.',
 		statModifier: null,
-		masteries: {
-			amount: '-2',
-			target: 'speech',
-		},
+		masteries: [
+			{
+				amount: '-2',
+				target: 'trading',
+			},
+			{
+				amount: '-2',
+				target: 'speech',
+			},
+		],
 		flavor: 'thinks they are on a high horse',
 		description:
 			'This character has an arrogant and superior attitude towards others.',
@@ -1091,10 +1177,12 @@ export const characterAttributes: Attribute[] = [
 		value: -1,
 		effect: 'Slow-witted and struggles with understanding.',
 		statModifier: null,
-		masteries: {
-			amount: '-2',
-			target: 'knowledge',
-		},
+		masteries: [
+			{
+				amount: '-2',
+				target: 'sciences',
+			},
+		],
 		flavor: 'has some difficulties at the synapse level',
 		description:
 			'This character has a lower than average intelligence and struggles with comprehension.',
@@ -1102,11 +1190,11 @@ export const characterAttributes: Attribute[] = [
 	},
 	{
 		name: 'illiterate',
-		value: -1,
+		value: -2,
 		effect: 'Cannot read or write.',
 		statModifier: {
 			amount: '-1',
-			stat: 'logic',
+			stat: 'ERU',
 		},
 		masteries: null,
 		flavor: 'illiterate',
@@ -1119,7 +1207,7 @@ export const characterAttributes: Attribute[] = [
 		effect: 'Attracts magical energies.',
 		statModifier: {
 			amount: '+1',
-			stat: 'perception',
+			stat: 'SEN',
 		},
 		masteries: null,
 		flavor: 'the magical winds are drawn to them',
@@ -1132,7 +1220,11 @@ export const characterAttributes: Attribute[] = [
 		value: 1,
 		effect: 'Physically large and intimidating.',
 		statModifier: null,
-		masteries: null,
+		masteries: [
+			{ amount: '+2', target: 'persuasion' },
+			{ amount: '+1', target: 'speech' },
+			{ amount: '-1', target: 'movement' },
+		],
 		flavor: 'imposing',
 		description: 'This character has a large and physically imposing presence.',
 		id: 'imposant-75',
@@ -1140,10 +1232,11 @@ export const characterAttributes: Attribute[] = [
 	{
 		name: 'inscrutable',
 		value: 1,
-		effect: 'Difficult to read or understand their thoughts and emotions.',
+		effect: 'Ennemies have disadvantage to check on sincerity checks.',
 		statModifier: null,
 		masteries: null,
-		flavor: 'inscrutable',
+		advantages: [{ amount: '-1', target: 'sincerity', opponent: true }],
+		flavor: 'Difficult to read or understand their thoughts and emotions.',
 		description:
 			'This character is enigmatic and their thoughts and feelings are difficult for others to discern.',
 		id: 'impenetrable-76',
@@ -1153,10 +1246,12 @@ export const characterAttributes: Attribute[] = [
 		value: -1,
 		effect: 'Fails to pay attention to plans and surroundings.',
 		statModifier: null,
-		masteries: {
-			amount: '-2',
-			target: 'detection',
-		},
+		masteries: [
+			{
+				amount: '-2',
+				target: 'detection',
+			},
+		],
 		flavor: "doesn't follow plans, doesn't pay attention",
 		description:
 			'This character is easily distracted and often misses important details or instructions.',
@@ -1165,12 +1260,11 @@ export const characterAttributes: Attribute[] = [
 	{
 		name: 'adamant',
 		value: 1,
-		effect: 'Resistant to being controlled or manipulated.',
+		effect:
+			'Resistant to being controlled or manipulated. Enemies have disadvantage to control this character.',
 		statModifier: null,
-		masteries: {
-			amount: '-2',
-			target: 'discretion',
-		},
+		masteries: null,
+		advantages: [{ amount: '-1', target: 'mindcontrol', opponent: true }],
 		flavor: 'a mind of steel in a... normal body',
 		description:
 			'This character has a strong will and is difficult to influence or control.',
@@ -1182,20 +1276,10 @@ export const characterAttributes: Attribute[] = [
 		effect: 'Resistant to cold temperatures.',
 		statModifier: null,
 		masteries: null,
-		flavor: 'does not feel the effects',
+		flavor: 'does not feel the effects of cold weather',
 		description:
 			'This character has a natural resistance to the effects of cold weather.',
 		id: 'froid-79',
-	},
-	{
-		name: 'clumsy',
-		value: -1,
-		effect: 'Clumsy or awkward in their movements.',
-		statModifier: null,
-		masteries: null,
-		flavor: 'awkward',
-		description: 'This character is not particularly graceful or coordinated.',
-		id: 'gauche-80',
 	},
 	{
 		name: 'carefree',
@@ -1219,13 +1303,16 @@ export const characterAttributes: Attribute[] = [
 	},
 	{
 		name: 'upright',
-		value: 1,
-		effect: 'Difficult to intimidate.',
+		value: 0,
+		effect:
+			'Difficult to intimidate. Enemies have disadvantage to corrupt this character.',
 		statModifier: null,
-		masteries: {
-			amount: '-2',
-			target: 'persuasion',
-		},
+		masteries: [
+			{
+				amount: '-2',
+				target: 'persuasion',
+			},
+		],
 		flavor: 'a beautiful soul who is not easily manipulated',
 		description:
 			'This character is honest and principled, making them resistant to intimidation.',
@@ -1233,8 +1320,9 @@ export const characterAttributes: Attribute[] = [
 	},
 	{
 		name: 'irritable',
-		value: -1,
-		effect: 'Easily angered or irritated.',
+		value: -2,
+		effect:
+			'Easily angered or irritated. Needs to roll a Panic test when triggered.',
 		statModifier: null,
 		masteries: null,
 		flavor: 'gets angry over nothing',
@@ -1244,13 +1332,22 @@ export const characterAttributes: Attribute[] = [
 	},
 	{
 		name: 'Born Leader',
-		value: 1,
+		value: 2,
 		effect: 'Draws attention and is easily listened to.',
 		statModifier: {
 			amount: '+1',
-			stat: 'COU',
+			stat: 'CHA',
 		},
-		masteries: null,
+		masteries: [
+			{
+				amount: '+1',
+				target: 'bravery',
+			},
+			{
+				amount: '+1',
+				target: 'performance',
+			},
+		],
 		flavor: 'attracts attention and is easily listened to',
 		description:
 			'This character has a natural charisma and leadership quality, making people inclined to listen to them.',
@@ -1277,9 +1374,9 @@ export const characterAttributes: Attribute[] = [
 	},
 	{
 		name: 'Ancestral Ties',
-		value: 1,
+		value: 2,
 		effect:
-			'Can be guided by ancestors in dreams and meditations, an advantage if resting.',
+			'Can be guided by ancestors in dreams and meditations, an advantage if resting.', //TODO: implement
 		statModifier: null,
 		masteries: null,
 		flavor: 'can be guided by ancestors in dreams and meditations',
@@ -1291,11 +1388,13 @@ export const characterAttributes: Attribute[] = [
 		name: 'Clumsy',
 		value: -1,
 		effect: 'Clumsy.',
-		statModifier: {
-			amount: '-1',
-			stat: 'DEX',
-		},
-		masteries: null,
+		statModifier: null,
+		masteries: [
+			{
+				amount: '-2',
+				target: 'preciseness',
+			},
+		],
 		flavor: 'some are born with fins instead of hands',
 		description: 'This character is clumsy and lacks physical coordination.',
 		id: 'maladroit-87',
@@ -1356,9 +1455,10 @@ export const characterAttributes: Attribute[] = [
 	{
 		name: 'Memory',
 		value: 1,
-		effect: '+2 to memory rolls.',
+		effect: 'Has advantage to memory and knowledge rolls.',
 		statModifier: null,
 		masteries: null,
+		advantages: [{ amount: '+1', target: 'knowledge' }],
 		flavor: 'can remember precise things',
 		description:
 			'This character has an excellent memory and can recall details easily.',
@@ -1367,7 +1467,7 @@ export const characterAttributes: Attribute[] = [
 	{
 		name: 'Battered',
 		value: -2,
-		effect: 'Starts death saving throws at 20.',
+		effect: 'Starts death saving throws at a difficulty of 20.',
 		statModifier: null,
 		masteries: null,
 		flavor: 'this body has already seen some wild and unripe things',
@@ -1380,13 +1480,19 @@ export const characterAttributes: Attribute[] = [
 		value: -1,
 		effect: 'Unattractive.',
 		statModifier: {
-			amount: '-1/-2',
+			amount: '-1',
 			stat: 'CHA',
 		},
-		masteries: {
-			amount: '-1',
-			target: 'speech',
-		},
+		masteries: [
+			{
+				amount: '-1',
+				target: 'persuasion',
+			},
+			{
+				amount: '+1',
+				target: 'performance',
+			},
+		],
 		flavor: 'would do better to wear a veil',
 		description:
 			'This character is physically unattractive, which can negatively impact their social interactions.',
@@ -1446,14 +1552,16 @@ export const characterAttributes: Attribute[] = [
 		id: 'oeil-de-lynx-97',
 	},
 	{
-		name: 'Beta',
-		value: -1,
+		name: 'Simpleton',
+		value: -2,
 		effect: 'Lacks knowledge.',
-		statModifier: null,
-		masteries: {
-			amount: '-2',
-			target: 'knowledge',
-		},
+		statModifier: { amount: '-1', stat: 'ERU' },
+		masteries: [
+			{
+				amount: '-2',
+				target: 'knowledge',
+			},
+		],
 		flavor: '',
 		description: 'This character is not very knowledgeable.',
 		id: 'beta-98',
@@ -1461,12 +1569,10 @@ export const characterAttributes: Attribute[] = [
 	{
 		name: 'Forgetful',
 		value: -1,
-		effect: 'Disadvantage on memory rolls.',
+		effect: 'Disadvantage on memory and knowledge rolls.',
 		statModifier: null,
-		masteries: {
-			amount: '-1',
-			target: 'memory',
-		},
+		masteries: null,
+		advantages: [{ amount: '-1', target: 'knowledge' }],
 		flavor: '',
 		description:
 			'This character is forgetful and has difficulty remembering things.',
@@ -1477,10 +1583,12 @@ export const characterAttributes: Attribute[] = [
 		value: -2,
 		effect: 'Refuses to fight, dislikes weapons.',
 		statModifier: null,
-		masteries: {
-			amount: '-2',
-			target: 'attack',
-		},
+		masteries: [
+			{
+				amount: '-2',
+				target: 'attack',
+			},
+		],
 		flavor: "refuses to fight, doesn't like weapons",
 		description:
 			'This character is strongly opposed to violence and avoids fighting or using weapons.',
@@ -1529,7 +1637,7 @@ export const characterAttributes: Attribute[] = [
 			},
 			{
 				amount: '+1',
-				target: 'logic',
+				target: 'perception',
 			},
 		],
 		flavor: '',
@@ -1540,9 +1648,10 @@ export const characterAttributes: Attribute[] = [
 	{
 		name: 'Insecure',
 		value: -1,
-		effect: 'Lacks self-confidence.',
+		effect: 'Lacks self-confidence. Disadvantage in public situations.',
 		statModifier: null,
 		masteries: null,
+		advantages: [{ amount: '-1', target: 'performance' }],
 		flavor: 'a slight lack of self-confidence',
 		description: 'This character has a slight lack of self-confidence.',
 		id: 'peu-assure-104',
@@ -1553,7 +1662,7 @@ export const characterAttributes: Attribute[] = [
 		effect: 'Fearful.',
 		statModifier: {
 			amount: '-1',
-			stat: 'COU',
+			stat: 'WIL',
 		},
 		masteries: null,
 		flavor: 'often called a coward',
@@ -1565,7 +1674,7 @@ export const characterAttributes: Attribute[] = [
 		name: 'Phobia of',
 		value: -1,
 		effect:
-			'Will do anything to avoid their phobia, will panic when encountered.',
+			'Will do anything to avoid their phobia, will test for panic when encountered.',
 		statModifier: null,
 		masteries: null,
 		flavor:
@@ -1576,8 +1685,8 @@ export const characterAttributes: Attribute[] = [
 	},
 	{
 		name: 'Stone Fists',
-		value: 1,
-		effect: 'Unarmed attacks are powerful.',
+		value: 3,
+		effect: 'Unarmed attacks are powerful. Get +1 dmg on unarmed blows.',
 		statModifier: null,
 		masteries: null,
 		flavor: 'hands like bricks',
@@ -1605,12 +1714,20 @@ export const characterAttributes: Attribute[] = [
 		statModifier: null,
 		masteries: [
 			{
-				amount: '+2',
+				amount: '+1',
 				target: 'speech',
 			},
 			{
-				amount: '-2',
+				amount: '+1',
+				target: 'healing',
+			},
+			{
+				amount: '-1',
 				target: 'persuasion',
+			},
+			{
+				amount: '-2',
+				target: 'intimidation',
 			},
 		],
 		flavor:
@@ -1633,7 +1750,7 @@ export const characterAttributes: Attribute[] = [
 		id: 'possede-110',
 	},
 	{
-		name: 'Precise',
+		name: 'Accurate',
 		value: 1,
 		effect: 'Accurate.',
 		statModifier: null,
@@ -1657,7 +1774,7 @@ export const characterAttributes: Attribute[] = [
 		effect: 'Overconfident.',
 		statModifier: {
 			amount: '-1',
-			stat: 'perception',
+			stat: 'SEN',
 		},
 		masteries: null,
 		flavor: 'feels capable of more than they are capable of',
@@ -1688,12 +1805,9 @@ export const characterAttributes: Attribute[] = [
 	{
 		name: 'Prodigy',
 		value: 1,
-		effect: 'Doubles their learning speed.',
+		effect: 'Has a better their learning speed. Gets a +2 skill points',
 		statModifier: null,
-		masteries: {
-			amount: '+2',
-			target: 'learning',
-		},
+		masteries: null,
 		flavor: 'full of natural talent',
 		description:
 			'This character is a prodigy and learns new skills at twice the normal rate.',
@@ -1712,6 +1826,10 @@ export const characterAttributes: Attribute[] = [
 			{
 				amount: '+1',
 				target: 'logic',
+			},
+			{
+				amount: '+1',
+				target: 'survival',
 			},
 		],
 		flavor: '',
@@ -1747,7 +1865,7 @@ export const characterAttributes: Attribute[] = [
 		value: 1,
 		effect: 'People tend to listen to their conclusions.',
 		statModifier: null,
-		masteries: { amount: '+2', target: 'logic' },
+		masteries: [{ amount: '+2', target: 'logic' }],
 		flavor: 'people tend to listen to their conclusions',
 		description:
 			'This character is logical and their reasoning is often trusted by others.',
@@ -1757,7 +1875,7 @@ export const characterAttributes: Attribute[] = [
 		name: 'Fast',
 		value: 1,
 		effect: 'Has good legs.',
-		statModifier: { amount: '+1', stat: 'MOU' },
+		statModifier: { amount: '+1', stat: 'CEL' },
 		masteries: null,
 		flavor: 'has good legs',
 		description: 'This character is quick and agile.',
@@ -1776,7 +1894,7 @@ export const characterAttributes: Attribute[] = [
 	{
 		name: 'Wanted',
 		value: -1,
-		effect: 'Can be arrested at any time if recognized.',
+		effect: 'Can be arrested at any time if recognized.', //TODO: implement
 		statModifier: null,
 		masteries: null,
 		flavor: 'can be arrested at any time if recognized',
@@ -1790,9 +1908,10 @@ export const characterAttributes: Attribute[] = [
 		effect:
 			'Opponents have disadvantage on intimidation and negotiation checks against them.',
 		statModifier: null,
-		masteries: [
-			{ amount: '-2', target: 'persuasion' },
-			{ amount: '-2', target: 'trading' },
+		masteries: null,
+		advantages: [
+			{ amount: '-1', target: 'persuasion', opponent: true },
+			{ amount: '-1', target: 'intimidation', opponent: true },
 		],
 		flavor:
 			'a sinister aura hangs over them, few people dare to cause them trouble',
@@ -1813,7 +1932,8 @@ export const characterAttributes: Attribute[] = [
 	{
 		name: 'Resilient',
 		value: 1,
-		effect: 'Not easy to finish off.',
+		effect:
+			'Not easy to finish off. Can roll on Endurance to stay at 1 VIT after a knockout.',
 		statModifier: null,
 		masteries: null,
 		flavor: 'not easy to finish off',
@@ -1823,9 +1943,10 @@ export const characterAttributes: Attribute[] = [
 	{
 		name: 'Resistant',
 		value: 1,
-		effect: '+1d4 on physical resistance rolls.',
+		effect: 'advantage on physical resistance rolls.',
 		statModifier: null,
 		masteries: null,
+		advantages: [{ amount: '+1', target: 'physique' }],
 		flavor: 'shows increased tenacity',
 		description: 'This character has a natural resistance to physical harm.',
 		id: 'resistant-125',
@@ -1836,6 +1957,8 @@ export const characterAttributes: Attribute[] = [
 		effect: 'Advantage on fear saving throws.',
 		statModifier: null,
 		masteries: null,
+		advantages: [{ amount: '+1', target: 'fear' }],
+
 		flavor: 'goes towards danger',
 		description: 'This character is fearless and faces danger head-on.',
 		id: 'risque-tout-126',
@@ -1845,7 +1968,7 @@ export const characterAttributes: Attribute[] = [
 		value: -1,
 		effect: 'Lacks social graces.',
 		statModifier: null,
-		masteries: { amount: '-2', target: 'healing' },
+		masteries: [{ amount: '-2', target: 'healing' }],
 		flavor: '',
 		description: 'This character is impolite and lacks social skills.',
 		id: 'rude-127',
@@ -1855,7 +1978,10 @@ export const characterAttributes: Attribute[] = [
 		value: 1,
 		effect: 'Knows how to make the right decisions when they are crucial.',
 		statModifier: null,
-		masteries: { amount: '+2', target: 'knowledge' },
+		masteries: [
+			{ amount: '+1', target: 'knowledge' },
+			{ amount: '+1', target: 'bravery' },
+		],
 		flavor: 'knows how to make the right decisions when they are crucial',
 		description:
 			'This character possesses wisdom and makes sound judgments in critical situations.',
@@ -1866,7 +1992,7 @@ export const characterAttributes: Attribute[] = [
 		value: -2,
 		effect: 'Cannot frequent all public places, smells bad.',
 		statModifier: { amount: '-1', stat: 'SOC' },
-		masteries: { amount: '-2', target: 'speech' },
+		masteries: [{ amount: '-2', target: 'trading' }],
 		flavor: 'cannot frequent all public places, smells bad',
 		description:
 			"This character's poor hygiene makes them unwelcome in many public areas and they have a strong odor.",
@@ -1891,18 +2017,18 @@ export const characterAttributes: Attribute[] = [
 		value: 1,
 		effect: 'Knows how to approach stealthily.',
 		statModifier: null,
-		masteries: { amount: '+2', target: 'discretion' },
+		masteries: [{ amount: '+2', target: 'discretion' }],
 		flavor: 'knows how to approach stealthily',
 		description: 'This character is skilled at moving quietly and unnoticed.',
 		id: 'silencieux-131',
 	},
 	{
 		name: 'Simple-minded',
-		value: -1,
+		value: -2,
 		effect: 'Not very intelligent.',
-		statModifier: { amount: '-1', stat: 'perception' },
-		masteries: null,
-		flavor: '',
+		statModifier: { amount: '-1', stat: 'ERU' },
+		masteries: [{ amount: '-2', target: 'logic' }],
+		flavor: 'Not very intelligent.',
 		description: 'This character is not very bright.',
 		id: 'simplet-132',
 	},
@@ -1919,7 +2045,7 @@ export const characterAttributes: Attribute[] = [
 	},
 	{
 		name: 'Dark Fate',
-		value: -1,
+		value: -2,
 		effect: 'Their choices will inexorably lead them towards evil.',
 		statModifier: null,
 		masteries: null,
@@ -1930,11 +2056,11 @@ export const characterAttributes: Attribute[] = [
 	},
 	{
 		name: 'Submissive',
-		value: -1,
+		value: -2,
 		effect: 'Vulnerable to torture and intimidation.',
 		statModifier: null,
 		masteries: [
-			{ amount: '-2', target: 'resistance' },
+			{ amount: '-2', target: 'bravery' },
 			{ amount: '-2', target: 'persuasion' },
 		],
 		flavor: "don't hit, don't hit!",
@@ -1954,8 +2080,8 @@ export const characterAttributes: Attribute[] = [
 	},
 	{
 		name: 'Deaf',
-		value: -2,
-		effect: 'Cannot hear anything.',
+		value: -3,
+		effect: 'Cannot hear anything. But knows how to sign.',
 		statModifier: null,
 		masteries: null,
 		flavor: 'hears nothing',
@@ -1976,8 +2102,9 @@ export const characterAttributes: Attribute[] = [
 	},
 	{
 		name: 'Tactician',
-		value: 1,
-		effect: 'Has a good analytical mind for tactical situations.',
+		value: 3,
+		effect:
+			'Has a good analytical mind for tactical situations. Can rollback a deplacement or use of item before an action against an enemy, once per long rest.',
 		statModifier: null,
 		masteries: null,
 		flavor: 'has a good analytical mind for tactical situations',
@@ -1987,7 +2114,7 @@ export const characterAttributes: Attribute[] = [
 	},
 	{
 		name: 'Flashy',
-		value: 1,
+		value: 0,
 		effect: 'Easily noticed, stands out.',
 		statModifier: null,
 		masteries: [
@@ -2004,7 +2131,7 @@ export const characterAttributes: Attribute[] = [
 		value: 1,
 		effect: 'Reacts quickly in complex situations.',
 		statModifier: null,
-		masteries: { amount: '+1', target: 'initiative' },
+		masteries: [{ amount: '+2', target: 'initiative' }],
 		flavor: 'reacts quickly in complex situations',
 		description:
 			'This character remains calm and thinks clearly under pressure, allowing them to react quickly.',
@@ -2013,9 +2140,10 @@ export const characterAttributes: Attribute[] = [
 	{
 		name: 'Stubborn',
 		value: 1,
-		effect: 'Disadvantage on persuasion checks when involved.',
+		effect: 'Enemies have disadvantage on persuasion checks when involved.',
 		statModifier: null,
-		masteries: { amount: '-1', target: 'persuasion' },
+		masteries: null,
+		advantages: [{ amount: '-1', target: 'persuasion', opponent: true }],
 		flavor: 'a real hardhead',
 		description:
 			'This character is obstinate and difficult to persuade, especially when they have a personal stake in the matter.',
@@ -2028,6 +2156,7 @@ export const characterAttributes: Attribute[] = [
 			'Has trouble following conversations, interrupts, wanders off to other activities.',
 		statModifier: null,
 		masteries: null,
+		advantages: [{ amount: '-1', target: 'perception' }],
 		flavor:
 			'has trouble following a conversation, interrupts, wanders off to other activities',
 		description:
@@ -2047,10 +2176,10 @@ export const characterAttributes: Attribute[] = [
 	},
 	{
 		name: 'Valiant',
-		value: 1,
+		value: 2,
 		effect: 'Few things scare them.',
-		statModifier: { amount: '+1', stat: 'COU' },
-		masteries: null,
+		statModifier: { amount: '+1', stat: 'WIL' },
+		masteries: [{ amount: '+2', target: 'bravery' }],
 		flavor: 'few things scare them',
 		description: 'This character is courageous and not easily frightened.',
 		id: 'vaillant-145',
@@ -2058,7 +2187,7 @@ export const characterAttributes: Attribute[] = [
 	{
 		name: 'Wealthy',
 		value: 1,
-		effect: 'Has significant financial resources.',
+		effect: 'Has significant financial resources. Begins with +1d4 MO.', //TODO: implement
 		statModifier: null,
 		masteries: null,
 		flavor: '',
@@ -2070,7 +2199,7 @@ export const characterAttributes: Attribute[] = [
 		value: 1,
 		effect: 'Agile and quick.',
 		statModifier: null,
-		masteries: { amount: '+2', target: 'movement' },
+		masteries: [{ amount: '+2', target: 'movement' }],
 		flavor: '',
 		description: 'This character is energetic and moves swiftly.',
 		id: 'vif-147',
@@ -2080,7 +2209,7 @@ export const characterAttributes: Attribute[] = [
 		value: -1,
 		effect: 'Lacks refinement.',
 		statModifier: null,
-		masteries: { amount: '-2', target: 'speech' },
+		masteries: [{ amount: '-2', target: 'speech' }],
 		flavor: '',
 		description: 'This character is crude and lacks social etiquette.',
 		id: 'vulgaire-148',
@@ -2088,12 +2217,165 @@ export const characterAttributes: Attribute[] = [
 	{
 		name: 'Scholar',
 		value: 1,
-		effect: 'Learned the basics of an old language through books',
+		effect: 'Knows an obscure language.',
 		statModifier: null,
 		masteries: null,
-		flavor: '',
+		flavor: 'Learned the basics of an old language through books',
 		description:
 			'This spent a lot of time in libraries and read oddly written fantasy books',
 		id: 'scholar-149',
+	},
+	{
+		id: 'sluggish-150',
+		name: 'Sluggish',
+		value: -1,
+		effect: 'Moves slowly and struggles to keep pace.',
+		statModifier: { amount: '-1', stat: 'CEL' },
+		masteries: null,
+		flavor: 'Often the last to catch up.',
+		description:
+			'This character is slow on their feet and tends to fall behind others.',
+	},
+	{
+		id: 'gourde-151',
+		name: 'Fumbler',
+		value: -1,
+		effect: 'Frequently drops objects or makes manual errors.',
+		statModifier: { amount: '-1', stat: 'DEX' },
+		masteries: null,
+		flavor: 'Can’t seem to hold onto anything.',
+		description: 'This character is clumsy and often fumbles fine tasks.',
+	},
+	{
+		id: 'gringalet-152',
+		name: 'Weakling',
+		value: -1,
+		effect: 'Lacks physical power to carry weights. Carrying max reduced by 1.', //TODO: implement
+		statModifier: null,
+		masteries: null,
+		flavor: 'Struggles with a backpack.',
+		description:
+			'This character has very little raw physical force and tires easily.',
+	},
+	{
+		id: 'constitution-acier-153',
+		name: 'Iron Constitution',
+		value: 1,
+		effect: 'Endures fatigue and physical stress better than most.',
+		statModifier: { amount: '+1', stat: 'END' },
+		masteries: null,
+		flavor: 'Nothing seems to wear them down.',
+		description:
+			'This character is tough and rarely affected by exhaustion or harsh conditions.',
+	},
+	{
+		id: 'negligent-154',
+		name: 'Sloppy',
+		value: -1,
+		effect: 'Poor at detail-oriented crafting.',
+		statModifier: null,
+		masteries: [{ amount: '-2', target: 'crafting' }],
+		flavor: 'Always leaves tools lying around.',
+		description:
+			'This character’s work is riddled with flaws and unfinished edges.',
+	},
+	{
+		id: 'tranquille-155',
+		name: 'Cushy',
+		value: -1,
+		effect: 'Avoids fistfights and physical efforts',
+		statModifier: null,
+		masteries: [
+			{ amount: '-1', target: 'brawl' },
+			{ amount: '-1', target: 'physique' },
+		],
+		flavor: 'Can’t throw a punch to save their life.',
+		description: 'This character is ineffective in hand-to-hand combat.',
+	},
+	{
+		id: 'doue-156',
+		name: 'Gifted',
+		value: 1,
+		effect: 'Innately talented in magical arts.',
+		statModifier: null,
+		masteries: [{ amount: '+1', target: 'magic' }],
+		flavor: 'A natural conduit for arcane forces.',
+		description:
+			'This character exhibits magical talent without formal training.',
+	},
+	{
+		id: 'non-receptif-157',
+		name: 'Unreceptive',
+		value: -1,
+		effect: 'Unreceptive to magical energies.',
+		statModifier: null,
+		masteries: [
+			{ amount: '-1', target: 'magic' },
+			{ amount: '-1', target: 'esoterism' },
+		],
+		flavor: 'Magic fizzles in their presence.',
+		description:
+			'This character has difficulty casting or interacting with magical effects.',
+	},
+	{
+		id: 'aggressif-158',
+		name: 'Aggressive',
+		value: 1,
+		effect: 'Naturally assertive in combat.',
+		statModifier: null,
+		masteries: [
+			{ amount: '+1', target: 'attack' },
+			{ amount: '+1', target: 'bravery' },
+		],
+		flavor: 'Always goes for the throat.',
+		description:
+			'This character hits hard and presses the attack relentlessly.',
+	},
+	{
+		id: 'preste-159',
+		name: 'Nimble',
+		value: 1,
+		effect: 'Moves silently and precisely.',
+		statModifier: null,
+		masteries: [{ amount: '+2', target: 'discretion' }],
+		flavor: 'Light-footed and hard to hear, like a shadow.',
+		description:
+			'This character moves with quiet grace, rarely making noise or drawing attention.',
+	},
+	{
+		id: 'sauvage-160',
+		name: 'Bushborn',
+		value: 1,
+		effect: 'Thrives in natural environments.',
+		statModifier: null,
+		masteries: [{ amount: '+2', target: 'survival' }],
+		flavor: 'Raised by the woods, at home in the wild.',
+		description:
+			'This character is instinctively attuned to nature, capable of surviving without modern aid.',
+	},
+	{
+		id: 'perdu-161',
+		name: 'Directionless',
+		value: -1,
+		effect: 'Struggles with orientation and natural survival.',
+		statModifier: null,
+		masteries: [
+			{ amount: '-1', target: 'survival' },
+			{ amount: '-1', target: 'movement' },
+		],
+		flavor: 'Can get lost in their own house.',
+		description:
+			'This character lacks basic survival instincts and often gets lost, even in familiar places.',
+	},
+	{
+		id: 'negationniste-162',
+		name: 'Denialist',
+		value: -1,
+		effect: 'Rejects established scientific reasoning.',
+		statModifier: null,
+		masteries: [{ amount: '-2', target: 'sciences' }],
+		flavor: 'Has “alternative facts” for everything.',
+		description:
+			'This character dismisses proven facts and struggles with logical or scientific thinking.',
 	},
 ];

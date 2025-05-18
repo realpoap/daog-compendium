@@ -448,8 +448,8 @@ export const calcCharacterStats = (c: Character) => {
 	c.profile.variables.speech =
 		c.profile.stats.CHA + c.profile.boni.speech + c.masteries.speech.current;
 	// TRADE ---------------------------------------------------------------------------
-	c.profile.variables.trade =
-		c.profile.stats.SOC + c.profile.boni.trade + c.masteries.trading.current;
+	c.profile.variables.trading =
+		c.profile.stats.SOC + c.profile.boni.trading + c.masteries.trading.current;
 	// PERFORMANCE--------------------------------------------------------------------------
 	c.profile.variables.performance =
 		c.profile.stats.CHA +
@@ -465,9 +465,9 @@ export const calcCharacterStats = (c: Character) => {
 		c.profile.stats.INS +
 		c.profile.boni.survival +
 		c.masteries.survival.current;
-	// ENIGMS --------------------------------------------------------------------------
-	c.profile.variables.enigms =
-		c.profile.stats.ERU + c.profile.boni.enigms + c.masteries.logic.current;
+	// LOGIC --------------------------------------------------------------------------
+	c.profile.variables.logic =
+		c.profile.stats.ERU + c.profile.boni.logic + c.masteries.logic.current;
 	// MAGICLOAD + SPELL BONUS---------------------------------------------------------------
 	c.status.magicLoad.max = Math.floor(c.profile.stats.SEN / 10) + levelBonus;
 	c.profile.variables.magic =
@@ -551,11 +551,21 @@ export const variablesReset = {
 	magic: 0,
 	bravery: 0,
 	survival: 0,
-	enigms: 0,
+	logic: 0,
 	speech: 0,
-	trade: 0,
+	trading: 0,
 	performance: 0,
 	intimidation: 0,
+	persuasion: 0,
+	knowledge: 0,
+	sciences: 0,
+	physique: 0,
+	preciseness: 0,
+	crafting: 0,
+	detection: 0,
+	esoterism: 0,
+	movement: 0,
+	healing: 0,
 };
 
 export const masteriesReset = {

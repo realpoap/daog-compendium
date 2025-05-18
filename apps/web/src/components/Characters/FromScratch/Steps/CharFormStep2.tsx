@@ -1,8 +1,12 @@
-import SelectFilter from '@/components/SpellList/SelectFilter';
-import { allSpecies, SpecieDataForm } from '@/data/speciesProfile';
+import { SingleErrorMessage } from '@/components/RHFComponents';
+import { allSpecies, SpecieDataForm, speciesMap } from '@/data/speciesProfile';
 import { useCharacterForm } from '@/store/characterContext';
+import { variablesReset } from '@/utils/calculateStats';
 import { capitalizeFirstLetter } from '@/utils/capitalize';
-import { useState } from 'react';
+import { cn } from '@/utils/classNames';
+import { setObjectSkills } from '@/utils/objectSkills';
+import { ChangeEvent, useEffect, useState } from 'react';
+import { useWatch } from 'react-hook-form';
 
 const difficulties = [
 	{ value: 'easy', label: 'easy' },
@@ -16,56 +20,151 @@ export type Option = {
 	icon?: JSX.Element;
 };
 
-type Props = {
-	selected: SpecieDataForm | undefined;
-};
+const CharFormStep2 = () => {
+	const { methods, setFormData } = useCharacterForm();
+	const [selectedDifficulty, setSelectedDifficulty] = useState<string[]>([
+		'easy',
+		'normal',
+		'tough',
+	]);
+	const [selectedSpecieData, setSelectedSpecieData] =
+		useState<SpecieDataForm>();
+	const selectedSpecies = useWatch({ name: 'bio.species' });
+	const selectedSub = useWatch({ name: 'bio.subspecies' });
+	const punName = useWatch({ name: 'bio.isPun' });
 
-const CharFormStep2 = ({ selected }: Props) => {
-	const { methods } = useCharacterForm();
-	const [selectedDifficulty, setSelectedDifficulty] = useState<Option[]>([]);
-
-	const selectedDiffValues = selectedDifficulty.map(d => d.value);
-
-	// Filter species based on difficulty
-	const filteredSpecies =
-		selectedDiffValues.length === 0
-			? allSpecies
-			: allSpecies.filter(s => selectedDiffValues.includes(s.specieDifficulty));
+	useEffect(() => {
+		if (selectedSub !== '') {
+			const foundSub = allSpecies.find(specie => specie.sub === selectedSub);
+			if (foundSub) {
+				setSelectedSpecieData(foundSub);
+				const skilllist = foundSub?.path.skills;
+				const languagelist = foundSub?.specifics.speaks;
+				const attributelist = foundSub?.path.attributes;
+				const selectedSpecies = speciesMap[foundSub.sub];
+				const objectSkills = setObjectSkills(skilllist);
+				const skillPoints = foundSub.specie === 'human' ? 10 : 5;
+				setFormData(prev => ({
+					...prev,
+					path: {
+						...prev.path,
+						skills: objectSkills,
+						skillPoints: skillPoints,
+						attributes: attributelist,
+					},
+					specifics: {
+						...prev.specifics,
+						speaks: languagelist,
+						description: '',
+						background: '',
+					},
+					profile: {
+						...prev.profile,
+						level: 1,
+						statsStarting: selectedSpecies.profile.statsStarting,
+						variables: variablesReset,
+						boni: variablesReset,
+						advantages: variablesReset,
+					},
+				}));
+				methods.setValue(
+					'profile.statsStarting',
+					selectedSpecies.profile.statsStarting,
+				);
+				methods.setValue(
+					'profile.statsStarting.VIT',
+					punName
+						? selectedSpecies.profile.statsStarting.VIT + 1
+						: selectedSpecies.profile.statsStarting.VIT,
+				);
+			}
+		}
+	}, [selectedSpecies, selectedSub]);
 
 	// If a specie is selected, show subspecies
-	const subsForSelectedSpecie = filteredSpecies.filter(
-		s => s.specie === selected?.specie,
+	const subsForSelectedSpecie = allSpecies.filter(
+		s => s.specie === selectedSpecies,
 	);
+
+	const handleDifficultySelect = (e: ChangeEvent<HTMLInputElement>) => {
+		// Find Difficulty option selected
+		const value = e.target.ariaLabel;
+		//const diff = difficulties.find(diff => diff.value === value);
+		if (!value) return;
+
+		// Find if already selected
+		const isAlreadySelected =
+			selectedDifficulty.length !== 0
+				? selectedDifficulty?.includes(value)
+				: false;
+		console.log(value, isAlreadySelected);
+		if (!isAlreadySelected) {
+			//If not selected, add to selectedDifficulty
+			setSelectedDifficulty(prev => [...prev, value]);
+		} else {
+			// If selected, remove from selectedDifficulty
+			setSelectedDifficulty(selectedDifficulty?.filter(diff => diff !== value));
+		}
+		methods.setValue('bio.species', '');
+		methods.setValue('bio.subspecies', undefined);
+		console.dir(selectedDifficulty);
+	};
 
 	return (
 		<div>
-			<fieldset className='flex flex-col gap-4'>
-				<SelectFilter
-					value={selectedDifficulty}
-					options={difficulties}
-					onChange={setSelectedDifficulty}
-					placeholder='Difficulty'
-					isMulti
-				/>
+			<fieldset className='flex flex-col items-center gap-4'>
+				<h3 className='font-semibold'>Select playing difficulty</h3>
+				<div className='flex flex-row gap-2'>
+					{difficulties.map(diff => (
+						<input
+							className='btn btn-sm capitalize'
+							key={`diff-${diff.label}-input`}
+							type='checkbox'
+							name='difficulty'
+							defaultChecked={true}
+							aria-label={diff.label}
+							onChange={e => handleDifficultySelect(e)}
+						/>
+					))}
+				</div>
 
 				{/* Specie Selection */}
-				<div>
+				<div className='flex flex-col items-center'>
 					<h3 className='font-semibold'>Choose a Specie</h3>
-					<div className='flex flex-row flex-wrap gap-2'>
+					<SingleErrorMessage name='bio.species' />
+					<div className='flex flex-row flex-wrap items-center justify-center gap-2'>
 						{allSpecies
+							.filter(s => {
+								if (selectedDifficulty.length !== 0) {
+									return selectedDifficulty.some(
+										diff => diff === s.specieDifficulty,
+									);
+								} else {
+									return true;
+								}
+							})
 							.filter(
 								(obj1, i, arr) =>
 									arr.findIndex(obj2 => obj2.specie === obj1.specie) === i,
 							)
+
 							.map(specie => (
 								<span
 									key={specie.sub}
 									onClick={() => {
-										console.log(specie.specie, specie.sub);
 										methods.setValue('bio.species', specie.specie);
-										methods.setValue('bio.subspecies', specie.sub);
+										if (specie.specie === specie.sub) {
+											methods.setValue('bio.subspecies', specie.sub);
+										} else {
+											methods.setValue('bio.subspecies', undefined);
+										}
 									}}
-									className={`badge badge border-primary border-1 rounded-box cursor-pointer flex-col text-sm ${selected && selected.specie === specie.specie ? 'badge-primary' : ''}`}
+									className={cn(
+										`badge badge border-primary border-1 rounded-box cursor-pointer flex-col text-sm`,
+										{
+											'badge-primary': selectedSpecies === specie.specie,
+										},
+									)}
 								>
 									<span className='font-bold capitalize'>{specie.specie}</span>
 								</span>
@@ -74,50 +173,65 @@ const CharFormStep2 = ({ selected }: Props) => {
 				</div>
 
 				{/* Subspecies Selection */}
-				{selected && subsForSelectedSpecie.length > 1 && (
-					<div className='font-cabin'>
-						<h3 className=''>Choose a Subspecie</h3>
-						<div className='flex flex-row gap-2'>
-							{subsForSelectedSpecie.map(s => (
-								<span
-									key={s.sub}
-									onClick={() => methods.setValue('bio.subspecies', s.sub)}
-									className={`badge badge border-primary border-1 rounded-box cursor-pointer flex-col text-sm ${
-										selected.sub === s.sub ? 'badge-primary' : ''
-									}`}
-								>
-									<span className='text-md capitalize'>{s.sub}</span>
-								</span>
-							))}
+				{selectedSpecies !== selectedSub &&
+					subsForSelectedSpecie.length !== 0 && (
+						<div className='font-cabin'>
+							<h3 className=''>Choose a Subspecie</h3>
+							<SingleErrorMessage name='bio.subspecies' />
+							<div className='flex flex-row gap-2'>
+								{subsForSelectedSpecie
+									.filter(s => {
+										if (selectedDifficulty.length !== 0) {
+											return selectedDifficulty.some(
+												diff => diff === s.specieDifficulty,
+											);
+										} else {
+											return true;
+										}
+									})
+									.map(s => (
+										<span
+											key={s.sub}
+											onClick={() => methods.setValue('bio.subspecies', s.sub)}
+											className={cn(
+												`badge badge border-primary border-1 rounded-box cursor-pointer flex-col text-sm`,
+												{
+													'badge-primary': selectedSub === s.sub,
+												},
+											)}
+										>
+											<span className='text-md capitalize'>{s.sub}</span>
+										</span>
+									))}
+							</div>
 						</div>
-					</div>
-				)}
+					)}
 			</fieldset>
 
 			{/* Detail Panel */}
-			{selected && (
+			{selectedSub && selectedSpecieData && (
 				<div className='mt-6 rounded-lg border p-4 shadow'>
 					<h3 className='font-grenze mb-2 text-3xl font-bold'>
-						{capitalizeFirstLetter(`${selected.sub}`)}
+						{capitalizeFirstLetter(`${selectedSpecieData.sub}`)}
 					</h3>
 
-					{selected && (
+					{selectedSpecieData && (
 						<div className='flex flex-col gap-4'>
 							<span className='font-bold'>
-								Difficulty : {selected.specieDifficulty}
+								Difficulty : {selectedSpecieData.specieDifficulty}
 							</span>
 							<div
 								className='flex-2'
-								key={`${selected.specie}-${selected.sub}`}
+								key={`${selectedSpecieData.specie}-${selectedSpecieData.sub}`}
 							>
-								<p className='italic'>{selected.description}</p>
+								<p className='italic'>{selectedSpecieData.description}</p>
 							</div>
 							<h3 className='text-lg font-bold'>Attributes</h3>
 							<div className='flex flex-row gap-2'>
-								{selected.path.attributes.map(attr => (
+								{selectedSpecieData.path.attributes.map(attr => (
 									<div
 										className='flex-1'
-										key={`${selected.sub}-${attr.name}`}
+										key={`${selectedSpecieData.sub}-${attr.name}`}
 									>
 										<h4 className='font-bold'>{attr.name}</h4>
 										<p className='text-xs italic'>{attr.description}</p>

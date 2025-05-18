@@ -24,7 +24,7 @@ export const moufflian = {
 		attributes: [
 			{
 				name: 'Cosmopolitan',
-				effect: '1 additional language (F), 1 additional language (E)',
+				effect: '1 additional language (E)',
 				description:
 					'Humans are in constant contact with foreign races and have developed developed great talents for adapting to trade or to improve to improve understanding within their community. A human will often one or two additional languages from an early age, by virtue of the the different races with whom they make friends.',
 				value: 0,
@@ -422,7 +422,7 @@ export const durhkran = {
 export const grey = {
 	specie: 'dwarf',
 	sub: 'grey',
-	specieDifficulty: 'tough',
+	specieDifficulty: 'normal',
 	languages: [
 		{
 			label: 'goblin',
@@ -678,6 +678,8 @@ export const royalist = {
 			SOC: 11,
 			ERU: 13,
 		},
+		variables: { survival: '+1' },
+		advantages: { evasion: '+1', fear: '-1' },
 	},
 };
 export const free = {
@@ -725,7 +727,7 @@ export const free = {
 			{
 				name: 'Tireless Chatterbox',
 				effect:
-					'No fatigue penalties with one short rest per day, +1 carry capacity, disadvantage on stealth when accompanied',
+					'No fatigue penalties with one half rest per day, +1 carry capacity, disadvantage on stealth when accompanied',
 				description:
 					'Traveling with a gnome means endless conversation. Their joy in meeting strangers and telling stories makes them forget their tiredness—but not their volume.',
 				value: 0,
@@ -767,6 +769,10 @@ export const free = {
 			SOC: 17,
 			ERU: 16,
 		},
+		advantages: { discretion: -1 },
+	},
+	status: {
+		weightBonus: 1,
 	},
 };
 export const proschöne = {
@@ -957,7 +963,7 @@ export const pipourray = {
 export const villous = {
 	specie: 'orc',
 	sub: 'villous',
-	specieDifficulty: 'tough',
+	specieDifficulty: 'normal',
 	languages: [
 		{
 			label: 'common',
@@ -1315,7 +1321,7 @@ export const halfogre = {
 export const troll = {
 	specie: 'troll',
 	sub: 'troll',
-	specieDifficulty: 'tough',
+	specieDifficulty: 'normal',
 	languages: [
 		{
 			label: 'clay',
