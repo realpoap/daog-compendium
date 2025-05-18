@@ -4,6 +4,7 @@ import { setupCompleteCharacterFormValues } from '@/utils/setCharacterFormData';
 import { trpc } from '@/utils/trpc';
 import { StatProfil } from '@api/lib/ZodCreature';
 import { useNavigate } from '@tanstack/react-router';
+import { useState } from 'react';
 import { FormProvider, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import CharFormStep1 from './Steps/CharFormStep1';
@@ -53,6 +54,8 @@ const CharacterFormInner = () => {
 		},
 	});
 
+	const [destinyClicked, setDestinyClicked] = useState(false);
+
 	const profile: StatProfil = useWatch({ name: 'profile.statsStarting' });
 	const variables = useWatch({ name: 'profile.variables' });
 
@@ -60,7 +63,7 @@ const CharacterFormInner = () => {
 		if (currentStep === steps.length - 1) {
 			// Final step → submit to backend
 			const complete = setupCompleteCharacterFormValues(methods, user);
-			console.log('Final submit:', complete);
+			//console.log('Final submit:', complete);
 			createCharacter.mutate(complete);
 		} else {
 			console.log('Step valid data:', data);
@@ -104,7 +107,16 @@ const CharacterFormInner = () => {
 			component: <CharFormStep7 />,
 		},
 		{ id: 10, label: 'Background', component: <CharFormStep8 /> },
-		{ id: 11, label: 'Destiny', component: <CharFormStep12 /> },
+		{
+			id: 11,
+			label: 'Destiny',
+			component: (
+				<CharFormStep12
+					clicked={destinyClicked}
+					setClicked={setDestinyClicked}
+				/>
+			),
+		},
 	];
 
 	return (

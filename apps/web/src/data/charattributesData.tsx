@@ -897,7 +897,7 @@ export const characterAttributes: Attribute[] = [
 		statModifier: null,
 		masteries: [
 			{
-				amount: '+1',
+				amount: '+2',
 				target: 'physique',
 			},
 		],

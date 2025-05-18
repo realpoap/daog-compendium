@@ -422,7 +422,7 @@ export const durhkran = {
 export const grey = {
 	specie: 'dwarf',
 	sub: 'grey',
-	specieDifficulty: 'tough',
+	specieDifficulty: 'normal',
 	languages: [
 		{
 			label: 'goblin',
@@ -1137,7 +1137,7 @@ export const halfvampire = {
 export const barbarian = {
 	specie: 'barbarian',
 	sub: 'barbarian',
-	specieDifficulty: 'tough',
+	specieDifficulty: 'normal',
 	languages: [
 		{
 			label: 'clay',
@@ -1315,7 +1315,7 @@ export const halfogre = {
 export const troll = {
 	specie: 'troll',
 	sub: 'troll',
-	specieDifficulty: 'tough',
+	specieDifficulty: 'normal',
 	languages: [
 		{
 			label: 'clay',
