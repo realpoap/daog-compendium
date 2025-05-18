@@ -678,6 +678,8 @@ export const royalist = {
 			SOC: 11,
 			ERU: 13,
 		},
+		variables: { survival: '+1' },
+		advantages: { evasion: '+1', fear: '-1' },
 	},
 };
 export const free = {
@@ -725,7 +727,7 @@ export const free = {
 			{
 				name: 'Tireless Chatterbox',
 				effect:
-					'No fatigue penalties with one short rest per day, +1 carry capacity, disadvantage on stealth when accompanied',
+					'No fatigue penalties with one half rest per day, +1 carry capacity, disadvantage on stealth when accompanied',
 				description:
 					'Traveling with a gnome means endless conversation. Their joy in meeting strangers and telling stories makes them forget their tiredness—but not their volume.',
 				value: 0,
@@ -767,6 +769,10 @@ export const free = {
 			SOC: 17,
 			ERU: 16,
 		},
+		advantages: { discretion: -1 },
+	},
+	status: {
+		weightBonus: 1,
 	},
 };
 export const proschöne = {

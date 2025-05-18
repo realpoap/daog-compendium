@@ -126,6 +126,7 @@ type Variables {
 esoterism Int @default(0)
 movement Int @default(0)
 healing Int @default(0)
+preciseness Int @default(0)
 }
 
 type Bio {

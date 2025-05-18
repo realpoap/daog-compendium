@@ -87,8 +87,6 @@ const CharFormStep2 = () => {
 	);
 
 	const handleDifficultySelect = (e: ChangeEvent<HTMLInputElement>) => {
-		//FIXME: logic inverse
-
 		// Find Difficulty option selected
 		const value = e.target.ariaLabel;
 		//const diff = difficulties.find(diff => diff.value === value);
