@@ -424,7 +424,7 @@ const CharacterSummaryTile = ({
 					},
 					{
 						icon: GiMagnifyingGlass,
-						value: char.profile.variables.enigms,
+						value: char.profile.variables.logic,
 						name: 'Investigation',
 					},
 					{
@@ -434,7 +434,7 @@ const CharacterSummaryTile = ({
 					},
 					{
 						icon: GiSwapBag,
-						value: char.profile.variables.trade,
+						value: char.profile.variables.trading,
 						name: 'Trade',
 					},
 					{
