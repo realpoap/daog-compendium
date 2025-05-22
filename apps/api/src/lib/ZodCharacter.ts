@@ -92,6 +92,8 @@ export const MasteriesSchema = z.object({
 	ranged: StatVariableSchema,
 });
 
+export type Masteries = z.infer<typeof MasteriesSchema>;
+
 export const InventorySchema = z.object({
 	weapons: z.array(CreatureItemSchema).optional(),
 	armors: z.array(CreatureItemSchema).optional(),
@@ -339,6 +341,7 @@ export const CharacterSchema = z.object({
 	path: PathSchema,
 	status: StatusSchema,
 	masteries: MasteriesSchema,
+	variables: VariablesSchema,
 	profile: StatisticsSchema,
 	specifics: SpecificsSchema,
 	equipment: InventorySchema,
@@ -363,6 +366,7 @@ export const NewCharacterSchema = z.object({
 	path: PathSchema,
 	status: StatusSchema,
 	masteries: MasteriesSchema,
+	variables: VariablesSchema,
 	profile: StatisticsSchema,
 	specifics: SpecificsSchema,
 	equipment: InventorySchema,

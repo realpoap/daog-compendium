@@ -1,10 +1,17 @@
+import { calcCharacterStats } from '@/utils/calculateStats';
 import { capitalizeFirstLetter } from '@/utils/capitalize';
 import { cn } from '@/utils/classNames';
 import { Character } from '@api/lib/ZodCharacter';
 import { UserWithoutPass } from '@api/lib/ZodUser';
 import { useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
-import { FiEdit, FiMaximize, FiPlusCircle, FiTrash2 } from 'rocketicons/fi';
+import {
+	FiEdit,
+	FiMaximize,
+	FiPlusCircle,
+	FiSliders,
+	FiTrash2,
+} from 'rocketicons/fi';
 import {
 	GiArmorVest,
 	GiBullseye,
@@ -107,6 +114,12 @@ const CharacterSummaryTile = ({
 								<div className='text-neutral-content text-sm'>
 									Lvl. {char.profile.level}
 								</div>
+							</div>
+							<div
+								className='hover:scale-120 hover:*:icon-neutral-content z-50 ml-auto flex'
+								onClick={() => calcCharacterStats(char)}
+							>
+								<FiSliders className='icon-sm icon-neutral' />
 							</div>
 							<div
 								className='hover:scale-120 hover:*:icon-neutral-content z-50 ml-auto flex'
@@ -364,14 +377,15 @@ const CharacterSummaryTile = ({
 							Press ESC key or click the button below to close
 						</p>
 					</div>
-					<form
-						method='dialog'
-						className='modal-backdrop'
-					>
-						<button>close</button>
-					</form>
 				</div>
+				<form
+					method='dialog'
+					className='modal-backdrop'
+				>
+					<button>close</button>
+				</form>
 			</dialog>
+			{/* COLLAPSE ---------------------------------------------------------------- */}
 			<div
 				className={cn(
 					'collapse-content group hidden grid-cols-5 gap-4 font-bold',
@@ -383,23 +397,36 @@ const CharacterSummaryTile = ({
 				{[
 					{
 						icon: GiThunderSkull,
-						value: char.profile.variables.initiative,
+						label: `${char.profile.stats?.CEL} +
+							${char.profile.stats?.WIL} +
+							${char.profile.boni.initiative + char.profile.variables.initiative + char.masteries.movement.current} +
+							${char.specifics.sizeBonus}`,
+						value: char.variables.initiative,
 						name: 'initiative',
 					},
 					// { icon: GiWingfoot, value: char.profile.speed?.running },
 					{
 						icon: GiBullseye,
-						value: char.profile.variables.ranged,
+						label: `${
+							char.profile.stats?.DEX &&
+							char.profile.stats?.DEX +
+								Math.floor(char.profile.stats?.DEX / 10) +
+								Math.floor(char.profile.level / 5)
+						} +
+							
+							${char.profile.boni.ranged + char.profile.variables.ranged + char.masteries.ranged.current}
+							`,
+						value: char.variables.ranged,
 						name: 'Ranged',
 					},
 					{
 						icon: GiSwordWound,
-						value: char.profile.variables.attack,
+						value: char.variables.attack,
 						name: 'Attack',
 					},
 					{
 						icon: GiCheckedShield,
-						value: char.profile.variables.defense,
+						value: char.variables.defense,
 						name: 'Defense',
 					},
 					{
@@ -409,63 +436,78 @@ const CharacterSummaryTile = ({
 					},
 					{
 						icon: GiSemiClosedEye,
-						value: char.profile.variables.perception,
+						value: char.variables.perception,
 						name: 'Perception',
 					},
 					{
 						icon: GiHood,
-						value: char.profile.variables.discretion,
+						value: char.variables.discretion,
 						name: 'Discretion',
 					},
 					{
 						icon: GiCampfire,
-						value: char.profile.variables.survival,
+						value: char.variables.survival,
 						name: 'Survival',
 					},
 					{
 						icon: GiMagnifyingGlass,
-						value: char.profile.variables.logic,
+						value: char.variables.logic,
 						name: 'Investigation',
 					},
 					{
 						icon: GiHood,
-						value: char.profile.variables.speech,
+						value: char.variables.speech,
 						name: 'Speech',
 					},
 					{
 						icon: GiSwapBag,
-						value: char.profile.variables.trading,
-						name: 'Trade',
+						value: char.variables.trading,
+						name: 'Trading',
 					},
 					{
 						icon: GiDominoMask,
-						value: char.profile.variables.performance,
+						value: char.variables.performance,
 						name: 'Performance',
 					},
 					{
 						icon: GiSly,
-						value: char.profile.variables.intimidation,
-						name: 'Intimidation',
+						value:
+							char.specifics.alignment === 'evil' ||
+							char.specifics.alignment === 'neutral' ||
+							char.specifics.alignment === 'bad'
+								? char.variables.intimidation > char.variables.persuasion
+									? char.variables.intimidation
+									: char.variables.persuasion
+								: char.variables.persuasion,
+						name:
+							char.specifics.alignment === 'evil' ||
+							char.specifics.alignment === 'neutral' ||
+							char.specifics.alignment === 'bad'
+								? char.variables.intimidation > char.variables.persuasion
+									? 'Intimidation'
+									: 'Persuasion'
+								: 'Persuasion',
 					},
 					{
 						icon: GiCursedStar,
-						value: char.profile.variables.magic,
+						value: char.variables.magic,
 						name: 'Magic',
 					},
 					{
 						icon: GiGhost,
-						value: char.profile.variables.bravery,
+						value: char.variables.bravery,
 						name: 'Bravery',
 					},
-				].map(({ icon: Icon, value, name }, index) => (
+				].map(({ icon: Icon, label, value, name }, index) => (
 					<div
 						className='tooltip'
 						key={index}
 					>
-						<div className='tooltip-content z-50'>
+						<div className='tooltip-content z-50 flex flex-col'>
 							<span className='font-cabin text-normal text-sm'>
 								{capitalizeFirstLetter(name)}
 							</span>
+							<span className='font-cabin text-xs'>{label}</span>
 						</div>
 						<div className='font-cabin bg-tile text-neutral-content flex w-full flex-row items-center justify-center rounded-sm p-1'>
 							<Icon className='icon-background dark:icon-neutral-content mr-1 size-[1rem] flex-shrink-0' />

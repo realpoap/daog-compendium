@@ -38,7 +38,7 @@ export const CharacterFormContextProvider = ({
 		shouldFocusError: true,
 		resolver: async (data, context, options) => {
 			// you can debug your validation schema here
-			console.log('formData', data);
+			//console.log('formData', data);
 			console.log(
 				'validation result',
 				await zodResolver(NewCharacterSchema)(data, context, options),

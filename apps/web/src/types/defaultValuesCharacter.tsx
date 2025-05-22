@@ -102,6 +102,7 @@ export const defaultValuesCharacter: Partial<NewCharacter> = {
 		spirit: { current: 0, max: 0 },
 		magicLoad: { current: 0, max: 0 },
 	},
+	variables: variablesReset,
 	masteries: {
 		crafting: { current: 0, max: 0 },
 		fighting: { current: 0, max: 0 },

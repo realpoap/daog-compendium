@@ -40,11 +40,11 @@ const CharacterFormInner = () => {
 
 	const createCharacter = trpc.characters.create.useMutation({
 		onSuccess: () => {
-			toast.success('Character created !');
 			methods.reset();
 			navigate({
 				to: '/characters',
 			});
+			toast.success('Character created !');
 		},
 		onError: error => {
 			if (error.data?.code === 'UNAUTHORIZED') {
@@ -59,14 +59,14 @@ const CharacterFormInner = () => {
 	const profile: StatProfil = useWatch({ name: 'profile.statsStarting' });
 	const variables = useWatch({ name: 'profile.variables' });
 
-	const onSubmit = handleSubmit(data => {
+	const onSubmit = handleSubmit(() => {
 		if (currentStep === steps.length - 1) {
 			// Final step → submit to backend
 			const complete = setupCompleteCharacterFormValues(methods, user);
 			//console.log('Final submit:', complete);
 			createCharacter.mutate(complete);
 		} else {
-			console.log('Step valid data:', data);
+			//console.log('Step valid data:', data);
 			nextStep();
 		}
 	});
