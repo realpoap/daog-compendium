@@ -39,8 +39,9 @@ const CharacterFormInner = () => {
 	const { handleSubmit } = methods;
 
 	const createCharacter = trpc.characters.create.useMutation({
-		onSuccess: () => {
+		onSuccess: data => {
 			methods.reset();
+			if (data) updatecharacter.mutate(data);
 			navigate({
 				to: '/characters',
 			});
@@ -50,6 +51,14 @@ const CharacterFormInner = () => {
 			if (error.data?.code === 'UNAUTHORIZED') {
 				toast.error('You must be logged in');
 			} else toast.error('Something bad happened...');
+			throw new Error(error.message);
+		},
+	});
+
+	const updatecharacter = trpc.characters.update.useMutation({
+		onSuccess: () => {},
+		onError: error => {
+			toast.error('Could not update character...');
 			throw new Error(error.message);
 		},
 	});
