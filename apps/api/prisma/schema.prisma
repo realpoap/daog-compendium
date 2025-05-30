@@ -50,34 +50,35 @@ model Character {
   path Path
   status Status
   masteries Masteries
+  variables Variables
   profile Statistics
   specifics Specifics
   equipment Inventory
 }
 
 type Masteries {
-  crafting StatVariable 
-	fighting StatVariable 
-	defense StatVariable
+  crafting StatVariable //
+	fighting StatVariable // todo
+	defense StatVariable //
 	detection StatVariable
-	discretion StatVariable
-	speech StatVariable
+	discretion StatVariable //
+	speech StatVariable //
 	esoterism StatVariable
-	logic StatVariable
-	brawl StatVariable
-	magic StatVariable
+	logic StatVariable //
+	brawl StatVariable // todo
+	magic StatVariable //
 	preciseness StatVariable
-	movement StatVariable
-	trading StatVariable
-	perception StatVariable
-	performance StatVariable
-	persuasion StatVariable
+	movement StatVariable //
+	trading StatVariable //
+	perception StatVariable //
+	performance StatVariable //
+	persuasion StatVariable //
 	physique StatVariable
 	knowledge StatVariable
 	sciences StatVariable
 	healing StatVariable
-	survival StatVariable
-	ranged StatVariable
+	survival StatVariable //
+	ranged StatVariable //
 }
 
 type Statistics {
@@ -123,10 +124,10 @@ type Variables {
 	physique Int @default(0)
 	sciences Int @default(0)
   detection Int @default(0)
-esoterism Int @default(0)
-movement Int @default(0)
-healing Int @default(0)
-preciseness Int @default(0)
+  esoterism Int @default(0)
+  movement Int @default(0)
+  healing Int @default(0)
+  preciseness Int @default(0)
 }
 
 type Bio {

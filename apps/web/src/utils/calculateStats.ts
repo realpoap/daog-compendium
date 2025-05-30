@@ -1,6 +1,6 @@
 import { HabitatTypeType, SpellTypeType } from '@api/lib/zod-prisma';
 import { NewAction } from '@api/lib/ZodAction';
-import { Character } from '@api/lib/ZodCharacter';
+import { Character, Masteries } from '@api/lib/ZodCharacter';
 import { CreatureComponent } from '@api/lib/ZodComponent';
 import { Creature, CreatureAttribute, NewCreature } from '@api/lib/ZodCreature';
 import { CreatureItem } from '@api/lib/ZodItem';
@@ -229,6 +229,7 @@ const calcModifiersBonus = (creature: Creature | NewCreature) => {
 };
 
 export const calcCharacterStats = (c: Character) => {
+	console.log('calcCharacterStats: Entered function');
 	if (!c.profile.statsStarting) {
 		c.profile.statsStarting = {
 			CEL: 15,
@@ -245,6 +246,8 @@ export const calcCharacterStats = (c: Character) => {
 			ERU: 15,
 		};
 	}
+
+	// Set base data ------------------------------------------
 	if (!c.profile.stats) {
 		c.profile.stats = { ...c.profile.statsStarting };
 	} else {
@@ -277,6 +280,7 @@ export const calcCharacterStats = (c: Character) => {
 			max: 0,
 		};
 	}
+
 	const levelBonus = Math.floor(c.profile.level / 5);
 	c.path.actionList = {
 		main: levelBonus,
@@ -334,46 +338,56 @@ export const calcCharacterStats = (c: Character) => {
 	}
 
 	// INITIATIVE
-	c.profile.variables.initiative =
+	c.variables.initiative =
 		c.profile.boni.initiative +
+		c.profile.variables.initiative +
 		c.profile.stats.CEL +
 		c.profile.stats.WIL +
 		c.masteries.movement.current +
 		c.specifics.sizeBonus;
 
 	// ATTACK --------------------------------------------------------------------------
-	c.profile.variables.attack =
+	c.variables.attack =
 		c.path.attackType === 'STR'
 			? c.profile.boni.attack +
+				c.profile.variables.attack +
 				c.profile.stats.STR +
 				c.masteries.fighting.current
 			: c.profile.boni.attack +
+				c.profile.variables.attack +
 				c.profile.stats.AGI +
 				c.masteries.fighting.current;
+
+	// TODO: Add the bonus regarding weapon
 
 	// DEFENSE --------------------------------------------------------------------------
 
 	if (c.status.weight && c.status.carryWeight && c.status.weightBonus) {
+		c.status.weight.max =
+			c.profile.stats.END +
+			Math.floor(c.profile.stats.END / 10) +
+			Math.floor(c.profile.stats.STR / 10) +
+			c.masteries.physique.current +
+			levelBonus +
+			c.status.weightBonus;
+
+		c.status.weightClass =
+			c.status.weight.current >= c.status.weight.max * 0.75
+				? c.status.weight.current >= c.status.weight.max * 0.9
+					? 2
+					: 1
+				: 0;
+
 		c.path.defenseType =
-			c.status.carryWeight >
+			c.status.weight.current >
 			c.profile.stats.END * 0.5 +
 				Math.floor(c.profile.stats.END / 10) +
 				levelBonus
 				? 'STR'
 				: 'AGI';
+	} else {
+		c.path.defenseType = 'STR';
 	}
-
-	c.profile.variables.defense =
-		c.path.defenseType === 'STR'
-			? c.profile.boni.defense +
-				c.profile.variables.defense +
-				c.profile.stats.STR +
-				c.masteries.defense.current
-			: c.profile.boni.defense +
-				c.profile.stats.AGI +
-				Math.floor(c.profile.stats.AGI / 10) +
-				levelBonus +
-				c.masteries.defense.current;
 
 	// ARMORVALUE ----------------------------------------------------------------
 	if (c.equipment.armorValue) {
@@ -389,20 +403,45 @@ export const calcCharacterStats = (c: Character) => {
 							: c.equipment.armorValue > 1
 								? 1
 								: 0;
+
+		c.variables.defense =
+			c.path.defenseType === 'STR'
+				? c.profile.boni.defense +
+					c.profile.variables.defense +
+					c.profile.stats.STR +
+					c.masteries.defense.current +
+					c.equipment.armorValue
+				: c.profile.boni.defense +
+					c.profile.variables.defense +
+					c.profile.stats.AGI +
+					Math.floor(c.profile.stats.AGI / 10) +
+					levelBonus +
+					c.masteries.defense.current +
+					c.equipment.armorValue;
 	}
 
 	// RANGED ---------------------------------------------------------------------------
 
-	c.profile.variables.ranged =
+	c.variables.ranged =
 		c.profile.boni.ranged +
-		c.profile.stats.CEL +
+		c.profile.variables.ranged +
+		c.profile.stats.DEX +
 		Math.floor(c.profile.stats.DEX / 10) +
 		levelBonus +
 		c.masteries.ranged.current;
 
 	// PERCEPTION ---------------------------------------------------------------------------
-	c.profile.variables.perception =
+	c.variables.perception =
 		c.profile.boni.perception +
+		c.profile.variables.perception +
+		c.profile.stats.INS +
+		Math.floor(c.profile.stats.INS / 10) +
+		levelBonus +
+		c.masteries.perception.current;
+	// DETECTION ---------------------------------------------------------------------------
+	c.variables.perception =
+		c.profile.boni.perception +
+		c.profile.variables.perception +
 		c.profile.stats.INS +
 		Math.floor(c.profile.stats.INS / 10) +
 		levelBonus +
@@ -410,13 +449,14 @@ export const calcCharacterStats = (c: Character) => {
 
 	// DISCRETION ---------------------------------------------------------------------------
 
-	c.profile.variables.discretion =
+	c.variables.discretion =
 		c.profile.boni.discretion +
+		c.profile.variables.discretion +
 		c.profile.stats.AGI +
-		Math.floor(c.profile.stats.AGI / 10) +
+		Math.floor(c.profile.stats.CEL / 10) +
 		levelBonus +
-		c.specifics.sizeBonus -
-		Number(c.specifics.massive);
+		Number(c.specifics.sizeBonus) -
+		2 * Number(c.specifics.massive);
 
 	// SPEED ---------------------------------------------------------------------------
 	c.profile.speed = {
@@ -440,40 +480,141 @@ export const calcCharacterStats = (c: Character) => {
 	};
 
 	// BRAVERY ---------------------------------------------------------------------------
-	c.profile.variables.bravery =
+	c.variables.bravery =
 		c.profile.stats.WIL +
 		c.profile.boni.bravery +
-		c.masteries.esoterism.current;
+		c.profile.variables.bravery +
+		c.masteries.esoterism.current +
+		Math.floor(c.profile.stats.CHA / 10) +
+		levelBonus;
 	// SPEECH ---------------------------------------------------------------------------
-	c.profile.variables.speech =
-		c.profile.stats.CHA + c.profile.boni.speech + c.masteries.speech.current;
-	// TRADE ---------------------------------------------------------------------------
-	c.profile.variables.trading =
-		c.profile.stats.SOC + c.profile.boni.trading + c.masteries.trading.current;
+	c.variables.speech =
+		c.profile.stats.SOC +
+		c.profile.boni.speech +
+		c.profile.variables.speech +
+		c.masteries.speech.current +
+		Math.floor(c.profile.stats.CHA / 10) +
+		levelBonus;
+	// TRADING ---------------------------------------------------------------------------
+	c.variables.trading =
+		c.profile.stats.SOC +
+		c.profile.boni.trading +
+		c.profile.variables.trading +
+		c.masteries.trading.current +
+		Math.floor(c.profile.stats.ERU / 10) +
+		levelBonus;
+
+	// CRAFTING ---------------------------------------------------------------------------
+	c.variables.crafting =
+		c.profile.stats.DEX +
+		c.profile.boni.crafting +
+		c.profile.variables.crafting +
+		c.masteries.crafting.current +
+		Math.floor(c.profile.stats.WIL / 10) +
+		levelBonus;
 	// PERFORMANCE--------------------------------------------------------------------------
-	c.profile.variables.performance =
+	c.variables.performance =
 		c.profile.stats.CHA +
 		c.profile.boni.performance +
-		c.masteries.performance.current;
+		c.profile.variables.performance +
+		c.masteries.performance.current +
+		Math.floor(c.profile.stats.AGI / 10) +
+		levelBonus;
 	// INTIMIDATION--------------------------------------------------------------------------
-	c.profile.variables.intimidation =
+	c.variables.intimidation =
+		c.profile.stats.STR + Math.floor(c.profile.stats.CHA / 10) + levelBonus;
+	// TODO: merge
+
+	// PERSUASION--------------------------------------------------------------------------
+	c.variables.persuasion =
 		c.profile.stats.CHA +
-		c.profile.boni.intimidation +
-		Math.floor(c.profile.stats.STR / 10);
+		c.profile.boni.persuasion +
+		c.profile.variables.persuasion +
+		c.masteries.persuasion.current +
+		Math.floor(c.profile.stats.ERU / 10) +
+		levelBonus;
+
 	// SURVIVAL --------------------------------------------------------------------------
-	c.profile.variables.survival =
+	c.variables.survival =
 		c.profile.stats.INS +
 		c.profile.boni.survival +
-		c.masteries.survival.current;
-	// LOGIC --------------------------------------------------------------------------
-	c.profile.variables.logic =
-		c.profile.stats.ERU + c.profile.boni.logic + c.masteries.logic.current;
+		c.profile.variables.survival +
+		c.masteries.survival.current +
+		Math.floor(c.profile.stats.ERU / 10) +
+		levelBonus;
+
+	// LOGIC/MEMORY --------------------------------------------------------------------------
+	c.variables.logic =
+		c.profile.stats.ERU +
+		c.profile.boni.logic +
+		c.profile.variables.logic +
+		c.masteries.logic.current +
+		Math.floor(c.profile.stats.WIL / 10) +
+		levelBonus;
+
+	// INVESTIGATION --------------------------------------------------------------------------
+	c.variables.logic =
+		c.profile.stats.ERU +
+		c.profile.boni.detection +
+		c.profile.variables.detection +
+		c.masteries.detection.current +
+		Math.floor(c.profile.stats.INS / 10) +
+		levelBonus;
+
 	// MAGICLOAD + SPELL BONUS---------------------------------------------------------------
 	c.status.magicLoad.max = Math.floor(c.profile.stats.SEN / 10) + levelBonus;
-	c.profile.variables.magic =
-		c.profile.boni.magic + c.status.magicLoad.max + c.masteries.magic.current;
+
+	c.variables.magic =
+		c.profile.boni.magic +
+		c.status.magicLoad.max +
+		c.profile.variables.magic +
+		c.masteries.magic.current;
 
 	//console.log('😎 Character after calculation : ', c);
+	console.log('calcCharacterStats: Exiting function');
+
+	return c;
+};
+
+export const calcMasteriesScores = (c: Character) => {
+	// check if data is here --------------------------------
+	if (!c.profile.variables) {
+		console.info('No variables found');
+	}
+	if (!c.profile.boni) {
+		console.info('No boni found');
+	}
+	if (!c.masteries) {
+		console.error('No masteries found');
+		return;
+	}
+	if (!c.path.skills) {
+		console.error('No skills found');
+		return;
+	}
+
+	c.masteries = { ...masteriesReset };
+
+	// Loop through skills and update masteries accordingly
+	c.path.skills.map((skill, i) => {
+		console.log(`FUNCTION ENTERED for character`); // LOG A
+
+		const skillMast = skill.mastery as keyof Masteries;
+		if (!c.masteries[skillMast] || !skill.playerLevel) return;
+		const current = c.masteries[skillMast].current;
+		const max = c.masteries[skillMast].max;
+		console.error(i, current, skill.playerLevel);
+		console.log(
+			i,
+			`Processing Skill: ${skill.name}, Mastery: ${skillMast}, Level: ${skill.playerLevel}`,
+		); // LOG B
+		c.masteries[skillMast] = {
+			current: current + skill.playerLevel,
+			max: max < skill.playerLevel ? skill.playerLevel : max,
+		};
+	});
+	console.info(`FUNCTION COMPLETED for character`); // LOG C
+	//console.dir(c.masteries);
 	return c;
 };
 

@@ -39,12 +39,13 @@ const CharacterFormInner = () => {
 	const { handleSubmit } = methods;
 
 	const createCharacter = trpc.characters.create.useMutation({
-		onSuccess: () => {
-			toast.success('Character created !');
+		onSuccess: data => {
 			methods.reset();
+			if (data) updatecharacter.mutate(data);
 			navigate({
 				to: '/characters',
 			});
+			toast.success('Character created !');
 		},
 		onError: error => {
 			if (error.data?.code === 'UNAUTHORIZED') {
@@ -54,19 +55,27 @@ const CharacterFormInner = () => {
 		},
 	});
 
+	const updatecharacter = trpc.characters.update.useMutation({
+		onSuccess: () => {},
+		onError: error => {
+			toast.error('Could not update character...');
+			throw new Error(error.message);
+		},
+	});
+
 	const [destinyClicked, setDestinyClicked] = useState(false);
 
 	const profile: StatProfil = useWatch({ name: 'profile.statsStarting' });
 	const variables = useWatch({ name: 'profile.variables' });
 
-	const onSubmit = handleSubmit(data => {
+	const onSubmit = handleSubmit(() => {
 		if (currentStep === steps.length - 1) {
 			// Final step → submit to backend
 			const complete = setupCompleteCharacterFormValues(methods, user);
 			//console.log('Final submit:', complete);
 			createCharacter.mutate(complete);
 		} else {
-			console.log('Step valid data:', data);
+			//console.log('Step valid data:', data);
 			nextStep();
 		}
 	});

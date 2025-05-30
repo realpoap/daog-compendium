@@ -1,6 +1,6 @@
 import { speciesMap } from '@/data/speciesProfile'; // Move your statsMap there
 import { masteriesReset, variablesReset } from '@/utils/calculateStats';
-import { NewCharacter } from '@api/lib/ZodCharacter';
+import { Masteries, NewCharacter } from '@api/lib/ZodCharacter';
 import { UserWithoutPass } from '@api/lib/ZodUser';
 import { UseFormReturn } from 'react-hook-form';
 
@@ -30,9 +30,44 @@ export const setupCompleteCharacterFormValues = (
 	setupStatus(methods);
 	setupSpecieBonus(methods);
 	setupActions(methods);
-	methods.setValue('masteries', masteriesReset);
+	setupMasteries(methods);
 
 	return methods.getValues();
+};
+
+const setupMasteries = (methods: UseFormReturn<NewCharacter>) => {
+	console.info('CALCULATING MASTERIES');
+
+	// check if data is here --------------------------------
+	if (!methods.getValues('masteries')) {
+		console.error('No masteries found');
+		return;
+	}
+	if (!methods.getValues('path.skills')) {
+		console.error('No skills found');
+		return;
+	}
+	const masteries: Masteries = methods.getValues('masteries');
+
+	// Loop through skills and update masteries accordingly
+	methods?.getValues('path.skills')?.forEach(skill => {
+		const skillMast = skill.mastery as keyof Masteries;
+		if (!masteries[skillMast] || !skill.playerLevel) return;
+		const currentMastery = masteries[skillMast];
+
+		// Update the mastery entry
+		masteries[skillMast] = {
+			current: currentMastery.current + skill.playerLevel,
+			max:
+				currentMastery.max < skill.playerLevel
+					? skill.playerLevel
+					: currentMastery.max,
+		};
+	});
+
+	console.info('CALCULATED MASTERIES');
+	console.dir(masteries);
+	methods.setValue('masteries', masteries);
 };
 
 const setupBio = (

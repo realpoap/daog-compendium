@@ -6,23 +6,17 @@ import {
 } from '@/types/creatureOptions';
 import { calcCharacterStats } from '@/utils/calculateStats';
 import { trpc } from '@/utils/trpc';
-import { Character, CharacterSchema } from '@api/lib/ZodCharacter';
+import {
+	Character,
+	CharacterSchema,
+	NewCharacter,
+} from '@api/lib/ZodCharacter';
 import { SpellType } from '@api/lib/ZodSpell';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate, useParams } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import {
-	GiArmorVest,
-	GiBullseye,
-	GiCheckedShield,
-	GiFairyWand,
-	GiHood,
-	GiSemiClosedEye,
-	GiSwordWound,
-	GiThunderSkull,
-} from 'rocketicons/gi';
 import { SubmitButton } from '../Buttons';
 import Collapsible from '../Collapsible';
 import { Checkbox, Field, Input, InputNumber, Select } from '../RHFComponents';
@@ -35,7 +29,7 @@ const CharacterEdit = () => {
 
 	const isEditor = user?.role === 'ADMIN' || user?.role === 'EDITOR';
 	const utils = trpc.useUtils();
-	const [character, setCharacter] = useState<Character>();
+	const [character, setCharacter] = useState<Character | NewCharacter>();
 	const characterById = trpc.characters.getById.useQuery(id as string);
 
 	const methods = useForm<Character>({
@@ -59,11 +53,11 @@ const CharacterEdit = () => {
 			Object.entries(characterById.data).forEach(([name, value]) =>
 				methods.setValue(name as keyof Character, value),
 			);
-			console.groupCollapsed('Character');
-			console.dir(methods.getValues());
-			console.groupEnd();
+			// console.groupCollapsed('Character');
+			// console.dir(methods.getValues());
+			// console.groupEnd();
 		}
-	}, [characterById.data]);
+	}, [characterById.isSuccess]);
 
 	useEffect(() => {
 		if (character) {
@@ -79,9 +73,9 @@ const CharacterEdit = () => {
 				'fullname',
 				`${methods.getValues('bio.name')} (${methods.getValues('bio.subspecies') + ' '}${methods.getValues('bio.species')}) - lvl ${methods.getValues('profile.level')}`,
 			);
-			console.groupCollapsed('Character sent');
-			console.dir(methods.getValues());
-			console.groupEnd();
+			// console.groupCollapsed('Character sent');
+			// console.dir(methods.getValues());
+			// console.groupEnd();
 		}
 	}, [methods.formState.isSubmitting]);
 
@@ -89,7 +83,7 @@ const CharacterEdit = () => {
 		onSuccess: () => {
 			utils.characters.getById.invalidate();
 			utils.characters.getAll.invalidate();
-			toast.success('Character created !');
+			toast.success('Character updated !');
 			methods.reset();
 			navigate({
 				to: '/characters',
@@ -126,7 +120,7 @@ const CharacterEdit = () => {
 			<div className='mt-sm flex flex-col items-center justify-center p-2 px-2'>
 				<TitleBack title={`${character?.bio.name}`} />
 
-				<div className='flex flex-row gap-2'>
+				{/* <div className='flex flex-row gap-2'>
 					<div className='font-cabin flex flex-row after:pl-2 after:text-stone-500 after:content-["|"]'>
 						<GiThunderSkull className='icon-background dark:icon-stone-200 icon-base mr-2' />{' '}
 						{methods.getValues('profile.variables.initiative')}
@@ -160,7 +154,7 @@ const CharacterEdit = () => {
 						<GiFairyWand className='icon-background dark:icon-stone-200 icon-base mr-2' />{' '}
 						{methods.getValues('profile.variables.magic')}
 					</div>
-				</div>
+				</div> */}
 				<FormProvider {...methods}>
 					<form
 						onSubmit={methods.handleSubmit(onSubmit)}

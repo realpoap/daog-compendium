@@ -1,4 +1,8 @@
 import { useAuth } from '@/store/authContext';
+import {
+	calcCharacterStats,
+	calcMasteriesScores,
+} from '@/utils/calculateStats';
 import { capitalizeFirstLetter } from '@/utils/capitalize';
 import { cn } from '@/utils/classNames';
 import { trpc } from '@/utils/trpc';
@@ -59,6 +63,13 @@ const CharactersView = () => {
 			throw new Error(error.message);
 		},
 	});
+	const updateCharacter = trpc.characters.update.useMutation({
+		onSuccess: () => {},
+		onError: error => {
+			toast.error(error.message);
+			throw new Error(error.message);
+		},
+	});
 	const updateCharCampaign = trpc.characters.updateCampaign.useMutation({
 		onSuccess: () => {
 			utils.characters.getAll.invalidate();
@@ -88,6 +99,7 @@ const CharactersView = () => {
 			throw new Error(error.message);
 		},
 	});
+
 	const updateCampPlayers = trpc.campaigns.updatePlayers.useMutation({
 		onSuccess: () => {
 			utils.campaigns.getByPlayer.invalidate();
@@ -218,6 +230,16 @@ const CharactersView = () => {
 			.map(async c => {
 				await updateCharCampaign.mutate({ id: c.id, campaignId: '' });
 			});
+	};
+
+	const handleStatsChange = async (char: Character) => {
+		const charScores = calcMasteriesScores(char);
+		if (charScores == null) {
+			toast.error('Could not calculate scores');
+			return;
+		}
+		const newChar = calcCharacterStats(charScores);
+		await updateCharacter.mutate(newChar);
 	};
 
 	const handleCampaignChange = async (
@@ -411,6 +433,7 @@ const CharactersView = () => {
 												userOptions={userOptions}
 												updateCampaign={handleCampaignChange}
 												updateOwner={handleOwnerChange}
+												updateChar={handleStatsChange}
 												updateXp={handleXpChange}
 											/>
 										))}
@@ -454,6 +477,7 @@ const CharactersView = () => {
 										char={char}
 										updateCampaign={handleCampaignChange}
 										updateOwner={handleOwnerChange}
+										updateChar={handleStatsChange}
 										campaignOptions={campaignOptions}
 										userOptions={userOptions}
 										updateXp={handleXpChange}
