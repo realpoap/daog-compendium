@@ -19,13 +19,13 @@ const TagBadge = ({
 }: Props) => {
 	return (
 		<div
-			className='tooltip tooltip-bottom gap'
+			className='tooltip tooltip-bottom gap overflow-visible'
 			data-tip={tooltip}
 		>
 			<span
 				key={index}
 				className={cn(
-					`badge font-cabin bg-primary badge-sm md:badge-md text-background text-md shadow-xs inline-flex border-0 text-center align-middle font-semibold capitalize`,
+					`badge font-cabin bg-primary badge-sm md:badge-md text-background text-md shadow-xs inline-flex overflow-visible border-0 text-center align-middle font-semibold capitalize`,
 
 					{
 						'hover:animate-shake hover:bg-background hover:text-error cursor-pointer transition-all duration-75 hover:shadow-black':

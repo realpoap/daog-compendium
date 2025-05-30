@@ -1,4 +1,3 @@
-import { calcCharacterStats } from '@/utils/calculateStats';
 import { capitalizeFirstLetter } from '@/utils/capitalize';
 import { cn } from '@/utils/classNames';
 import { Character } from '@api/lib/ZodCharacter';
@@ -9,6 +8,7 @@ import {
 	FiEdit,
 	FiMaximize,
 	FiPlusCircle,
+	FiRefreshCw,
 	FiSliders,
 	FiTrash2,
 } from 'rocketicons/fi';
@@ -36,6 +36,7 @@ type Props = {
 		userId: string,
 		campaign: string,
 	) => Promise<void>;
+	updateChar: (char: Character) => Promise<void>;
 	updateXp: (expInput: number, char: Character) => Promise<void>;
 };
 
@@ -47,17 +48,18 @@ const CharacterSummaryTile = ({
 	updateCampaign,
 	updateXp,
 	updateOwner,
+	updateChar,
 	campaignOptions,
 	userOptions,
 }: Props) => {
 	const navigate = useNavigate();
 	const [currentExp, setCurrentExp] = useState(char.profile.experience ?? 0);
+	const [togglePanel, setTogglePanel] = useState(false);
 
 	return (
 		<div
-			tabIndex={0}
 			className={cn(
-				'bg-card has-[.btn-error:hover]:animate-shake has-[.btn-error:hover]:ring-error ring-card collapse mb-2 flex w-full flex-col rounded-xl shadow-md ring-2 transition-all duration-500 focus:*:last:grid has-[.btn-error:hover]:opacity-70',
+				'bg-card has-[.btn-error:hover]:animate-shake has-[.btn-error:hover]:ring-error ring-card mb-2 flex w-full flex-col rounded-xl shadow-md ring-2 transition-all duration-500 has-[.btn-error:hover]:opacity-70',
 			)}
 		>
 			<li
@@ -76,52 +78,66 @@ const CharacterSummaryTile = ({
 						{/* NAME */}
 						<div
 							className={cn(
-								'text-primary xs:flex-row xs:items-baseline xs:gap-2 flex w-full flex-col items-start text-base font-semibold',
+								'text-primary xs:flex-row xs:items-baseline xs:gap-2 flex w-full flex-col items-start justify-between text-base font-semibold',
 							)}
 						>
-							<div className='flex w-fit flex-row items-center justify-start'>
-								<span
-									className={`${char.bio.isDead && 'line-through decoration-2'}`}
-								>
-									{char.bio.name}
-									{char.bio.surname ? `, ${char.bio.surname}` : ''}
-								</span>
-								{char.bio.isDead && (
-									<GiPirateGrave className='icon-primary icon-base mx-2' />
+							<div className='flex flex-row items-center gap-2'>
+								<div className='flex w-fit flex-row items-center justify-start'>
+									<span
+										className={`${char.bio.isDead && 'line-through decoration-2'}`}
+									>
+										{char.bio.name}
+										{char.bio.surname ? `, ${char.bio.surname}` : ''}
+									</span>
+									{char.bio.isDead && (
+										<GiPirateGrave className='icon-primary icon-base mx-2' />
+									)}
+								</div>
+								<div className='flex w-fit flex-row items-baseline justify-end gap-2'>
+									<div className='text-neutral-content text-sm capitalize'>
+										{char.bio.subspecies !== char.bio.species
+											? char.bio.subspecies
+											: ''}{' '}
+										{char.bio.species}
+									</div>
+									<div className='text-neutral-content text-sm'>
+										Lvl. {char.profile.level}
+									</div>
+								</div>
+							</div>
+							<div className='flex flex-row items-center justify-end gap-2'>
+								{togglePanel && (
+									<div
+										className='hover:scale-120 hover:*:icon-neutral-content z-50 ml-auto flex'
+										onClick={() => {
+											if (togglePanel) updateChar(char);
+										}}
+									>
+										<FiRefreshCw className='icon-sm icon-neutral' />
+									</div>
 								)}
-							</div>
-							<div className='flex w-fit flex-row items-baseline justify-start gap-2'>
-								<div className='text-neutral-content text-sm capitalize'>
-									{char.bio.subspecies !== char.bio.species
-										? char.bio.subspecies
-										: ''}{' '}
-									{char.bio.species}
+								<div
+									className='hover:scale-120 hover:*:icon-neutral-content z-50 ml-auto flex'
+									onClick={() => {
+										setTogglePanel(prev => !prev);
+										if (!togglePanel) updateChar(char);
+									}}
+								>
+									<FiSliders className='icon-sm icon-neutral' />
 								</div>
-								<div className='text-neutral-content text-sm'>
-									Lvl. {char.profile.level}
+								<div
+									className='hover:scale-120 hover:*:icon-neutral-content z-50 ml-auto flex'
+									onClick={e => {
+										e.stopPropagation();
+										(
+											document.getElementById(
+												`modal-char-${char.id}`,
+											) as HTMLDialogElement
+										).showModal();
+									}}
+								>
+									<FiMaximize className='icon-sm icon-neutral' />
 								</div>
-							</div>
-							<div
-								className='hover:scale-120 hover:*:icon-neutral-content z-50 ml-auto flex'
-								onClick={e => {
-									e.stopPropagation();
-									calcCharacterStats(char);
-								}}
-							>
-								<FiSliders className='icon-sm icon-neutral' />
-							</div>
-							<div
-								className='hover:scale-120 hover:*:icon-neutral-content z-50 ml-auto flex'
-								onClick={e => {
-									e.stopPropagation();
-									(
-										document.getElementById(
-											`modal-char-${char.id}`,
-										) as HTMLDialogElement
-									).showModal();
-								}}
-							>
-								<FiMaximize className='icon-sm icon-neutral' />
 							</div>
 						</div>
 						<div className='xs:flex-row flex w-full flex-col items-start justify-between gap-2'>
@@ -263,7 +279,7 @@ const CharacterSummaryTile = ({
 								</div>
 							</div>
 							{/* -------------- STAT BLOCK -------------- */}
-							<div className='flex-1 flex-col'>
+							<div className='xs:flex-1 xs:flex-col hidden'>
 								<div className='w-half text-cabin flex flex-row items-center gap-1 text-xs'>
 									<span>Speed :</span>
 
@@ -273,6 +289,10 @@ const CharacterSummaryTile = ({
 									<span>{char.profile.speed?.obstacle} m</span>
 								</div>
 								<div className='w-half text-cabin flex flex-col items-start text-xs'>
+									<span>
+										Load : {char.status.weight.current}/{char.status.weight.max}{' '}
+										({char.status.weightClass})
+									</span>
 									<span>Defense Type : {char.path.defenseType}</span>
 									<span>Armor Class : {char.equipment.armorClass}</span>
 								</div>
@@ -281,33 +301,33 @@ const CharacterSummaryTile = ({
 					</div>
 				</div>
 				{/* HEALTH */}
+				<div className='h-22 flex w-4 flex-row items-center justify-center'>
+					{(user?.id === char.bio.owner || user?.role !== 'VIEWER') && (
+						<div className='rotate-270 flex flex-col gap-1'>
+							<progress
+								className='progress progress-error w-22 h-1 transition-all duration-500 after:[animation-duration:500]'
+								value={Math.round(
+									(char.status.health.current /
+										(char.status.tempHealth
+											? char.status.health.max + char.status.tempHealth
+											: char.status.health.max)) *
+										100,
+								)}
+								max={100}
+							></progress>
+							<progress
+								className='progress progress-info h-1 transition-all duration-500 after:[animation-duration:500]'
+								value={Math.round(
+									(char.status.spirit.current /
+										(char.status.tempSpirit
+											? char.status.spirit.max + char.status.tempSpirit
+											: char.status.spirit.max)) *
+										100,
+								)}
+								max={100}
+							></progress>
 
-				{(user?.id === char.bio.owner || user?.role !== 'VIEWER') && (
-					<div className='xs:flex xs:flex-col rotate-270 hidden w-0 items-center justify-center gap-1'>
-						<progress
-							className='progress progress-error h-1 w-12 after:[animation-duration:2s]'
-							value={Math.round(
-								(char.status.health.current /
-									(char.status.tempHealth
-										? char.status.health.max + char.status.tempHealth
-										: char.status.health.max)) *
-									100,
-							)}
-							max={100}
-						></progress>
-						<progress
-							className='progress progress-info h-1 w-12 after:[animation-duration:2s]'
-							value={Math.round(
-								(char.status.spirit.current /
-									(char.status.tempSpirit
-										? char.status.spirit.max + char.status.tempSpirit
-										: char.status.spirit.max)) *
-									100,
-							)}
-							max={100}
-						></progress>
-
-						{/* <div className='font-cabin text-error flex w-max flex-row items-center text-sm'>
+							{/* <div className='font-cabin text-error flex w-max flex-row items-center text-sm'>
 								<GiGlassHeart className='icon-error dark:icon-error icon-sm mr-2' />
 								<div className='flex flex-col'>
 									<span>{char?.status.health?.current}</span>
@@ -332,8 +352,9 @@ const CharacterSummaryTile = ({
 									</div>
 								</div>
 							</div> */}
-					</div>
-				)}
+						</div>
+					)}
+				</div>
 
 				{/* ADMIN */}
 				<div className='xs:flex hidden flex-col items-end justify-center gap-2'>
@@ -369,7 +390,7 @@ const CharacterSummaryTile = ({
 			<CharacterViewDialog char={char} />
 
 			{/* COLLAPSE ---------------------------------------------------------------- */}
-			<CharacterVariablesPanel char={char} />
+			{togglePanel && <CharacterVariablesPanel char={char} />}
 		</div>
 	);
 };

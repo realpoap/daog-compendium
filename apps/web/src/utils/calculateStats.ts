@@ -1,6 +1,6 @@
 import { HabitatTypeType, SpellTypeType } from '@api/lib/zod-prisma';
 import { NewAction } from '@api/lib/ZodAction';
-import { Character, Masteries, NewCharacter } from '@api/lib/ZodCharacter';
+import { Character, Masteries } from '@api/lib/ZodCharacter';
 import { CreatureComponent } from '@api/lib/ZodComponent';
 import { Creature, CreatureAttribute, NewCreature } from '@api/lib/ZodCreature';
 import { CreatureItem } from '@api/lib/ZodItem';
@@ -228,7 +228,7 @@ const calcModifiersBonus = (creature: Creature | NewCreature) => {
 	return calCreature;
 };
 
-export const calcCharacterStats = (c: Character | NewCharacter) => {
+export const calcCharacterStats = (c: Character) => {
 	console.log('calcCharacterStats: Entered function');
 	if (!c.profile.statsStarting) {
 		c.profile.statsStarting = {
@@ -280,9 +280,6 @@ export const calcCharacterStats = (c: Character | NewCharacter) => {
 			max: 0,
 		};
 	}
-	console.log('calcCharacterStats: About to call calcMasteriesScores');
-
-	calcMasteriesScores(c);
 
 	const levelBonus = Math.floor(c.profile.level / 5);
 	c.path.actionList = {
@@ -366,8 +363,23 @@ export const calcCharacterStats = (c: Character | NewCharacter) => {
 	// DEFENSE --------------------------------------------------------------------------
 
 	if (c.status.weight && c.status.carryWeight && c.status.weightBonus) {
+		c.status.weight.max =
+			c.profile.stats.END +
+			Math.floor(c.profile.stats.END / 10) +
+			Math.floor(c.profile.stats.STR / 10) +
+			c.masteries.physique.current +
+			levelBonus +
+			c.status.weightBonus;
+
+		c.status.weightClass =
+			c.status.weight.current >= c.status.weight.max * 0.75
+				? c.status.weight.current >= c.status.weight.max * 0.9
+					? 2
+					: 1
+				: 0;
+
 		c.path.defenseType =
-			c.status.carryWeight >
+			c.status.weight.current >
 			c.profile.stats.END * 0.5 +
 				Math.floor(c.profile.stats.END / 10) +
 				levelBonus
@@ -564,7 +576,7 @@ export const calcCharacterStats = (c: Character | NewCharacter) => {
 	return c;
 };
 
-export const calcMasteriesScores = (c: Character | NewCharacter) => {
+export const calcMasteriesScores = (c: Character) => {
 	// check if data is here --------------------------------
 	if (!c.profile.variables) {
 		console.info('No variables found');
@@ -581,11 +593,10 @@ export const calcMasteriesScores = (c: Character | NewCharacter) => {
 		return;
 	}
 
-	c.masteries = masteriesReset;
-	//FIXME: logic fucked
+	c.masteries = { ...masteriesReset };
 
 	// Loop through skills and update masteries accordingly
-	c.path.skills.forEach((skill, i) => {
+	c.path.skills.map((skill, i) => {
 		console.log(`FUNCTION ENTERED for character`); // LOG A
 
 		const skillMast = skill.mastery as keyof Masteries;
