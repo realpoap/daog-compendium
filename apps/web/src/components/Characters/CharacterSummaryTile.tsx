@@ -279,7 +279,7 @@ const CharacterSummaryTile = ({
 								</div>
 							</div>
 							{/* -------------- STAT BLOCK -------------- */}
-							<div className='xs:flex-1 xs:flex-col hidden'>
+							<div className='xs:flex-1 xs:flex-col xs:flex hidden'>
 								<div className='w-half text-cabin flex flex-row items-center gap-1 text-xs'>
 									<span>Speed :</span>
 
@@ -293,8 +293,10 @@ const CharacterSummaryTile = ({
 										Load : {char.status.weight.current}/{char.status.weight.max}{' '}
 										({char.status.weightClass})
 									</span>
-									<span>Defense Type : {char.path.defenseType}</span>
-									<span>Armor Class : {char.equipment.armorClass}</span>
+									<span>
+										Defense Type : {char.path.defenseType} - Armor Class :{' '}
+										{char.equipment.armorClass}
+									</span>
 								</div>
 							</div>
 						</div>
