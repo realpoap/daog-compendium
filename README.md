@@ -71,8 +71,10 @@ more:
 
 ## ⏱ Time Spent
 
-Tracked with WakaTime  
-**Total coding time:** `~340 hours - coding time` 👉
+_Tracked with WakaTime_  
+**Total coding time:** `~340 hours - coding time`
+
+👉
 [View totals on WakaTime](https://wakatime.com/@05ad44a3-a7f6-44ba-8534-0e534c30ce90)
 -> Also See Wakatime export file in the repo.
 
@@ -88,19 +90,19 @@ Tracked with WakaTime
 
 ## Breakdown estimates
 
-including learning time _Based on time logged on files_
+_based on time logged on files_
 
-- Monster Details: 70h
+- Monster Details: 45h
 - Character View: 20h
-- Items: 45h
+- Items: 30h
 - Spells: 30h
-- Character Creation Form: 80h
-- Campaigns & Dashboard: 30h
-- Stats Auto-Calculation: 15h
-- Data import from Drive to Db :
-- 60h Prisma Schemas: 30h
-- Auth + Roles: 20h
-- Special Components: 40h
+- Character Creation Form: 60h
+- Campaigns & Dashboard: 25h
+- Stats Auto-Calculation: 10h
+- Data import from Drive to Db : 40h
+- Prisma Schemas: 20h
+- Auth + Roles: 15h
+- Special Components: 15h
 - Layout: 20h
 
 ---
