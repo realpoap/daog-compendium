@@ -1,58 +1,103 @@
-# react-trpc-turbo
+# 📚 DAOG Compendium
 
-## Technologies used
+A fullstack monorepo project that serves as a digital compendium for the fantasy
+world of _DAOG_ RPG, allowing users to browse, manage, and interact with
+categorized lore content.
+
+---
+
+## 🌐 Live Demo
+
+- **Frontend (Vite + React):**  
+  👉 https://realpoap.github.io/daog-compendium
+
+- **Backend (Express + tRPC):**  
+  👉 https://daog-compendium.onrender.com
+
+---
+
+## 🎯 Project Summary
+
+Developed as part of a FullStack Open curriculum, this project showcases an
+advanced, typed application featuring real-world use of authentication, dynamic
+filtering, role-based access control, and a fully decoupled deployment.
+
+---
+
+## 🚀 Tech Stack
+
+### 📦 Monorepo
 
 - Turborepo
-- React Vite
-- Express.js
-- tRPC
-- TanStack Router
-- Tailwind CSS
+- Shared config packages: ESLint, Tailwind, TypeScript
 
-### Apps and Packages
+### 🔧 Backend (`apps/api`)
 
-- `@repo/web`: Vite, React, TanStack Router and tRPC Client
-- `@repo/api`: Express.js, Drizzle and tRPC Server
-- `@repo/eslint-config`: `eslint` configurations
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-- `@repo/tailwind-config`: shared Tailwind configuration
+- Node.js + Express
+- [tRPC](https://trpc.io/) for type-safe API
+- [MongoDB](https://www.mongodb.com/) via Prisma
+- Zod for schema validation
+- JWT-based authentication
+- Role-based permissions (`viewer`, `edit`, `admin`)
+- Deployed to Render
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+### 💻 Frontend (`apps/web`)
 
-### Utilities
+- React (with Vite)
+- TanStack Router for routing
+- TailwindCSS + DaisyUI
+- tRPC Client
+- React Hook Form + Zod for validation
+- Deployed to GitHub Pages
 
-This Turborepo has some additional tools already setup for you:
+---
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+## ✨ Features
 
-## Setup
+- 📖 Read-only browsing of categorized entries (abilities, spells, bestiary,
+  items)
+- 🔍 Dynamic filtering and tag-based search
+- ✏️ Edit access granted to users with the `edit` role
+- 🔐 JWT-based login and role-specific views
+- 🧩 Zod-powered multi-steps forms with schema-safe inputs
+- 🌍 Public CI/CD deployment (frontend + backend decoupled)
 
-To get started, clone the repository and install the dependencies:
+---
 
-```
-pnpm install
-```
+## ⏱ Time Spent
 
-Then, copy the `.env.example` file to `.env` in the web/ folder and fill in the necessary environment variables. For local development, the defaul value will work. If you want to deploy the app, you will need to specify where the backend is hosted.
+Tracked with WakaTime  
+**Total coding time:** `~340 hours`
 
-```
-cp ./apps/web/.env.example ./apps/web/.env
-```
+| Area                     | Hours (Est.) |
+| ------------------------ | ------------ |
+| 🛠️ Config & Boilerplate  | 40h          |
+| 🧠 Backend (API + Auth)  | 90h          |
+| 🎨 Frontend UI & Logic   | 110h         |
+| 🔎 Filtering + Forms     | 40h          |
+| 🚀 Hosting & Integration | 30h          |
+| 🧪 Testing & Fixing      | 30h          |
 
-### Build
+---
 
-To build all apps and packages, run the following command:
+## 🛡️ Permissions & Roles
 
-```
-pnpm build
-```
+- `viewer`: can browse all public content
+- `edit`: can add or modify entries via form UI
+- `admin`: can view deletion controls (actual deletion not implemented yet)
 
-### Develop
+---
 
-To run all apps and packages in development mode, run the following command:
+## ✅ Submission Checklist
 
-```
-pnpm dev
-```
+- [x] Fullstack project in monorepo
+- [x] MongoDB database via Prisma
+- [x] Role-based access logic
+- [x] Fully typed with tRPC and Zod
+- [x] Tracked time (340h) via WakaTime
+
+---
+
+## 🙈 Author
+
+GitHub: [`@realpoap`](https://github.com/realpoap)
