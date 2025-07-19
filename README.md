@@ -11,8 +11,8 @@ categorized lore content.
 - **Frontend (Vite + React):**  
   👉 https://realpoap.github.io/daog-compendium
 
-- **Backend (Express + tRPC):**  
-  👉 https://daog-compendium.onrender.com
+- **Backend (Express + tRPC):** 👉*(wait some time for server init)*
+  https://daog-compendium.onrender.com
 
 ---
 
@@ -28,36 +28,41 @@ filtering, role-based access control, and a fully decoupled deployment.
 
 ### 📦 Monorepo
 
-- Turborepo
-- Shared config packages: ESLint, Tailwind, TypeScript
+- **Turborepo**
+- **ESLint**
+- **TypeScript**
 
 ### 🔧 Backend (`apps/api`)
 
-- Node.js + Express
-- [tRPC](https://trpc.io/) for type-safe API
-- [MongoDB](https://www.mongodb.com/) via Prisma
-- Zod for schema validation
-- JWT-based authentication
-- Role-based permissions (`viewer`, `edit`, `admin`)
-- Deployed to Render
+- **Node.js** + **Express**
+- **tRPC** for type-safe API
+- **MongoDB** via **Prisma ORM**
+- **Zod** for schema validation
+- **JWT**-based authentication
 
 ### 💻 Frontend (`apps/web`)
 
-- React (with Vite)
-- TanStack Router for routing
-- TailwindCSS + DaisyUI
-- tRPC Client
-- React Hook Form + Zod for validation
-- Deployed to GitHub Pages
+- **React** (with Vite)
+- **TanStack Router** for routing
+- **TailwindCSS** + **DaisyUI**
+- **tRPC** Client
+- **React Hook Form** + Zod for validation
 
 ---
 
 ## ✨ Features
 
-- 📖 Read-only browsing of categorized entries (abilities, spells, bestiary,
-  items)
-- 🔍 Dynamic filtering and tag-based search
-- ✏️ Edit access granted to users with the `edit` role
+- 📖 Browse, create, edit and search Spells, Monsters and Items
+- 🧙‍♂️ Generate your personal character sheet with species abilities, skills and
+  attributes
+- ⚔️ Assign Items and Components to your character, share entity with link
+- 🎲 Create campaigns and add players from your group
+- 🧟‍♂️ Add characters and monsters with auto difficulty level calculation
+
+more:
+
+- 🔍 Dynamic filtering and tag-based search, debounced
+- ✏️ Edit entities with the `edit` role, browse as `viewer`
 - 🔐 JWT-based login and role-specific views
 - 🧩 Zod-powered multi-steps forms with schema-safe inputs
 - 🌍 Public CI/CD deployment (frontend + backend decoupled)
@@ -67,16 +72,36 @@ filtering, role-based access control, and a fully decoupled deployment.
 ## ⏱ Time Spent
 
 Tracked with WakaTime  
-**Total coding time:** `~340 hours`
+**Total coding time:** `~340 hours - coding time` 👉
+[View totals on WakaTime](https://wakatime.com/@05ad44a3-a7f6-44ba-8534-0e534c30ce90)
+-> Also See Wakatime export file in the repo.
 
 | Area                     | Hours (Est.) |
 | ------------------------ | ------------ |
-| 🛠️ Config & Boilerplate  | 40h          |
-| 🧠 Backend (API + Auth)  | 90h          |
+| 🛠️ Config & Boilerplate  | 10h          |
+| 🧠 Backend (API + Auth)  | 85h          |
 | 🎨 Frontend UI & Logic   | 110h         |
-| 🔎 Filtering + Forms     | 40h          |
-| 🚀 Hosting & Integration | 30h          |
-| 🧪 Testing & Fixing      | 30h          |
+| 🛒 Data import           | 30h          |
+| 🔎 Filtering + Forms     | 60h          |
+| 🚀 Hosting & Integration | 20h          |
+| 🧪 Testing & Fixing      | 25h          |
+
+## Breakdown estimates
+
+including learning time _Based on time logged on files_
+
+- Monster Details: 70h
+- Character View: 20h
+- Items: 45h
+- Spells: 30h
+- Character Creation Form: 80h
+- Campaigns & Dashboard: 30h
+- Stats Auto-Calculation: 15h
+- Data import from Drive to Db :
+- 60h Prisma Schemas: 30h
+- Auth + Roles: 20h
+- Special Components: 40h
+- Layout: 20h
 
 ---
 
