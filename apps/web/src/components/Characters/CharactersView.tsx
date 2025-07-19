@@ -375,6 +375,8 @@ const CharactersView = () => {
 						)}
 					</div>
 				</div>
+
+				{/* CAMPAIGN LIST -------------------------------------------- */}
 				<div
 					className={cn(
 						'xs:w-11/12 z-0 mt-8 flex h-full w-full flex-col justify-start transition-all duration-300 md:w-2/3',
@@ -487,7 +489,7 @@ const CharactersView = () => {
 					</div>
 				</div>
 			</div>
-			{/* CAMPAIGNS PANEL -------------------------------------------------------------------------------- */}
+			{/* CAMPAIGNS PANEL ---------------------------------------------------------- */}
 			<div
 				className={cn(
 					'sidebar bg-card xs:w-1/2 fixed bottom-0 left-0 top-12 z-20 w-5/6 px-4 shadow shadow-lg shadow-stone-900 transition-transform duration-500 sm:w-1/3',
@@ -520,6 +522,23 @@ const CharactersView = () => {
 								})}
 							></span>
 							{capitalizeFirstLetter(camp.name)}
+							{/* <div className='avatar-group -space-x-2'>
+								{camp.players.map(player => {
+									const character = characters.find(char => char.id === player);
+									return (
+										<div
+											className='avatar'
+											key={`${player}-${camp.id}`}
+										>
+											<div className='w-6'>
+												<img src={character?.bio?.avatar?.url || undefined} />
+											</div>
+										</div>
+									);
+								})}
+							</div> */}
+							<span>Players : {}</span>
+
 							{(user?.role === 'ADMIN' || user?.id === camp.dm) && (
 								<button
 									onClick={() =>
